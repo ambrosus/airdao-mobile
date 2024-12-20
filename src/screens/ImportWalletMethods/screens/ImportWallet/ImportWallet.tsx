@@ -6,7 +6,13 @@ import React, {
   useState,
   useCallback
 } from 'react';
-import { Alert, View } from 'react-native';
+import {
+  Alert,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Platform,
+  View
+} from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -31,11 +37,21 @@ import {
   StringUtils,
   MnemonicUtils,
   scale,
-  verticalScale
+  verticalScale,
+  isAndroid,
+  isSmallScreen
 } from '@utils';
 import { styles } from './styles';
 
 const INITIAL_ARRAY = Array(12).fill('');
+
+const EXTRA_SCROLL_HEIGHT = Platform.select({
+  ios: 180,
+  android: isSmallScreen ? 240 : 180,
+  default: 180
+});
+
+const EXTRA_HEIGHT = isSmallScreen ? 64 : 0;
 
 export const ImportWallet = () => {
   const { t } = useTranslation();
@@ -49,6 +65,13 @@ export const ImportWallet = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [isWalletAlreadyExist, setIsWalletAlreadyExist] = useState(false);
+  const [scrollOffset, setScrollOffset] = useState(0);
+
+  const keyboardAwareScrollViewRef = useRef<KeyboardAwareScrollView>(null);
+
+  const onScrollHandle = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    setScrollOffset(event.nativeEvent.contentOffset.y);
+  };
 
   const inputs = useRef(
     Array(12)
@@ -63,9 +86,19 @@ export const ImportWallet = () => {
   const focusNextInput = useCallback(
     (from: number) => {
       if (from === mnemonicWords.length) inputs.current[from]?.current?.blur();
-      else inputs.current[from + 1]?.current?.focus();
+      else {
+        if (isAndroid && from >= 7) {
+          keyboardAwareScrollViewRef.current?.scrollToPosition(
+            0,
+            scrollOffset + 100,
+            true
+          );
+        }
+
+        inputs.current[from + 1]?.current?.focus();
+      }
     },
-    [mnemonicWords.length]
+    [mnemonicWords.length, scrollOffset]
   );
 
   const handleWordChange = useCallback(
@@ -170,7 +203,10 @@ export const ImportWallet = () => {
       />
       <View style={styles.container}>
         <KeyboardAwareScrollView
-          extraHeight={verticalScale(180)}
+          ref={keyboardAwareScrollViewRef}
+          onScroll={onScrollHandle}
+          extraScrollHeight={verticalScale(EXTRA_HEIGHT)}
+          extraHeight={verticalScale(EXTRA_SCROLL_HEIGHT)}
           enableOnAndroid
           enableAutomaticScroll
           scrollToOverflowEnabled={false}

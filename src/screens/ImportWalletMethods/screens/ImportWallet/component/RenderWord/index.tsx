@@ -28,7 +28,7 @@ export const RenderWords = ({
     []
   );
   const renderItem = ({ item, index }: { item: string; index: number }) => {
-    const returnKeyType = index === mnemonicWords.length ? 'done' : 'next';
+    const returnKeyType = index === mnemonicWords.length - 1 ? 'done' : 'next';
 
     const onSubmitEditingHandle = () =>
       index === mnemonicWords.length
@@ -38,7 +38,7 @@ export const RenderWords = ({
     return (
       <View style={styles.container}>
         <InputWithIcon
-          blurOnSubmit={false}
+          blurOnSubmit={returnKeyType === 'done'}
           ref={inputs.current[index]}
           value={item}
           type="text"
