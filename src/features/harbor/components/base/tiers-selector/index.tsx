@@ -5,6 +5,7 @@ import Tooltip from 'react-native-walkthrough-tooltip';
 import { Row, Spacer, Text } from '@components/base';
 import { CircleInfoIcon } from '@components/svg/icons/v2/harbor';
 import { COLORS } from '@constants/colors';
+import { DEVICE_HEIGHT } from '@constants/variables';
 import {
   EMPTY_SELECTED_TIER,
   REWARD_TIERS_LIST
@@ -13,7 +14,7 @@ import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { TierRewardItem } from '@entities/harbor/model/types';
 import { TokenReward } from '@features/harbor/components/base/token-reward';
 import { calculateClaimAmount } from '@features/harbor/hooks';
-import { isAndroid, scale } from '@utils';
+import { isAndroid, isIos, scale } from '@utils';
 import { styles } from './styles';
 
 interface TiersContainerProps {
@@ -85,6 +86,7 @@ export const TiersSelector = ({
         <Tooltip
           showChildInTooltip={isIos}
           backgroundColor="transparent"
+          topAdjustment={isAndroid ? -DEVICE_HEIGHT * 0.05 : 0}
           disableShadow
           arrowStyle={isAndroid ? { bottom: 20 } : {}}
           contentStyle={[styles.toolTipContainerStyle]}
