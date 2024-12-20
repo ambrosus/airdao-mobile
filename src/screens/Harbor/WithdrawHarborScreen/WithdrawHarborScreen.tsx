@@ -12,11 +12,13 @@ import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { useWalletStore } from '@entities/wallet';
 import { HarborWithdrawTabs } from '@features/harbor/components/tabs';
 import { useEffectOnce, useKeyboardHeight } from '@hooks';
-import { isSmallScreen, scale } from '@utils';
+import { isSmallScreen } from '@utils';
 import { styles } from './styles';
 
 export const WithdrawHarborScreen = () => {
   const { t } = useTranslation();
+  const { top, bottom } = useSafeAreaInsets();
+  const extraHeight = isSmallScreen ? 500 / (DEVICE_HEIGHT / 100) : 0;
   const scrollRef = useRef<ScrollView>(null);
 
   const navigation = useNavigation<HarborNavigationProp>();
@@ -43,7 +45,6 @@ export const WithdrawHarborScreen = () => {
   const refetchAll = async () => {
     updateAll(wallet?.address || '');
   };
-  const extraHeight = isSmallScreen ? scale(100) : 0;
   const keyboardHeight = useKeyboardHeight();
 
   useEffect(() => {
@@ -53,8 +54,6 @@ export const WithdrawHarborScreen = () => {
       scrollRef.current?.scrollTo({ y: 0 });
     }
   }, [extraHeight, keyboardHeight]);
-
-  const { top } = useSafeAreaInsets();
 
   return (
     <View style={{ paddingTop: top }}>
@@ -77,9 +76,8 @@ export const WithdrawHarborScreen = () => {
       >
         <View
           style={{
-            ...styles.container,
-            height: DEVICE_HEIGHT - top - scale(56) + extraHeight,
-            paddingBottom: scale(16) + extraHeight
+            marginBottom: extraHeight,
+            height: DEVICE_HEIGHT - top - bottom
           }}
         >
           <HarborWithdrawTabs />

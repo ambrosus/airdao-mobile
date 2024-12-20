@@ -33,8 +33,8 @@ import { HarborTitle, RateInfo, StakedBalanceInfo } from './components';
 import { styles } from './styles';
 
 export const ProcessStake = () => {
-  const { top } = useSafeAreaInsets();
-  const extraHeight = isSmallScreen ? scale(100) : 0;
+  const { top, bottom } = useSafeAreaInsets();
+  const extraHeight = isSmallScreen ? 500 / (DEVICE_HEIGHT / 100) : 0;
   const scrollRef = useRef<ScrollView>(null);
   const bottomSheetRef = useRef<BottomSheetRef>(null);
   const { t } = useTranslation();
@@ -173,9 +173,9 @@ export const ProcessStake = () => {
       >
         <View
           style={{
-            ...styles.container,
-            height: DEVICE_HEIGHT - top - scale(56) + extraHeight,
-            paddingBottom: scale(16) + extraHeight
+            marginBottom: extraHeight,
+            height: DEVICE_HEIGHT - top - bottom,
+            ...styles.wrapper
           }}
         >
           <View>
