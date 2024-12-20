@@ -110,16 +110,17 @@ export const ImportWalletPrivateKey = () => {
     const isEmpty = privateKey === '';
     return {
       state: isEmpty,
-      typographyColor: isEmpty || loader ? COLORS.brand600 : COLORS.neutral0
+      typographyColor:
+        isEmpty || loader || !!errorStatus ? COLORS.brand600 : COLORS.neutral0
     };
-  }, [loader, privateKey]);
+  }, [errorStatus, loader, privateKey]);
 
   const toggleSecureTextEntry = useCallback(() => {
     setSecureTextEntry((prevState) => !prevState);
   }, []);
 
   const errorText = useMemo(() => {
-    const alreadyExistError = t('import.private.key.already.exist');
+    const alreadyExistError = t('import.wallet.key.error.exist');
     const importError = t('import.private.key.error');
     return errorStatus === 'exist' ? alreadyExistError : importError;
   }, [errorStatus, t]);
