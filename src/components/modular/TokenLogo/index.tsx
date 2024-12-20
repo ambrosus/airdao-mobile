@@ -20,7 +20,7 @@ import {
   UnknownTokenIcon,
   UsdcIcon
 } from '@components/svg/icons';
-import NFTIcon from '@components/svg/icons/NFTIcon';
+import { NFTIcon } from '@components/svg/icons/NFTIcon';
 import { getTokenNameFromDatabase } from '@utils';
 
 export interface TokenLogoProps {
