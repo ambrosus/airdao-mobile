@@ -158,8 +158,8 @@
   "common.status.success": "Başarılı",
   "common.tx.confirmed": "İşlem onaylandı",
   "common.details": "Ayrıntılar",
-  "common.day": "!!!day",
-  "common.days": "!!!days",
+  "common.day": "gün",
+  "common.days": "günler",
 
   "create.wallet.backup": "Cüzdanınızı yedekleyin",
   "create.wallet.backup.header": "Yedekleme cüzdanı",
