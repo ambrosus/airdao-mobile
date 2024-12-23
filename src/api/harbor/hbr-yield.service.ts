@@ -33,6 +33,10 @@ class HBRYieldService {
   async liquidityPool() {
     return await this.contract.info();
   }
+
+  async maxUserStakeLimit(address: string) {
+    return await this.contract.getMaxUserStakeValue(address);
+  }
 }
 
 export const hbrYieldService = new HBRYieldService();

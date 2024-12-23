@@ -9,3 +9,4 @@ export { HarborAccountAction } from './HarborAccountAction';
 export { CircleInfoIcon } from './CircleInfoIcon';
 export { StakeIcon } from './StakeIcon';
 export { RewardsIcon } from './RewardsIcon';
+export { WalletStakeIcon } from './WalletStakeIcon';

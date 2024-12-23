@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
+import { HarborTabParamsList } from '@appTypes/navigation/harbor';
 import { Row, Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { StakeIcon } from '@components/svg/icons/v2/harbor';
@@ -11,11 +13,12 @@ import { NumberUtils, scale } from '@utils';
 
 export const StakedHBRContainerWithRedirect = () => {
   const { t } = useTranslation();
+  const navigation = useNavigation<NavigationProp<HarborTabParamsList>>();
   const [loading] = useState(false);
   const { deposit } = useStakeHBRStore();
 
   const onStakeButtonPress = () => {
-    console.warn('asd');
+    navigation.navigate('StakeHBRScreen');
   };
 
   return (

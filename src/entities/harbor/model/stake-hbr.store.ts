@@ -18,7 +18,7 @@ export const useStakeHBRStore = create<StakeHBRStore>((set) => ({
   refreshing: false,
   hbrYieldFetcher: async (address: string, key = 'loading') => {
     set({ [key]: true });
-    const [stake, rewards, deposit, limitsConfig, poolInfo] =
+    const [stake, rewards, deposit, limitsConfig, poolInfo, maxUserStakeValue] =
       await stakeHBRPromise(address);
 
     set({
@@ -26,7 +26,8 @@ export const useStakeHBRStore = create<StakeHBRStore>((set) => ({
       rewards,
       deposit,
       limitsConfig: limitsConfigMapper(limitsConfig),
-      totalPoolLimit: poolInfo[0]
+      totalPoolLimit: poolInfo[0],
+      maxUserStakeValue
     });
 
     set({ [key]: false });

@@ -5,7 +5,8 @@ import { scale } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {
-    ...contentBox
+    ...contentBox,
+    backgroundColor: COLORS.neutral0
   },
   textStyle: {
     color: COLORS.neutral900,
