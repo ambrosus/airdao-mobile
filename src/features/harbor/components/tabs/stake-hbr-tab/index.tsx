@@ -16,6 +16,7 @@ export const StakeHBRTab = ({}) => {
   const refreshControlNode = useMemo(() => {
     const onRefresh = () =>
       hbrYieldFetcher(wallet?.address ?? '', 'refreshing');
+
     return (
       <RefreshControl
         refreshing={refreshing}
