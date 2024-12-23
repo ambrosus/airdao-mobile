@@ -4,6 +4,7 @@ import { TokenLogo } from '@components/modular';
 import { AnimatedTabsV2 } from '@components/modular/AnimatedTabsV2';
 import { WrappedListsContainer } from '@features/kosmos/components/base';
 import { StakeAMBTab } from '../stake-amb-tab';
+import { StakeHBRTab } from '../stake-hbr-tab';
 
 export const HarborStakeTabs = () => {
   const { t } = useTranslation();
@@ -21,16 +22,16 @@ export const HarborStakeTabs = () => {
               <StakeAMBTab />
             </WrappedListsContainer>
           )
+        },
+        {
+          icon: <TokenLogo token={'hbr'} scale={0.8} />,
+          title: `${t('staking.header')} HBR`,
+          view: (
+            <WrappedListsContainer>
+              <StakeHBRTab />
+            </WrappedListsContainer>
+          )
         }
-        // {
-        //   icon: <TokenLogo token={'hbr'} scale={0.8} />,
-        //   title: `${t('staking.header')} HBR`,
-        //   view: (
-        //     <WrappedListsContainer>
-        //       <StakeHBRTab />
-        //     </WrappedListsContainer>
-        //   )
-        // }
       ]}
     />
   );

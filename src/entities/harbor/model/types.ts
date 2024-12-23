@@ -1,4 +1,4 @@
-import { BigNumber } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { Token } from '@models';
 
 interface UnStakeDelayModel {
@@ -54,4 +54,34 @@ export interface HarborStoreModel {
   ambAmount: string;
   loading: boolean;
   updateAll: (payload: string) => void;
+}
+
+// Stake HBR
+export interface LimitsConfig {
+  rewardTokenPrice: ethers.BigNumber;
+  interest: ethers.BigNumber;
+  interestRate: ethers.BigNumber;
+  minDepositValue: ethers.BigNumber;
+  minStakeValue: ethers.BigNumber;
+  fastUnstakePenalty: ethers.BigNumber;
+  unstakeLockPeriod: ethers.BigNumber;
+  stakeLockPeriod: ethers.BigNumber;
+  maxTotalStakeValue: ethers.BigNumber;
+  maxStakePerUserValue: ethers.BigNumber;
+  stakeLimitsMultiplier: ethers.BigNumber;
+}
+
+export interface StakeHBRStore {
+  stake: ethers.BigNumber;
+  rewards: ethers.BigNumber;
+  deposit: ethers.BigNumber;
+  loading: boolean;
+  refreshing: boolean;
+  limitsConfig: LimitsConfig;
+  maxUserStakeValue: ethers.BigNumber;
+  totalPoolLimit: ethers.BigNumber;
+  hbrYieldFetcher: (
+    payload: string,
+    key?: 'loading' | 'refreshing'
+  ) => Promise<void>;
 }

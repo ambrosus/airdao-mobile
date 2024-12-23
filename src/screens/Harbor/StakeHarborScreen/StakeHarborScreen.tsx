@@ -7,6 +7,7 @@ import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { Button } from '@components/base';
 import { Header } from '@components/composite';
 import { WithdrawIcon } from '@components/svg/icons/v2/harbor';
+import { useStakeHBRStore } from '@entities/harbor/model';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { useWalletStore } from '@entities/wallet';
 import { HarborStakeTabs } from '@features/harbor/components/tabs';
@@ -16,10 +17,13 @@ export const StakeHarborScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<HarborNavigationProp>();
   const { updateAll, loading } = useHarborStore();
+  const { hbrYieldFetcher } = useStakeHBRStore();
   const { wallet } = useWalletStore();
 
   useEffect(() => {
     updateAll(wallet?.address || '');
+    hbrYieldFetcher(wallet?.address || '');
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wallet?.address]);
 
