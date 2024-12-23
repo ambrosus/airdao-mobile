@@ -46,7 +46,8 @@ const envs = {
     FACTORY_ADDRESS: '0x2b6852CeDEF193ece9814Ee99BE4A4Df7F463557',
     CHAIN_ID: 16718,
     CURRENCY_GRAPH_URL:
-      'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b'
+      'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b',
+    HBR_LIQUIDITY_POOL: '0xA89621016D945408a556ECcb4A10c0122aB852F2'
   },
   stage: {
     WALLET_API_URL: 'https://wallet-api.ambrosus.io',
@@ -78,7 +79,7 @@ const envs = {
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
     POOL_STORE_CONTRACT_ADDRESS: '0xfC4CFa1735e13EdC30BE9eA894F2d0bb584ab642',
     ST_AMB_ADDRESS: '0x2834C436d04ED155e736F994c1F3a0d05C4A8dE4',
-    LIQUID_STAKING_ADDRESS: '0xBda7cf631Db4535A500ED16Dd98099C04e66F1d5',
+    LIQUID_STAKING_ADDRESS: '0xA89621016D945408a556ECcb4A10c0122aB852F2',
     STAKING_TIERS_ADDRESS: '0xD0442B6d4cCf2fEe0B48bc1be607390F4f8EB987',
 
     ALL_TOKENS: ALL_TOKENS_DATA.PROD,
@@ -123,7 +124,6 @@ const envs = {
     NFT_CONTRACT_ADDRESS: '0x4Ae225f3dC55875dc64A96fdE2835A15d3bD872a',
     LIQUID_STAKING_ADDRESS: '0xd33aeaC471e077781c08A073491B5c7d974c6645',
     STAKING_TIERS_ADDRESS: '0x926C2A4a3355d608540749af9017D4613A14E3e1',
-
     ALL_TOKENS: ALL_TOKENS_DATA.TESTNET,
     ...BRIDGE_DATA.testnet,
     SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.testnet,
@@ -132,7 +132,8 @@ const envs = {
     MARKETPLACE_URL: 'https://bond-backend-api.ambrosus-test.io',
     CHAIN_ID: 22040,
     CURRENCY_GRAPH_URL:
-      'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b'
+      'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b',
+    HBR_LIQUIDITY_POOL: '0x255b5ff5026f198c83575d9a1A4561fe820ab92e'
   }
 };
 
