@@ -28,6 +28,7 @@ import {
 import { BottomSheetRef } from '@components/composite';
 import { TokenLogo, TokenSelector } from '@components/modular';
 import { DownArrowIcon } from '@components/svg/icons';
+import { WalletStakeIcon } from '@components/svg/icons/v2/harbor';
 import { COLORS } from '@constants/colors';
 import { useForwardedRef } from '@hooks';
 import { Token } from '@models';
@@ -44,6 +45,7 @@ interface InputWithoutTokenSelectProps {
   exchange?: {
     token: string;
     value: string;
+    availableToStake?: boolean;
   };
 
   onFocus?: () => void;
@@ -234,34 +236,76 @@ export const InputWithoutTokenSelect = forwardRef<
             />
           )}
         </View>
-        {!!exchange && (
-          <>
-            <View style={styles.exchangeMain}>
-              <View style={styles.exchangeContainerIcon}>
-                <DownArrowIcon scale={0.9} />
+        {!!exchange &&
+          (exchange.availableToStake ? (
+            <>
+              <View style={styles.exchangeMain}>
+                <View style={styles.exchangeContainerIcon}>
+                  <DownArrowIcon color="#585E77" scale={1.2} />
+                </View>
               </View>
-            </View>
-            <Row
-              style={styles.exchangeRate}
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Row alignItems="center">
-                <TokenLogo token={exchange.token} />
-                <Spacer horizontal value={scale(8)} />
-                <Text fontSize={scale(14)} color={COLORS.neutral900}>
-                  {exchange.token}
+              <Row
+                style={styles.exchangeRate}
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Row alignItems="center">
+                  <WalletStakeIcon />
+                  <Spacer horizontal value={4} />
+                  <Text
+                    fontSize={14}
+                    fontFamily="Inter_500Medium"
+                    color={COLORS.neutral900}
+                  >
+                    Available to Stake
+                  </Text>
+                </Row>
+                <Row alignItems="center">
+                  <TokenLogo scale={0.75} token={exchange.token} />
+                  <Spacer horizontal value={scale(4)} />
+                  <Text
+                    fontSize={scale(14)}
+                    color={
+                      exchange.value ? COLORS.neutral900 : COLORS.neutral400
+                    }
+                  >
+                    {exchange.value}
+                  </Text>
+                  <Spacer horizontal value={scale(2)} />
+                  <Text fontSize={scale(14)} color={COLORS.neutral900}>
+                    {exchange.token}
+                  </Text>
+                </Row>
+              </Row>
+            </>
+          ) : (
+            <>
+              <View style={styles.exchangeMain}>
+                <View style={styles.exchangeContainerIcon}>
+                  <DownArrowIcon color="#585E77" scale={1.2} />
+                </View>
+              </View>
+              <Row
+                style={styles.exchangeRate}
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Row alignItems="center">
+                  <TokenLogo token={exchange.token} />
+                  <Spacer horizontal value={scale(8)} />
+                  <Text fontSize={scale(14)} color={COLORS.neutral900}>
+                    {exchange.token}
+                  </Text>
+                </Row>
+                <Text
+                  color={exchange.value ? COLORS.neutral900 : COLORS.neutral400}
+                  fontSize={scale(14)}
+                >
+                  {+exchange?.value > 0 ? exchange.value : 0}
                 </Text>
               </Row>
-              <Text
-                color={exchange.value ? COLORS.neutral900 : COLORS.neutral400}
-                fontSize={scale(14)}
-              >
-                {+exchange?.value > 0 ? exchange.value : 0}
-              </Text>
-            </Row>
-          </>
-        )}
+            </>
+          ))}
       </>
     );
   }
