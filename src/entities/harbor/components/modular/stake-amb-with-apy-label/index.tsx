@@ -4,19 +4,23 @@ import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
 import { Row, Spacer, Text } from '@components/base';
+import { PrimaryButton } from '@components/modular';
+import { StakeIcon } from '@components/svg/icons/v2/harbor';
 import { COLORS } from '@constants/colors';
 import { useGetPoolYieldAPY, useStakeHBRStore } from '@entities/harbor';
-import { NumberUtils } from '@utils';
+import { NumberUtils, scale } from '@utils';
 import { styles } from './styles';
 import { YieldLabel } from '../../base';
 import { StakedDetails } from '../../composite';
 
 const RenderAPYHeaderNode = () => {
   const apy = useGetPoolYieldAPY();
+  const label = '🔥 Hot APY ';
+
   return (
     <Row alignItems="center" justifyContent="center">
       <Text fontSize={14} fontFamily="Inter_500Medium" color={COLORS.neutral0}>
-        🔥 Hot APY{' '}
+        {label}
         <Text fontSize={14} fontFamily="Inter_700Bold" color={COLORS.neutral0}>
           {apy ?? '0'}%
         </Text>
@@ -27,7 +31,7 @@ const RenderAPYHeaderNode = () => {
 
 export const StakeAMBWithApyLabel = () => {
   const { t } = useTranslation();
-  const { stake, limitsConfig, totalPoolLimit } = useStakeHBRStore();
+  const { stake, deposit, limitsConfig, totalPoolLimit } = useStakeHBRStore();
 
   const stakeLockPeriod = useMemo(
     () => (Number(limitsConfig?.stakeLockPeriod) / 86400).toFixed(0) || '0',
@@ -45,6 +49,12 @@ export const StakeAMBWithApyLabel = () => {
     }),
     [limitsConfig.maxTotalStakeValue, totalPoolLimit]
   );
+
+  const onStakeButtonPress = () => {
+    console.warn('stake amb');
+  };
+
+  const disabled = useMemo(() => deposit.isZero(), [deposit]);
 
   return (
     <>
@@ -100,6 +110,21 @@ export const StakeAMBWithApyLabel = () => {
               </Row>
             </Row>
           </View>
+
+          <Spacer value={8} />
+
+          <PrimaryButton disabled={disabled} onPress={onStakeButtonPress}>
+            <Row justifyContent="center" alignItems="center">
+              <StakeIcon color={COLORS[disabled ? 'neutral500' : 'neutral0']} />
+              <Spacer horizontal value={scale(10)} />
+              <Text
+                align="justify"
+                color={COLORS[disabled ? 'neutral500' : 'neutral0']}
+              >
+                {t('staking.header')}
+              </Text>
+            </Row>
+          </PrimaryButton>
         </StakedDetails>
       </View>
     </>
