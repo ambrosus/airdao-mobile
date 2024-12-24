@@ -8,7 +8,8 @@ export async function stakeHBRPromise(address: string) {
       await hbrYieldService.deposit(address),
       await hbrYieldService.limitConfig(),
       await hbrYieldService.liquidityPool(),
-      await hbrYieldService.maxUserStakeLimit(address)
+      await hbrYieldService.maxUserStakeLimit(address),
+      await hbrYieldService.allowance(address)
     ]);
   } catch (error) {
     throw error;

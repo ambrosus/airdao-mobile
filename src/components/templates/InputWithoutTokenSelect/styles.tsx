@@ -11,7 +11,9 @@ export const styles = StyleSheet.create({
   },
   errorWrap: {
     borderWidth: scale(1),
-    borderColor: COLORS.error500
+    borderColor: COLORS.error500,
+    paddingHorizontal: scale(11),
+    paddingVertical: scale(7)
   },
   selectorWrapper: {
     backgroundColor: COLORS.neutral100,
