@@ -75,11 +75,13 @@ export interface StakeHBRStore {
   stake: ethers.BigNumber;
   rewards: ethers.BigNumber;
   deposit: ethers.BigNumber;
+  allowance: ethers.BigNumber;
   loading: boolean;
   refreshing: boolean;
   limitsConfig: LimitsConfig;
   maxUserStakeValue: ethers.BigNumber;
   totalPoolLimit: ethers.BigNumber;
+  fetchUserAllowance: (payload: string) => Promise<void>;
   hbrYieldFetcher: (
     payload: string,
     key?: 'loading' | 'refreshing'

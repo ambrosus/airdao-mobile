@@ -222,7 +222,12 @@ export const InputWithoutTokenSelect = forwardRef<
               </Button>
             ) : (
               <View>
-                <Text fontSize={scale(12)} color={COLORS.error500}>
+                <Text
+                  fontSize={scale(12)}
+                  fontFamily="Inter_600SemiBold"
+                  color={COLORS.error500}
+                  style={styles.button}
+                >
                   {inputError}
                 </Text>
               </View>

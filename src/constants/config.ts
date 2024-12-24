@@ -47,7 +47,8 @@ const envs = {
     CHAIN_ID: 16718,
     CURRENCY_GRAPH_URL:
       'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b',
-    HBR_LIQUIDITY_POOL: '0xA89621016D945408a556ECcb4A10c0122aB852F2'
+    HBR_LIQUIDITY_POOL: '0xA89621016D945408a556ECcb4A10c0122aB852F2',
+    HBR_TOKEN_ADDRESS: '0xd09270E917024E75086e27854740871F1C8E0E10'
   },
   stage: {
     WALLET_API_URL: 'https://wallet-api.ambrosus.io',
@@ -81,7 +82,6 @@ const envs = {
     ST_AMB_ADDRESS: '0x2834C436d04ED155e736F994c1F3a0d05C4A8dE4',
     LIQUID_STAKING_ADDRESS: '0xA89621016D945408a556ECcb4A10c0122aB852F2',
     STAKING_TIERS_ADDRESS: '0xD0442B6d4cCf2fEe0B48bc1be607390F4f8EB987',
-
     ALL_TOKENS: ALL_TOKENS_DATA.PROD,
     ...BRIDGE_DATA.stage,
     SWAP_TOKENS: SWAP_SUPPORTED_TOKENS.tokens.prod,
@@ -90,7 +90,9 @@ const envs = {
     MARKETPLACE_URL: 'https://bond-backend-api.ambrosus.io',
     CHAIN_ID: 16718,
     CURRENCY_GRAPH_URL:
-      'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b'
+      'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b',
+    HBR_LIQUIDITY_POOL: '0xA89621016D945408a556ECcb4A10c0122aB852F2',
+    HBR_TOKEN_ADDRESS: '0xd09270E917024E75086e27854740871F1C8E0E10'
   },
   testnet: {
     WALLET_API_URL: 'https://wallet-api.ambrosus-test.io',
@@ -133,7 +135,8 @@ const envs = {
     CHAIN_ID: 22040,
     CURRENCY_GRAPH_URL:
       'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b',
-    HBR_LIQUIDITY_POOL: '0x255b5ff5026f198c83575d9a1A4561fe820ab92e'
+    HBR_LIQUIDITY_POOL: '0x255b5ff5026f198c83575d9a1A4561fe820ab92e',
+    HBR_TOKEN_ADDRESS: '0x7B58Cbb7c4Ff2E53F8c4405606D0A7AF707ab00b'
   }
 };
 
