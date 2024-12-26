@@ -6,7 +6,8 @@ import {
   StakeHarborScreen,
   WithdrawHarborScreen,
   WithdrawRequests,
-  StakeHBRScreen
+  StakeHBRScreen,
+  StakeAMBScreen
 } from '@screens/Harbor';
 
 const Stack = createNativeStackNavigator<HarborTabParamsList>();
@@ -24,6 +25,7 @@ export const HarborStacks = () => {
       />
       <Stack.Screen name="WithdrawRequests" component={WithdrawRequests} />
       <Stack.Screen name="StakeHBRScreen" component={StakeHBRScreen} />
+      <Stack.Screen name="StakeAMBScreen" component={StakeAMBScreen} />
     </Stack.Navigator>
   );
 };

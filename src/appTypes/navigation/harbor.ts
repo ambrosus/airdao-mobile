@@ -9,6 +9,7 @@ export type HarborTabParamsList = {
   WithdrawRequests: undefined;
   ProcessStake: undefined;
   StakeHBRScreen: undefined;
+  StakeAMBScreen: { apy?: number };
 };
 
 export type HarborNavigationProp = CompositeNavigationProp<

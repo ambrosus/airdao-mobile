@@ -11,15 +11,10 @@ import { styles } from './styles';
 
 interface StakeInputProps {
   description?: string;
-  onChangeHBRAmountHandle: (payload: string) => void;
-  readonly inputError?: string;
+  readonly error?: string;
 }
 
-export const StakeInput = ({
-  description,
-  inputError,
-  onChangeHBRAmountHandle
-}: StakeInputProps) => {
+export const StakeInput = ({ description, error }: StakeInputProps) => {
   const hbrInstance = useHBRInstance();
   const { maxUserStakeValue, stake } = useStakeHBRStore();
   const { amount, onChangeHBRAmountToStake } = useStakeHBRActionsStore();
@@ -47,9 +42,9 @@ export const StakeInput = ({
   return (
     <View style={styles.container}>
       <InputWithoutTokenSelect
-        inputError={inputError}
+        inputError={error}
         value={amount}
-        onChangeText={onChangeHBRAmountHandle}
+        onChangeText={onChangeHBRAmountToStake}
         token={hbrInstance}
         exchange={exchange}
         onPressMaxAmount={onPressMaxAmountHandle}

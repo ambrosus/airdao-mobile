@@ -1,8 +1,10 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
+import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { Row, Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { StakeIcon } from '@components/svg/icons/v2/harbor';
@@ -13,8 +15,7 @@ import { styles } from './styles';
 import { YieldLabel } from '../../base';
 import { StakedDetails } from '../../composite';
 
-const RenderAPYHeaderNode = () => {
-  const apy = useGetPoolYieldAPY();
+const RenderAPYHeaderNode = ({ apy }: { apy?: number }) => {
   const label = '🔥 Hot APY ';
 
   return (
@@ -31,7 +32,10 @@ const RenderAPYHeaderNode = () => {
 
 export const StakeAMBWithApyLabel = () => {
   const { t } = useTranslation();
+  const navigation = useNavigation<HarborNavigationProp>();
+
   const { stake, deposit, limitsConfig, totalPoolLimit } = useStakeHBRStore();
+  const apy = useGetPoolYieldAPY();
 
   const stakeLockPeriod = useMemo(
     () => (Number(limitsConfig?.stakeLockPeriod) / 86400).toFixed(0) || '0',
@@ -51,7 +55,7 @@ export const StakeAMBWithApyLabel = () => {
   );
 
   const onStakeButtonPress = () => {
-    console.warn('stake amb');
+    navigation.navigate('StakeAMBScreen', { apy });
   };
 
   const disabled = useMemo(() => deposit.isZero(), [deposit]);
@@ -61,7 +65,7 @@ export const StakeAMBWithApyLabel = () => {
       <YieldLabel label="Stake HBR to access high-yield AMB staking." />
 
       <View style={styles.container}>
-        <RenderAPYHeaderNode />
+        <RenderAPYHeaderNode apy={apy} />
         <StakedDetails
           amount={NumberUtils.numberToTransformedLocale(
             ethers.utils.formatEther(stake)
@@ -95,7 +99,7 @@ export const StakeAMBWithApyLabel = () => {
                 {t('harbor.stake.pool.limit')}
               </Text>
 
-              <Row>
+              <Row alignItems="center">
                 <Text
                   fontSize={14}
                   fontFamily="Inter_500Medium"
