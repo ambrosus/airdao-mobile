@@ -1,30 +1,46 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
+import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { Row, Spacer, Text } from '@components/base';
-import { TokenLogo } from '@components/modular';
+import { PrimaryButton, TokenLogo } from '@components/modular';
 import { SuccessIcon } from '@components/svg/icons/v2/harbor';
 import { COLORS } from '@constants/colors';
+import { useStakeHBRStore } from '@entities/harbor/model';
 import { useWalletStore } from '@entities/wallet';
 import { CopyHash } from '@features/harbor/components/base/preview-modules/success-template/copy-hash';
-import { NumberUtils, StringUtils, scale } from '@utils';
+import { NumberUtils, StringUtils, _delayNavigation, scale } from '@utils';
 import { styles } from './styles';
 
 interface SuccessTxViewProps {
   readonly amount: string;
   timestamp?: unknown;
   txHash?: string;
+  dismiss: () => void;
 }
 
 export const SuccessTxView = ({
   amount,
   timestamp,
-  txHash
+  txHash,
+  dismiss
 }: SuccessTxViewProps) => {
   const { t } = useTranslation();
   const { wallet } = useWalletStore();
+  const navigation = useNavigation<HarborNavigationProp>();
+  const { hbrYieldFetcher } = useStakeHBRStore();
+
+  const onDismissBottomSheet = useCallback(async () => {
+    try {
+      await hbrYieldFetcher(wallet?.address ?? '');
+      _delayNavigation(dismiss, () => navigation.goBack());
+    } catch (error) {
+      throw error;
+    }
+  }, [dismiss, hbrYieldFetcher, navigation, wallet?.address]);
 
   return (
     <View style={styles.container}>
@@ -97,6 +113,15 @@ export const SuccessTxView = ({
         </View>
       )}
       <Spacer value={scale(12)} />
+      <PrimaryButton onPress={onDismissBottomSheet}>
+        <Text
+          fontSize={14}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral0}
+        >
+          Close
+        </Text>
+      </PrimaryButton>
     </View>
   );
 };
