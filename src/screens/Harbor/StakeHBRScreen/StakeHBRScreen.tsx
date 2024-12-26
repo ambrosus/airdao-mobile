@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   View
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
@@ -32,23 +33,31 @@ export const StakeHBRScreen = () => {
 
   const bottomSheetReviewTxRef = useRef<BottomSheetRef>(null);
 
-  const onChangeHBRAmountHandle = useCallback(
-    (amount: string) => {
-      if (amount) {
-        const greaterThenBalance = ethers.utils
-          .parseEther(amount)
-          .gt(hbrInstance.balance.wei);
-        if (greaterThenBalance) {
-          setInputError(t('bridge.insufficient.funds'));
-        } else {
-          setInputError('');
-        }
-      }
-
-      onChangeHBRAmountToStake(amount);
-    },
-    [hbrInstance.balance.wei, onChangeHBRAmountToStake, t]
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        onChangeHBRAmountToStake('');
+      };
+    }, [onChangeHBRAmountToStake])
   );
+
+  const onChangeHBRAmountHandle = useCallback(
+    (amount: string) => onChangeHBRAmountToStake(amount),
+    [onChangeHBRAmountToStake]
+  );
+
+  useMemo(() => {
+    if (amount) {
+      const greaterThenBalance = ethers.utils
+        .parseEther(amount)
+        .gt(hbrInstance.balance.wei);
+      if (greaterThenBalance) {
+        setInputError(t('bridge.insufficient.funds'));
+      } else {
+        setInputError('');
+      }
+    }
+  }, [amount, hbrInstance.balance.wei, t]);
 
   const label = useMemo(() => {
     const bnAmount = ethers.utils.parseEther(!amount ? '0' : amount);

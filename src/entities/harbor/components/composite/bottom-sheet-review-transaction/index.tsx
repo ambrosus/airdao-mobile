@@ -39,6 +39,12 @@ export const BottomSheetReviewTransaction = forwardRef<
     [bottom]
   );
 
+  const dismiss = () => {
+    if (bottomSheetRef.current) {
+      bottomSheetRef.current.dismiss();
+    }
+  };
+
   return (
     <BottomSheet
       ref={bottomSheetRef}
@@ -52,6 +58,7 @@ export const BottomSheetReviewTransaction = forwardRef<
             amount={amount}
             timestamp={timestamp}
             txHash={txHash}
+            dismiss={dismiss}
           />
         ) : (
           <>

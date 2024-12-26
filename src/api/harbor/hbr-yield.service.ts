@@ -30,31 +30,31 @@ const createSigner = (privateKey: string) => {
 };
 
 class HBRYieldService {
-  private contract = createHBRLiquidityPoolContract();
+  private lpContract = createHBRLiquidityPoolContract();
   private tokenContract = createHBRTokenContract();
 
   async staked(address: string) {
-    return await this.contract.getStake(address);
+    return await this.lpContract.getStake(address);
   }
 
   async rewards(address: string) {
-    return await this.contract.getUserRewards(address);
+    return await this.lpContract.getUserRewards(address);
   }
 
   async deposit(address: string) {
-    return await this.contract.getDeposit(address);
+    return await this.lpContract.getDeposit(address);
   }
 
   async limitConfig() {
-    return await this.contract.limitsConfig();
+    return await this.lpContract.limitsConfig();
   }
 
   async liquidityPool() {
-    return await this.contract.info();
+    return await this.lpContract.info();
   }
 
   async maxUserStakeLimit(address: string) {
-    return await this.contract.getMaxUserStakeValue(address);
+    return await this.lpContract.getMaxUserStakeValue(address);
   }
 
   async allowance(address: string) {

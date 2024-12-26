@@ -3,6 +3,7 @@ import { verticalScale, scale } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {
+    paddingTop: 16,
     alignItems: 'center'
   },
   header: {
