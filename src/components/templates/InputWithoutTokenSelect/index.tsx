@@ -53,6 +53,7 @@ interface InputWithoutTokenSelectProps {
   resetKeyboardState?: boolean;
   isRequiredRefetchBalance?: boolean;
   inputError?: string;
+  arrow?: boolean;
 }
 
 export const InputWithoutTokenSelect = forwardRef<
@@ -70,7 +71,8 @@ export const InputWithoutTokenSelect = forwardRef<
       onBlur,
       resetKeyboardState = false,
       exchange,
-      inputError
+      inputError,
+      arrow = true
     },
     ref
   ) => {
@@ -244,11 +246,15 @@ export const InputWithoutTokenSelect = forwardRef<
         {!!exchange &&
           (exchange.availableToStake ? (
             <>
-              <View style={styles.exchangeMain}>
-                <View style={styles.exchangeContainerIcon}>
-                  <DownArrowIcon color="#585E77" scale={1.2} />
+              {arrow ? (
+                <View style={styles.exchangeMain}>
+                  <View style={styles.exchangeContainerIcon}>
+                    <DownArrowIcon color="#585E77" scale={1.2} />
+                  </View>
                 </View>
-              </View>
+              ) : (
+                <Spacer value={8} />
+              )}
               <Row
                 style={styles.exchangeRate}
                 alignItems="center"

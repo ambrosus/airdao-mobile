@@ -18,6 +18,10 @@ import { StakedBalanceInfo } from '@entities/harbor/components/composite';
 import { useApproveContract, useStakeHBRActionsStore } from '@features/harbor';
 import { StakeInput } from '@features/harbor/components/modular';
 import { BottomSheetReviewTransactionWithAction } from '@features/harbor/components/templates';
+import {
+  keyboardAvoidingViewOffsetWithNotchSupportedValue,
+  useContainerStyleWithSafeArea
+} from '@hooks';
 import { NumberUtils } from '@utils';
 import { styles } from './styles';
 
@@ -25,6 +29,7 @@ export const StakeHBRScreen = () => {
   const { t } = useTranslation();
   const hbrInstance = useHBRInstance();
   const { approving, approve } = useApproveContract();
+  const footerStyle = useContainerStyleWithSafeArea(styles.footer);
 
   const { deposit, allowance } = useStakeHBRStore();
   const { amount, onChangeHBRAmountToStake } = useStakeHBRActionsStore();
@@ -39,11 +44,6 @@ export const StakeHBRScreen = () => {
         onChangeHBRAmountToStake('');
       };
     }, [onChangeHBRAmountToStake])
-  );
-
-  const onChangeHBRAmountHandle = useCallback(
-    (amount: string) => onChangeHBRAmountToStake(amount),
-    [onChangeHBRAmountToStake]
   );
 
   useMemo(() => {
@@ -94,32 +94,33 @@ export const StakeHBRScreen = () => {
 
       <KeyboardAvoidingView
         behavior="padding"
-        keyboardVerticalOffset={8}
+        keyboardVerticalOffset={keyboardAvoidingViewOffsetWithNotchSupportedValue(
+          8
+        )}
         style={styles.justifyContent}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.innerContainer}>
             <StakedBalanceInfo
               title={t('harbor.staked.balance')}
+              coin={CryptoCurrencyCode.HBR}
               stakedValue={NumberUtils.numberToTransformedLocale(
                 NumberUtils.limitDecimalCount(
                   +ethers.utils.formatEther(deposit),
                   2
                 )
               )}
-              coin={CryptoCurrencyCode.HBR}
             />
 
             <StakeInput
+              error={inputError}
               description="Your AMB staking limit depends on the amount of HBR staked. Stake more
           HBR to increase your limit!"
-              inputError={inputError}
-              onChangeHBRAmountHandle={onChangeHBRAmountHandle}
             />
           </View>
         </TouchableWithoutFeedback>
 
-        <View style={styles.footer}>
+        <View style={footerStyle}>
           <PrimaryButton disabled={disabled} onPress={onButtonPress}>
             <TextOrSpinner
               loading={approving}
