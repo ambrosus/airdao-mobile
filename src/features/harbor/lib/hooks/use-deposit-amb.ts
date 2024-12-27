@@ -1,14 +1,14 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ethers } from 'ethers';
-import { hbrYieldService } from '@api/harbor';
+import { hbrYieldService } from '@api/harbor/hbr-yield.service';
 import { getTimestampFromBlockHash } from '@entities/harbor/utils';
 import { useWalletPrivateKey, useWalletStore } from '@entities/wallet';
 import { useStakeHBRActionsStore } from '@features/harbor/model';
 
-export function useDepositHBR() {
+export function useDepositAMB() {
   const { wallet } = useWalletStore();
   const { _extractPrivateKey } = useWalletPrivateKey();
-  const { amount } = useStakeHBRActionsStore();
+  const { ambAmount } = useStakeHBRActionsStore();
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -24,12 +24,16 @@ export function useDepositHBR() {
     timestampHandler();
   }, [transaction]);
 
-  const _deposit = useCallback(async () => {
+  const _depositAmb = useCallback(async () => {
     setLoading(true);
     try {
       const privateKey = await _extractPrivateKey();
 
-      const tx = await hbrYieldService._deposit(amount, wallet, privateKey);
+      const tx = await hbrYieldService._depositAmb(
+        ambAmount,
+        wallet,
+        privateKey
+      );
 
       if (tx) {
         setTransaction(tx);
@@ -41,7 +45,7 @@ export function useDepositHBR() {
     } finally {
       setLoading(false);
     }
-  }, [_extractPrivateKey, amount, wallet]);
+  }, [_extractPrivateKey, ambAmount, wallet]);
 
-  return { _deposit, loading, success, transaction, timestamp };
+  return { _depositAmb, loading, success, transaction, timestamp };
 }

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
 import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { Row, Spacer, Text } from '@components/base';
+import { TextOrSpinner } from '@components/composite';
 import { PrimaryButton, TokenLogo } from '@components/modular';
 import { SuccessIcon } from '@components/svg/icons/v2/harbor';
 import { COLORS } from '@constants/colors';
@@ -20,25 +21,43 @@ interface SuccessTxViewProps {
   timestamp?: unknown;
   txHash?: string;
   dismiss: () => void;
+  token?: CryptoCurrencyCode;
+  apy?: number;
+  stakeLockPeriod?: string;
 }
+
+const buttonNodeStyles = {
+  active: {
+    fontSize: 14,
+    fontFamily: 'Inter_500Medium',
+    color: COLORS.neutral0
+  }
+} as const;
 
 export const SuccessTxView = ({
   amount,
   timestamp,
   txHash,
-  dismiss
+  dismiss,
+  token = CryptoCurrencyCode.HBR,
+  apy,
+  stakeLockPeriod
 }: SuccessTxViewProps) => {
   const { t } = useTranslation();
   const { wallet } = useWalletStore();
   const navigation = useNavigation<HarborNavigationProp>();
   const { hbrYieldFetcher } = useStakeHBRStore();
+  const [loading, setLoading] = useState(false);
 
   const onDismissBottomSheet = useCallback(async () => {
     try {
+      setLoading(true);
       await hbrYieldFetcher(wallet?.address ?? '');
       _delayNavigation(dismiss, () => navigation.goBack());
     } catch (error) {
       throw error;
+    } finally {
+      setLoading(false);
     }
   }, [dismiss, hbrYieldFetcher, navigation, wallet?.address]);
 
@@ -56,15 +75,14 @@ export const SuccessTxView = ({
         </Text>
 
         <Row alignItems="center">
-          <TokenLogo token={CryptoCurrencyCode.HBR} />
+          <TokenLogo token={token} />
           <Spacer horizontal value={8} />
           <Text
             fontSize={24}
             fontFamily="Inter_700Bold"
             color={COLORS.neutral900}
           >
-            {NumberUtils.numberToTransformedLocale(amount)}{' '}
-            {CryptoCurrencyCode.HBR}
+            {NumberUtils.numberToTransformedLocale(amount)} {token}
           </Text>
         </Row>
       </View>
@@ -86,6 +104,42 @@ export const SuccessTxView = ({
             {StringUtils.formatAddress(wallet?.address ?? '', 10, 3)}
           </Text>
         </Row>
+        {apy && (
+          <Row alignItems="center" justifyContent="space-between">
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral600}
+            >
+              {t('staking.apy')}
+            </Text>
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              color={COLORS.success300}
+            >
+              {apy}%
+            </Text>
+          </Row>
+        )}
+        {stakeLockPeriod && (
+          <Row alignItems="center" justifyContent="space-between">
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral600}
+            >
+              {t('kosmos.lock.period')}
+            </Text>
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral900}
+            >
+              {stakeLockPeriod} {t('common.days')}
+            </Text>
+          </Row>
+        )}
         {/* Date row item */}
         <Row alignItems="center" justifyContent="space-between">
           <Text
@@ -113,14 +167,14 @@ export const SuccessTxView = ({
         </View>
       )}
       <Spacer value={scale(12)} />
-      <PrimaryButton onPress={onDismissBottomSheet}>
-        <Text
-          fontSize={14}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral0}
-        >
-          Close
-        </Text>
+      <PrimaryButton disabled={loading} onPress={onDismissBottomSheet}>
+        <TextOrSpinner
+          label="Close"
+          loading={loading}
+          loadingLabel={undefined}
+          styles={buttonNodeStyles}
+          spinnerColor={COLORS.brand600}
+        />
       </PrimaryButton>
     </View>
   );

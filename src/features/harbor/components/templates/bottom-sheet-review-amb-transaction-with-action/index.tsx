@@ -1,8 +1,9 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import { BottomSheetRef, TextOrSpinner } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { BottomSheetReviewAMBTransaction } from '@entities/harbor/components/composite';
+import { useDepositAMB } from '@features/harbor/lib/hooks';
 import { useStakeHBRActionsStore } from '@features/harbor/model';
 
 const buttonNodeStyles = {
@@ -18,26 +19,32 @@ export const BottomSheetReviewAMBTransactionWithAction = forwardRef<
   { apy: number }
 >(({ apy }, ref) => {
   const { ambAmount } = useStakeHBRActionsStore();
+  const { _depositAmb, loading, success, transaction, timestamp } =
+    useDepositAMB();
 
-  const _deposit = () => console.warn('asdf');
+  const txHash = useMemo(() => {
+    if (!transaction) return 'unknown';
+
+    return transaction.transactionHash;
+  }, [transaction]);
 
   return (
     <BottomSheetReviewAMBTransaction
       ref={ref}
       amount={ambAmount}
       apy={apy}
-      success={false}
-      timestamp={123}
-      txHash=""
-      loading={false}
+      success={success}
+      timestamp={timestamp}
+      txHash={txHash}
+      loading={loading}
     >
-      <PrimaryButton onPress={_deposit}>
+      <PrimaryButton disabled={loading} onPress={_depositAmb}>
         <TextOrSpinner
-          loading={false}
+          loading={loading}
           loadingLabel={undefined}
           label="Stake"
           styles={buttonNodeStyles}
-          spinnerColor={buttonNodeStyles.active.color}
+          spinnerColor={COLORS.brand600}
           spinnerSize="small"
         />
       </PrimaryButton>

@@ -78,6 +78,21 @@ class HBRYieldService {
     const tx = await contract.deposit(bnAmount);
     return await tx.wait();
   }
+
+  async _depositAmb(
+    amount: string,
+    wallet: IsNullableAccount | undefined,
+    privateKey: string
+  ) {
+    if (!wallet) throw Error('No wallet found!');
+
+    const bnAmount = ethers.utils.parseEther(amount);
+    const signer = createSigner(privateKey);
+    const contract = createHBRLiquidityPoolContract(signer);
+
+    const tx = await contract.stake(bnAmount, { value: bnAmount });
+    return await tx.wait();
+  }
 }
 
 export const hbrYieldService = new HBRYieldService();

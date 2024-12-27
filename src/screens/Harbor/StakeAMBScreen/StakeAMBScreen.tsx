@@ -5,6 +5,7 @@ import {
   TouchableWithoutFeedback,
   View
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
@@ -38,7 +39,7 @@ type Props = NativeStackScreenProps<HarborTabParamsList, 'StakeAMBScreen'>;
 export const StakeAMBScreen = ({ route }: Props) => {
   const { t } = useTranslation();
   const { stake } = useStakeHBRStore();
-  const { ambAmount } = useStakeHBRActionsStore();
+  const { ambAmount, onChangeAMBAmountToStake } = useStakeHBRActionsStore();
   const { wallet } = useWalletStore();
   const footerStyle = useKeyboardContainerStyleWithSafeArea(styles.footer);
 
@@ -47,6 +48,14 @@ export const StakeAMBScreen = ({ route }: Props) => {
   const [inputError, setInputError] = useState('');
 
   const bottomSheetReviewTxRef = useRef<BottomSheetRef>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        onChangeAMBAmountToStake('');
+      };
+    }, [onChangeAMBAmountToStake])
+  );
 
   useMemo(() => {
     if (ambAmount) {

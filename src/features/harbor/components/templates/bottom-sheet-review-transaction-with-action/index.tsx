@@ -3,7 +3,7 @@ import { BottomSheetRef, TextOrSpinner } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { BottomSheetReviewTransaction } from '@entities/harbor/components/composite';
-import { useDepositHBR } from '@features/harbor/lib/hooks/use-deposit-hbr';
+import { useDepositHBR } from '@features/harbor/lib/hooks';
 import { useStakeHBRActionsStore } from '@features/harbor/model';
 
 const buttonNodeStyles = {
@@ -37,13 +37,13 @@ export const BottomSheetReviewTransactionWithAction = forwardRef<
       txHash={txHash}
       loading={loading}
     >
-      <PrimaryButton onPress={_deposit}>
+      <PrimaryButton disabled={loading} onPress={_deposit}>
         <TextOrSpinner
           loading={loading}
           loadingLabel={undefined}
           label="Stake"
           styles={buttonNodeStyles}
-          spinnerColor={buttonNodeStyles.active.color}
+          spinnerColor={COLORS.brand600}
           spinnerSize="small"
         />
       </PrimaryButton>
