@@ -18,12 +18,12 @@ export const useStakeHBRStore = create<StakeHBRStore>((set) => ({
   limitsConfig: INITIAL_LIMITS,
   maxUserStakeValue: INITIAL_ETHERS_ZERO,
   totalPoolLimit: INITIAL_ETHERS_ZERO,
-  fetchUserAllowance: async (address: string) => {
+  fetchUserAllowance: async (address) => {
     const allowance = await hbrYieldService.allowance(address);
 
     set({ allowance });
   },
-  hbrYieldFetcher: async (address: string, key = 'loading') => {
+  hbrYieldFetcher: async (address, key = 'loading') => {
     set({ [key]: true });
     const [
       stake,

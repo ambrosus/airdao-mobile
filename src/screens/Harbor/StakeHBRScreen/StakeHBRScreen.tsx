@@ -13,6 +13,7 @@ import { CryptoCurrencyCode } from '@appTypes';
 import { BottomSheetRef, Header, TextOrSpinner } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
+import { KEYBOARD_OPENING_TIME } from '@constants/variables';
 import { useHBRInstance, useStakeHBRStore } from '@entities/harbor';
 import { StakedBalanceInfo } from '@entities/harbor/components/composite';
 import { useApproveContract, useStakeHBRActionsStore } from '@features/harbor';
@@ -20,7 +21,7 @@ import { StakeInput } from '@features/harbor/components/modular';
 import { BottomSheetReviewTransactionWithAction } from '@features/harbor/components/templates';
 import {
   keyboardAvoidingViewOffsetWithNotchSupportedValue,
-  useContainerStyleWithSafeArea
+  useKeyboardContainerStyleWithSafeArea
 } from '@hooks';
 import { NumberUtils } from '@utils';
 import { styles } from './styles';
@@ -29,7 +30,7 @@ export const StakeHBRScreen = () => {
   const { t } = useTranslation();
   const hbrInstance = useHBRInstance();
   const { approving, approve } = useApproveContract();
-  const footerStyle = useContainerStyleWithSafeArea(styles.footer);
+  const footerStyle = useKeyboardContainerStyleWithSafeArea(styles.footer);
 
   const { deposit, allowance } = useStakeHBRStore();
   const { amount, onChangeHBRAmountToStake } = useStakeHBRActionsStore();
@@ -75,6 +76,7 @@ export const StakeHBRScreen = () => {
   );
 
   const onButtonPress = useCallback(async () => {
+    Keyboard.dismiss();
     if (
       label.includes(
         t('swap.button.approve', {
@@ -85,7 +87,10 @@ export const StakeHBRScreen = () => {
       return await approve();
     }
 
-    bottomSheetReviewTxRef.current?.show();
+    setTimeout(
+      () => bottomSheetReviewTxRef.current?.show(),
+      KEYBOARD_OPENING_TIME
+    );
   }, [approve, label, t]);
 
   return (

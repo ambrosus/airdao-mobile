@@ -16,4 +16,5 @@ export * from './useUSDPrice';
 export * from './useSettingsWalletActions';
 export * from './useEffectOnce';
 export * from './useBarcodeScanner';
-export * from './useContainerStyleWithSafeArea';
+export * from './useKeyboardContainerStyleWithSafeArea';
+export * from './useContainerWithSafeArea';
