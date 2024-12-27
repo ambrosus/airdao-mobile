@@ -30,7 +30,7 @@ export function useApproveContract() {
       });
 
       if (await tx.wait()) {
-        fetchUserAllowance(wallet?.address ?? '');
+        await fetchUserAllowance(wallet?.address ?? '');
       }
     } catch (error) {
       console.error('Error approving contract:', error);

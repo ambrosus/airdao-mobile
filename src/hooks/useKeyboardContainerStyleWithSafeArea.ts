@@ -15,7 +15,7 @@ export function keyboardAvoidingViewOffsetWithNotchSupportedValue(
   return !hasNotch() ? 0 : value;
 }
 
-export function useContainerStyleWithSafeArea(
+export function useKeyboardContainerStyleWithSafeArea(
   style: StyleProp<unknown>
 ): StyleProp<ViewStyle> {
   const { bottom: bottomInset } = useSafeAreaInsets();

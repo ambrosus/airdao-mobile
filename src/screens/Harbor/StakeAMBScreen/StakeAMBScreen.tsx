@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -12,9 +12,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CryptoCurrencyCode } from '@appTypes';
 import { HarborTabParamsList } from '@appTypes/navigation/harbor';
 import { Row, Spacer, Text } from '@components/base';
-import { Header, TextOrSpinner } from '@components/composite';
+import { BottomSheetRef, Header, TextOrSpinner } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
+import { KEYBOARD_OPENING_TIME } from '@constants/variables';
 import { useStakeHBRStore } from '@entities/harbor';
 import { HeaderAPYLabel } from '@entities/harbor/components/base';
 import {
@@ -23,10 +24,11 @@ import {
 } from '@entities/harbor/components/composite';
 import { useWalletStore } from '@entities/wallet';
 import { useStakeHBRActionsStore } from '@features/harbor';
+import { BottomSheetReviewAMBTransactionWithAction } from '@features/harbor/components/templates';
 import { useAMBEntity } from '@features/send-funds/lib/hooks';
 import {
   keyboardAvoidingViewOffsetWithNotchSupportedValue,
-  useContainerStyleWithSafeArea
+  useKeyboardContainerStyleWithSafeArea
 } from '@hooks';
 import { NumberUtils, scale } from '@utils';
 import { styles } from './styles';
@@ -38,11 +40,13 @@ export const StakeAMBScreen = ({ route }: Props) => {
   const { stake } = useStakeHBRStore();
   const { ambAmount } = useStakeHBRActionsStore();
   const { wallet } = useWalletStore();
-  const footerStyle = useContainerStyleWithSafeArea(styles.footer);
+  const footerStyle = useKeyboardContainerStyleWithSafeArea(styles.footer);
 
   const ambInstance = useAMBEntity(wallet?.address ?? '');
 
   const [inputError, setInputError] = useState('');
+
+  const bottomSheetReviewTxRef = useRef<BottomSheetRef>(null);
 
   useMemo(() => {
     if (ambAmount) {
@@ -56,6 +60,11 @@ export const StakeAMBScreen = ({ route }: Props) => {
       }
     }
   }, [ambAmount, ambInstance.balance.wei, t]);
+
+  const disabled = useMemo(
+    () => !!inputError || !ambAmount,
+    [ambAmount, inputError]
+  );
 
   const renderHeaderCenterNode = useMemo(() => {
     const { apy } = route.params;
@@ -76,7 +85,12 @@ export const StakeAMBScreen = ({ route }: Props) => {
   }, [route.params, t]);
 
   const onButtonPress = useCallback(() => {
-    console.warn('stake');
+    Keyboard.dismiss();
+
+    setTimeout(
+      () => bottomSheetReviewTxRef.current?.show(),
+      KEYBOARD_OPENING_TIME
+    );
   }, []);
 
   return (
@@ -110,7 +124,7 @@ export const StakeAMBScreen = ({ route }: Props) => {
         </TouchableWithoutFeedback>
 
         <View style={footerStyle}>
-          <PrimaryButton disabled={false} onPress={onButtonPress}>
+          <PrimaryButton disabled={disabled} onPress={onButtonPress}>
             <TextOrSpinner
               loading={false}
               loadingLabel={undefined}
@@ -119,13 +133,18 @@ export const StakeAMBScreen = ({ route }: Props) => {
                 active: {
                   fontSize: 14,
                   fontFamily: 'Inter_500Medium',
-                  color: false ? COLORS.neutral500 : COLORS.neutral0
+                  color: disabled ? COLORS.neutral500 : COLORS.neutral0
                 }
               }}
             />
           </PrimaryButton>
         </View>
       </KeyboardAvoidingView>
+
+      <BottomSheetReviewAMBTransactionWithAction
+        ref={bottomSheetReviewTxRef}
+        apy={route.params.apy ?? 0}
+      />
     </SafeAreaView>
   );
 };
