@@ -55,10 +55,13 @@ export const BottomSheetReviewAMBTransaction = forwardRef<
       <View style={containerStyle}>
         {success ? (
           <SuccessTxView
+            apy={apy}
             amount={amount}
-            timestamp={timestamp}
             txHash={txHash}
             dismiss={dismiss}
+            timestamp={timestamp}
+            stakeLockPeriod={stakeLockPeriod}
+            token={CryptoCurrencyCode.stAMB}
           />
         ) : (
           <>
@@ -136,7 +139,7 @@ export const BottomSheetReviewAMBTransaction = forwardRef<
                   fontFamily="Inter_500Medium"
                   color={COLORS.success300}
                 >
-                  {apy} %
+                  {apy}%
                 </Text>
               </Row>
             </View>
