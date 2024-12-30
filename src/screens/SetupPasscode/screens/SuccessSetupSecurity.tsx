@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,7 @@ import { SuccessIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { usePasscodeStore } from '@features/passcode';
 import { usePasscodeActions } from '@features/passcode/lib/hooks';
+import { useEffectOnce } from '@hooks';
 import { scale, verticalScale } from '@utils';
 
 export const SuccessSetupSecurity = () => {
@@ -19,9 +20,11 @@ export const SuccessSetupSecurity = () => {
   const { isFaceIDEnabled } = usePasscodeStore();
   const { onToggleBiometricAuth } = usePasscodeActions();
 
-  useEffect(() => {
-    if (!isFaceIDEnabled) onToggleBiometricAuth();
-  }, [isFaceIDEnabled, onToggleBiometricAuth]);
+  useEffectOnce(() => {
+    if (!isFaceIDEnabled) {
+      onToggleBiometricAuth();
+    }
+  });
 
   const navigateToHome = () => {
     navigation.dispatch(
