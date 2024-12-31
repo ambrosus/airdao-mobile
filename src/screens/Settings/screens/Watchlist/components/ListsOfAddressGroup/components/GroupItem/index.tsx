@@ -66,14 +66,16 @@ export const GroupItem = memo(
         if (timeoutRef.current !== null) {
           clearTimeout(timeoutRef.current);
         }
-        timeoutRef.current = setTimeout(() => {
-          navigation.navigate('Collection', { group });
-        }, 200);
+
+        timeoutRef.current = setTimeout(
+          () => navigation.navigate('Collection', { group }),
+          200
+        );
       }, [group, navigation, timeoutRef]);
 
       const handleRemoveConfirm = (groupId: string) => {
         onDeleteList(groupId).then();
-        groupDeleteRef.current?.dismiss();
+        setTimeout(() => groupDeleteRef.current?.dismiss(), 100);
       };
 
       const handleConfirmRemove = useCallback(() => {
