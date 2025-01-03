@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
+import { DebugInfo } from '@screens/Settings/screens/About/DebugInfo';
 import { scale, PlatformSpecificUtils } from '@utils';
 import { AboutMenutItem } from './About.MenuItem';
 import { styles } from './styles';
@@ -38,6 +39,7 @@ export const AboutScreen = () => {
         <Button type="base" onPress={PlatformSpecificUtils.requestReview}>
           <AboutMenutItem title={t('settings.about.rate')} />
         </Button>
+        {!isProd && <DebugInfo />}
       </View>
       <Text style={styles.version} fontSize={scale(16)} align="center">{`${t(
         'settings.version'
