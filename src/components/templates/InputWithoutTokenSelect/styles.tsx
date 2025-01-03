@@ -5,8 +5,7 @@ import { moderateScale, scale, verticalScale } from '@utils';
 export const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: COLORS.neutral0,
-    paddingHorizontal: scale(12),
-    paddingVertical: scale(8),
+    padding: scale(12),
     borderRadius: 16
   },
   errorWrap: {
@@ -48,9 +47,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center'
   },
   exchangeContainerIcon: {
-    padding: scale(10),
-    top: -16,
-    paddingHorizontal: scale(12),
+    padding: scale(8),
+    top: -10,
+    paddingHorizontal: scale(9),
     backgroundColor: COLORS.neutral0,
     borderRadius: 50,
     borderWidth: 1,

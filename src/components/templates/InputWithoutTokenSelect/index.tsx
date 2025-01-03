@@ -238,7 +238,7 @@ export const InputWithoutTokenSelect = forwardRef<
           <>
             <View style={styles.exchangeMain}>
               <View style={styles.exchangeContainerIcon}>
-                <DownArrowIcon scale={1.2} />
+                <DownArrowIcon scale={0.9} />
               </View>
             </View>
             <Row
