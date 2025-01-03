@@ -37,17 +37,17 @@ export const DebugInfo: React.FC = () => {
       {
         id: 'currentPushToken',
         name: 'Current Push Token',
-        data: StringUtils.formatAddress(currentPushToken, 15, 15)
+        data: currentPushToken
       },
       {
         id: 'pushTokenFromFirebase',
         name: 'Push Token from Firebase',
-        data: StringUtils.formatAddress(pushTokenFromFirebase, 15, 15)
+        data: pushTokenFromFirebase
       },
       {
         id: 'pushTokenFromBackend',
         name: 'Push Token from backend',
-        data: StringUtils.formatAddress(watcherInfo?.push_token || '', 15, 15)
+        data: watcherInfo?.push_token
       },
       {
         id: 'userId',
@@ -57,7 +57,7 @@ export const DebugInfo: React.FC = () => {
       {
         id: 'deviceId',
         name: 'Device ID',
-        data: StringUtils.formatAddress(watcherInfo?.device_id || '', 15, 15)
+        data: watcherInfo?.device_id
       },
       {
         id: 'watcherAddreses',
