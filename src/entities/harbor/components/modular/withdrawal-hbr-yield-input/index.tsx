@@ -18,7 +18,7 @@ import { InputWithoutTokenSelect } from '@components/templates';
 import { COLORS } from '@constants/colors';
 import { useHBRInstance } from '@entities/harbor/lib/hooks';
 import { useStakeHBRStore } from '@entities/harbor/model';
-import { IAvailableWithdrawLogs } from '@entities/harbor/types';
+import { IAvailableWithdrawLogs, LogStatus } from '@entities/harbor/types';
 import {
   calculateTextWidth,
   getWithdrawInputLabel
@@ -64,7 +64,10 @@ export const WithdrawalHbrYieldInput = ({
     console.warn(amount);
   }, []);
 
-  const disabled = useMemo(() => logs?.status === 'error', [logs?.status]);
+  const disabled = useMemo(
+    () => logs?.status === LogStatus.ERROR,
+    [logs?.status]
+  );
 
   const tokenInstance = useMemo(
     () => (token === CryptoCurrencyCode.AMB ? ambInstance : hbrInstance),
@@ -83,7 +86,9 @@ export const WithdrawalHbrYieldInput = ({
 
   const labelStatus = useMemo(
     () =>
-      token === CryptoCurrencyCode.HBR ? 'warning' : logs?.status ?? 'warning',
+      token === CryptoCurrencyCode.HBR
+        ? LogStatus.WARNING
+        : logs?.status ?? LogStatus.WARNING,
     [logs?.status, token]
   );
 

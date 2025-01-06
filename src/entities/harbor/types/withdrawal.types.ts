@@ -2,7 +2,8 @@ import { ethers } from 'ethers';
 
 export enum LogStatus {
   SUCCESS = 'success',
-  ERROR = 'error'
+  ERROR = 'error',
+  WARNING = 'warning'
 }
 
 export interface ILogs {
