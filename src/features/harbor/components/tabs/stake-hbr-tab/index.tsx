@@ -1,12 +1,19 @@
 import React, { useMemo } from 'react';
-import { RefreshControl, ScrollView, View } from 'react-native';
+import {
+  RefreshControl,
+  ScrollView,
+  StyleProp,
+  View,
+  ViewStyle
+} from 'react-native';
 import { Spacer, Spinner } from '@components/base';
+import { DEVICE_HEIGHT } from '@constants/variables';
 import { useAvailableWithdrawLogs, useStakeHBRStore } from '@entities/harbor';
 import { Rewards } from '@entities/harbor/components/composite';
 import { StakeAMBWithApyLabel } from '@entities/harbor/components/modular';
 import { useWalletStore } from '@entities/wallet';
 import { StakedHBRContainerWithRedirect } from '@features/harbor/components/templates';
-import { verticalScale } from '@utils';
+import { isSmallScreen, verticalScale } from '@utils';
 import { styles } from './styles';
 
 export const StakeHBRTab = ({}) => {
@@ -16,6 +23,13 @@ export const StakeHBRTab = ({}) => {
 
   const { logs, refetchLogs } = useAvailableWithdrawLogs(
     limitsConfig.stakeLockPeriod
+  );
+
+  const scrollViewContentStyle = useMemo<StyleProp<ViewStyle>>(
+    () => ({
+      paddingBottom: isSmallScreen ? DEVICE_HEIGHT / 3.25 : 0
+    }),
+    []
   );
 
   const refreshControlNode = useMemo(() => {
@@ -45,6 +59,7 @@ export const StakeHBRTab = ({}) => {
         overScrollMode="auto"
         keyboardShouldPersistTaps="handled"
         style={styles.scrollViewContainer}
+        contentContainerStyle={scrollViewContentStyle}
       >
         <Rewards />
         <StakedHBRContainerWithRedirect />
