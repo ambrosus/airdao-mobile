@@ -13,7 +13,6 @@ export const styles = StyleSheet.create({
   },
   secondaryButton: {
     flex: 1,
-    backgroundColor: COLORS.neutral100,
     height: 48
   }
 });

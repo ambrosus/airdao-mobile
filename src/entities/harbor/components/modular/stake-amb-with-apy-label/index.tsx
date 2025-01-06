@@ -74,7 +74,7 @@ export const StakeAMBWithApyLabel = ({ logs }: StakeAMBWithApyLabelProps) => {
 
   const primaryButtonStyle = useMemo(
     () => ({
-      ...styles.primaryButton,
+      ...styles.button,
       backgroundColor: COLORS[disabled ? 'alphaBlack5' : 'brand600']
     }),
     [disabled]
@@ -162,7 +162,7 @@ export const StakeAMBWithApyLabel = ({ logs }: StakeAMBWithApyLabelProps) => {
             </SecondaryButton>
 
             <SecondaryButton
-              style={styles.secondaryButton}
+              style={styles.button}
               disabled={disabled}
               onPress={onWithdrawButtonPress}
             >
