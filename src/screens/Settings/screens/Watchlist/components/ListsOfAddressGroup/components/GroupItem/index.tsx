@@ -75,7 +75,7 @@ export const GroupItem = memo(
 
       const handleRemoveConfirm = (groupId: string) => {
         onDeleteList(groupId).then();
-        setTimeout(() => groupDeleteRef.current?.dismiss(), 100);
+        setTimeout(() => groupDeleteRef.current?.dismiss(), 200);
       };
 
       const handleConfirmRemove = useCallback(() => {

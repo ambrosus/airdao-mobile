@@ -35,7 +35,10 @@ export const BottomSheetConfirmRemoveGroup = forwardRef<BottomSheetRef, Props>(
         </Text>
         <Spacer value={24} />
         <Button
-          onPress={() => handleOnDeleteConfirm(groupId)}
+          onPress={() => {
+            handleOnDeleteConfirm(groupId);
+            setTimeout(() => localRef.current?.dismiss(), 500);
+          }}
           style={styles.removeButton}
         >
           <Text
