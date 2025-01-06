@@ -87,3 +87,8 @@ export interface StakeHBRStore {
     key?: 'loading' | 'refreshing'
   ) => Promise<void>;
 }
+
+export interface StakeUIStore {
+  activeTabIndex: number;
+  setActiveTabIndex: (payload: number) => void;
+}
