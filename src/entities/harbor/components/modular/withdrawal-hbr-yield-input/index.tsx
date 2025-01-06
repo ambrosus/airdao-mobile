@@ -66,10 +66,6 @@ export const WithdrawalHbrYieldInput = ({
 
   const disabled = useMemo(() => logs?.status === 'error', [logs?.status]);
 
-  const typographyDynamicColor = useMemo(() => {
-    return disabled ? 'rgba(88, 94, 119, 0.48)' : COLORS.neutral900;
-  }, [disabled]);
-
   const tokenInstance = useMemo(
     () => (token === CryptoCurrencyCode.AMB ? ambInstance : hbrInstance),
     [ambInstance, hbrInstance, token]
@@ -85,6 +81,21 @@ export const WithdrawalHbrYieldInput = ({
     [balance]
   );
 
+  const labelStatus = useMemo(
+    () =>
+      token === CryptoCurrencyCode.HBR ? 'warning' : logs?.status ?? 'warning',
+    [logs?.status, token]
+  );
+
+  // Dynamic Styles
+  const containerStyle = useMemo<StyleProp<ViewStyle>>(
+    () => ({
+      ...styles.container,
+      backgroundColor: BACKGROUND_CONTAINER_COLORS[type]
+    }),
+    [type]
+  );
+
   const lockIconStyle = useMemo<StyleProp<ViewStyle>>(
     () => ({
       ...styles.lockIcon,
@@ -93,19 +104,22 @@ export const WithdrawalHbrYieldInput = ({
     [value]
   );
 
-  const labelStatus = useMemo(
-    () =>
-      token === CryptoCurrencyCode.HBR ? 'warning' : logs?.status ?? 'warning',
-    [logs?.status, token]
-  );
+  const typographyDynamicColor = useMemo(() => {
+    return disabled ? 'rgba(88, 94, 119, 0.48)' : COLORS.neutral900;
+  }, [disabled]);
+
+  const renderInputLockNode = useMemo(() => {
+    if (disabled && inputValueWidth > 0) {
+      return (
+        <View style={lockIconStyle}>
+          <LockIcon color="rgba(88, 94, 119, 0.48)" />
+        </View>
+      );
+    }
+  }, [disabled, inputValueWidth, lockIconStyle]);
 
   return (
-    <View
-      style={{
-        ...styles.container,
-        backgroundColor: BACKGROUND_CONTAINER_COLORS[type]
-      }}
-    >
+    <View style={containerStyle}>
       <InputWithoutTokenSelect
         editable={!disabled}
         inputError={error}
@@ -117,14 +131,7 @@ export const WithdrawalHbrYieldInput = ({
         balance={ethers.utils.formatEther(balance)}
         onPressMaxAmount={() => null}
         arrow={false}
-        renderInputLockNode={
-          disabled &&
-          inputValueWidth > 0 && (
-            <View style={lockIconStyle}>
-              <LockIcon color="rgba(88, 94, 119, 0.48)" />
-            </View>
-          )
-        }
+        renderInputLockNode={renderInputLockNode}
       />
 
       <View style={styles.footer}>
