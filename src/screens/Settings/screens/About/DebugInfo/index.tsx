@@ -10,6 +10,7 @@ import * as Clipboard from 'expo-clipboard';
 import { watcherService } from '@api/watcher-service';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import Config from '@constants/config';
 import { useEffectOnce } from '@hooks';
 import { NotificationService } from '@lib';
 import { DebugInfoItem } from '@screens/Settings/screens/About/DebugInfo/components/DebugInfoItem';
@@ -21,6 +22,8 @@ interface DebugItemModel {
   data: string;
   name: string;
 }
+
+const watcherAPI = `${Config.WALLET_API_URL}/api/v1/watcher`;
 
 export const DebugInfo: React.FC = () => {
   const [debugData, setDebugData] = useState([]);
@@ -63,6 +66,11 @@ export const DebugInfo: React.FC = () => {
         id: 'watcherAddreses',
         name: 'User watch to addresses',
         data: watcherAddresses?.join(',  ')
+      },
+      {
+        id: 'watcherLink',
+        name: 'Watcher link (currentPushToken)',
+        data: `${watcherAPI}${currentPushToken}`
       }
     ];
     // @ts-ignore

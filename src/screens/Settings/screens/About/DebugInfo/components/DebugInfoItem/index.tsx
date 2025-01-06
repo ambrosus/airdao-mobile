@@ -22,7 +22,8 @@ const IDS_TO_CUT = [
   'currentPushToken',
   'pushTokenFromFirebase',
   'pushTokenFromBackend',
-  'deviceId'
+  'deviceId',
+  'watcherLink'
 ];
 export const DebugInfoItem = ({ item }: IProps) => {
   const { t } = useTranslation();
