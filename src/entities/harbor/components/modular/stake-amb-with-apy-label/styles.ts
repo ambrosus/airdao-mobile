@@ -9,11 +9,7 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(16),
     backgroundColor: 'rgba(22, 199, 132, 1)'
   },
-  primaryButton: {
-    flex: 1,
-    height: 48
-  },
-  secondaryButton: {
+  button: {
     flex: 1,
     height: 48
   },
