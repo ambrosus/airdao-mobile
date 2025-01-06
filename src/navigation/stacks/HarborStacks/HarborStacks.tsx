@@ -5,6 +5,7 @@ import {
   ProcessStake,
   StakeHarborScreen,
   WithdrawHarborScreen,
+  WithdrawHarborPoolScreen,
   WithdrawRequests,
   StakeHBRScreen,
   StakeAMBScreen
@@ -22,6 +23,10 @@ export const HarborStacks = () => {
       <Stack.Screen
         name="WithdrawHarborScreen"
         component={WithdrawHarborScreen}
+      />
+      <Stack.Screen
+        name="WithdrawHarborPoolScreen"
+        component={WithdrawHarborPoolScreen}
       />
       <Stack.Screen name="WithdrawRequests" component={WithdrawRequests} />
       <Stack.Screen name="StakeHBRScreen" component={StakeHBRScreen} />

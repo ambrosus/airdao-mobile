@@ -10,3 +10,6 @@ export { CircleInfoIcon } from './CircleInfoIcon';
 export { StakeIcon } from './StakeIcon';
 export { RewardsIcon } from './RewardsIcon';
 export { WalletStakeIcon } from './WalletStakeIcon';
+export { LockIcon } from './LockIcon';
+export { WithdrawWarningIcon } from './WithdrawWarningIcon';
+export { WithdrawCheckmarkIcon } from './WithdrawCheckmarkIcon';

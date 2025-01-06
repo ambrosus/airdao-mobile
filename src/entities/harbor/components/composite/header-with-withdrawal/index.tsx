@@ -5,11 +5,7 @@ import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { Button } from '@components/base';
 import { Header } from '@components/composite';
 import { WithdrawIcon } from '@components/svg/icons/v2/harbor';
-import {
-  useHarborStore,
-  useStakeHBRStore,
-  useStakeUIStore
-} from '@entities/harbor/model';
+import { useHarborStore, useStakeUIStore } from '@entities/harbor/model';
 
 enum TAB_INDEX {
   AMB = 0,
@@ -22,11 +18,6 @@ export const HeaderWithWithdrawal = () => {
 
   const { activeTabIndex } = useStakeUIStore();
   const { loading } = useHarborStore();
-  const { loading: hbrLoading, stake, deposit } = useStakeHBRStore();
-
-  const isWithdrawalHbrActive = useMemo(() => {
-    return !stake.isZero() || !deposit.isZero();
-  }, [deposit, stake]);
 
   const renderRightContentNode = useMemo(() => {
     if (activeTabIndex === TAB_INDEX.AMB && !loading) {
@@ -39,22 +30,7 @@ export const HeaderWithWithdrawal = () => {
         </Button>
       );
     }
-
-    if (
-      activeTabIndex === TAB_INDEX.HBR &&
-      isWithdrawalHbrActive &&
-      !hbrLoading
-    ) {
-      const onPress = () =>
-        !loading && navigation.navigate('WithdrawHarborScreen');
-
-      return (
-        <Button onPress={onPress}>
-          <WithdrawIcon />
-        </Button>
-      );
-    }
-  }, [activeTabIndex, hbrLoading, isWithdrawalHbrActive, loading, navigation]);
+  }, [activeTabIndex, loading, navigation]);
 
   return (
     <Header title={t('staking.header')} contentRight={renderRightContentNode} />
