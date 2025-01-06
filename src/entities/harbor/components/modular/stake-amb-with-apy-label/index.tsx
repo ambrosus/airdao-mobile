@@ -6,10 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
 import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { Row, Spacer, Text } from '@components/base';
-import { PrimaryButton } from '@components/modular';
-import { StakeIcon } from '@components/svg/icons/v2/harbor';
+import { SecondaryButton } from '@components/modular';
+import { StakeIcon, WithdrawIcon } from '@components/svg/icons/v2/harbor';
 import { COLORS } from '@constants/colors';
 import { useGetPoolYieldAPY, useStakeHBRStore } from '@entities/harbor';
+import { IAvailableWithdrawLogs } from '@entities/harbor/types';
 import { NumberUtils, scale } from '@utils';
 import { styles } from './styles';
 import { YieldLabel } from '../../base';
@@ -30,7 +31,11 @@ const RenderAPYHeaderNode = ({ apy }: { apy?: number }) => {
   );
 };
 
-export const StakeAMBWithApyLabel = () => {
+interface StakeAMBWithApyLabelProps {
+  logs: IAvailableWithdrawLogs | null;
+}
+
+export const StakeAMBWithApyLabel = ({ logs }: StakeAMBWithApyLabelProps) => {
   const { t } = useTranslation();
   const navigation = useNavigation<HarborNavigationProp>();
 
@@ -58,7 +63,22 @@ export const StakeAMBWithApyLabel = () => {
     navigation.navigate('StakeAMBScreen', { apy });
   };
 
+  const onWithdrawButtonPress = () => {
+    navigation.navigate('WithdrawHarborPoolScreen', {
+      token: CryptoCurrencyCode.AMB,
+      logs
+    });
+  };
+
   const disabled = useMemo(() => deposit.isZero(), [deposit]);
+
+  const primaryButtonStyle = useMemo(
+    () => ({
+      ...styles.primaryButton,
+      backgroundColor: COLORS[disabled ? 'alphaBlack5' : 'brand600']
+    }),
+    [disabled]
+  );
 
   return (
     <>
@@ -117,18 +137,49 @@ export const StakeAMBWithApyLabel = () => {
 
           <Spacer value={8} />
 
-          <PrimaryButton disabled={disabled} onPress={onStakeButtonPress}>
-            <Row justifyContent="center" alignItems="center">
-              <StakeIcon color={COLORS[disabled ? 'neutral500' : 'neutral0']} />
-              <Spacer horizontal value={scale(10)} />
-              <Text
-                align="justify"
-                color={COLORS[disabled ? 'neutral500' : 'neutral0']}
-              >
-                {t('staking.header')}
-              </Text>
-            </Row>
-          </PrimaryButton>
+          <Row
+            alignItems="center"
+            justifyContent="space-between"
+            style={styles.footer}
+          >
+            <SecondaryButton
+              style={primaryButtonStyle}
+              disabled={disabled}
+              onPress={onStakeButtonPress}
+            >
+              <Row justifyContent="center" alignItems="center">
+                <StakeIcon
+                  color={COLORS[disabled ? 'neutral400' : 'neutral0']}
+                />
+                <Spacer horizontal value={scale(10)} />
+                <Text
+                  align="justify"
+                  color={COLORS[disabled ? 'neutral400' : 'neutral0']}
+                >
+                  {t('staking.header')}
+                </Text>
+              </Row>
+            </SecondaryButton>
+
+            <SecondaryButton
+              style={styles.secondaryButton}
+              disabled={disabled}
+              onPress={onWithdrawButtonPress}
+            >
+              <Row justifyContent="center" alignItems="center">
+                <WithdrawIcon
+                  color={COLORS[disabled ? 'neutral400' : 'neutral900']}
+                />
+                <Spacer horizontal value={scale(10)} />
+                <Text
+                  align="justify"
+                  color={COLORS[disabled ? 'neutral400' : 'neutral900']}
+                >
+                  {t('harbor.withdraw.header')}
+                </Text>
+              </Row>
+            </SecondaryButton>
+          </Row>
         </StakedDetails>
       </View>
     </>

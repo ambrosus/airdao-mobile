@@ -93,6 +93,12 @@ export const WithdrawalHbrYieldInput = ({
     [value]
   );
 
+  const labelStatus = useMemo(
+    () =>
+      token === CryptoCurrencyCode.HBR ? 'warning' : logs?.status ?? 'warning',
+    [logs?.status, token]
+  );
+
   return (
     <View
       style={{
@@ -122,7 +128,7 @@ export const WithdrawalHbrYieldInput = ({
       />
 
       <View style={styles.footer}>
-        {getWithdrawInputLabel(logs?.status ?? 'warning', logs?.timestamp)}
+        {getWithdrawInputLabel(labelStatus, logs?.timestamp)}
       </View>
     </View>
   );

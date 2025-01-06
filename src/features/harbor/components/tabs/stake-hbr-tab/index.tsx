@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 import { Spacer, Spinner } from '@components/base';
-import { useStakeHBRStore } from '@entities/harbor';
+import { useAvailableWithdrawLogs, useStakeHBRStore } from '@entities/harbor';
 import { Rewards } from '@entities/harbor/components/composite';
 import { StakeAMBWithApyLabel } from '@entities/harbor/components/modular';
 import { useWalletStore } from '@entities/wallet';
@@ -11,11 +11,18 @@ import { styles } from './styles';
 
 export const StakeHBRTab = ({}) => {
   const { wallet } = useWalletStore();
-  const { loading, refreshing, hbrYieldFetcher } = useStakeHBRStore();
+  const { loading, refreshing, hbrYieldFetcher, limitsConfig } =
+    useStakeHBRStore();
+
+  const { logs, refetchLogs } = useAvailableWithdrawLogs(
+    limitsConfig.stakeLockPeriod
+  );
 
   const refreshControlNode = useMemo(() => {
-    const onRefresh = () =>
+    const onRefresh = () => {
       hbrYieldFetcher(wallet?.address ?? '', 'refreshing');
+      refetchLogs();
+    };
 
     return (
       <RefreshControl
@@ -24,7 +31,7 @@ export const StakeHBRTab = ({}) => {
         removeClippedSubviews
       />
     );
-  }, [hbrYieldFetcher, refreshing, wallet?.address]);
+  }, [hbrYieldFetcher, refetchLogs, refreshing, wallet?.address]);
 
   if (loading) {
     return <Spinner />;
@@ -42,7 +49,7 @@ export const StakeHBRTab = ({}) => {
         <Rewards />
         <StakedHBRContainerWithRedirect />
         <Spacer value={verticalScale(12)} />
-        <StakeAMBWithApyLabel />
+        <StakeAMBWithApyLabel logs={logs} />
       </ScrollView>
     </View>
   );

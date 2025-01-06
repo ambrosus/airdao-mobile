@@ -20,7 +20,7 @@ export const WithdrawHarborPoolScreen = ({ route }: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={`${t('harbor.withdraw.header')} AMB`} />
+      <Header title={`${t('harbor.withdraw.header')} ${token}`} />
 
       <View style={styles.innerContainer}>
         <WithdrawalHbrYieldInput

@@ -9,7 +9,17 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(16),
     backgroundColor: 'rgba(22, 199, 132, 1)'
   },
-
+  primaryButton: {
+    flex: 1,
+    height: 48
+  },
+  secondaryButton: {
+    flex: 1,
+    height: 48
+  },
+  footer: {
+    columnGap: scale(8)
+  },
   stakedNativeInnerDetails: {
     padding: scale(12),
     backgroundColor: 'rgba(88, 94, 119, 0.08)',
