@@ -27,7 +27,8 @@ export const styles = StyleSheet.create({
     columnGap: 4
   },
   inputContainer: {
-    flex: 1
+    flex: 1,
+    position: 'relative'
   },
   input: {
     width: '100%',

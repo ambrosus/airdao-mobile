@@ -5,3 +5,5 @@ export * from './stake-hbr-store-initials';
 export * from './limits.mapper';
 export * from './stake-hbr-promise';
 export * from './timestamp';
+export * from './withdraw/scale';
+export * from './withdraw/label-presets';

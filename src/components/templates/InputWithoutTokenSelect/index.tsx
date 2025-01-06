@@ -1,4 +1,5 @@
 import React, {
+  ReactNode,
   forwardRef,
   useCallback,
   useMemo,
@@ -9,9 +10,11 @@ import {
   InteractionManager,
   Keyboard,
   LayoutChangeEvent,
+  NativeSyntheticEvent,
   Platform,
   Pressable,
   StyleProp,
+  TextInputContentSizeChangeEventData,
   TouchableOpacity,
   View,
   ViewStyle
@@ -54,6 +57,14 @@ interface InputWithoutTokenSelectProps {
   isRequiredRefetchBalance?: boolean;
   inputError?: string;
   arrow?: boolean;
+
+  readonly balance?: string;
+  editable?: boolean;
+  onContentSizeChange?: (
+    event: NativeSyntheticEvent<TextInputContentSizeChangeEventData>
+  ) => void;
+  valueColor?: string;
+  renderInputLockNode?: ReactNode;
 }
 
 export const InputWithoutTokenSelect = forwardRef<
@@ -72,7 +83,12 @@ export const InputWithoutTokenSelect = forwardRef<
       resetKeyboardState = false,
       exchange,
       inputError,
-      arrow = true
+      arrow = true,
+      balance,
+      editable = true,
+      onContentSizeChange,
+      renderInputLockNode,
+      valueColor = COLORS.neutral900
     },
     ref
   ) => {
@@ -119,12 +135,15 @@ export const InputWithoutTokenSelect = forwardRef<
     }, [inputContainerWidth, isInputFocused, value]);
 
     const inputStyle = useMemo(() => {
-      return Platform.select({
-        android: { ...styles.input, ...styles.inputAndroidSpecified },
-        ios: styles.input,
-        default: styles.input
-      });
-    }, []);
+      return {
+        ...Platform.select({
+          android: { ...styles.input, ...styles.inputAndroidSpecified },
+          ios: styles.input,
+          default: styles.input
+        }),
+        color: valueColor
+      };
+    }, [valueColor]);
 
     const onInputContainerPress = useCallback(
       () => textInputRef.current?.focus(),
@@ -184,6 +203,7 @@ export const InputWithoutTokenSelect = forwardRef<
               style={styles.inputContainer}
             >
               <TextInput
+                editable={editable}
                 ref={textInputRef}
                 value={_value}
                 placeholder="0"
@@ -196,7 +216,9 @@ export const InputWithoutTokenSelect = forwardRef<
                 onChangeText={onChangeTokenAmount}
                 style={inputStyle}
                 textAlign="right"
+                onContentSizeChange={onContentSizeChange}
               />
+              {renderInputLockNode}
             </Pressable>
           </View>
           <Row justifyContent="space-between" alignItems="center">
@@ -205,7 +227,7 @@ export const InputWithoutTokenSelect = forwardRef<
               <Text fontSize={scale(12)} color={COLORS.neutral900}>
                 {NumberUtils.formatNumber(
                   +NumberUtils.limitDecimalCount(
-                    token.balance.formattedBalance,
+                    balance ? balance : token.balance.formattedBalance,
                     2
                   )
                 )}{' '}
