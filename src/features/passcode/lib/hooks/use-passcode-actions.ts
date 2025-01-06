@@ -1,17 +1,10 @@
 import { useCallback } from 'react';
 import * as LocalAuthentication from 'expo-local-authentication';
-import { toLength } from 'lodash';
-import {
-  _error,
-  authenticateNativePopup,
-  usePasscodeStore
-} from '@features/passcode';
-import { useSupportedBiometrics } from '@hooks';
+import { authenticateNativePopup, usePasscodeStore } from '@features/passcode';
 import { Cache, CacheKey } from '@lib/cache';
 import { DeviceUtils, PasscodeUtils } from '@utils';
 
 export function usePasscodeActions() {
-  const supportedBiometrics = useSupportedBiometrics();
   const {
     isFaceIDEnabled,
     onChangePasscode,
@@ -58,11 +51,13 @@ export function usePasscodeActions() {
             await PasscodeUtils.setFaceIDStatusInDB(true);
             onChangeIsFaceIDEnabled(true);
           } else {
-            _error({
-              hasFaceId,
-              hasFingerprint,
-              supportedBiometricsLength: toLength(supportedBiometrics)
-            });
+            return;
+            // block errors for biometric
+            // _error({
+            //   hasFaceId,
+            //   hasFingerprint,
+            //   supportedBiometricsLength: toLength(supportedBiometrics)
+            // });
           }
         }
       }
@@ -70,7 +65,7 @@ export function usePasscodeActions() {
       console.error('Face ID error:', error);
       throw error;
     }
-  }, [isFaceIDEnabled, onChangeIsFaceIDEnabled, supportedBiometrics]);
+  }, [isFaceIDEnabled, onChangeIsFaceIDEnabled]);
 
   return { onChangePasscodeHandle, onToggleBiometricAuth };
 }
