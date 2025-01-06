@@ -45,8 +45,8 @@ export const BottomSheetRemoveAddressFromCollection = forwardRef<
     if (collection) {
       onToggleAddressInList([wallet], collection);
     }
-    localRef.current?.dismiss();
-  }, [collection, localRef, onToggleAddressInList, wallet]);
+    // localRef.current?.dismiss();
+  }, [collection, onToggleAddressInList, wallet]);
 
   return (
     <BottomSheetFloat
