@@ -29,8 +29,8 @@ import { NumberUtils, moderateScale } from '@utils';
 import { styles } from './styles';
 
 const BACKGROUND_CONTAINER_COLORS = {
-  success: 'rgba(22, 199, 132, 1)',
-  error: 'rgba(242, 180, 7, 1)'
+  [LogStatus.SUCCESS]: 'rgba(22, 199, 132, 1)',
+  [LogStatus.ERROR]: 'rgba(242, 180, 7, 1)'
 } as const;
 
 interface WithdrawalHbrYieldInputProps extends PropsWithChildren {
