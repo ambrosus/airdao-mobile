@@ -1,21 +1,28 @@
 import React from 'react';
-import { Linking, View } from 'react-native';
+import { Linking, ScrollView, View } from 'react-native';
 import Constants from 'expo-constants';
-import * as Updates from 'expo-updates';
 import { useTranslation } from 'react-i18next';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets
+} from 'react-native-safe-area-context';
 import { Button, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { DebugInfo } from '@screens/Settings/screens/About/DebugInfo';
-import { scale, PlatformSpecificUtils } from '@utils';
+import { scale, PlatformSpecificUtils, isAndroid } from '@utils';
+import { isTestnet } from '@utils/isEnv';
 import { AboutMenutItem } from './About.MenuItem';
 import { styles } from './styles';
 
-// TODO add privacy policy and terms links
 export const AboutScreen = () => {
   const { t } = useTranslation();
-  const isProd = Updates.channel === 'prod';
-  const { nativeAppVersion, nativeBuildVersion } = Constants;
+
+  const nativeAppVersion = Constants.expoConfig?.version;
+  const nativeBuildVersion = isAndroid
+    ? Constants.expoConfig?.android?.versionCode
+    : Constants.expoConfig?.ios?.buildNumber;
+
+  const { bottom } = useSafeAreaInsets();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -39,12 +46,18 @@ export const AboutScreen = () => {
         <Button type="base" onPress={PlatformSpecificUtils.requestReview}>
           <AboutMenutItem title={t('settings.about.rate')} />
         </Button>
-        {!isProd && <DebugInfo />}
+
+        {(__DEV__ || isTestnet) && (
+          <ScrollView style={{ paddingBottom: bottom, maxHeight: '70%' }}>
+            <Spacer value={10} />
+            <DebugInfo />
+          </ScrollView>
+        )}
       </View>
       <Text style={styles.version} fontSize={scale(16)} align="center">{`${t(
         'settings.version'
       )} ${nativeAppVersion} ${
-        !isProd ? `build: ${nativeBuildVersion}` : ''
+        isTestnet ? `build: ${nativeBuildVersion}` : ''
       }`}</Text>
     </SafeAreaView>
   );

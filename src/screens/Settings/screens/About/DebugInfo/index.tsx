@@ -12,7 +12,7 @@ import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import Config from '@constants/config';
 import { useEffectOnce } from '@hooks';
-import { NotificationService } from '@lib';
+import { NotificationService, UID } from '@lib';
 import { DebugInfoItem } from '@screens/Settings/screens/About/DebugInfo/components/DebugInfoItem';
 import { scale, StringUtils } from '@utils';
 import { styles } from './styles';
@@ -35,6 +35,7 @@ export const DebugInfo: React.FC = () => {
     const watcherAddresses = watcherInfo?.addresses.map((item) =>
       StringUtils.formatAddress(item.address, 4, 4)
     );
+    const deviceId = watcherInfo?.device_id || (await UID());
 
     const data = [
       {
@@ -60,7 +61,7 @@ export const DebugInfo: React.FC = () => {
       {
         id: 'deviceId',
         name: 'Device ID',
-        data: watcherInfo?.device_id
+        data: deviceId
       },
       {
         id: 'watcherAddreses',
