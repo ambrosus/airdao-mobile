@@ -147,10 +147,9 @@ export const InputWithoutTokenSelect = forwardRef<
       };
     }, [valueColor]);
 
-    const onInputContainerPress = useCallback(
-      () => textInputRef.current?.focus(),
-      []
-    );
+    const onInputContainerPress = useCallback(() => {
+      if (editable) textInputRef.current?.focus();
+    }, [editable]);
 
     const onLayoutEventHandle = useCallback(
       (event: LayoutChangeEvent) =>

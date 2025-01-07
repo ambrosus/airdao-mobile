@@ -2,13 +2,13 @@ import React, { useCallback, useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
-  SafeAreaView,
   TouchableWithoutFeedback,
   View
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { CryptoCurrencyCode } from '@appTypes';
 import { HarborTabParamsList } from '@appTypes/navigation/harbor';
 import { Header } from '@components/composite';

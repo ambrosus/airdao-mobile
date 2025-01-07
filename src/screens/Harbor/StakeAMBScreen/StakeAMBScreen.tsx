@@ -38,7 +38,7 @@ type Props = NativeStackScreenProps<HarborTabParamsList, 'StakeAMBScreen'>;
 
 export const StakeAMBScreen = ({ route }: Props) => {
   const { t } = useTranslation();
-  const { stake } = useStakeHBRStore();
+  const { stake, limitsConfig } = useStakeHBRStore();
   const { ambAmount, onChangeAMBAmountToStake } = useStakeHBRActionsStore();
   const { wallet } = useWalletStore();
   const footerStyle = useKeyboardContainerStyleWithSafeArea(styles.footer);
@@ -96,11 +96,19 @@ export const StakeAMBScreen = ({ route }: Props) => {
   const onButtonPress = useCallback(() => {
     Keyboard.dismiss();
 
+    if (ethers.utils.parseEther(ambAmount).lt(limitsConfig.minStakeValue)) {
+      return setInputError(
+        `Min ${NumberUtils.formatNumber(
+          +ethers.utils.formatEther(limitsConfig.minStakeValue)
+        )} ${CryptoCurrencyCode.AMB}`
+      );
+    }
+
     setTimeout(
       () => bottomSheetReviewTxRef.current?.show(),
       KEYBOARD_OPENING_TIME
     );
-  }, []);
+  }, [ambAmount, limitsConfig.minStakeValue]);
 
   return (
     <SafeAreaView style={styles.container}>
