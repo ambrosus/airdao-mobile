@@ -1,25 +1,26 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { TextInputProps, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { GraphPoint } from 'react-native-graph';
 import Animated, {
+  AnimatedProps,
   useAnimatedProps,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
-import { GraphPoint } from 'react-native-graph';
 import { PriceSnapshotInterval } from '@appTypes';
 import { AnimatedText, Button, Row, Spacer } from '@components/base';
-import { ChevronDownIcon } from '@components/svg/icons';
-import { COLORS } from '@constants/colors';
-import { useAMBPrice, useAMBPriceHistorical } from '@hooks';
-import { scale, verticalScale } from '@utils/scaling';
 import { Badge } from '@components/base/Badge';
 import { PercentChange } from '@components/composite';
+import { ChevronDownIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
 import { MONTH_NAMES } from '@constants/variables';
-import { BezierChart } from '../BezierChart';
+import { useAMBPrice, useAMBPriceHistorical } from '@hooks';
+import { scale, verticalScale } from '@utils';
 import { styles } from './styles';
+import { BezierChart } from '../BezierChart';
 
 interface AMBPriceHistoryProps {
   badgeType: 'view' | 'button';
@@ -35,17 +36,24 @@ const intervalTimeDiffMap: { [key in PriceSnapshotInterval]: number } = {
   'monthly': 2.628 * 10e8
 };
 
-export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
-  const { badgeType, defaultInterval = '1d', onBadgePress } = props;
-  const { data: ambPriceNow } = useAMBPrice();
-  const ambPriceNowRef = useRef(ambPriceNow?.priceUSD);
-  const [selectedInterval, setSelectedInverval] =
+export const AMBPriceHistory = ({
+  badgeType,
+  defaultInterval = '1d',
+  onBadgePress
+}: AMBPriceHistoryProps) => {
+  const { t } = useTranslation();
+
+  const [selectedInterval, setSelectedInterval] =
     useState<PriceSnapshotInterval>(defaultInterval);
+
+  const { data: ambPriceNow } = useAMBPrice();
   const { data: historicalAMBPrice } = useAMBPriceHistorical(selectedInterval);
+
   const ambPrice = useSharedValue(ambPriceNow?.priceUSD || 0);
   const selectedPointDate = useSharedValue(-1);
+
   const didSetAMBPriceFromAPI = useRef(false);
-  const { t } = useTranslation();
+  const ambPriceNowRef = useRef(ambPriceNow?.priceUSD);
 
   useEffect(() => {
     if (ambPriceNow) {
@@ -61,6 +69,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
       (token) => new Date().getTime() - token.timestamp.getTime() <= diff
     );
   }, [historicalAMBPrice, selectedInterval]);
+
   const formattedPrice = useDerivedValue(() => {
     return `$${ambPrice.value.toFixed(6)}`;
   }, [ambPrice.value]);
@@ -91,32 +100,28 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
       const selectedDate = new Date(selectedPointDate.value);
       const isToday = now.toDateString() === selectedDate.toDateString();
       let formattedDate = '';
-      const hours =
-        selectedDate.getHours() % 12 >= 10
-          ? selectedDate.getHours() % 12
-          : `0${selectedDate.getHours() % 12}`;
-      const meridiem = selectedDate.getHours() > 12 ? 'pm' : 'am';
+      const hours = selectedDate.getHours();
       const minutes =
         selectedDate.getMinutes() >= 10
           ? selectedDate.getMinutes()
           : `0${selectedDate.getMinutes()}`;
       if (isToday) {
-        formattedDate = `${hours}:${minutes} ${meridiem}`;
+        formattedDate = `${hours}:${minutes}`;
       } else {
         const month = MONTH_NAMES[selectedDate.getMonth()];
         const date =
           selectedDate.getDate() >= 10
             ? selectedDate.getDate()
             : `0${selectedDate.getDate()}`;
-        formattedDate = `${month} ${date} ${hours}:${minutes} ${meridiem}`;
+        formattedDate = `${month} ${date} ${hours}:${minutes}`;
       }
       return {
         text: formattedDate
-      } as any;
+      } as Partial<AnimatedProps<TextInputProps>>;
     }
     return {
       text: ''
-    };
+    } as Partial<AnimatedProps<TextInputProps>>;
   });
 
   const animatedDateContainerStyles = useAnimatedStyle(() => {
@@ -202,10 +207,6 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
       <Spacer value={verticalScale(34)} />
       <BezierChart
         intervals={[
-          // {
-          //   text: '1H',
-          //   value: '1h'
-          // },
           {
             text: t('chart.timeframe.daily'),
             value: '1d'
@@ -214,11 +215,6 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
             text: t('chart.timeframe.weekly'),
             value: 'weekly'
           }
-          // temporarily hide
-          // {
-          //   text: t('chart.timeframe.monthly'),
-          //   value: 'monthly'
-          // }
         ]}
         selectedInterval={{ value: selectedInterval, text: '' }}
         data={chartData}
@@ -235,7 +231,7 @@ export const AMBPriceHistory = (props: AMBPriceHistoryProps) => {
           }
         }}
         onIntervalSelected={(interval) =>
-          setSelectedInverval(interval.value as PriceSnapshotInterval)
+          setSelectedInterval(interval.value as PriceSnapshotInterval)
         }
       />
     </View>

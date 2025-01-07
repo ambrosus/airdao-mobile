@@ -1,8 +1,8 @@
 import { ethers } from 'ethers';
+import Config from '@constants/config';
 import { ALLOWANCE } from '@features/swap/lib/abi';
 import { AllowanceArgs } from '@features/swap/types';
 import { createSigner } from '@features/swap/utils/contracts/instances';
-import Config from '@constants/config';
 
 export async function checkIsApprovalRequired({
   address,

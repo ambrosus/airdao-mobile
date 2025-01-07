@@ -1,14 +1,12 @@
-import { COLORS } from '@constants/colors';
-import { moderateScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
+import { COLORS } from '@constants/colors';
+import { moderateScale, scale } from '@utils';
 
 export const styles = StyleSheet.create({
-  icon: {
-    height: moderateScale(32),
-    width: moderateScale(32),
-    backgroundColor: COLORS.alphaBlack5,
-    borderRadius: moderateScale(16),
-    alignItems: 'center',
-    justifyContent: 'center'
+  container: {
+    padding: scale(12),
+    borderWidth: 0.5,
+    borderColor: COLORS.semanticsForegroundBorder,
+    borderRadius: moderateScale(16)
   }
 });

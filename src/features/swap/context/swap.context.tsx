@@ -1,17 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { createContextSelector } from '@utils/createContextSelector';
+import { ethers } from 'ethers';
+import {
+  BottomSheetStatus,
+  FIELD,
+  SelectedPairsState,
+  SelectedTokensKeys
+} from '@/features/swap/types';
+import { BottomSheetRef } from '@components/composite';
+import { createContextSelector } from '@utils';
 import {
   INITIAL_UI_BOTTOM_SHEET_INFORMATION,
   INITIAL_SELECTED_TOKENS,
   INITIAL_SELECTED_TOKENS_AMOUNT,
   INITIAL_SETTINGS
 } from './initials';
-import { BottomSheetRef } from '@components/composite';
-import {
-  FIELD,
-  SelectedPairsState,
-  SelectedTokensKeys
-} from '@/features/swap/types';
+import { initialBalances } from '../utils/balances';
 
 export const SwapContext = () => {
   const bottomSheetTokenARef = useRef<BottomSheetRef>(null);
@@ -19,6 +22,9 @@ export const SwapContext = () => {
   const bottomSheetPreviewSwapRef = useRef<BottomSheetRef>(null);
   const isExactInRef = useRef<boolean>(true);
   const allPairsRef = useRef<SelectedPairsState>([]);
+
+  const [bottomSheetSwapStatus, setBottomSheetSwapStatus] =
+    useState<BottomSheetStatus>(BottomSheetStatus.PREVIEW);
 
   // Tokens connected states
   const [_refExactGetter, setIsExactIn] = useState(true);
@@ -32,6 +38,10 @@ export const SwapContext = () => {
   const [selectedTokensAmount, setSelectedTokensAmount] = useState<
     Record<SelectedTokensKeys, string>
   >(INITIAL_SELECTED_TOKENS_AMOUNT);
+
+  const [balancesLoading, setBalancesLoading] = useState(false);
+  const [balances, setBalances] =
+    useState<Record<string, ethers.BigNumber>[]>(initialBalances);
 
   const [_refSettingsGetter, setSettings] = useState(INITIAL_SETTINGS);
   const [isProcessingSwap, setIsProcessingSwap] = useState(false);
@@ -49,7 +59,6 @@ export const SwapContext = () => {
   const latestSelectedTokensAmount = useRef(selectedTokensAmount);
 
   // Ref setters
-
   useEffect(() => {
     latestSelectedTokens.current = selectedTokens;
     latestSelectedTokensAmount.current = selectedTokensAmount;
@@ -101,7 +110,13 @@ export const SwapContext = () => {
     setIsIncreasingAllowance,
     allPairsRef,
     setPairs,
-    reset
+    reset,
+    balances,
+    setBalances,
+    setBalancesLoading,
+    balancesLoading,
+    setBottomSheetSwapStatus,
+    bottomSheetSwapStatus
   };
 };
 

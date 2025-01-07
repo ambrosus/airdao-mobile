@@ -1,7 +1,12 @@
 import { StyleSheet } from 'react-native';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 
 export const styles = StyleSheet.create({
+  loader: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '30%'
+  },
   container: {
     flex: 1
   },
@@ -10,10 +15,15 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   inputContainerWitHeading: {
+    position: 'relative',
     flex: 1,
     flexDirection: 'column',
     alignItems: 'flex-start',
     rowGap: 8
+  },
+  disabledInputContainer: {
+    zIndex: 1000,
+    position: 'absolute'
   },
   inputContainerWithSelector: {
     position: 'relative',

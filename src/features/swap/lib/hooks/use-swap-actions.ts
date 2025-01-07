@@ -1,6 +1,19 @@
 import { useCallback } from 'react';
 import { ethers } from 'ethers';
+import { useWalletPrivateKey } from '@entities/wallet';
 import { useSwapContextSelector } from '@features/swap/context';
+import {
+  calculateAllowanceWithProviderFee,
+  isETHtoWrapped,
+  isMultiHopSwapAvailable,
+  isWrappedToETH,
+  wrapNativeAddress
+} from '@features/swap/utils';
+import { createSigner } from '@features/swap/utils/contracts/instances';
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 import {
   checkIsApprovalRequired,
   increaseAllowance,
@@ -11,21 +24,12 @@ import {
   unwrapETH,
   wrapETH
 } from '../contracts';
-import {
-  wrapNativeAddress,
-  isETHtoWrapped,
-  isWrappedToETH,
-  isMultiHopSwapAvailable,
-  calculateAllowanceWithProviderFee
-} from '@features/swap/utils';
-import { createSigner } from '@features/swap/utils/contracts/instances';
+import { useSwapHelpers } from './use-swap-helpers';
 import { useSwapSettings } from './use-swap-settings';
 import { useSwapTokens } from './use-swap-tokens';
-import { useSwapHelpers } from './use-swap-helpers';
-import { useWallet } from '@hooks';
 
 export function useSwapActions() {
-  const { _extractPrivateKey } = useWallet();
+  const { _extractPrivateKey } = useWalletPrivateKey();
 
   const {
     _refExactGetter,
@@ -116,6 +120,7 @@ export function useSwapActions() {
       return await unwrapETH(tokenToSell.AMOUNT, signer);
     }
 
+    sendFirebaseEvent(CustomAppEvents.swap_start);
     if (isStartsWithETH && !isMultiHopSwapPossible) {
       return await swapExactETHForTokens(
         tokenToSell.AMOUNT,

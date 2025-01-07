@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Text } from '@components/base';
 import { TextProps } from '@components/base/Text/Text.types';
-import { NumberUtils } from '@utils/number';
 import { COLORS } from '@constants/colors';
+import { NumberUtils } from '@utils';
 
 interface PercentChangeProps
   extends Pick<TextProps, 'fontSize' | 'fontWeight'> {
@@ -10,9 +10,12 @@ interface PercentChangeProps
   color?: string;
 }
 
-export function PercentChange(props: PercentChangeProps): JSX.Element {
-  const { change, color, fontSize = 12, fontWeight = '500' } = props;
-
+export function PercentChange({
+  change,
+  color,
+  fontSize = 12,
+  fontWeight = '500'
+}: PercentChangeProps): JSX.Element {
   return (
     <Row alignItems="center">
       <Text
@@ -21,11 +24,9 @@ export function PercentChange(props: PercentChangeProps): JSX.Element {
         color={color || change >= 0 ? COLORS.success400 : COLORS.error400}
         testID="PercentChange_Title"
       >
-        {' '}
-        {NumberUtils.addSignToNumber(
+        {`${NumberUtils.addSignToNumber(
           Number(NumberUtils.formatNumber(change, 2))
-        )}
-        %
+        )}%`}
       </Text>
     </Row>
   );

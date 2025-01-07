@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import { upperCase } from 'lodash';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 
@@ -15,11 +14,11 @@ export const RowJustifyAlignedItem = ({
   return (
     <Row alignItems="center" justifyContent="space-between">
       <Text
-        fontSize={12}
+        fontSize={15}
         fontFamily="Inter_500Medium"
-        color={COLORS.neutral600}
+        color={COLORS.neutral500}
       >
-        {upperCase(label)}
+        {label}
       </Text>
 
       {children}

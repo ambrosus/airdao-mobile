@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { Row, Text } from '@components/base';
 import { TextInput } from '@components/base/Input/Input.text';
 import { COLORS } from '@constants/colors';
 import { useSwapSettings } from '@features/swap/lib/hooks';
+import { styles } from './styles';
 
 export const SettingsDeadlineForm = () => {
   const { t } = useTranslation();
@@ -22,9 +22,9 @@ export const SettingsDeadlineForm = () => {
     <View style={styles.container}>
       <View style={styles.inputWithLabel}>
         <Text
-          fontSize={16}
+          fontSize={14}
           fontFamily="Inter_500Medium"
-          color={COLORS.neutral500}
+          color={COLORS.neutral800}
         >
           {t('swap.settings.deadline')}
         </Text>
@@ -40,8 +40,8 @@ export const SettingsDeadlineForm = () => {
           />
           <Text
             fontSize={16}
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral600}
+            fontFamily="Inter_400Regular"
+            color={COLORS.neutral800}
           >
             {t('swap.settings.label.minutes')}
           </Text>

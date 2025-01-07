@@ -1,33 +1,48 @@
 import React, { useCallback, useMemo } from 'react';
 import { RefreshControl, View, VirtualizedList } from 'react-native';
-import { styles } from './styles';
-import {
-  useTransactions as useOrders,
-  useTransactions
-} from '@features/kosmos/lib/hooks';
-import { ScreenLoader } from '@features/kosmos/components/base';
-import { TransactionListItem, TxType } from '@features/kosmos/types';
-import { TotalOrdersAmount } from '../../composite/total-orders-amount';
-import { useClaim } from '@screens/Kosmos/hooks/useClaim';
-import { ClaimableOrderCardDetails } from '@features/kosmos/components/composite';
 import { useFocusEffect } from '@react-navigation/native';
+import {
+  TransactionListItem,
+  TxType,
+  useTransactions,
+  useTransactions as useOrders,
+  useMarketTokens
+} from '@entities/kosmos';
+import { ScreenLoader } from '@features/kosmos/components/base';
+import { ClaimableOrderCardDetails } from '@features/kosmos/components/composite';
+import { useClaimState } from '@features/kosmos/lib/hooks';
+import { styles } from './styles';
+import { TotalOrdersAmount } from '../../composite/total-orders-amount';
 
 export const UserOrdersList = () => {
   const { transactions, isTransactionsLoading, refetchTransactions } =
     useTransactions();
-  const { claimingTransaction, setClamingTransaction } = useClaim();
-  const renderRefetchController = useMemo(
-    () => (
+  const { claimingTransaction, setClaimingTransaction } = useClaimState();
+  const { refetchTokens, isTokensLoading } = useMarketTokens();
+
+  const renderRefetchController = useMemo(() => {
+    const refreshing = isTransactionsLoading || isTokensLoading;
+    const onRefresh = () => {
+      refetchTokens();
+      refetchTransactions();
+    };
+
+    return (
       <RefreshControl
-        onRefresh={refetchTransactions}
-        refreshing={isTransactionsLoading}
+        onRefresh={onRefresh}
+        refreshing={refreshing}
         removeClippedSubviews
       />
-    ),
-    [isTransactionsLoading, refetchTransactions]
-  );
+    );
+  }, [
+    isTokensLoading,
+    isTransactionsLoading,
+    refetchTokens,
+    refetchTransactions
+  ]);
 
   const { refetchTransactions: refetchOrders } = useOrders();
+
   useFocusEffect(
     useCallback(() => {
       refetchOrders();
@@ -40,7 +55,7 @@ export const UserOrdersList = () => {
       <ClaimableOrderCardDetails
         transaction={transaction}
         claimingTransaction={claimingTransaction}
-        setClamingTransaction={setClamingTransaction}
+        setClaimingTransaction={setClaimingTransaction}
       />
     );
   };
@@ -53,6 +68,12 @@ export const UserOrdersList = () => {
     return transactions.sort((a, b) => b.date - a.date);
   }, [transactions]);
 
+  const listKeyExtractor = useCallback(
+    ({ index, transaction }: { index: number; transaction: TxType }) =>
+      `${index}-${transaction.txHash}`,
+    []
+  );
+
   if (isTransactionsLoading) {
     return <ScreenLoader />;
   }
@@ -60,10 +81,11 @@ export const UserOrdersList = () => {
   const getItem = (
     _data: TxType[] | [],
     index: number
-  ): { id: string; transaction: TxType } => {
+  ): { id: string; index: number; transaction: TxType } => {
     const transaction = _data[index];
     return {
       id: transaction.txHash,
+      index,
       transaction
     };
   };
@@ -77,7 +99,7 @@ export const UserOrdersList = () => {
       </View>
 
       <VirtualizedList
-        keyExtractor={(item) => item.id}
+        keyExtractor={listKeyExtractor}
         initialNumToRender={4}
         data={sortedByDateTxs}
         refreshControl={renderRefetchController}

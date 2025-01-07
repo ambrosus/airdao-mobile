@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   input: {
@@ -22,10 +22,14 @@ export const styles = StyleSheet.create({
     height: 18,
     borderRadius: 25,
     borderWidth: 2,
-    borderColor: COLORS.neutral800,
+    backgroundColor: COLORS.neutral100,
+    borderColor: COLORS.neutral300,
     marginHorizontal: scale(18)
   },
   circleFilled: {
-    backgroundColor: COLORS.neutral800
+    borderWidth: 0,
+    width: 18,
+    height: 18,
+    backgroundColor: COLORS.brand500
   }
 });

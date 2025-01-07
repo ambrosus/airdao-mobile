@@ -5,15 +5,13 @@ export function plateVisibility(
   AMOUNT_A: string,
   TOKEN_B: SwapToken | null,
   AMOUNT_B: string,
-  oppositeAmountPerOneToken: string,
-  TokenUSDPrice: number
+  oppositeAmountPerOneToken: string
 ) {
   return (
     TOKEN_A &&
     AMOUNT_A !== '' &&
     TOKEN_B &&
     AMOUNT_B !== '' &&
-    oppositeAmountPerOneToken !== '' &&
-    TokenUSDPrice !== 0
+    oppositeAmountPerOneToken !== ''
   );
 }

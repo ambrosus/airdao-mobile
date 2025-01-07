@@ -3,13 +3,13 @@ import { ScrollView, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Button, Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { scale, verticalScale } from '@utils/scaling';
+import { WalletAvatarDefault } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { AccountDBModel } from '@database';
-import { WalletAvatarDefault } from '@components/svg/icons';
+import { scale, verticalScale } from '@utils';
+import { styles } from './styles';
 import { WalletAvatars, avatarScale } from './WalletPicker.constants';
 import { WalletPickerItem } from './WalletPicker.item';
-import { styles } from './styles';
 
 interface WalletPickerProps {
   wallets: AccountDBModel[];

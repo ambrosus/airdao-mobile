@@ -1,22 +1,22 @@
 import React, { useMemo, useState } from 'react';
 import { View } from 'react-native';
-import { styles } from './styles';
-import { Spacer, Spinner, Text } from '@components/base';
-import { PrimaryButton } from '@components/modular';
-import { COLORS } from '@constants/colors';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   NavigationProp,
   RouteProp,
   useNavigation,
   useRoute
 } from '@react-navigation/native';
-import { HomeParamsList } from '@appTypes';
-import { SuccessIcon } from '@components/svg/icons';
-import { verticalScale } from '@utils/scaling';
 import { useTranslation } from 'react-i18next';
-import { useStakingMultiplyContextSelector } from '@contexts';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { HomeParamsList } from '@appTypes';
+import { Spacer, Spinner, Text } from '@components/base';
+import { PrimaryButton } from '@components/modular';
+import { SuccessIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
+import { useStakingPoolsStore } from '@entities/staking';
 import { useBalanceOfAddress, useTokensAndTransactions } from '@hooks';
+import { verticalScale } from '@utils';
+import { styles } from './styles';
 
 export const StakeSuccessScreen = () => {
   const route = useRoute<RouteProp<HomeParamsList, 'StakeSuccessScreen'>>();
@@ -37,7 +37,7 @@ export const StakeSuccessScreen = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const { fetchPoolDetails } = useStakingMultiplyContextSelector();
+  const { fetchPoolDetails } = useStakingPoolsStore();
   const refetchPoolDetails = async () => {
     setLoading(true);
     try {

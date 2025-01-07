@@ -1,25 +1,28 @@
 import React from 'react';
+import { LayoutChangeEvent } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { AnimatedTabs } from '@components/modular';
+import { MarketType } from '@entities/kosmos';
+import { styles } from './styles';
 import { BuyBondTab } from './tabs/buy-bond';
-import { MarketType } from '@features/kosmos/types';
 import { TransactionsHistoryTab } from './tabs/transactions';
 
 interface ExactMarketTokenTabsProps {
   market: MarketType | undefined;
   scrollToInput: () => any;
   calculateMaximumAvailableAmount: (balance: string) => void;
-  tokenBalance: string;
-  isFetchingBalance: boolean;
+  userPerformedRefresh: boolean;
+  onScrollToTop: () => void;
+  onHandleBuyBondsLayoutChange: (event: LayoutChangeEvent) => void;
 }
 
 export const ExactMarketTokenTabs = ({
   market,
   scrollToInput,
   calculateMaximumAvailableAmount,
-  tokenBalance,
-  isFetchingBalance
+  userPerformedRefresh,
+  onScrollToTop,
+  onHandleBuyBondsLayoutChange
 }: ExactMarketTokenTabsProps) => {
   const { t } = useTranslation();
 
@@ -33,11 +36,12 @@ export const ExactMarketTokenTabs = ({
           title: t('kosmos.market.tabs.buy.bond'),
           view: (
             <BuyBondTab
+              onHandleBuyBondsLayoutChange={onHandleBuyBondsLayoutChange}
+              userPerformedRefresh={userPerformedRefresh}
               calculateMaximumAvailableAmount={calculateMaximumAvailableAmount}
-              tokenBalance={tokenBalance}
-              isFetchingBalance={isFetchingBalance}
               market={market}
               scrollToInput={scrollToInput}
+              onScrollToTop={onScrollToTop}
             />
           )
         },

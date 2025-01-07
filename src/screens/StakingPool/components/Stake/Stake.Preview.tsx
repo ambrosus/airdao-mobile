@@ -1,13 +1,11 @@
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useUSDPrice } from '@hooks';
-import { NumberUtils } from '@utils/number';
-import { scale, verticalScale } from '@utils/scaling';
-import { StringUtils } from '@utils/string';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
+import { StringUtils, NumberUtils, scale, verticalScale } from '@utils';
 
 interface StakePreviewProps {
   walletAddress: string;

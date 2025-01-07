@@ -1,6 +1,6 @@
 import { QueryResponse } from '@appTypes';
-import { ExplorerAccount } from '@models';
 import { useAccountByWalletHash } from '@hooks/database';
+import { ExplorerAccount } from '@models';
 import { useBalanceOfAddress } from './useBalanceOfAddress';
 
 export const useExplorerAccountFromHash = (

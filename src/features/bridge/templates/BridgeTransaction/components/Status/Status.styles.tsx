@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
-import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
 import { FONT } from '@constants/fonts';
+import { scale } from '@utils';
 
 export const styles = StyleSheet.create({
   statusMain: {
@@ -12,6 +12,8 @@ export const styles = StyleSheet.create({
     height: scale(20)
   },
   statusText: {
+    includeFontPadding: false,
+    fontSize: 14,
     color: COLORS.success700
   }
 });

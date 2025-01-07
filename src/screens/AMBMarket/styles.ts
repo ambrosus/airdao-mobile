@@ -1,11 +1,14 @@
-import { COLORS } from '@constants/colors';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
+import { COLORS } from '@constants/colors';
+import { moderateScale, scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.neutral0
+  },
+  header: {
+    shadowColor: 'transparent'
   },
   scrollView: {
     flexGrow: 1,

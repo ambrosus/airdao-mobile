@@ -1,5 +1,5 @@
-import { GetFeeDataModel } from '@lib/bridgeSDK/models/types';
 import Config from '@constants/config';
+import { GetFeeDataModel } from '@lib/bridgeSDK/models/types';
 import { MySdk } from '../sdk/index';
 
 export async function getBridgeFeeData({

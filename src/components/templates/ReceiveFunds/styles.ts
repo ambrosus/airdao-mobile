@@ -1,18 +1,11 @@
 import { StyleSheet } from 'react-native';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { moderateScale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  ambNetworkOnly: {
-    marginVertical: verticalScale(16),
-    backgroundColor: COLORS.alphaBlack5,
-    paddingHorizontal: scale(16),
-    paddingVertical: verticalScale(8),
-    borderRadius: moderateScale(16)
   },
   qrCode: {
     backgroundColor: COLORS.neutral0,
@@ -23,12 +16,11 @@ export const styles = StyleSheet.create({
     marginVertical: verticalScale(16)
   },
   copyBtn: {
+    width: '100%',
+    height: 56,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: verticalScale(16),
-    paddingVertical: verticalScale(6),
-    paddingHorizontal: scale(12),
-    borderRadius: 1000,
-    backgroundColor: COLORS.alphaBlack5
+    marginTop: verticalScale(24),
+    borderRadius: 1000
   }
 });

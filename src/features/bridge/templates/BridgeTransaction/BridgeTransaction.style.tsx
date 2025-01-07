@@ -13,5 +13,6 @@ export const styles = StyleSheet.create({
   leftContentRow: {
     gap: 10
   },
+  statusPoint: { width: 10, height: 10, borderRadius: 10 },
   amount: {}
 });

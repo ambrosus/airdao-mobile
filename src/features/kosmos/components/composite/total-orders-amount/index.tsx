@@ -2,15 +2,14 @@ import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { upperCase } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { TxType } from '@features/kosmos/types';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { useExtractToken } from '@features/kosmos/lib/hooks';
+import { TxType, useToken } from '@entities/kosmos';
 import {
   totalBondedReducer,
   totalClaimableReducer
 } from '@features/kosmos/utils';
+import { styles } from './styles';
 
 interface TotalOrdersAmountProps {
   transactions: TxType[];
@@ -18,7 +17,7 @@ interface TotalOrdersAmountProps {
 
 export const TotalOrdersAmount = ({ transactions }: TotalOrdersAmountProps) => {
   const { t } = useTranslation();
-  const { extractTokenCb } = useExtractToken();
+  const { extractTokenCb } = useToken();
 
   const totalBonded = useMemo(() => {
     return totalBondedReducer(transactions, extractTokenCb);
@@ -34,8 +33,7 @@ export const TotalOrdersAmount = ({ transactions }: TotalOrdersAmountProps) => {
         <Text
           fontSize={12}
           fontFamily="Inter_500Medium"
-          color={COLORS.neutral600}
-          style={styles.keyTypography}
+          color={COLORS.neutral500}
         >
           {upperCase(t('kosmos.orders.total.bonded'))}
         </Text>
@@ -51,8 +49,7 @@ export const TotalOrdersAmount = ({ transactions }: TotalOrdersAmountProps) => {
         <Text
           fontSize={12}
           fontFamily="Inter_500Medium"
-          color={COLORS.neutral600}
-          style={styles.keyTypography}
+          color={COLORS.neutral500}
         >
           {upperCase(t('kosmos.orders.claimable'))}
         </Text>

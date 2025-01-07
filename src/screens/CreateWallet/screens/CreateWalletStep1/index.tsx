@@ -1,32 +1,33 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  View,
   FlatList,
   ListRenderItemInfo,
   StyleProp,
+  View,
   ViewStyle
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { HomeNavigationProp } from '@appTypes';
 import { Spacer, Spinner, Text } from '@components/base';
 import { BottomAwareSafeAreaView, Header } from '@components/composite';
-import { MnemonicUtils } from '@utils/mnemonics';
-import { useAddWalletContext } from '@contexts';
-import { verticalScale, scale } from '@utils/scaling';
-import { AlertBanner, PrimaryButton, ToastType } from '@components/modular';
-import { useNavigation } from '@react-navigation/native';
+import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { HomeNavigationProp } from '@appTypes';
+
+import { useAddWalletStore } from '@features/add-wallet';
+import { scale, verticalScale, MnemonicUtils } from '@utils';
 import { styles } from './Step1.styles';
 
+const LIST_COLUMNS = 2;
+
 export const CreateWalletStep1 = () => {
-  const navigation = useNavigation<HomeNavigationProp>();
-  const [loading, setLoading] = useState(false);
-  const { walletMnemonic, mnemonicLength, setWalletMnemonic } =
-    useAddWalletContext();
-  const walletMnemonicArray = walletMnemonic.split(' ');
   const { t } = useTranslation();
-  const columnNumber = 2;
+  const navigation = useNavigation<HomeNavigationProp>();
+  const { mnemonic, mnemonicLength, onChangeMnemonic } = useAddWalletStore();
+  const [loading, setLoading] = useState(false);
+
+  const walletMnemonicArray = useMemo(() => mnemonic.split(' '), [mnemonic]);
 
   const init = async () => {
     setLoading(true);
@@ -35,7 +36,7 @@ export const CreateWalletStep1 = () => {
     const walletMnemonic = (
       await MnemonicUtils.generateNewMnemonic(mnemonicLength)
     ).mnemonic;
-    setWalletMnemonic(walletMnemonic);
+    onChangeMnemonic(walletMnemonic);
     setLoading(false);
   };
 
@@ -103,16 +104,16 @@ export const CreateWalletStep1 = () => {
             fontFamily="Inter_700Bold"
             color={COLORS.neutral900}
           >
-            {t('create.wallet.recovery.phrase')}
+            {t('button.create.wallet')}
           </Text>
         }
       />
       <Spacer value={scale(23)} />
       <View style={{ paddingHorizontal: scale(28) }}>
         <Text
+          fontSize={15}
           align="center"
-          fontSize={16}
-          fontFamily="Inter_500Medium"
+          fontFamily="Inter_400Regular"
           color={COLORS.neutral900}
         >
           {t('create.wallet.verify.text')}
@@ -129,22 +130,16 @@ export const CreateWalletStep1 = () => {
           data={walletMnemonicArray}
           bounces={false}
           showsVerticalScrollIndicator={false}
-          numColumns={columnNumber}
+          numColumns={LIST_COLUMNS}
           keyExtractor={(word, idx) => `${word}-${idx}`}
           renderItem={renderMnemonicWordListItem}
           contentContainerStyle={styles.contentContainerStyle}
         />
         <View>
-          <AlertBanner
-            text={t('create.wallet.verification.alert')}
-            type={ToastType.Highlight}
-          />
           <Spacer value={verticalScale(34)} />
           <BottomAwareSafeAreaView paddingBottom={verticalScale(18)}>
             <PrimaryButton onPress={onNextPress}>
-              <Text color={COLORS.neutral0}>
-                {t('create.wallet.verify.phrase')}
-              </Text>
+              <Text color={COLORS.neutral0}>{t('button.continue')}</Text>
             </PrimaryButton>
           </BottomAwareSafeAreaView>
         </View>

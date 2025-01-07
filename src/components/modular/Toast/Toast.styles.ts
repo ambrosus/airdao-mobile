@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { moderateScale, scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   containerStyle: {
@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(13),
     paddingVertical: verticalScale(12),
     paddingHorizontal: scale(16),
-    borderWidth: 1
+    borderWidth: 2
   },
   statusIcon: {
     width: moderateScale(24),

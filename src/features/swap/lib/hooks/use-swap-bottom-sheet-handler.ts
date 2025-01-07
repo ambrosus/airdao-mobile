@@ -1,18 +1,33 @@
 import { useCallback } from 'react';
 import { Keyboard } from 'react-native';
 import { useSwapContextSelector } from '@features/swap/context';
-import { FIELD, SelectedTokensKeys } from '@features/swap/types';
+import {
+  BottomSheetStatus,
+  FIELD,
+  SelectedTokensKeys
+} from '@features/swap/types';
+import { useSwapAllBalances } from './use-swap-all-balances';
 
 export function useSwapBottomSheetHandler() {
   const {
     bottomSheetTokenARef,
     bottomSheetTokenBRef,
-    bottomSheetPreviewSwapRef
+    bottomSheetPreviewSwapRef,
+    bottomSheetSwapStatus,
+    setBottomSheetSwapStatus
   } = useSwapContextSelector();
+
+  const { fetchAllBalances } = useSwapAllBalances();
+
+  const onChangeBottomSheetSwapStatus = useCallback(
+    (status: BottomSheetStatus) => setBottomSheetSwapStatus(status),
+    [setBottomSheetSwapStatus]
+  );
 
   const onShowBottomSheetByKey = useCallback(
     (key: SelectedTokensKeys) => {
       Keyboard.dismiss();
+      fetchAllBalances();
 
       setTimeout(() => {
         key === FIELD.TOKEN_A
@@ -20,7 +35,7 @@ export function useSwapBottomSheetHandler() {
           : bottomSheetTokenBRef.current?.show();
       }, 500);
     },
-    [bottomSheetTokenARef, bottomSheetTokenBRef]
+    [bottomSheetTokenARef, bottomSheetTokenBRef, fetchAllBalances]
   );
 
   const onDismissBottomSheetByKey = useCallback(
@@ -50,6 +65,8 @@ export function useSwapBottomSheetHandler() {
     onShowBottomSheetByKey,
     onDismissBottomSheets,
     onReviewSwapPreview,
-    onReviewSwapDismiss
+    onReviewSwapDismiss,
+    onChangeBottomSheetSwapStatus,
+    bottomSheetSwapStatus
   };
 }

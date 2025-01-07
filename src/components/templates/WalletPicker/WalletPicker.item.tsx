@@ -1,16 +1,14 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Row, Spacer, Text } from '@components/base';
-import { AccountDBModel } from '@database';
-import { WalletAvatars } from './WalletPicker.constants';
-import { useBalanceOfAddress, useUSDPrice } from '@hooks';
 import { CryptoCurrencyCode } from '@appTypes';
-import { scale, verticalScale } from '@utils/scaling';
-import { StringUtils } from '@utils/string';
-import { NumberUtils } from '@utils/number';
-import { styles } from './styles';
-import { COLORS } from '@constants/colors';
+import { Row, Spacer, Text } from '@components/base';
 import { CheckIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
+import { AccountDBModel } from '@database';
+import { useBalanceOfAddress, useUSDPrice } from '@hooks';
+import { NumberUtils, StringUtils, scale, verticalScale } from '@utils';
+import { styles } from './styles';
+import { WalletAvatars } from './WalletPicker.constants';
 
 interface WalletItemProps {
   wallet: AccountDBModel;
@@ -53,14 +51,16 @@ export const WalletPickerItem = (props: WalletItemProps) => {
             AMB
           </Text>
           <Spacer value={scale(8)} horizontal />
-          <Text
-            fontSize={14}
-            fontFamily="Inter_500Medium"
-            fontWeight="500"
-            color={COLORS.neutral400}
-          >
-            ${NumberUtils.limitDecimalCount(usdBalance, 2)}
-          </Text>
+          {!Number.isNaN(usdBalance) && (
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              fontWeight="500"
+              color={COLORS.neutral400}
+            >
+              ${NumberUtils.limitDecimalCount(usdBalance, 2)}
+            </Text>
+          )}
         </Row>
       </View>
       <Spacer value={scale(16)} horizontal />

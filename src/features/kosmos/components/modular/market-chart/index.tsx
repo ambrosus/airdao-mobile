@@ -1,22 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
-import { LineChart } from 'react-native-chart-kit';
 import { useFocusEffect } from '@react-navigation/native';
-import { chartConfigStyle, styles } from './styles';
+import { LineChart } from 'react-native-chart-kit';
 import {
-  getTokenPriceForChart,
-  getSDAPriceForChart
-} from '@features/kosmos/api';
-import { ChartTooltip } from '@features/kosmos/components/composite';
-import { ApiPricesResponse, MarketType } from '@features/kosmos/types';
-import { mapper, replaceTimestamps } from '@features/kosmos/utils';
-import {
-  CHART_WIDTH,
+  ApiPricesResponse,
   CHART_HEIGHT,
-  CHART_Y_AXIS_INTERVAL
-} from '@features/kosmos/constants';
+  CHART_WIDTH,
+  CHART_Y_AXIS_INTERVAL,
+  getSDAPriceForChart,
+  getTokenPriceForChart,
+  MarketType,
+  replaceTimestamps
+} from '@entities/kosmos';
+import { useChartStore } from '@features/kosmos';
+import { ChartTooltip } from '@features/kosmos/components/composite';
+import { mapper } from '@features/kosmos/utils';
+import { chartConfigStyle, styles } from './styles';
 import { DataPointsPressEventHandler, TooltipState } from './types';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
 
 type MarketChartProps = {
   tokenAddress: string;
@@ -39,13 +39,13 @@ export const MarketChart = ({
   market
 }: MarketChartProps) => {
   const {
-    isMarketTooltipVisible,
-    onToggleMarketTooltip,
-    setIsMarketChartLoading
-  } = useKosmosMarketsContextSelector();
+    isChartTooltipVisible,
+    onToggleIsChartTooltipVisible,
+    onToggleIsChartLoading
+  } = useChartStore();
 
-  const [marketPrices, setMarketPrices] = useState<Array<number[]>>([]);
-  const [bondPrices, setBondPrices] = useState<Array<number[]>>([]);
+  const [marketPrices, setMarketPrices] = useState<number[][]>([]);
+  const [bondPrices, setBondPrices] = useState<number[][]>([]);
   const [tooltip, setTooltip] = useState<TooltipState>({
     x: 0,
     y: 0,
@@ -55,7 +55,7 @@ export const MarketChart = ({
   const fetchChartPoints = useCallback(
     async (controller: AbortController) => {
       try {
-        setIsMarketChartLoading(true);
+        onToggleIsChartLoading(true);
 
         const now = new Date();
         const from = chartInterval
@@ -106,7 +106,7 @@ export const MarketChart = ({
       } catch (error) {
         throw error;
       } finally {
-        setIsMarketChartLoading(false);
+        onToggleIsChartLoading(false);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -126,14 +126,14 @@ export const MarketChart = ({
       y: 0,
       value: { bond: 0, market: 0, timestamp: 0, discount: 0 }
     });
-    onToggleMarketTooltip(true);
-  }, [onToggleMarketTooltip]);
+    onToggleIsChartTooltipVisible(true);
+  }, [onToggleIsChartTooltipVisible]);
 
   // Reset show tooltip state after navigated back
   useFocusEffect(
     useCallback(() => {
-      return () => onToggleMarketTooltip(false);
-    }, [onToggleMarketTooltip])
+      return () => onToggleIsChartTooltipVisible(false);
+    }, [onToggleIsChartTooltipVisible])
   );
 
   const points = useMemo(() => {
@@ -162,9 +162,9 @@ export const MarketChart = ({
           discount: discountPercentage
         }
       });
-      onToggleMarketTooltip(true);
+      onToggleIsChartTooltipVisible(true);
     },
-    [marketPrices, onToggleMarketTooltip, points.bonds, points.market]
+    [marketPrices, onToggleIsChartTooltipVisible, points.bonds, points.market]
   );
 
   const onDataPointClick = useCallback(
@@ -204,7 +204,7 @@ export const MarketChart = ({
             ]
           }}
           decorator={() =>
-            isMarketTooltipVisible && <ChartTooltip tooltip={tooltip} />
+            isChartTooltipVisible && <ChartTooltip tooltip={tooltip} />
           }
           withInnerLines={true}
           withVerticalLines={false}

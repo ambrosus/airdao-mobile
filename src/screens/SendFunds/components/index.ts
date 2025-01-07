@@ -1,5 +1,5 @@
-export * from './AddressInput';
-export * from './ConfirmTransaction';
-export * from './EstimatedFee';
-export * from './ShowInUSD';
-export * from './UseMax';
+export { AddressInput } from './address-input';
+export { ConfirmTransaction } from './confirm-tx';
+export { EstimatedFee } from './estimated-fee';
+export { ShowInUSD } from './show-usd-currency';
+export { UseMax } from './use-max-button';

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Spacer } from '@components/base';
 import { View } from 'react-native';
-import { styles } from '../../styles';
+import { Spacer } from '@components/base';
 import { CheckBox } from '@components/composite';
-import { ExplorerAccount } from '@models/Explorer';
 import { WalletItem } from '@components/templates';
 import { COLORS } from '@constants/colors';
+import { ExplorerAccount } from '@models/Explorer';
+import { styles } from '../../styles';
 
 type Props = {
   item: ExplorerAccount;

@@ -8,19 +8,21 @@ import React, {
 import {
   Keyboard,
   Platform,
+  Pressable,
   TouchableWithoutFeedback,
   View
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { styles } from './BottomSheet.styles';
-import { BottomSheetProps, BottomSheetRef } from './BottomSheet.types';
-import { BottomSheetBorderRadius } from './BottomSheet.constants';
-import { Separator } from '@components/base';
+import { AirDAOEventType } from '@appTypes';
+import { Row, Separator, Text } from '@components/base';
+import { CloseCircleIcon } from '@components/svg/icons/v2';
+import { COLORS } from '@constants/colors';
 import { useFullscreenModalHeight } from '@hooks/useFullscreenModalHeight';
 import { useKeyboardHeight } from '@hooks/useKeyboardHeight';
-import { COLORS } from '@constants/colors';
 import { AirDAOEventDispatcher } from '@lib';
-import { AirDAOEventType } from '@appTypes';
+import { BottomSheetBorderRadius } from './BottomSheet.constants';
+import { styles } from './BottomSheet.styles';
+import { BottomSheetProps, BottomSheetRef } from './BottomSheet.types';
 import { Toast } from '../../modular/Toast';
 
 const DEFAULT_BACKDROP_OPACITY = 1;
@@ -40,7 +42,9 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
       testID,
       swipingEnabled = true,
       closeOnBackPress = true,
-      onBackdropPress
+      onCustomCrossPress,
+      onBackdropPress,
+      title
     },
     ref
   ) => {
@@ -69,6 +73,12 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
       if (typeof onClose === 'function') onClose();
     }, [onClose]);
 
+    const onCrossPress = useCallback(() => {
+      setIsVisible(false);
+      Keyboard.dismiss();
+      if (typeof onCustomCrossPress === 'function') onCustomCrossPress();
+    }, [onCustomCrossPress]);
+
     useImperativeHandle(ref, () => ({
       show,
       dismiss,
@@ -96,10 +106,36 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
           ]}
           testID={testID}
         >
-          {swiperIconVisible && (
+          {swiperIconVisible && !title && (
             <View style={styles.swiper}>
               <Separator height={4} color={COLORS.neutral200} />
             </View>
+          )}
+          {title && (
+            <Row
+              style={styles.header}
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Text
+                fontSize={20}
+                fontFamily="Inter_600SemiBold"
+                color={COLORS.neutral800}
+              >
+                {title}
+              </Text>
+              <Pressable
+                disabled={!closeOnBackPress}
+                onPress={onCrossPress}
+                style={({ pressed }) => [
+                  {
+                    opacity: pressed ? 0.5 : 1
+                  }
+                ]}
+              >
+                <CloseCircleIcon />
+              </Pressable>
+            </Row>
           )}
           {children}
         </View>
@@ -114,6 +150,9 @@ export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
         containerStyle,
         testID,
         swiperIconVisible,
+        title,
+        closeOnBackPress,
+        onCrossPress,
         children
       ]
     );

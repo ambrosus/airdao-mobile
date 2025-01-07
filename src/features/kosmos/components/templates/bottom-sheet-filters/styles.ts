@@ -1,6 +1,6 @@
-import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
+import { COLORS } from '@constants/colors';
+import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   heading: {
@@ -19,12 +19,14 @@ export const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    height: 45
+    height: 45,
+    borderRadius: 1000
   },
+
   buttonText: {
-    height: '110%'
+    height: '100%'
   },
   primaryButton: {
-    backgroundColor: COLORS.brand500
+    backgroundColor: COLORS.brand600
   }
 });

@@ -1,7 +1,7 @@
+import { Q } from '@nozbe/watermelondb';
 import { DatabaseTable } from '@appTypes';
 import Database from '@database/Database';
 import { WalletDBModel } from '@database/models';
-import { Q } from '@nozbe/watermelondb';
 
 const walletsDb = DatabaseTable.Wallets;
 

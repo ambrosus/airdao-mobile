@@ -1,15 +1,13 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Spinner, Text } from '@components/base';
+import { TextProps } from '@components/base/Text/Text.types';
 import { CopyToClipboardButton } from '@components/composite';
-import { COLORS } from '@constants/colors';
-import { NumberUtils } from '@utils/number';
-import { scale, verticalScale } from '@utils/scaling';
-import { StringUtils } from '@utils/string';
 import { LogoGradient } from '@components/svg/icons';
-import { ToastPosition } from '../Toast';
+import { COLORS } from '@constants/colors';
+import { StringUtils, NumberUtils, scale, verticalScale } from '@utils';
 import { styles } from './styles';
+import { ToastOptions, ToastPosition } from '../Toast';
 
 export interface WalletCardProps {
   address: string;
@@ -25,41 +23,72 @@ export interface WalletCardProps {
 }
 
 const LOGO_THEME = {
-  DARK: [COLORS.neutral700]
+  GREEN: [COLORS.green500],
+  PURPLE: [COLORS.purple500],
+  BLUE: [COLORS.brand600]
 };
 
 const LOGO_GRADIENT = {
-  DARK: [COLORS.neutral900, COLORS.neutral900],
-  LIGHT: [COLORS.brand600, COLORS.brand300]
+  GREEN: ['rgba(255, 238, 80, 1)', 'rgba(108, 225, 169, 1)'],
+  PURPLE: ['rgba(241, 80, 255, 1)', 'rgba(146, 108, 255, 1)'],
+  BLUE: ['rgba(80, 255, 255, 1)', 'rgba(108, 157, 255, 1)']
 };
-export const WalletCard = (props: WalletCardProps) => {
-  const {
-    address,
-    ambBalance,
-    usdBalance,
-    addressLeftPadding = 5,
-    addressRightPadding = 6,
-    backgroundColor = COLORS.brand600,
-    addressTextColor = COLORS.alphaWhite50,
-    priceTextColor = COLORS.neutral0,
-    balanceLoading = false,
-    change24HR = 0
-  } = props;
 
-  const { t } = useTranslation();
+export const WalletCard = ({
+  address,
+  ambBalance,
+  usdBalance,
+  addressLeftPadding = 5,
+  addressRightPadding = 6,
+  backgroundColor = COLORS.brand600,
+  addressTextColor = COLORS.alphaWhite80,
+  priceTextColor = COLORS.neutral0,
+  balanceLoading = false,
+  change24HR = 0
+}: WalletCardProps) => {
+  const logoGradient = useMemo((): string[] => {
+    if (LOGO_THEME.GREEN.includes(backgroundColor)) {
+      return LOGO_GRADIENT.GREEN;
+    } else if (LOGO_THEME.PURPLE.includes(backgroundColor)) {
+      return LOGO_GRADIENT.PURPLE;
+    } else if (LOGO_THEME.BLUE.includes(backgroundColor)) {
+      return LOGO_GRADIENT.BLUE;
+    }
 
-  const isDarkTheme = LOGO_THEME.DARK.includes(backgroundColor);
+    return [];
+  }, [backgroundColor]);
 
-  const logoGradient = isDarkTheme ? LOGO_GRADIENT.DARK : LOGO_GRADIENT.LIGHT;
-
-  const percentChange = NumberUtils.addSignToNumber(change24HR);
-  const fiatChange = NumberUtils.formatNumber(
-    (usdBalance * change24HR) / 100,
-    2
+  const textProps: Partial<TextProps> = useMemo(
+    () => ({
+      fontSize: 15,
+      fontWeight: '500',
+      fontFamily: 'Inter_500Medium',
+      color: addressTextColor
+    }),
+    [addressTextColor]
   );
-  const timeChange = t('common.today').toLowerCase();
 
-  const changeInfo = `${percentChange}% ($${fiatChange}) ${timeChange}`;
+  const iconProps = useMemo(
+    () => ({
+      color: addressTextColor
+    }),
+    [addressTextColor]
+  );
+
+  const successTextProps: Partial<TextProps> = useMemo(
+    () => ({
+      fontSize: 14,
+      color: COLORS.neutral0
+    }),
+    []
+  );
+
+  const toastProps: Pick<ToastOptions, 'position'> = useMemo(
+    () => ({
+      position: ToastPosition.Top
+    }),
+    []
+  );
 
   return (
     <View style={[styles.container, { backgroundColor }]}>
@@ -72,25 +101,12 @@ export const WalletCard = (props: WalletCardProps) => {
           addressLeftPadding,
           addressRightPadding
         )}
-        copiedTextWrapperStyle={{
-          backgroundColor: COLORS.lightWhite,
-          borderColor: COLORS.transparentWhite,
-          borderWidth: 1,
-          paddingHorizontal: 8,
-          borderRadius: 20
-        }}
+        copiedTextWrapperStyle={styles.copiedTextWrapperStyle}
         textToCopy={address}
-        textProps={{
-          fontFamily: 'Inter_400Regular',
-          fontSize: 14,
-          fontWeight: '400',
-          color: addressTextColor
-        }}
-        iconProps={{
-          color: addressTextColor
-        }}
-        successTextProps={{ color: COLORS.neutral0, fontSize: 14 }}
-        toastProps={{ position: ToastPosition.Top }}
+        textProps={textProps}
+        iconProps={iconProps}
+        successTextProps={successTextProps}
+        toastProps={toastProps}
       />
       <View>
         {balanceLoading ? (
@@ -99,39 +115,44 @@ export const WalletCard = (props: WalletCardProps) => {
           <>
             <Row alignItems="center">
               <Text
-                color={priceTextColor}
-                fontSize={24}
-                fontWeight="800"
-                fontFamily="Mersad_600SemiBold"
+                fontSize={22}
+                fontFamily="Inter_700Bold"
+                color={COLORS.neutral0}
+                numberOfLines={1}
               >
-                {NumberUtils.limitDecimalCount(ambBalance, 2)} AMB
+                {NumberUtils.numberToTransformedLocale(ambBalance)} AMB
               </Text>
               <Spacer value={scale(16)} horizontal />
-              <View style={styles.usdPriceBg}>
-                <Text
-                  color={priceTextColor}
-                  fontSize={14}
-                  fontWeight="500"
-                  fontFamily="Inter_500Medium"
-                >
-                  $
-                  {NumberUtils.limitDecimalCount(
-                    usdBalance,
-                    usdBalance > 0 ? 2 : 0
-                  )}
-                </Text>
-              </View>
             </Row>
             <Spacer value={verticalScale(10)} />
-            {change24HR != undefined && (
-              <Text
-                fontSize={14}
-                fontFamily="Inter_500Medium"
-                color={priceTextColor}
-              >
-                {changeInfo}
-              </Text>
-            )}
+            <Row alignItems="center">
+              {!Number.isNaN(usdBalance) && (
+                <Text
+                  fontSize={15}
+                  fontFamily="Inter_500Medium"
+                  color={priceTextColor}
+                  style={styles.footerTypography}
+                >
+                  ${NumberUtils.numberToTransformedLocale(usdBalance)}
+                </Text>
+              )}
+
+              {!!change24HR && (
+                <>
+                  <Spacer horizontal value={scale(12)} />
+                  <Text
+                    fontSize={15}
+                    fontFamily="Inter_500Medium"
+                    color={change24HR > 0 ? '#9FE1CC' : COLORS.error200}
+                    style={styles.footerTypography}
+                  >
+                    {`${NumberUtils.addSignToNumber(
+                      +NumberUtils.formatNumber(change24HR, 2)
+                    )}%`}
+                  </Text>
+                </>
+              )}
+            </Row>
           </>
         )}
       </View>

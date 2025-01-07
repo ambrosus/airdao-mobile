@@ -9,14 +9,14 @@ import Animated, {
   useDerivedValue,
   runOnJS
 } from 'react-native-reanimated';
-import { SliderProps } from './Slider.types';
+import { COLORS } from '@constants/colors';
 import {
   SliderEmptyColor,
   SliderFillColor,
   SliderKnobColor,
   SliderKnobSize
 } from './Slider.constants';
-import { COLORS } from '@constants/colors';
+import { SliderProps } from './Slider.types';
 Animated.addWhitelistedNativeProps({ text: true });
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);

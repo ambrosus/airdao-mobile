@@ -1,95 +1,95 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useMemo } from 'react';
 import { View } from 'react-native';
-import { Transaction, TransactionTokenInfo } from '@models';
+import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { DownArrowIcon } from '@components/svg/icons';
-import { StringUtils } from '@utils/string';
-import { useUSDPrice } from '@hooks';
-import { NumberUtils } from '@utils/number';
+import { _txStatusLabel, _txStatusThumbnail } from '@features/explorer/utils';
+import { Transaction, TransactionTokenInfo } from '@models';
+import { NumberUtils, StringUtils, scale, verticalScale } from '@utils';
 import { styles } from './styles';
-
-const CONTRACT_CALL = '(contract call)';
 
 interface TransactionItemProps {
   transaction: Transaction;
   transactionTokenInfo: TransactionTokenInfo;
 }
 
-export const TransactionItem = (props: TransactionItemProps): JSX.Element => {
-  const { transaction, transactionTokenInfo } = props;
-  const { type } = transaction;
-  const isSent = transaction.isSent;
+export const TransactionItem = ({
+  transaction,
+  transactionTokenInfo
+}: TransactionItemProps): JSX.Element => {
   const { t } = useTranslation();
-  const usdAmount = useUSDPrice(transaction.amount, transaction.symbol);
 
-  const isContractCall = type.toLowerCase().includes('contract');
-  const transactionType = isSent
-    ? t('common.transaction.sent')
-    : t('common.transaction.received');
+  const amountColor = useMemo(() => {
+    return transaction.isSent ? COLORS.neutral800 : '#23B083';
+  }, [transaction]);
 
-  const typeToRender = isContractCall
-    ? `${transactionType} ${CONTRACT_CALL}`
-    : transactionType;
+  const amountWithSymbolValue = useMemo(() => {
+    const amount = NumberUtils.numberToTransformedLocale(
+      transactionTokenInfo.cryptoAmount
+    );
+
+    return transaction.isSent && transactionTokenInfo.cryptoAmount !== '0'
+      ? `-${amount}`
+      : amount;
+  }, [transaction, transactionTokenInfo.cryptoAmount]);
+
+  const isTransferAndSentTx = useMemo(() => {
+    const type = _txStatusLabel(transaction);
+    const types = ['Transaction', 'Transfer'];
+
+    return types.includes(type) && transaction.isSent;
+  }, [transaction]);
+
+  const label = useMemo(
+    () =>
+      t(`common.transaction.${isTransferAndSentTx ? 'destination' : 'from'}`),
+    [isTransferAndSentTx, t]
+  );
+
+  const address = useMemo(
+    () =>
+      StringUtils.formatAddress(
+        transaction[isTransferAndSentTx ? 'to' : 'from'],
+        5,
+        5
+      ),
+    [isTransferAndSentTx, transaction]
+  );
 
   return (
-    <View>
+    <View style={styles.container}>
       <Row alignItems="center" justifyContent="space-between">
         <Row alignItems="center">
-          <View
-            style={[
-              styles.icon,
-              { transform: [{ rotate: isSent ? '180deg' : '0deg' }] }
-            ]}
-          >
-            <DownArrowIcon color={COLORS.neutral900} />
-          </View>
+          {_txStatusThumbnail(transaction)}
           <Spacer value={scale(8)} horizontal />
           <View>
             <Text
-              fontSize={14}
+              fontSize={16}
               fontFamily="Inter_500Medium"
-              color={COLORS.neutral900}
+              color={COLORS.neutral800}
             >
-              {typeToRender}
+              {_txStatusLabel(transaction)}
             </Text>
             <Spacer value={verticalScale(4)} />
             <Text
-              fontSize={12}
-              fontFamily="Inter_500Medium"
-              color={COLORS.alphaBlack50}
+              fontSize={13}
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.neutral500}
             >
-              {t('common.transaction.from')}{' '}
-              {StringUtils.formatAddress(transaction.from, 5, 5)}
+              {label} {address}
             </Text>
           </View>
         </Row>
         <View>
           <Text
-            fontSize={14}
+            fontSize={16}
             align="right"
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral900}
+            fontFamily="Inter_400Regular"
+            color={amountColor}
           >
-            {NumberUtils.limitDecimalCount(
-              transactionTokenInfo.cryptoAmount,
-              2
-            )}{' '}
-            {transaction.symbol}
+            {amountWithSymbolValue} {transaction.symbol}
           </Text>
           <Spacer value={verticalScale(4)} />
-          {usdAmount >= 0 && (
-            <Text
-              fontSize={12}
-              align="right"
-              fontFamily="Inter_500Medium"
-              color={COLORS.alphaBlack50}
-            >
-              ${NumberUtils.limitDecimalCount(usdAmount, 2)}
-            </Text>
-          )}
         </View>
       </Row>
     </View>

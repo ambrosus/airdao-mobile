@@ -1,8 +1,8 @@
 import React, { useImperativeHandle, useRef, useState } from 'react';
 import { TextInput as RNTextInput, StyleSheet } from 'react-native';
-import { InputProps, InputRef } from './Input.types';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { moderateScale, scale, verticalScale } from '@utils';
+import { InputProps, InputRef } from './Input.types';
 
 export const TextInput = React.forwardRef<InputRef, InputProps>(
   (props, ref) => {

@@ -1,17 +1,17 @@
 import React, { useCallback, useMemo } from 'react';
+import { ethers } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
+import { CryptoCurrencyCode } from '@appTypes';
+import { ShimmerLoader } from '@components/animations';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { FIELD, SelectedTokensKeys } from '@features/swap/types';
-import { scale } from '@utils/scaling';
+import { WalletOutlineIcon } from '@components/svg/icons/v2';
+import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapBalance, useSwapFieldsHandler } from '@features/swap/lib/hooks';
-import { NumberUtils } from '@utils/number';
+import { FIELD, SelectedTokensKeys } from '@features/swap/types';
 import { useUSDPrice } from '@hooks';
-import { CryptoCurrencyCode } from '@appTypes';
-import { COLORS } from '@constants/colors';
-import { WalletXsIcon } from '@components/svg/icons';
-import { ShimmerLoader } from '@components/animations';
+import { NumberUtils, scale } from '@utils';
 
 interface BalanceProps {
   type: SelectedTokensKeys;
@@ -19,7 +19,12 @@ interface BalanceProps {
 
 export const Balance = ({ type }: BalanceProps) => {
   const { t } = useTranslation();
-  const { selectedTokens, setIsExactIn } = useSwapContextSelector();
+  const {
+    selectedTokens,
+    selectedTokensAmount,
+    _refExactGetter,
+    setIsExactIn
+  } = useSwapContextSelector();
   const { onSelectMaxTokensAmount, updateReceivedTokensOutput } =
     useSwapFieldsHandler();
 
@@ -39,7 +44,7 @@ export const Balance = ({ type }: BalanceProps) => {
   }, [bnBalanceAmount]);
 
   const USDTokenPrice = useUSDPrice(
-    Number(NumberUtils.limitDecimalCount(normalizedTokenBalance, 2)),
+    Number(NumberUtils.limitDecimalCount(selectedTokensAmount[type], 2)),
     selectedTokens[type]?.symbol as CryptoCurrencyCode
   );
 
@@ -49,6 +54,7 @@ export const Balance = ({ type }: BalanceProps) => {
         formatEther(bnBalanceAmount?._hex),
         18
       );
+
       onSelectMaxTokensAmount(type, fullAmount);
       setIsExactIn(type === FIELD.TOKEN_A);
 
@@ -64,6 +70,10 @@ export const Balance = ({ type }: BalanceProps) => {
     updateReceivedTokensOutput
   ]);
 
+  const disabled = useMemo(() => {
+    return bnBalanceAmount?.isZero() || !selectedTokens[type];
+  }, [bnBalanceAmount, selectedTokens, type]);
+
   const maximumTokenBalance = useMemo(() => {
     return !selectedTokens[type] ? '0' : normalizedTokenBalance;
   }, [normalizedTokenBalance, selectedTokens, type]);
@@ -76,23 +86,29 @@ export const Balance = ({ type }: BalanceProps) => {
     return isUSDPriceNegative ? 'flex-end' : 'space-between';
   }, [isUSDPriceNegative]);
 
+  const error = useMemo(() => {
+    if (!_refExactGetter || !bnBalanceAmount || !selectedTokensAmount[type])
+      return false;
+
+    const bnInputBalance = bnBalanceAmount?._hex;
+    const bnSelectedAmount = ethers.utils.parseEther(
+      selectedTokensAmount[type]
+    );
+
+    if (type === FIELD.TOKEN_A && _refExactGetter) {
+      return bnSelectedAmount.gt(bnInputBalance);
+    } else if (type === FIELD.TOKEN_B && !_refExactGetter) {
+      return bnSelectedAmount.gt(bnInputBalance);
+    }
+  }, [_refExactGetter, bnBalanceAmount, selectedTokensAmount, type]);
+
   return (
     <Row alignItems="center" justifyContent={containerJustifyContent}>
-      {isUSDPriceNegative ? null : isFetchingBalance ? (
-        <ShimmerLoader width={45} height={12} />
-      ) : (
-        <Text
-          fontSize={14}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral400}
-        >
-          ~${NumberUtils.limitDecimalCount(USDTokenPrice, 2)}
-        </Text>
-      )}
-
       <Row alignItems="center">
         <Row alignItems="center">
-          <WalletXsIcon />
+          <WalletOutlineIcon
+            color={error ? COLORS.error500 : COLORS.neutral500}
+          />
           <Spacer horizontal value={4} />
           {isFetchingBalance ? (
             <ShimmerLoader width={45} height={12} />
@@ -100,21 +116,37 @@ export const Balance = ({ type }: BalanceProps) => {
             <Text
               fontSize={14}
               fontFamily="Inter_500Medium"
-              color={COLORS.neutral400}
+              color={error ? COLORS.error500 : COLORS.neutral500}
             >
               {maximumTokenBalance}
             </Text>
           )}
         </Row>
 
-        <Spacer horizontal value={scale(16)} />
-
-        <Button onPress={onSelectMaxTokensAmountPress}>
-          <Text fontSize={14} fontFamily="Inter_600SemiBold" color="#3668DD">
-            {t('swap.text.button.max')}
-          </Text>
-        </Button>
+        {!disabled && (
+          <>
+            <Spacer horizontal value={scale(4)} />
+            <Button onPress={onSelectMaxTokensAmountPress}>
+              <Text
+                fontSize={15}
+                fontFamily="Inter_500Medium"
+                color={COLORS.brand600}
+              >
+                {t('swap.text.button.max')}
+              </Text>
+            </Button>
+          </>
+        )}
       </Row>
+      {!Number.isNaN(USDTokenPrice) && (
+        <Text
+          fontSize={14}
+          fontFamily="Inter_500Medium"
+          color={COLORS.neutral500}
+        >
+          ${NumberUtils.limitDecimalCount(USDTokenPrice, 2)}
+        </Text>
+      )}
     </Row>
   );
 };

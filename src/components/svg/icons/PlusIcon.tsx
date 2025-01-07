@@ -1,7 +1,7 @@
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
-import { IconProps } from './Icon.types';
 import { COLORS } from '@constants/colors';
+import { IconProps } from './Icon.types';
 
 export function PlusIcon(props: IconProps) {
   const { scale = 1, color = COLORS.gray500 } = props;
