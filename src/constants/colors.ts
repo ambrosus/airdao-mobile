@@ -118,6 +118,7 @@ export const COLORS = {
   veryLightGrey: '#ffffff99',
   navyIndigo: '#162c5d',
   separator: '#2f2b431a',
+  softGrayBlue: 'rgba(88, 94, 119, 1)',
 
   // V2
   foregroundSecondaryContent: 'rgba(148, 151, 156, 1)',

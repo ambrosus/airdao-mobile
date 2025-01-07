@@ -11,5 +11,9 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(16),
     paddingTop: verticalScale(12),
     backgroundColor: COLORS.neutral50
+  },
+  justifyContentContainer: {
+    flex: 1,
+    justifyContent: 'space-between'
   }
 });
