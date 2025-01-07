@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
@@ -24,6 +24,8 @@ interface SuccessTxViewProps {
   token?: CryptoCurrencyCode;
   apy?: number;
   stakeLockPeriod?: string;
+  withdraw?: boolean;
+  sender?: boolean;
 }
 
 const buttonNodeStyles = {
@@ -38,10 +40,12 @@ export const SuccessTxView = ({
   amount,
   timestamp,
   txHash,
+  sender = true,
   dismiss,
   token = CryptoCurrencyCode.HBR,
   apy,
-  stakeLockPeriod
+  stakeLockPeriod,
+  withdraw = false
 }: SuccessTxViewProps) => {
   const { t } = useTranslation();
   const { wallet } = useWalletStore();
@@ -61,6 +65,12 @@ export const SuccessTxView = ({
     }
   }, [dismiss, hbrYieldFetcher, navigation, wallet?.address]);
 
+  const title = useMemo(() => {
+    return t(
+      withdraw ? 'Withdrawal request sent' : 'harbor.successfully.stake.header'
+    );
+  }, [t, withdraw]);
+
   return (
     <View style={styles.container}>
       <SuccessIcon />
@@ -71,7 +81,7 @@ export const SuccessTxView = ({
           fontFamily="Inter_600SemiBold"
           color={COLORS.neutral900}
         >
-          {t('harbor.successfully.stake.header')}
+          {title}
         </Text>
 
         <Row alignItems="center">
@@ -88,22 +98,24 @@ export const SuccessTxView = ({
       </View>
       <View style={styles.details}>
         {/* Address row item */}
-        <Row alignItems="center" justifyContent="space-between">
-          <Text
-            fontSize={14}
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral600}
-          >
-            {t('common.transaction.from')}
-          </Text>
-          <Text
-            fontSize={14}
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral900}
-          >
-            {StringUtils.formatAddress(wallet?.address ?? '', 10, 3)}
-          </Text>
-        </Row>
+        {sender && (
+          <Row alignItems="center" justifyContent="space-between">
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral600}
+            >
+              {t('common.transaction.from')}
+            </Text>
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral900}
+            >
+              {StringUtils.formatAddress(wallet?.address ?? '', 10, 3)}
+            </Text>
+          </Row>
+        )}
         {apy && (
           <Row alignItems="center" justifyContent="space-between">
             <Text

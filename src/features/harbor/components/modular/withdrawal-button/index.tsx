@@ -1,12 +1,15 @@
 import React, { useMemo } from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { CryptoCurrencyCode } from '@appTypes';
-import { TextOrSpinner } from '@components/composite';
+import { BottomSheet, TextOrSpinner } from '@components/composite';
 import { SecondaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useStakeHBRStore } from '@entities/harbor';
+import { SuccessTxView } from '@entities/harbor/components/base';
 import { IAvailableWithdrawLogs } from '@entities/harbor/types';
 import { useWithdrawalActions } from '@features/harbor/lib/hooks';
+import { useContainerStyleWithSafeArea } from '@hooks';
+import { styles } from './styles';
 
 interface WithdrawalButtonProps {
   token: CryptoCurrencyCode.AMB | CryptoCurrencyCode.HBR;
@@ -19,11 +22,18 @@ export const WithdrawalButton = ({
   logs,
   amountToWithdraw
 }: WithdrawalButtonProps) => {
-  const { deposit, stake } = useStakeHBRStore();
-  const { withdrawalCallback, loading } = useWithdrawalActions(
-    token,
-    amountToWithdraw
+  const bottomSheetContainerStyle = useContainerStyleWithSafeArea(
+    styles.bottomSheetContainer
   );
+
+  const { deposit, stake } = useStakeHBRStore();
+  const {
+    loading,
+    timestamp,
+    transaction,
+    bottomSheetRef,
+    withdrawalCallback
+  } = useWithdrawalActions(token, amountToWithdraw);
 
   const disabled = useMemo(() => {
     const isErrorLog = logs?.status === 'error';
@@ -45,6 +55,8 @@ export const WithdrawalButton = ({
     }),
     [disabled]
   );
+
+  const onDismissBottomSheet = () => bottomSheetRef.current?.dismiss();
 
   return (
     <>
@@ -72,6 +84,24 @@ export const WithdrawalButton = ({
           spinnerColor={COLORS.neutral0}
         />
       </SecondaryButton>
+
+      <BottomSheet
+        ref={bottomSheetRef}
+        swiperIconVisible={false}
+        swipingEnabled={false}
+      >
+        <View style={bottomSheetContainerStyle}>
+          <SuccessTxView
+            withdraw
+            token={token}
+            sender={false}
+            timestamp={timestamp}
+            amount={amountToWithdraw}
+            txHash={transaction?.transactionHash}
+            dismiss={onDismissBottomSheet}
+          />
+        </View>
+      </BottomSheet>
     </>
   );
 };
