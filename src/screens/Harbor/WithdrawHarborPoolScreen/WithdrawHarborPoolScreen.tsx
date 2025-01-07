@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { HarborTabParamsList } from '@appTypes/navigation/harbor';
 import { Header } from '@components/composite';
 import { WithdrawalHbrYieldInput } from '@entities/harbor/components/modular';
+import { LogStatus } from '@entities/harbor/types';
+import { CountdownTimer } from '@features/harbor/components/composite';
 import { styles } from './styles';
 
 type Props = NativeStackScreenProps<
@@ -23,11 +25,17 @@ export const WithdrawHarborPoolScreen = ({ route }: Props) => {
       <Header title={`${t('harbor.withdraw.header')} ${token}`} />
 
       <View style={styles.innerContainer}>
-        <WithdrawalHbrYieldInput
-          token={token}
-          type={logs?.status ?? 'error'}
-          logs={logs}
-        />
+        <View style={styles.justifyContentContainer}>
+          <WithdrawalHbrYieldInput
+            token={token}
+            type={logs?.status ?? LogStatus.ERROR}
+            logs={logs}
+          />
+
+          {logs?.status === LogStatus.ERROR && (
+            <CountdownTimer timestamp={logs?.timestamp ?? 1} />
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );

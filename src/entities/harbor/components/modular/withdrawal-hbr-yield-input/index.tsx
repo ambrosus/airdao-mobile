@@ -35,7 +35,7 @@ const BACKGROUND_CONTAINER_COLORS = {
 
 interface WithdrawalHbrYieldInputProps extends PropsWithChildren {
   token: CryptoCurrencyCode.AMB | CryptoCurrencyCode.HBR;
-  type: keyof typeof BACKGROUND_CONTAINER_COLORS;
+  type: LogStatus;
   logs: IAvailableWithdrawLogs | null;
 }
 
@@ -96,7 +96,10 @@ export const WithdrawalHbrYieldInput = ({
   const containerStyle = useMemo<StyleProp<ViewStyle>>(
     () => ({
       ...styles.container,
-      backgroundColor: BACKGROUND_CONTAINER_COLORS[type]
+      backgroundColor:
+        BACKGROUND_CONTAINER_COLORS[
+          type as keyof typeof BACKGROUND_CONTAINER_COLORS
+        ]
     }),
     [type]
   );
