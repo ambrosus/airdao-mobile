@@ -68,20 +68,22 @@ export const WithdrawRequests = () => {
 
   return (
     <View style={[styles.main, { paddingTop: insets.top }]}>
-      <Header title={t('harbor.requests.header')} />
-      <FlatList
-        style={styles.main}
-        data={withdrawalList}
-        contentContainerStyle={isEmptyList ? {} : styles.listContainer}
-        renderItem={renderItem}
-        ListEmptyComponent={EmptyList}
-        refreshControl={
-          <RefreshControl
-            onRefresh={() => updateWithdrawList(wallet?.address || '')}
-            refreshing={withdrawListLoader}
-          />
-        }
-      />
+      <View style={styles.container}>
+        <Header title={t('harbor.requests.header')} />
+        <FlatList
+          style={styles.main}
+          data={withdrawalList}
+          contentContainerStyle={isEmptyList ? {} : styles.listContainer}
+          renderItem={renderItem}
+          ListEmptyComponent={EmptyList}
+          refreshControl={
+            <RefreshControl
+              onRefresh={() => updateWithdrawList(wallet?.address || '')}
+              refreshing={withdrawListLoader}
+            />
+          }
+        />
+      </View>
     </View>
   );
 };
