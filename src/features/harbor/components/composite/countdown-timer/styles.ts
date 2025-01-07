@@ -9,8 +9,8 @@ export const styles = StyleSheet.create({
   box: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    width: 33,
+    height: 28,
     borderRadius: 8,
     backgroundColor: 'rgba(88, 94, 119, 0.12)'
   },

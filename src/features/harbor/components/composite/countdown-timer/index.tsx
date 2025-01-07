@@ -1,6 +1,8 @@
 import React, { PropsWithChildren, memo, useEffect, useState } from 'react';
 import { View } from 'react-native';
+import { startCase, toLower } from 'lodash';
 import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { styles } from './styles';
@@ -10,6 +12,7 @@ interface CountdownTimerProps {
 }
 
 export const CountdownTimer = ({ timestamp }: CountdownTimerProps) => {
+  const { t } = useTranslation();
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -57,9 +60,15 @@ export const CountdownTimer = ({ timestamp }: CountdownTimerProps) => {
 
       <Row alignItems="center">
         <Row alignItems="center">
-          <Box>{timeLeft.days}</Box>
+          <Box>{formatValue(timeLeft.days)}</Box>
           <Spacer horizontal value={8} />
-          <Text>days</Text>
+          <Text
+            fontSize={12}
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral900}
+          >
+            {startCase(toLower(t('common.days')))}
+          </Text>
         </Row>
         <Row alignItems="center" style={styles.hours}>
           <TimeSegment value={formatValue(timeLeft.hours)} />
@@ -96,7 +105,13 @@ const TimeSegment = memo(
       <Spacer horizontal value={4} />
       {separator && (
         <>
-          <Text>:</Text>
+          <Text
+            fontSize={12}
+            fontFamily="Inter_500Medium"
+            color={COLORS.softGrayBlue}
+          >
+            :
+          </Text>
           <Spacer horizontal value={4} />
         </>
       )}

@@ -25,7 +25,7 @@ import {
 } from '@entities/harbor/utils';
 import { useWalletStore } from '@entities/wallet';
 import { useAMBEntity } from '@features/send-funds/lib/hooks';
-import { NumberUtils, moderateScale } from '@utils';
+import { moderateScale } from '@utils';
 import { styles } from './styles';
 
 const BACKGROUND_CONTAINER_COLORS = {
@@ -34,12 +34,16 @@ const BACKGROUND_CONTAINER_COLORS = {
 } as const;
 
 interface WithdrawalHbrYieldInputProps extends PropsWithChildren {
+  value: string;
+  onChangeValue: (payload: string) => void;
   token: CryptoCurrencyCode.AMB | CryptoCurrencyCode.HBR;
   type: LogStatus;
   logs: IAvailableWithdrawLogs | null;
 }
 
 export const WithdrawalHbrYieldInput = ({
+  value,
+  onChangeValue,
   token,
   type,
   logs
@@ -60,10 +64,6 @@ export const WithdrawalHbrYieldInput = ({
     []
   );
 
-  const onChangeAMBAmountToWithdraw = useCallback((amount: string) => {
-    console.warn(amount);
-  }, []);
-
   const disabled = useMemo(
     () => logs?.status === LogStatus.ERROR,
     [logs?.status]
@@ -77,11 +77,6 @@ export const WithdrawalHbrYieldInput = ({
   const balance = useMemo(
     () => (token === CryptoCurrencyCode.AMB ? stake : deposit),
     [deposit, stake, token]
-  );
-
-  const value = useMemo(
-    () => NumberUtils.limitDecimalCount(ethers.utils.formatEther(balance), 3),
-    [balance]
   );
 
   const labelStatus = useMemo(
@@ -126,6 +121,15 @@ export const WithdrawalHbrYieldInput = ({
     }
   }, [disabled, inputValueWidth, lockIconStyle]);
 
+  const onPressMaxAmount = useCallback(() => {
+    switch (token) {
+      case CryptoCurrencyCode.AMB:
+        return onChangeValue(ethers.utils.formatEther(stake));
+      case CryptoCurrencyCode.HBR:
+        return onChangeValue(ethers.utils.formatEther(deposit));
+    }
+  }, [deposit, onChangeValue, stake, token]);
+
   return (
     <View style={containerStyle}>
       <InputWithoutTokenSelect
@@ -133,11 +137,11 @@ export const WithdrawalHbrYieldInput = ({
         inputError={error}
         value={value}
         valueColor={typographyDynamicColor}
-        onChangeText={onChangeAMBAmountToWithdraw}
+        onChangeText={onChangeValue}
         onContentSizeChange={onInputContentSizeChange}
         token={tokenInstance}
         balance={ethers.utils.formatEther(balance)}
-        onPressMaxAmount={() => null}
+        onPressMaxAmount={onPressMaxAmount}
         arrow={false}
         renderInputLockNode={renderInputLockNode}
       />
