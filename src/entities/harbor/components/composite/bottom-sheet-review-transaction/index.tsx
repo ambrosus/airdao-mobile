@@ -1,15 +1,23 @@
-import React, { PropsWithChildren, forwardRef, useMemo } from 'react';
+import React, {
+  PropsWithChildren,
+  forwardRef,
+  useCallback,
+  useMemo
+} from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CryptoCurrencyCode } from '@appTypes';
+import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { Row, Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
+import { useStakeHBRStore } from '@entities/harbor/model';
 import { useWalletStore } from '@entities/wallet';
 import { useForwardedRef } from '@hooks';
-import { StringUtils, verticalScale } from '@utils';
+import { StringUtils, _delayNavigation, verticalScale } from '@utils';
 import { styles } from './styles';
 import { SuccessTxView } from '../../base';
 
@@ -26,8 +34,10 @@ export const BottomSheetReviewTransaction = forwardRef<
   BottomSheetReviewTransactionProps
 >(({ amount, success, timestamp, txHash, loading, children }, ref) => {
   const { t } = useTranslation();
+  const navigation = useNavigation<HarborNavigationProp>();
   const { bottom } = useSafeAreaInsets();
   const { wallet } = useWalletStore();
+  const { hbrYieldFetcher } = useStakeHBRStore();
 
   const bottomSheetRef = useForwardedRef(ref);
 
@@ -39,16 +49,26 @@ export const BottomSheetReviewTransaction = forwardRef<
     [bottom]
   );
 
-  const dismiss = () => {
+  const dismiss = useCallback(() => {
     if (bottomSheetRef.current) {
       bottomSheetRef.current.dismiss();
     }
-  };
+  }, [bottomSheetRef]);
+
+  const onDismissBottomSheet = useCallback(async () => {
+    try {
+      await hbrYieldFetcher(wallet?.address ?? '');
+      _delayNavigation(dismiss, () => navigation.goBack());
+    } catch (error) {
+      throw error;
+    }
+  }, [dismiss, hbrYieldFetcher, navigation, wallet?.address]);
 
   return (
     <BottomSheet
       ref={bottomSheetRef}
       title={success ? undefined : t('common.review')}
+      onBackdropPress={onDismissBottomSheet}
       closeOnBackPress={!loading}
       swipingEnabled={!loading}
     >

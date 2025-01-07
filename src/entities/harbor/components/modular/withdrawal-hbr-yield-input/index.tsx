@@ -64,10 +64,13 @@ export const WithdrawalHbrYieldInput = ({
     []
   );
 
-  const disabled = useMemo(
-    () => logs?.status === LogStatus.ERROR,
-    [logs?.status]
-  );
+  const isErrorLog = logs?.status === LogStatus.ERROR;
+
+  const hbrWithdrawalDisabled = useMemo(() => {
+    return token === CryptoCurrencyCode.HBR && !stake.isZero();
+  }, [stake, token]);
+
+  hbrWithdrawalDisabled;
 
   const tokenInstance = useMemo(
     () => (token === CryptoCurrencyCode.AMB ? ambInstance : hbrInstance),
@@ -108,18 +111,20 @@ export const WithdrawalHbrYieldInput = ({
   );
 
   const typographyDynamicColor = useMemo(() => {
-    return disabled ? 'rgba(88, 94, 119, 0.48)' : COLORS.neutral900;
-  }, [disabled]);
+    return isErrorLog || hbrWithdrawalDisabled
+      ? 'rgba(88, 94, 119, 0.48)'
+      : COLORS.neutral900;
+  }, [hbrWithdrawalDisabled, isErrorLog]);
 
   const renderInputLockNode = useMemo(() => {
-    if (disabled && inputValueWidth > 0) {
+    if (isErrorLog && inputValueWidth > 0) {
       return (
         <View style={lockIconStyle}>
           <LockIcon color="rgba(88, 94, 119, 0.48)" />
         </View>
       );
     }
-  }, [disabled, inputValueWidth, lockIconStyle]);
+  }, [inputValueWidth, isErrorLog, lockIconStyle]);
 
   const onPressMaxAmount = useCallback(() => {
     switch (token) {
@@ -133,7 +138,7 @@ export const WithdrawalHbrYieldInput = ({
   return (
     <View style={containerStyle}>
       <InputWithoutTokenSelect
-        editable={!disabled}
+        editable={!isErrorLog && !hbrWithdrawalDisabled}
         inputError={error}
         value={value}
         valueColor={typographyDynamicColor}
@@ -144,7 +149,7 @@ export const WithdrawalHbrYieldInput = ({
         onPressMaxAmount={onPressMaxAmount}
         arrow={false}
         renderInputLockNode={renderInputLockNode}
-        maxButtonLocked={logs?.status === LogStatus.ERROR}
+        maxButtonLocked={isErrorLog || hbrWithdrawalDisabled}
       />
 
       <View style={styles.footer}>

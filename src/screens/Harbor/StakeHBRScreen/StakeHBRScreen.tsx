@@ -2,13 +2,13 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
-  SafeAreaView,
   TouchableWithoutFeedback,
   View
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { CryptoCurrencyCode } from '@appTypes';
 import { BottomSheetRef, Header, TextOrSpinner } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
@@ -32,7 +32,7 @@ export const StakeHBRScreen = () => {
   const { approving, approve } = useApproveContract();
   const footerStyle = useKeyboardContainerStyleWithSafeArea(styles.footer);
 
-  const { deposit, allowance } = useStakeHBRStore();
+  const { deposit, allowance, limitsConfig } = useStakeHBRStore();
   const { amount, onChangeHBRAmountToStake } = useStakeHBRActionsStore();
 
   const [inputError, setInputError] = useState('');
@@ -77,6 +77,15 @@ export const StakeHBRScreen = () => {
 
   const onButtonPress = useCallback(async () => {
     Keyboard.dismiss();
+
+    if (ethers.utils.parseEther(amount).lt(limitsConfig.minStakeValue)) {
+      return setInputError(
+        `Min ${NumberUtils.formatNumber(
+          +ethers.utils.formatEther(limitsConfig.minStakeValue)
+        )} ${CryptoCurrencyCode.AMB}`
+      );
+    }
+
     if (
       label.includes(
         t('swap.button.approve', {
@@ -91,7 +100,7 @@ export const StakeHBRScreen = () => {
       () => bottomSheetReviewTxRef.current?.show(),
       KEYBOARD_OPENING_TIME
     );
-  }, [approve, label, t]);
+  }, [amount, approve, label, limitsConfig.minStakeValue, t]);
 
   return (
     <SafeAreaView style={styles.container}>

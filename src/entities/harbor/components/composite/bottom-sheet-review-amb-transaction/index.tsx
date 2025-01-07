@@ -1,7 +1,14 @@
-import React, { PropsWithChildren, forwardRef, useMemo } from 'react';
+import React, {
+  PropsWithChildren,
+  forwardRef,
+  useCallback,
+  useMemo
+} from 'react';
 import { View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
+import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { Row, Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { TokenLogo } from '@components/modular';
@@ -9,7 +16,7 @@ import { COLORS } from '@constants/colors';
 import { useStakeHBRStore } from '@entities/harbor/model';
 import { useWalletStore } from '@entities/wallet';
 import { useForwardedRef, useContainerStyleWithSafeArea } from '@hooks';
-import { NumberUtils, StringUtils } from '@utils';
+import { NumberUtils, StringUtils, _delayNavigation } from '@utils';
 import { styles } from './styles';
 import { SuccessTxView } from '../../base';
 
@@ -27,23 +34,33 @@ export const BottomSheetReviewAMBTransaction = forwardRef<
   BottomSheetReviewAMBTransactionProps
 >(({ amount, apy, success, timestamp, txHash, loading, children }, ref) => {
   const { t } = useTranslation();
+  const navigation = useNavigation<HarborNavigationProp>();
 
   const { wallet } = useWalletStore();
-  const { limitsConfig } = useStakeHBRStore();
+  const { limitsConfig, hbrYieldFetcher } = useStakeHBRStore();
   const containerStyle = useContainerStyleWithSafeArea(styles.container);
 
   const bottomSheetRef = useForwardedRef(ref);
 
-  const dismiss = () => {
+  const dismiss = useCallback(() => {
     if (bottomSheetRef.current) {
       bottomSheetRef.current.dismiss();
     }
-  };
+  }, [bottomSheetRef]);
 
   const stakeLockPeriod = useMemo(
     () => (Number(limitsConfig?.stakeLockPeriod) / 86400).toFixed(0) || '0',
     [limitsConfig?.stakeLockPeriod]
   );
+
+  const onDismissBottomSheet = useCallback(async () => {
+    try {
+      await hbrYieldFetcher(wallet?.address ?? '');
+      _delayNavigation(dismiss, () => navigation.goBack());
+    } catch (error) {
+      throw error;
+    }
+  }, [dismiss, hbrYieldFetcher, navigation, wallet?.address]);
 
   return (
     <BottomSheet
@@ -51,6 +68,7 @@ export const BottomSheetReviewAMBTransaction = forwardRef<
       title={success ? undefined : t('common.review')}
       closeOnBackPress={!loading}
       swipingEnabled={!loading}
+      onBackdropPress={onDismissBottomSheet}
     >
       <View style={containerStyle}>
         {success ? (
