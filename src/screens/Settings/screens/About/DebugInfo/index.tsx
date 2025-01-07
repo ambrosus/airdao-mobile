@@ -70,7 +70,7 @@ export const DebugInfo: React.FC = () => {
       {
         id: 'watcherLink',
         name: 'Watcher link (currentPushToken)',
-        data: `${watcherAPI}${currentPushToken}`
+        data: `${watcherAPI}/${currentPushToken}`
       }
     ];
     // @ts-ignore
