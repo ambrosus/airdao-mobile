@@ -41,6 +41,7 @@ import { styles } from './styles';
 interface InputWithoutTokenSelectProps {
   readonly title?: string;
   readonly value: string;
+  readonly defaultValue?: string;
   readonly label?: string;
   readonly token: Token;
   readonly onChangeText: (text: string) => void;
@@ -74,6 +75,7 @@ export const InputWithoutTokenSelect = forwardRef<
   (
     {
       value,
+      defaultValue,
       label,
       token,
       onChangeText,
@@ -206,6 +208,7 @@ export const InputWithoutTokenSelect = forwardRef<
                 editable={editable}
                 ref={textInputRef}
                 value={_value}
+                defaultValue={defaultValue}
                 placeholder="0"
                 type="number"
                 numberOfLines={1}

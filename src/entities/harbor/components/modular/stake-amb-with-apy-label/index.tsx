@@ -71,6 +71,7 @@ export const StakeAMBWithApyLabel = ({ logs }: StakeAMBWithApyLabelProps) => {
   };
 
   const disabled = useMemo(() => deposit.isZero(), [deposit]);
+  const isWithdrawalDisabled = useMemo(() => stake.isZero(), [stake]);
 
   const primaryButtonStyle = useMemo(
     () => ({
@@ -163,17 +164,21 @@ export const StakeAMBWithApyLabel = ({ logs }: StakeAMBWithApyLabelProps) => {
 
             <SecondaryButton
               style={styles.button}
-              disabled={disabled}
+              disabled={isWithdrawalDisabled}
               onPress={onWithdrawButtonPress}
             >
               <Row justifyContent="center" alignItems="center">
                 <WithdrawIcon
-                  color={COLORS[disabled ? 'neutral400' : 'neutral900']}
+                  color={
+                    COLORS[isWithdrawalDisabled ? 'neutral400' : 'neutral900']
+                  }
                 />
                 <Spacer horizontal value={scale(10)} />
                 <Text
                   align="justify"
-                  color={COLORS[disabled ? 'neutral400' : 'neutral900']}
+                  color={
+                    COLORS[isWithdrawalDisabled ? 'neutral400' : 'neutral900']
+                  }
                 >
                   {t('harbor.withdraw.header')}
                 </Text>

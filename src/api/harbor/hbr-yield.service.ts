@@ -93,6 +93,26 @@ class HBRYieldService {
     const tx = await contract.stake(bnAmount, { value: bnAmount });
     return await tx.wait();
   }
+
+  async withdraw(deposit: ethers.BigNumber, privateKey: string) {
+    if (deposit.isZero()) throw Error('Deposit is too low');
+
+    const signer = createSigner(privateKey);
+    const contract = createHBRLiquidityPoolContract(signer);
+
+    const tx = await contract.withdraw(deposit);
+    return await tx.wait();
+  }
+
+  async unstake(stake: ethers.BigNumber, privateKey: string) {
+    if (stake.isZero()) throw Error('Deposit is too low');
+
+    const signer = createSigner(privateKey);
+    const contract = createHBRLiquidityPoolContract(signer);
+
+    const tx = await contract.unstake(stake);
+    return await tx.wait();
+  }
 }
 
 export const hbrYieldService = new HBRYieldService();

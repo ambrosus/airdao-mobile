@@ -15,5 +15,10 @@ export const styles = StyleSheet.create({
   justifyContentContainer: {
     flex: 1,
     justifyContent: 'space-between'
+  },
+  footer: {
+    alignContent: 'center',
+    justifyContent: 'center',
+    rowGap: verticalScale(16)
   }
 });
