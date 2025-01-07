@@ -144,6 +144,7 @@ export const WithdrawalHbrYieldInput = ({
         onPressMaxAmount={onPressMaxAmount}
         arrow={false}
         renderInputLockNode={renderInputLockNode}
+        maxButtonLocked={logs?.status === LogStatus.ERROR}
       />
 
       <View style={styles.footer}>

@@ -35,15 +35,12 @@ export const WithdrawHarborPoolScreen = ({ route }: Props) => {
     params: { token, logs }
   } = route;
 
-  const { stake, deposit } = useStakeHBRStore();
+  const { stake } = useStakeHBRStore();
 
   const [amountToWithdraw, setAmountToWithdraw] = useState(
-    NumberUtils.limitDecimalCount(
-      ethers.utils.formatEther(
-        token === CryptoCurrencyCode.AMB ? stake : deposit
-      ),
-      2
-    )
+    token === CryptoCurrencyCode.AMB && logs?.status === LogStatus.ERROR
+      ? NumberUtils.limitDecimalCount(ethers.utils.formatEther(stake), 2)
+      : ''
   );
 
   const onChangeAmountToWithdraw = useCallback((amount: string) => {
@@ -79,7 +76,11 @@ export const WithdrawHarborPoolScreen = ({ route }: Props) => {
                   <CountdownTimer timestamp={logs?.timestamp ?? 1} />
                 )}
 
-                <WithdrawalButton token={token} logs={logs} />
+                <WithdrawalButton
+                  logs={logs}
+                  token={token}
+                  amountToWithdraw={amountToWithdraw}
+                />
               </View>
             </View>
           </View>
