@@ -1,8 +1,8 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react-native';
-import { BottomSheetCreateCollectionOrAddAddress } from '@components/templates/BottomSheetCreateCollectionOrAddAddress/index';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { render, waitFor } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { BottomSheetCreateCollectionOrAddAddress } from '@components/templates/BottomSheetCreateCollectionOrAddAddress/index';
 import clearAllMocks = jest.clearAllMocks;
 
 const queryClient = new QueryClient();

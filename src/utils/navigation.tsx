@@ -1,13 +1,15 @@
 const TabVisibleRoutes = [
   'HomeScreen',
-  'PortfolioScreen',
-  'SearchScreen',
   'SettingsScreen',
-  'WalletScreen'
+  'WalletScreen',
+  'ProductsScreen',
+  'StakeHarborScreen'
 ];
 
 const getTabBarVisibility = (route: string): boolean => {
   return TabVisibleRoutes.includes(route);
 };
 
-export const NavigationUtils = { getTabBarVisibility };
+export const NavigationUtils = {
+  getTabBarVisibility
+};

@@ -1,27 +1,25 @@
 import React, { useMemo } from 'react';
-import { styles } from './styles';
+import { View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
-import { NETWORK, SHORTEN_NETWORK } from '@utils/bridge';
 import { RightArrowIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
-import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
+import { NETWORK, SHORTEN_NETWORK } from '@utils';
+import { styles } from './styles';
 
 interface BridgeNetworksSelectedProps {
+  size?: 'small' | 'large';
   type?: 'preview';
   networkFrom: string;
   networkTo: string;
 }
 
 export const BridgeNetworksSelected = ({
-  type,
+  size = 'large',
   networkFrom,
   networkTo
 }: BridgeNetworksSelectedProps) => {
-  const { t } = useTranslation();
-
+  const isSmallStyle = size === 'small';
   const transformedNetworkName = useMemo(() => {
     return {
       from: SHORTEN_NETWORK[networkFrom as keyof typeof NETWORK],
@@ -29,29 +27,45 @@ export const BridgeNetworksSelected = ({
     };
   }, [networkFrom, networkTo]);
 
-  const isPreview = type === 'preview';
-
+  if (isSmallStyle) {
+    return (
+      <Row width="100%" alignItems="center" justifyContent="space-around">
+        <Row>
+          <TokenLogo
+            scale={0.7}
+            token={networkFrom}
+            overrideIconVariants={{ eth: 'blue' }}
+          />
+          <Spacer horizontal value={10} />
+          <Text fontSize={15} color={COLORS.neutral900}>
+            {transformedNetworkName.from}
+          </Text>
+        </Row>
+        <RightArrowIcon color={COLORS.neutral400} />
+        <Row>
+          <TokenLogo
+            scale={0.7}
+            token={networkTo}
+            overrideIconVariants={{ eth: 'blue' }}
+          />
+          <Spacer horizontal value={10} />
+          <Text fontSize={15} color={COLORS.neutral900}>
+            {transformedNetworkName.to}
+          </Text>
+        </Row>
+      </Row>
+    );
+  }
   return (
     <View>
-      {isPreview && (
-        <>
-          <Row justifyContent={'space-between'}>
-            <Text>{t('common.transaction.from')}</Text>
-            <Spacer value={scale(10)} />
-            <Text>{t('common.transaction.to')}</Text>
-            <Spacer value={scale(10)} />
-          </Row>
-          <Spacer value={10} />
-        </>
-      )}
       <Row justifyContent={'space-between'} alignItems="center" width={'100%'}>
         <Row
-          justifyContent={'center'}
+          justifyContent={'flex-start'}
           alignItems={'center'}
           style={styles.previewWrapper}
         >
           <TokenLogo
-            scale={networkFrom === 'amb' ? 0.6 : 0.65}
+            scale={0.7}
             token={networkFrom}
             overrideIconVariants={{ eth: 'blue' }}
           />
@@ -59,16 +73,14 @@ export const BridgeNetworksSelected = ({
             {transformedNetworkName.from}
           </Text>
         </Row>
-        <View style={styles.reorder}>
-          <RightArrowIcon color={COLORS.black} />
-        </View>
+        <RightArrowIcon color={COLORS.neutral400} scale={1.35} />
         <Row
-          justifyContent={'center'}
+          justifyContent={'flex-start'}
           alignItems={'center'}
           style={styles.previewWrapper}
         >
           <TokenLogo
-            scale={networkTo === 'amb' ? 0.6 : 0.65}
+            scale={0.7}
             token={networkTo}
             overrideIconVariants={{ eth: 'blue' }}
           />

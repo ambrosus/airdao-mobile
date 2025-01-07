@@ -1,10 +1,10 @@
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { SharePortfolio } from '@components/templates';
 import React from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
-import clearAllMocks = jest.clearAllMocks;
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Social } from '@appTypes';
+import { SharePortfolio } from '@components/templates';
+import clearAllMocks = jest.clearAllMocks;
 
 jest.mock('@utils/share', () => ({
   ShareUtils: {

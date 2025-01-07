@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {
@@ -17,6 +17,6 @@ export const styles = StyleSheet.create({
     paddingVertical: verticalScale(6),
     paddingHorizontal: scale(12),
     borderRadius: 1000,
-    backgroundColor: COLORS.neutral100
+    backgroundColor: COLORS.brand100
   }
 });

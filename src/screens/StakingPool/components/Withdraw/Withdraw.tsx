@@ -2,39 +2,46 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { staking } from '@api/staking/staking-service';
+import { ReturnedPoolDetails } from '@api/staking/types';
+import { HomeParamsList } from '@appTypes';
 import { InputRef, Row, Spacer, Text } from '@components/base';
 import {
   BottomSheet,
   BottomSheetRef,
   InputWithIcon
 } from '@components/composite';
-import { styles } from './styles';
-import { COLORS } from '@constants/colors';
-import { StringUtils } from '@utils/string';
-import { verticalScale } from '@utils/scaling';
 import { PercentageBox } from '@components/composite/PercentageBox';
-import { NumberUtils } from '@utils/number';
 import { PrimaryButton } from '@components/modular';
+import { COLORS } from '@constants/colors';
 import { AccountDBModel } from '@database';
-import { WithdrawTokenPreview } from './BottomSheet/Withdraw.Preview';
-import { ReturnedPoolDetails } from '@api/staking/types';
-import { staking } from '@api/staking/staking-service';
-import { HomeParamsList } from '@appTypes';
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 import { StakePending } from '@screens/StakingPool/components';
 
+import { NumberUtils, StringUtils, verticalScale } from '@utils';
+import { WithdrawTokenPreview } from './BottomSheet/Withdraw.Preview';
+import { styles } from './styles';
+
 const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
+
+type ScrollType = 'focus' | 'blur';
 
 interface WithdrawTokenProps {
   wallet: AccountDBModel | null;
   apy?: number;
   pool: ReturnedPoolDetails | undefined;
   isSwiping: boolean;
+  onScroll?: (value: ScrollType) => void;
 }
 
 export const WithdrawToken = ({
   wallet,
   pool,
-  isSwiping
+  isSwiping,
+  onScroll
 }: WithdrawTokenProps) => {
   const { t } = useTranslation();
   const navigation =
@@ -45,6 +52,12 @@ export const WithdrawToken = ({
 
   const [loading, setLoading] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState<string>('');
+
+  const _onScroll = (type: ScrollType) => {
+    if (typeof onScroll === 'function') {
+      onScroll(type);
+    }
+  };
 
   const onChangeWithdrawAmount = (value: string) => {
     setWithdrawAmount(StringUtils.removeNonNumericCharacters(value));
@@ -98,6 +111,7 @@ export const WithdrawToken = ({
           navigation.navigate('StakeErrorScreen')
         );
       } else {
+        sendFirebaseEvent(CustomAppEvents.withdraw_finish);
         await simulateNavigationDelay(() =>
           navigation.navigate('StakeSuccessScreen', {
             type: 'withdraw',
@@ -145,6 +159,8 @@ export const WithdrawToken = ({
       </Text>
       <Spacer value={verticalScale(8)} />
       <InputWithIcon
+        onFocus={() => _onScroll('focus')}
+        onBlur={() => _onScroll('blur')}
         ref={inputRef}
         focusable={!isSwiping}
         editable={!isSwiping}
@@ -171,7 +187,7 @@ export const WithdrawToken = ({
       <Spacer value={verticalScale(44)} />
       <PrimaryButton onPress={onWithdrawPreview} disabled={isWrongStakeValue}>
         <Text color={isWrongStakeValue ? COLORS.alphaBlack30 : COLORS.neutral0}>
-          {t(isWrongStakeValue ? 'button.enter.amount' : 'button.preview')}
+          {t(isWrongStakeValue ? 'button.enter.amount' : 'common.review')}
         </Text>
       </PrimaryButton>
 

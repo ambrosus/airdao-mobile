@@ -1,96 +1,114 @@
-import React, { ForwardedRef, forwardRef } from 'react';
+import React, { ForwardedRef, forwardRef, useCallback } from 'react';
+import { TouchableOpacity, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { HomeNavigationProp } from '@appTypes';
+import { Button, Spacer, Text } from '@components/base';
 import {
   BottomSheet,
   BottomSheetProps,
   BottomSheetRef
 } from '@components/composite';
-import { View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
-import { Button, Spacer, Text } from '@components/base';
-import { useForwardedRef } from '@hooks';
-import { verticalScale } from '@utils/scaling';
+import { AddIcon, CloseIcon } from '@components/svg/icons';
+import { DownloadIcon } from '@components/svg/icons/v2/settings';
 import { COLORS } from '@constants/colors';
-import { HomeNavigationProp } from '@appTypes';
-import { useAddWalletContext } from '@contexts';
-import { AddIcon } from '@components/svg/icons';
+import { useAddWalletStore } from '@features/add-wallet';
+import { useForwardedRef } from '@hooks';
+import { scale, verticalScale } from '@utils';
 import { styles } from './styles';
-import CirculationIcon from '@components/svg/icons/CirculationIcon';
 
 export const BottomSheetWalletCreateOrImport = forwardRef<
   BottomSheetRef,
   BottomSheetProps
 >((props, ref) => {
-  const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-  const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
-  const { setWalletName, setMnemonicLength } = useAddWalletContext();
+  const navigation = useNavigation<HomeNavigationProp>();
+  const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
 
-  const navigateToWalletCreate = () => {
-    setWalletName('');
-    setMnemonicLength(128);
+  const { onChangeMnemonicLength, onChangeName } = useAddWalletStore();
+
+  const navigateToWalletCreate = useCallback(() => {
+    onChangeName('');
+    onChangeMnemonicLength(128);
+    // @ts-ignore
     navigation.navigate('CreateWalletStep0');
     localRef.current?.dismiss();
-  };
+  }, [localRef, navigation, onChangeMnemonicLength, onChangeName]);
 
-  const navigateToImportWallet = () => {
-    setWalletName('');
-    setMnemonicLength(128);
+  const navigateToImportWallet = useCallback(() => {
+    onChangeName('');
+    onChangeMnemonicLength(128);
+    // @ts-ignore
     navigation.navigate('ImportWalletMethods');
     localRef.current?.dismiss();
-  };
+  }, [localRef, navigation, onChangeMnemonicLength, onChangeName]);
 
-  const AddWalletButton = () => (
-    <Button
-      onPress={navigateToWalletCreate}
-      style={{ ...styles.buttonWrapper, backgroundColor: COLORS.brand100 }}
-    >
-      <AddIcon color={COLORS.brand500} scale={1.9} />
-      <Spacer horizontal value={verticalScale(16)} />
-      <View>
+  const onClose = () => localRef?.current?.dismiss();
+
+  const AddWalletButton = useCallback(
+    () => (
+      <Button onPress={navigateToWalletCreate} style={styles.buttonWrapper}>
+        <View
+          style={{
+            backgroundColor: COLORS.brand600,
+            borderRadius: 50,
+            padding: 5
+          }}
+        >
+          <AddIcon color={COLORS.neutral0} scale={1.3} />
+        </View>
+        <Spacer value={15} />
         <Text
           fontFamily={'Inter_600SemiBold'}
           fontSize={16}
-          color={COLORS.brand500}
+          color={COLORS.neutral900}
         >
           {t('button.create.wallet')}
         </Text>
-        <Spacer value={verticalScale(4)} />
-        <Text fontSize={14} color={COLORS.brand300}>
-          {t('button.create.wallet.info')}
-        </Text>
-      </View>
-    </Button>
+      </Button>
+    ),
+    [navigateToWalletCreate, t]
   );
-  const ImportWalletButton = () => (
-    <Button
-      onPress={navigateToImportWallet}
-      style={{ ...styles.buttonWrapper, backgroundColor: COLORS.purple100 }}
-    >
-      <CirculationIcon />
-      <Spacer horizontal value={verticalScale(16)} />
-      <View>
+
+  const ImportWalletButton = useCallback(
+    () => (
+      <Button onPress={navigateToImportWallet} style={styles.buttonWrapper}>
+        <DownloadIcon />
+        <Spacer value={15} />
         <Text
-          fontSize={16}
-          color={COLORS.purple600}
           fontFamily={'Inter_600SemiBold'}
+          fontSize={16}
+          color={COLORS.neutral900}
         >
-          {t('button.import.wallet')}
+          {t('import.wallet.common.title')}
         </Text>
-        <Spacer value={verticalScale(4)} />
-        <Text fontSize={14} color={COLORS.purple300}>
-          {t('button.import.wallet.info')}
-        </Text>
-      </View>
-    </Button>
+      </Button>
+    ),
+    [navigateToImportWallet, t]
   );
 
   return (
-    <BottomSheet ref={localRef} swiperIconVisible height={verticalScale(225)}>
-      <View style={styles.buttonContainer}>
-        <Spacer value={verticalScale(16)} />
+    <BottomSheet
+      containerStyle={styles.buttonContainer}
+      ref={localRef}
+      swiperIconVisible
+      height={verticalScale(225)}
+    >
+      <View style={styles.titleContainer}>
+        <Text
+          fontFamily={'Inter_600SemiBold'}
+          fontSize={scale(20)}
+          color={COLORS.neutral900}
+        >
+          {t('button.add.wallet')}
+        </Text>
+        <TouchableOpacity onPress={onClose}>
+          <CloseIcon scale={0.7} border />
+        </TouchableOpacity>
+      </View>
+      <Spacer value={verticalScale(16)} />
+      <View style={styles.container}>
         <AddWalletButton />
-        <Spacer value={verticalScale(16)} />
         <ImportWalletButton />
       </View>
     </BottomSheet>

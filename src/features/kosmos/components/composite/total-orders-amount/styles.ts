@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {
@@ -10,8 +10,5 @@ export const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: COLORS.neutral100,
     rowGap: verticalScale(12)
-  },
-  keyTypography: {
-    letterSpacing: 0.36
   }
 });

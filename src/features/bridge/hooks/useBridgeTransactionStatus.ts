@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import Config from '@constants/config';
-import { keepWSAlive } from '@utils/keepWSlive';
+import { keepWSAlive } from '@utils';
 
 const POINTED_STAGES = ['1.1', '2.1', '2.2', '3.1', '3.1', '4'];
 const WSS_BRIDGE_TRANSACTIONS_HISTORY_URL = Config.WSS_BRIDGE_HISTORY_URL;
@@ -15,38 +15,42 @@ export function useBridgeTransactionStatus(
 
   const initWSSConnector = useCallback(async () => {
     try {
-      await new Promise((resolve, reject) => {
-        const ws = new WebSocket(
-          `${WSS_BRIDGE_TRANSACTIONS_HISTORY_URL}?txHash=${txHash}`
-        );
+      if (txHash) {
+        await new Promise((resolve, reject) => {
+          const ws = new WebSocket(
+            `${WSS_BRIDGE_TRANSACTIONS_HISTORY_URL}?txHash=${txHash}`
+          );
 
-        const intervalId = keepWSAlive(ws);
+          const intervalId = keepWSAlive(ws);
 
-        ws.onmessage = async (event: MessageEvent<string>) => {
-          const { data } = event;
-          const { status, confirmations, minSafetyBlocks } = JSON.parse(data);
-          setMinSafetyBlocks(minSafetyBlocks);
+          ws.onmessage = async (event: MessageEvent<string>) => {
+            const { data } = event;
+            const { status, confirmations, minSafetyBlocks } = JSON.parse(data);
+            setMinSafetyBlocks(minSafetyBlocks);
 
-          const transformedStages = POINTED_STAGES[status];
-          setStage(transformedStages);
+            const transformedStages = POINTED_STAGES[status];
+            setStage(transformedStages);
 
-          if (status < 2) return;
-          setConfirmations(confirmations);
+            if (status < 2) return;
+            setConfirmations(confirmations);
 
-          if (status === 5) {
-            ws.close();
-            resolve(null);
-          }
+            if (status === 5) {
+              ws.close();
+              resolve(null);
+            }
 
-          ws.onerror = (error) => {
-            reject(error);
+            ws.onerror = (error) => {
+              reject(error);
+            };
+            ws.onclose = () => {
+              reject('WebSocket closed unexpectedly');
+              clearInterval(intervalId);
+            };
           };
-          ws.onclose = () => {
-            reject('WebSocket closed unexpectedly');
-            clearInterval(intervalId);
-          };
-        };
-      });
+        });
+      } else {
+        setStage(POINTED_STAGES[0]);
+      }
     } catch (error) {
       await new Promise((resolve) => setTimeout(resolve, 500)); // sleep 0.5s
     }

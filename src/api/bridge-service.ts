@@ -1,11 +1,7 @@
 import axios from 'axios';
+import Config from '@constants/config';
 import { Config as BridgeConfig } from '@lib/bridgeSDK/models/types';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
-import Config from '@constants/config';
-
-interface BridgeParamsModel {
-  data: BridgeConfig;
-}
 
 const BRIDGE_TRANSACTIONS_HISTORY_URL = Config.BRIDGE_HISTORY_URL;
 
@@ -21,7 +17,7 @@ export const getBridgeHistory = async (
   }
 };
 
-const getBridgeParams = async (): Promise<BridgeParamsModel> => {
+const getBridgeParams = async (): Promise<BridgeConfig> => {
   const apiUrl = Config.BRIDGE_CONFIG;
   try {
     const res = await axios.get(apiUrl);

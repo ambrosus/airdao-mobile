@@ -1,5 +1,5 @@
-import { getModel, getUniqueId } from 'react-native-device-info';
 import { keccak256, toUtf8Bytes } from 'ethers/lib/utils';
+import { getModel, getUniqueId } from 'react-native-device-info';
 
 const UID = async () => {
   const getUID = async () =>

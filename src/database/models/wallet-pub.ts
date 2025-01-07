@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
-import { DatabaseTable } from '@appTypes';
 import { Model } from '@nozbe/watermelondb';
 import { text, field, relation } from '@nozbe/watermelondb/decorators';
+import { DatabaseTable } from '@appTypes';
 import { WalletDBModel } from './wallet';
 
 export class WalletPubDBModel extends Model {

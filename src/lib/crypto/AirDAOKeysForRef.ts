@@ -1,8 +1,8 @@
 import { ethers } from 'ethers';
-import AirDAOKeys from './AirDAOKeys';
-import { AddressUtils } from '@utils/address';
-import AddressProcessor from '@lib/crypto/AddressProcessor';
 import Config from '@constants/config';
+import AddressProcessor from '@lib/crypto/AddressProcessor';
+import { AddressUtils } from '@utils/address';
+import AirDAOKeys from './AirDAOKeys';
 
 const CACHE: { [key: string]: any } = {};
 

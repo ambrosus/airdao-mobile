@@ -1,10 +1,9 @@
 import React from 'react';
-import { AppPreference } from '../AppPrefrences.types';
-import { Row, Spacer, Text } from '@components/base';
 import { StyleSheet } from 'react-native';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { ChevronDownIcon } from '@components/svg/icons';
+import { moderateScale, scale, verticalScale } from '@utils';
+import { AppPreference } from '../AppPrefrences.types';
 
 export const AppPreferencesMenuItem = (props: AppPreference) => {
   const { title, value } = props;
@@ -18,7 +17,7 @@ export const AppPreferencesMenuItem = (props: AppPreference) => {
       <Text
         fontSize={16}
         fontFamily="Inter_600SemiBold"
-        color={COLORS.neutral500}
+        color={COLORS.neutral900}
       >
         {title}
       </Text>
@@ -31,7 +30,6 @@ export const AppPreferencesMenuItem = (props: AppPreference) => {
           {value}
         </Text>
         <Spacer value={scale(8)} horizontal />
-        <ChevronDownIcon rotate="270deg" color={COLORS.neutral300} />
       </Row>
     </Row>
   );

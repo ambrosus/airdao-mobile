@@ -1,6 +1,4 @@
 import React, {
-  Dispatch,
-  SetStateAction,
   forwardRef,
   useCallback,
   useEffect,
@@ -8,7 +6,6 @@ import React, {
   useState
 } from 'react';
 import {
-  Keyboard,
   NativeSyntheticEvent,
   StyleProp,
   TextInputKeyPressEventData,
@@ -16,19 +13,19 @@ import {
   TextStyle
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { Clipboard } from '@utils/clipboard';
-import { TextInput } from '@components/base/Input/Input.text';
 import { InputRef, TextInputProps } from '@components/base';
+import { TextInput } from '@components/base/Input/Input.text';
 import { COLORS } from '@constants/colors';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { Clipboard, moderateScale, scale, verticalScale } from '@utils';
 
 type SelectionKeys = 'start' | 'end';
 type SelectionObject = Record<SelectionKeys, null | number>;
 
 type PrivateKeyMaskedInputProps = TextInputProps & {
+  color?: string;
   value: string;
   secureTextEntry: boolean;
-  setPrivateKey: Dispatch<SetStateAction<string>>;
+  setPrivateKey: (value: string) => void;
 };
 
 const _isAlphanumeric = (char: string): boolean => {
@@ -43,10 +40,11 @@ const SELECTION_INITIAL_STATE = {
 export const PrivateKeyMaskedInput = forwardRef<
   InputRef,
   PrivateKeyMaskedInputProps
->(({ value, setPrivateKey, secureTextEntry }, maskedInputRef) => {
+>(({ color, value, setPrivateKey, secureTextEntry }, maskedInputRef) => {
   const { t } = useTranslation();
   const inputStyle: StyleProp<TextStyle> = useMemo(() => {
     return {
+      color: color || COLORS.neutral900,
       width: '100%',
       height: 90,
       borderRadius: moderateScale(12),
@@ -58,7 +56,7 @@ export const PrivateKeyMaskedInput = forwardRef<
       textAlign: 'left',
       verticalAlign: 'top'
     };
-  }, []);
+  }, [color]);
 
   const [clipboard, setClipboard] = useState('');
 
@@ -88,7 +86,6 @@ export const PrivateKeyMaskedInput = forwardRef<
         const removedExtraSymbols = text.replace(/[^\w$]/g, '');
         setPrivateKey(removedExtraSymbols);
       } else if (secureTextEntry && clipboard.includes(text)) {
-        Keyboard.dismiss();
         setPrivateKey(text);
         setCurrentCaretPosition(text.length);
       }

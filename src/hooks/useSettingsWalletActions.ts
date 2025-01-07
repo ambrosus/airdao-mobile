@@ -1,8 +1,8 @@
 import { CommonActions, useNavigation } from '@react-navigation/native';
-import { DatabaseTable, SettingsTabNavigationProp } from '@appTypes';
-import { WalletUtils } from '@utils/wallet';
 import { API } from '@api/api';
+import { DatabaseTable, SettingsTabNavigationProp } from '@appTypes';
 import { Database, WalletDBModel } from '@database';
+import { WalletUtils } from '@utils';
 
 export function useSettingsWalletActions() {
   const navigation: SettingsTabNavigationProp = useNavigation();

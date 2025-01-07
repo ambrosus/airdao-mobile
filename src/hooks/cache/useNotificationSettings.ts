@@ -1,8 +1,8 @@
-import { API } from '@api/api';
-import { QueryResponse } from '@appTypes/QueryResponse';
-import { NotificationSettings } from '@appTypes/notification';
-import { DefaultNotificationSettings } from '@constants/variables';
 import { useQuery } from '@tanstack/react-query';
+import { API } from '@api/api';
+import { NotificationSettings } from '@appTypes/notification';
+import { QueryResponse } from '@appTypes/QueryResponse';
+import { DefaultNotificationSettings } from '@constants/variables';
 import { Cache, CacheKey } from '@lib/cache';
 
 export const useNotificationSettings =

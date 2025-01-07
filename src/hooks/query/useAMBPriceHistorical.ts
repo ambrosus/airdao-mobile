@@ -1,7 +1,7 @@
+import { useQuery } from '@tanstack/react-query';
 import { API } from '@api/api';
 import { PriceSnapshotInterval, QueryResponse } from '@appTypes';
 import { AMBToken } from '@models';
-import { useQuery } from '@tanstack/react-query';
 
 export function useAMBPriceHistorical(
   interval: PriceSnapshotInterval

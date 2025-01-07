@@ -1,6 +1,18 @@
 import { ethers } from 'ethers';
 
-export const ALL_TOKENS_DATA = {
+export interface DatabaseTokenModel {
+  address: string;
+  decimals: number;
+  name: string;
+  symbol: string;
+}
+
+export interface AllTokenDataModel {
+  PROD: DatabaseTokenModel[];
+  TESTNET: DatabaseTokenModel[];
+}
+
+export const ALL_TOKENS_DATA: AllTokenDataModel = {
   PROD: [
     {
       address: ethers.constants.AddressZero,
@@ -313,9 +325,51 @@ export const ALL_TOKENS_DATA = {
       name: 'Staked AMB',
       symbol: 'stAMB',
       decimals: 18
+    },
+    {
+      address: '0xd09270E917024E75086e27854740871F1C8E0E10',
+      name: 'Harbor',
+      symbol: 'HBR',
+      decimals: 18
+    },
+    {
+      address: '0xDD7A6DC26a2d25016600936fB5A1DcB2612C4ADD',
+      decimals: 0,
+      name: 'Collateralized Harbor',
+      symbol: 'cHBR'
+    },
+    {
+      address: '0x6ee05D1Fe386555D7d4804D4B08141C60bB5eabf',
+      name: 'Astra LP',
+      symbol: 'AST-LP',
+      decimals: 18
+    },
+    {
+      address: '0x5ceCBde7811aC0Ed86Be11827AE622b89Bc429DF',
+      name: 'Astra',
+      symbol: 'AST',
+      decimals: 18
+    },
+    {
+      address: '0xC15891E4dE2793726c20F53EcA6FB6319968E5F3',
+      name: 'Kosmos Token',
+      symbol: 'KOS',
+      decimals: 18
+    },
+    {
+      address: '0x5ECAddC28FcFc0bEDF94858c6D771420672ad2CF',
+      name: 'X3NA',
+      symbol: 'X3NA',
+      decimals: 18
     }
   ],
   TESTNET: [
+    {
+      address: ethers.constants.AddressZero,
+      decimals: 0,
+      name: 'AirDAO',
+      symbol: 'AMB'
+    },
     {
       address: '0x2Cf845b49e1c4E5D657fbBF36E97B7B5B7B7b74b',
       decimals: 18,
@@ -367,7 +421,8 @@ export const ALL_TOKENS_DATA = {
     {
       address: '0x2Cf845b49e1c4E5D657fbBF36E97B7B5B7B7b74b',
       name: 'Synthetic Amber',
-      symbol: 'SAMB'
+      symbol: 'SAMB',
+      decimals: 18
     },
     {
       address: '0x92f47Ee54B8320A4E74Ddb256dc6e9129bCFD053',
@@ -378,7 +433,8 @@ export const ALL_TOKENS_DATA = {
     {
       address: '0xdd82283Fc93Aa4373B6B27a7B25EB3A770fc3aba',
       name: 'USD Coin',
-      symbol: 'USDC'
+      symbol: 'USDC',
+      decimals: 18
     },
     {
       address: '0x38742FA88FD3b16318Ba64F4747E41954e9FFc0e',
@@ -397,6 +453,48 @@ export const ALL_TOKENS_DATA = {
       decimals: 0,
       name: '“Test2“',
       symbol: '“Test2“'
+    },
+    {
+      address: '0x109948270c9Be75020bf74538D1c3Db17d6c5efd',
+      decimals: 0,
+      name: 'Collateralized Harbor',
+      symbol: 'cHBR'
+    },
+    {
+      address: '0x7B58Cbb7c4Ff2E53F8c4405606D0A7AF707ab00b',
+      name: 'Harbor',
+      symbol: 'HBR',
+      decimals: 18
+    },
+    {
+      address: '0xAedD2bf3Aa338088C5024f5A92bBc708C0073BF0',
+      name: 'Kosmos Token',
+      symbol: 'KOS',
+      decimals: 18
+    },
+    {
+      address: '0xF0FdC3f1D8D567bB6108f3Ef12BA4E2bb6C0a969',
+      decimals: 18,
+      name: 'Wrapped Ether',
+      symbol: 'WETH'
+    },
+    {
+      address: '0x740219322978F445822d5FdB84462028A8745729',
+      decimals: 18,
+      name: 'Wrapped BNB',
+      symbol: 'WBNB'
+    },
+    {
+      address: '0x24f3811961685888c7a1966cAec194e5444bfC0D',
+      name: 'Astra',
+      symbol: 'AST',
+      decimals: 18
+    },
+    {
+      address: '0x5C114A3E9b6DB57A9FE5950eC1946278a2d7A22b',
+      name: 'Staked AMB',
+      symbol: 'StAMB',
+      decimals: 18
     }
   ]
 };

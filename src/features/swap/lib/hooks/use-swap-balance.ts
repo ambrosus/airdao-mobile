@@ -1,13 +1,12 @@
 import { useCallback, useState } from 'react';
-import { BigNumber } from 'ethers/lib/ethers';
-import { SwapToken } from '@features/swap/types';
-
 import { useFocusEffect } from '@react-navigation/native';
-import { useWallet } from '@hooks';
+import { BigNumber } from 'ethers/lib/ethers';
+import { useWalletStore } from '@entities/wallet';
+import { SwapToken } from '@features/swap/types';
 import { erc20Contracts } from '@lib/erc20/erc20.contracts';
 
 export function useSwapBalance(token: SwapToken | null) {
-  const { wallet } = useWallet();
+  const { wallet } = useWalletStore();
   const [isFetchingBalance, setIsFetchingBalance] = useState(false);
   const [bnBalanceAmount, setBnBalanceAmount] = useState<BigNumber | null>(
     null

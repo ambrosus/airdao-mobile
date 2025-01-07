@@ -1,17 +1,18 @@
 import React from 'react';
 import { FlatList, ListRenderItemInfo } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { WalletDBModel } from '@database';
-import { useAllWallets } from '@hooks/database';
-import { Button } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
 import { SettingsTabNavigationProp } from '@appTypes';
+import { Button } from '@components/base';
+import { WalletDBModel } from '@database';
+import { useAllAccounts, useAllWallets } from '@hooks/database';
+import { scale, verticalScale } from '@utils';
 import { WalletItem } from './Wallet';
 
 export const AllWallets = () => {
   const allWalletsQueryInfo = useAllWallets();
   const allWallets = allWalletsQueryInfo.data;
   const navigation = useNavigation<SettingsTabNavigationProp>();
+  const { data: allAccounts } = useAllAccounts();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -21,12 +22,21 @@ export const AllWallets = () => {
   );
 
   const renderWallet = (args: ListRenderItemInfo<WalletDBModel>) => {
+    const account = allAccounts.find(
+      // @ts-ignore
+      (account) => account._raw?.hash === args.item.hash
+    );
+
+    const walletAddress = account?.address || '';
+
     const onPress = () => {
-      navigation.navigate('SingleWallet', { wallet: args.item });
+      navigation.navigate('SingleWallet', { wallet: args.item, walletAddress });
     };
+
     return (
       <Button onPress={onPress}>
         <WalletItem
+          walletAddress={walletAddress}
           index={args.index}
           wallet={args.item}
           isSelectedWallet={false}
@@ -42,7 +52,7 @@ export const AllWallets = () => {
       keyExtractor={(w) => w.hash}
       contentContainerStyle={{
         paddingHorizontal: scale(18),
-        paddingTop: verticalScale(8)
+        paddingTop: verticalScale(15)
       }}
     />
   );

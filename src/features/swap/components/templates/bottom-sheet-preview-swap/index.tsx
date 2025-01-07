@@ -1,64 +1,68 @@
-import React, { forwardRef, useMemo } from 'react';
+import React, { forwardRef, useCallback, useMemo } from 'react';
 import { View } from 'react-native';
-import { styles } from './styles';
-import { useForwardedRef } from '@hooks';
-import { PreviewInformation } from '@features/swap/components/composite';
-import { BottomSheetReviewTokenItem } from '@features/swap/components/base';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { Spacer, Text } from '@components/base';
-import { scale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
-import { FIELD } from '@features/swap/types';
-import { SubmitSwapActions } from '../../modular';
-import { useSwapContextSelector } from '@features/swap/context';
-import { SwapPendingLayout } from './components/pending';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { isETHtoWrapped, isWrappedToETH } from '@features/swap/utils';
-import { useSwapTokens } from '@features/swap/lib/hooks';
+import { HomeNavigationProp } from '@appTypes';
+import { Spacer } from '@components/base';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { useSwapContextSelector } from '@features/swap/context';
+import { useSwapBottomSheetHandler } from '@features/swap/lib/hooks';
+import { BottomSheetStatus } from '@features/swap/types';
+import { useForwardedRef } from '@hooks';
+import { scale, _delayNavigation } from '@utils';
+import { RenderBottomSheetStatusView } from './components/render';
+import { styles } from './styles';
 
 export const BottomSheetPreviewSwap = forwardRef<BottomSheetRef, unknown>(
   (_, ref) => {
     const { t } = useTranslation();
+    const navigation: HomeNavigationProp = useNavigation();
     const bottomSheetRef = useForwardedRef(ref);
     const { isProcessingSwap } = useSwapContextSelector();
-    const { tokensRoute } = useSwapTokens();
+    const {
+      bottomSheetSwapStatus,
+      onReviewSwapDismiss,
+      onChangeBottomSheetSwapStatus
+    } = useSwapBottomSheetHandler();
 
-    const isWrapOrUnwrapETH = useMemo(() => {
-      return isETHtoWrapped(tokensRoute) || isWrappedToETH(tokensRoute);
-    }, [tokensRoute]);
+    const isPreview = useMemo(
+      () => bottomSheetSwapStatus === BottomSheetStatus.PREVIEW,
+      [bottomSheetSwapStatus]
+    );
+
+    const onSuccessBottomSheetDismiss = useCallback(() => {
+      onChangeBottomSheetSwapStatus(BottomSheetStatus.PREVIEW);
+      if (bottomSheetSwapStatus === BottomSheetStatus.SUCCESS) {
+        _delayNavigation(onReviewSwapDismiss, () =>
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: 'HomeScreen' }]
+            })
+          )
+        );
+      }
+    }, [
+      bottomSheetSwapStatus,
+      navigation,
+      onChangeBottomSheetSwapStatus,
+      onReviewSwapDismiss
+    ]);
 
     return (
       <BottomSheet
-        swiperIconVisible={!isProcessingSwap}
-        closeOnBackPress={!isProcessingSwap}
-        swipingEnabled={!isProcessingSwap}
         ref={bottomSheetRef}
+        title={isPreview ? t('common.review') : undefined}
+        swiperIconVisible={false}
+        closeOnBackPress={!isProcessingSwap}
+        onBackdropPress={onSuccessBottomSheetDismiss}
+        onCustomCrossPress={onSuccessBottomSheetDismiss}
+        swipingEnabled={false}
       >
-        {isProcessingSwap ? (
-          <SwapPendingLayout />
-        ) : (
-          <View style={styles.container}>
-            <Text
-              fontSize={20}
-              fontFamily="Inter_600SemiBold"
-              color={COLORS.neutral800}
-              style={styles.heading}
-            >
-              {t('swap.bottom.sheet.heading')}
-            </Text>
+        <View style={styles.container}>
+          <RenderBottomSheetStatusView />
+        </View>
 
-            <View style={styles.preview}>
-              <BottomSheetReviewTokenItem type={FIELD.TOKEN_A} />
-              <View style={styles.divider} />
-              <BottomSheetReviewTokenItem type={FIELD.TOKEN_B} />
-            </View>
-
-            {!isWrapOrUnwrapETH && <PreviewInformation />}
-
-            <Spacer value={scale(24)} />
-            <SubmitSwapActions />
-          </View>
-        )}
         <Spacer value={scale(40)} />
       </BottomSheet>
     );

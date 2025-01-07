@@ -1,13 +1,14 @@
 import { StyleSheet } from 'react-native';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   innerContainer: {
+    height: 'auto',
     marginHorizontal: scale(16.5)
   },
+  zIndex: { zIndex: 0 },
   inputWithHeadingContainer: {
-    marginTop: 16,
-    rowGap: 8
+    marginTop: 16
   },
   balance: {
     marginTop: verticalScale(8)

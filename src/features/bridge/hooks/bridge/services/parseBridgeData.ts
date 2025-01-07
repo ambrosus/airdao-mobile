@@ -1,11 +1,11 @@
+import { Dispatch, SetStateAction } from 'react';
+import { CryptoCurrencyCode } from '@appTypes';
 import {
   BridgePairsModel,
   NetworksNames,
   RenderTokenItem
 } from '@models/Bridge';
 import { DEFAULT_TOKEN_PAIRS } from '../../../constants';
-import { CryptoCurrencyCode } from '@appTypes';
-import { Dispatch, SetStateAction } from 'react';
 
 export const parseNetworkParams = (
   pair: BridgePairsModel,

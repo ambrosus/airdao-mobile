@@ -1,21 +1,23 @@
 import React, { useMemo, useRef } from 'react';
 import { View } from 'react-native';
-import { styles } from './BridgeTransaction.style';
-
-import { TokenLogo } from '@components/modular';
-import { scale } from '@utils/scaling';
-import { NumberUtils } from '@utils/number';
-import { Status } from './components/Status/Status';
-import { BottomSheetRef } from '@components/composite';
-import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
-import { Button, Row, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { NETWORK, tokenThumb, transactionFrom } from '@utils/bridge';
-import { useBridgeTransactionStatus } from '@features/bridge/hooks/useBridgeTransactionStatus';
 import { useTranslation } from 'react-i18next';
+import { Button, Row, Text } from '@components/base';
+import { BottomSheetRef } from '@components/composite';
+import { TokenLogo } from '@components/modular';
+import { COLORS } from '@constants/colors';
 import { DECIMAL_LIMIT } from '@constants/variables';
-import { BottomSheetBridgeTransactionPendingHistory } from '@features/bridge/templates/BottomSheetBridgeTransactionPendingHistory';
+import { useBridgeTransactionStatus } from '@features/bridge/hooks/useBridgeTransactionStatus';
 import { BottomSheetBridgeTransactionHistory } from '@features/bridge/templates/BottomSheetBridgeTransactionHistory/BottomSheetBridgeTransactionHistory';
+import { BottomSheetBridgeTransactionPendingHistory } from '@features/bridge/templates/BottomSheetBridgeTransactionPendingHistory';
+import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
+import {
+  NumberUtils,
+  scale,
+  NETWORK,
+  tokenThumb,
+  transactionFrom
+} from '@utils';
+import { styles } from './BridgeTransaction.style';
 
 interface BridgeTransactionModel {
   transaction: BridgeTransactionHistoryDTO;
@@ -55,6 +57,14 @@ export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
     }
   };
 
+  const statusStyle = useMemo(() => {
+    const isSuccessTransaction = transactionStatus === 'success';
+    return {
+      ...styles.statusPoint,
+      backgroundColor: isSuccessTransaction ? COLORS.green500 : COLORS.yellow500
+    };
+  }, [transactionStatus]);
+
   return (
     <>
       <Button onPress={onPreviewTransactionDetails}>
@@ -79,16 +89,17 @@ export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
               color={COLORS.alphaBlack50}
               numberOfLines={1}
             >
-              {t('bridge.transaction.to', {
+              {t('bridge.transaction.destination', {
                 networkTo:
                   NETWORK[transaction.networkTo as keyof typeof NETWORK]
               })}
             </Text>
           </View>
-          <Status
-            steps={{ start: confirmations, end: minSafetyBlocks }}
-            status={transactionStatus}
-          />
+          <View style={{ ...statusStyle }} />
+          {/*<Status*/}
+          {/*  steps={{ start: confirmations, end: minSafetyBlocks }}*/}
+          {/*  status={transactionStatus}*/}
+          {/*/>*/}
         </View>
       </Button>
 

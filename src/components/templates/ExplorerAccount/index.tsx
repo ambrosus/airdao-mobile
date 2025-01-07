@@ -2,16 +2,14 @@ import React, { useRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Badge, Button, Row, Spacer, Text } from '@components/base';
-import { ExplorerAccount } from '@models/Explorer';
-import { scale, verticalScale } from '@utils/scaling';
-import { StringUtils } from '@utils/string';
-import { useAMBPrice } from '@hooks/query';
-import { NumberUtils } from '@utils/number';
-import { styles } from './styles';
-import { useLists } from '@contexts/ListsContext';
 import { BottomSheetRef, CopyToClipboardButton } from '@components/composite';
 import { COLORS } from '@constants/colors';
+import { useListsSelector } from '@entities/lists';
 import { useWatchlist } from '@hooks';
+import { useAMBPrice } from '@hooks/query';
+import { ExplorerAccount } from '@models/Explorer';
+import { NumberUtils, scale, verticalScale, StringUtils } from '@utils';
+import { styles } from './styles';
 import { BottomSheetAddWalletToList } from '../BottomSheetAddWalletToList';
 
 interface ExplorerAccountProps {
@@ -21,15 +19,18 @@ interface ExplorerAccountProps {
   onToggleWatchlist?: (isOnWatchlist: boolean) => unknown;
 }
 
-export const ExplorerAccountView = (
-  props: ExplorerAccountProps
-): JSX.Element => {
-  const { account, listInfoVisible, nameVisible, onToggleWatchlist } = props;
-  const { listsOfAddressGroup } = useLists((v) => v);
-  const { addToWatchlist, removeFromWatchlist } = useWatchlist();
+export const ExplorerAccountView = ({
+  account,
+  listInfoVisible,
+  nameVisible,
+  onToggleWatchlist
+}: ExplorerAccountProps): JSX.Element => {
   const { t } = useTranslation();
 
+  const { listsOfAddressGroup } = useListsSelector();
+  const { addToWatchlist, removeFromWatchlist } = useWatchlist();
   const { data: ambPriceData } = useAMBPrice();
+
   const ambPriceUSD = ambPriceData?.priceUSD || 0;
 
   const addToListModal = useRef<BottomSheetRef>(null);
@@ -243,4 +244,4 @@ export const ExplorerAccountView = (
 };
 
 export * from './ExplorerAccount.Transactions';
-export * from './ExplorerAccount.TransactionItem';
+export * from './components/transaction-item/ExplorerAccount.TransactionItem';

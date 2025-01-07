@@ -1,5 +1,6 @@
+import { $token } from '@entities/kosmos';
 import i18n from '@localization/i18n';
-import { getTokenByAddress } from './token-by-address';
+
 import {
   FiltersState,
   MarketType,
@@ -35,7 +36,7 @@ function filterMarketsByToken(
   tokens: Token[] = []
 ): MarketType[] {
   return markets.filter((market) => {
-    const quoteToken = getTokenByAddress(market.quoteToken, tokens);
+    const quoteToken = $token(market.quoteToken, tokens);
     return quoteToken && quoteToken.symbol === token;
   });
 }

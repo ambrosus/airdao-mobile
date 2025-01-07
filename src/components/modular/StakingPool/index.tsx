@@ -1,15 +1,13 @@
-import { Row, Spacer, Text } from '@components/base';
-import { StakingPool } from '@models';
 import React from 'react';
 import { View } from 'react-native';
-import { TokenLogo } from '../TokenLogo';
-import { scale, verticalScale } from '@utils/scaling';
+import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
+import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { usePoolDetailsByName } from '@contexts';
-import { NumberUtils } from '@utils/number';
-import { BigNumber } from 'ethers';
-import { TokenUtils } from '@utils/token';
+import { useStakingPoolDetails } from '@entities/staking';
+import { StakingPool } from '@models';
+import { scale, verticalScale, TokenUtils, NumberUtils } from '@utils';
+import { TokenLogo } from '../TokenLogo';
 
 interface StakingPoolItemProps {
   stakingPool: StakingPool;
@@ -17,14 +15,14 @@ interface StakingPoolItemProps {
 
 export const StakingPoolItem = (props: StakingPoolItemProps) => {
   const { stakingPool } = props;
-  const poolStakingDetails = usePoolDetailsByName(stakingPool.token.name);
+  const poolStakingDetails = useStakingPoolDetails(stakingPool.token.name);
   const { t } = useTranslation();
 
   return (
     <Row
       alignItems="center"
       justifyContent="space-between"
-      style={{ opacity: stakingPool.isActive ? 1 : 0.5 }}
+      // style={{ opacity: stakingPool.isActive ? 1 : 0.5 }}
     >
       <Row alignItems="center">
         <TokenLogo token={stakingPool.token.name} />
@@ -44,9 +42,10 @@ export const StakingPoolItem = (props: StakingPoolItemProps) => {
             fontWeight="500"
           >
             {t('staking.current.stake', {
-              amount: NumberUtils.formatAmount(
-                poolStakingDetails?.user.raw ?? BigNumber.from(0),
-                0
+              amount: NumberUtils.formatDecimal(
+                ethers.utils.formatEther(
+                  poolStakingDetails?.user.raw ?? ethers.BigNumber.from(0)
+                )
               ),
               symbol: 'AMB'
             })}

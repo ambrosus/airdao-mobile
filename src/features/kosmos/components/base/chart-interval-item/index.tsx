@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { StyleProp, TouchableOpacity, ViewStyle } from 'react-native';
-import { scale } from '@utils/scaling';
 import { Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { scale } from '@utils';
 
 interface ChartIntervalItemProps {
   interval: { label: string; value: number };
@@ -19,13 +19,13 @@ export const ChartIntervalItem = ({
     return {
       borderRadius: scale(101),
       paddingHorizontal: scale(16),
-      paddingVertical: 8,
-      borderColor: '#C5D4F5',
+      paddingVertical: 4,
       alignItems: 'center',
       justifyContent: 'center',
       borderWidth: selectedInterval === interval.value ? 1 : 0,
+      borderColor: COLORS.primary100,
       backgroundColor:
-        selectedInterval === interval.value ? '#E9EFFB' : 'transparent'
+        selectedInterval === interval.value ? COLORS.primary50 : 'transparent'
     };
   }, [interval, selectedInterval]);
 
@@ -53,7 +53,7 @@ export const ChartIntervalItem = ({
         fontFamily={intervalValueFontFamily}
         color={intervalValueColor}
       >
-        {interval.label}
+        {interval.label.toUpperCase()}
       </Text>
     </TouchableOpacity>
   );

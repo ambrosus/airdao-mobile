@@ -1,35 +1,44 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import {
   InteractionManager,
   LayoutChangeEvent,
   RefreshControl,
   View
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useFocusEffect } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { isIOS } from 'react-native-popover-view/dist/Constants';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { styles } from './styles';
+import { HomeParamsList } from '@appTypes';
+import { Spacer } from '@components/base';
 import { Header } from '@components/composite';
+import { DEVICE_HEIGHT } from '@constants/variables';
+import {
+  useMarketByIdQuery,
+  useMarketTransactions,
+  useToken
+} from '@entities/kosmos';
+import { useChartStore } from '@features/kosmos';
 import {
   MarketHeaderDetails,
   ScreenLoader
 } from '@features/kosmos/components/base';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { useBalance, useExtractToken } from '@features/kosmos/lib/hooks';
-import { HomeParamsList } from '@appTypes';
-import {
-  useMarketByIdQuery,
-  useMarketTransactions
-} from '@features/kosmos/lib/query';
 import { MarketTableDetails } from '@features/kosmos/components/composite';
 import {
   ExactMarketTokenTabs,
   MarketChartsWithTimeframes
 } from '@features/kosmos/components/templates';
-import { isIOS } from 'react-native-popover-view/dist/Constants';
-import { isAndroid } from '@utils/isPlatform';
+import { useBalance, useResetStore } from '@features/kosmos/lib/hooks';
 import { useUpdateScreenData } from '@hooks/useUpdateScreenData';
+import { isAndroid, verticalScale } from '@utils';
+import { styles } from './styles';
 
 type KosmosMarketScreenProps = NativeStackScreenProps<
   HomeParamsList,
@@ -37,26 +46,27 @@ type KosmosMarketScreenProps = NativeStackScreenProps<
 >;
 
 export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
-  const { onToggleMarketTooltip, isMarketChartLoading, reset } =
-    useKosmosMarketsContextSelector();
-  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
-  const { token } = useExtractToken(route.params.market.payoutToken);
+  const { onToggleIsChartTooltipVisible, isChartLoading } = useChartStore();
+
+  const { reset } = useResetStore();
+
+  const { token } = useToken(route.params.market.payoutToken);
   const [marketLayoutYAxis, setMarketLayoutYAxis] = useState(0);
   const [isRefreshingData, setIsRefreshingData] = useState(false);
+  const [userPerformedRefresh, setUserPerformedRefresh] = useState(false);
+  const [buyBondsLayoutMeasureHeight, setBuyBondsLayoutMeasureHeight] =
+    useState(0);
 
-  const { market, refetch, isLoading } = useMarketByIdQuery(
+  const { market, refetch, isRefetching, isLoading } = useMarketByIdQuery(
     route.params.market.id
   );
 
-  const {
-    calculateMaximumAvailableAmount,
-    isFetching: isFetchingBalance,
-    tokenBalance,
-    refetchTokenBalance
-  } = useBalance(market);
+  const { calculateMaximumAvailableAmount } = useBalance(market);
 
   const { refetch: refetchTransactions, isLoading: isLoadingTransaction } =
     useMarketTransactions(market?.id);
+
+  const scrollRef = useRef<KeyboardAwareScrollView>(null);
 
   const renderHeaderMiddleContent = useMemo(() => {
     const tokenSymbol = token?.symbol ?? '';
@@ -66,9 +76,9 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
   const onScrollBeginDragHandler = useCallback(
     () =>
       InteractionManager.runAfterInteractions(() =>
-        onToggleMarketTooltip(false)
+        onToggleIsChartTooltipVisible(false)
       ),
-    [onToggleMarketTooltip]
+    [onToggleIsChartTooltipVisible]
   );
 
   useFocusEffect(
@@ -87,53 +97,67 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
     [marketLayoutYAxis]
   );
 
-  const refreshData = useCallback(async () => {
+  const onRefetchMarketDetails = useCallback(async () => {
+    setUserPerformedRefresh(true);
     try {
       if (isAndroid) {
         await refetchTransactions();
       }
-      refetchTokenBalance();
+
       await refetch();
-    } catch (e) {
-      // ignore
+    } catch (error) {
+      throw error;
     }
-  }, [refetch, refetchTokenBalance, refetchTransactions]);
+  }, [refetch, refetchTransactions]);
 
-  useUpdateScreenData(refreshData, 600);
+  useEffect(() => {
+    if (!isRefetching) setUserPerformedRefresh(false);
+  }, [isRefetching]);
 
-  const refetchMarketData = useCallback(async () => {
+  useUpdateScreenData(onRefetchMarketDetails, 600);
+
+  const onRefetchMarketHandle = useCallback(async () => {
     const refreshKosmosTransactions = async () => {
       setIsRefreshingData(true);
       try {
-        await refreshData();
+        await onRefetchMarketDetails();
       } finally {
         setIsRefreshingData(false);
       }
     };
     await refreshKosmosTransactions();
-  }, [refreshData]);
+  }, [onRefetchMarketDetails]);
+
+  const onHandleBuyBondsLayoutChange = useCallback(
+    (event: LayoutChangeEvent) => {
+      setBuyBondsLayoutMeasureHeight(
+        DEVICE_HEIGHT / 2 - event.nativeEvent.layout.height
+      );
+    },
+    []
+  );
 
   const renderRefetchController = useMemo(() => {
-    const refreshing =
-      isMarketChartLoading || (isAndroid && isLoadingTransaction);
+    const refreshing = isChartLoading || (isAndroid && isLoadingTransaction);
     return (
       <RefreshControl
-        onRefresh={refetchMarketData}
+        onRefresh={onRefetchMarketHandle}
         refreshing={refreshing}
         removeClippedSubviews
       />
     );
-  }, [isMarketChartLoading, isLoadingTransaction, refetchMarketData]);
+  }, [isChartLoading, isLoadingTransaction, onRefetchMarketHandle]);
 
-  const onScrollToMarket = useCallback(
-    () => scrollViewRef.current?.scrollToPosition(0, marketLayoutYAxis),
-    [marketLayoutYAxis]
-  );
+  const onScrollToMarket = useCallback(() => {
+    if (!isAndroid) {
+      scrollRef.current?.scrollToPosition(0, buyBondsLayoutMeasureHeight, true);
+    }
+  }, [buyBondsLayoutMeasureHeight]);
 
   const combinedLoading = useMemo(() => {
-    return isMarketChartLoading || isLoading;
-  }, [isMarketChartLoading, isLoading]);
-  const scrollRef = useRef(null);
+    return isChartLoading || isLoading;
+  }, [isChartLoading, isLoading]);
+
   const scrollToInput = () =>
     // @ts-ignore
     scrollRef?.current?.scrollToEnd({ animated: true });
@@ -153,11 +177,11 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
             enableResetScrollToCoords={false}
             keyboardShouldPersistTaps="handled"
             overScrollMode="never"
-            enableOnAndroid={false}
+            enableOnAndroid
             enableAutomaticScroll
             scrollToOverflowEnabled={false}
             nestedScrollEnabled={isIOS}
-            extraHeight={isAndroid ? 0 : 300}
+            extraHeight={330}
             onMomentumScrollBegin={onScrollBeginDragHandler}
             refreshControl={renderRefetchController}
           >
@@ -170,12 +194,14 @@ export const KosmosMarketScreen = ({ route }: KosmosMarketScreenProps) => {
               onScrollToMarket={onScrollToMarket}
             />
             <ExactMarketTokenTabs
+              onHandleBuyBondsLayoutChange={onHandleBuyBondsLayoutChange}
+              userPerformedRefresh={userPerformedRefresh}
               calculateMaximumAvailableAmount={calculateMaximumAvailableAmount}
-              tokenBalance={tokenBalance}
-              isFetchingBalance={isFetchingBalance}
               market={market}
               scrollToInput={scrollToInput}
+              onScrollToTop={onScrollToMarket}
             />
+            <Spacer value={verticalScale(30)} />
           </KeyboardAwareScrollView>
         )}
       </View>

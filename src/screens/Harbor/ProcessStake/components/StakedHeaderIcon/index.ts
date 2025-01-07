@@ -1,0 +1,1 @@
+export { StakeHeaderIcon } from './StakeHeaderIcon';

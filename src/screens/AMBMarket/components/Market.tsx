@@ -2,14 +2,13 @@ import React from 'react';
 import { Linking, StyleSheet, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import {
-  RightArrowIcon,
   BinanceIcon,
   ProbitIcon,
   KucoinIcon,
   MexcIcon
 } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 
 interface MarketItem {
   title: string;
@@ -51,21 +50,16 @@ export function AMBMarket(): JSX.Element {
         onPress={() => openLink(item.url)}
         style={styles.item}
       >
-        <Row alignItems="center" justifyContent="space-between">
-          <Row alignItems="center">
-            {item.icon}
-            <Spacer value={scale(8)} horizontal />
-            <Text
-              fontSize={14}
-              fontFamily="Inter_600SemiBold"
-              color={COLORS.neutral800}
-            >
-              {item.title}
-            </Text>
-          </Row>
-          <View style={{ transform: [{ rotate: '315deg' }] }}>
-            <RightArrowIcon color={COLORS.brand400} scale={1.25} />
-          </View>
+        <Row alignItems="center">
+          {item.icon}
+          <Spacer value={scale(8)} horizontal />
+          <Text
+            fontSize={14}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.brand600}
+          >
+            {item.title}
+          </Text>
         </Row>
       </Button>
     );

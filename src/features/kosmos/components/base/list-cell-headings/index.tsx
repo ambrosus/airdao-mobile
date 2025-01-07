@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
-import uppercase from 'lodash/upperCase';
+import capitalize from 'lodash/capitalize';
 import { useTranslation } from 'react-i18next';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
 
 export const ListCellHeadings = () => {
   const { t } = useTranslation();
@@ -17,7 +17,8 @@ export const ListCellHeadings = () => {
 
   const listHeadingsStyle: StyleProp<ViewStyle> = useMemo(() => {
     return {
-      paddingHorizontal: scale(16.5),
+      paddingLeft: scale(16),
+      paddingRight: scale(31),
       paddingBottom: verticalScale(16)
     };
   }, []);
@@ -30,12 +31,12 @@ export const ListCellHeadings = () => {
     >
       {LIST_HEADER_TITLES.map((heading, index) => (
         <Text
+          key={index}
           fontSize={12}
           fontFamily="Inter_500Medium"
           color={COLORS.neutral600}
-          key={index}
         >
-          {uppercase(heading)}
+          {capitalize(heading)}
         </Text>
       ))}
     </Row>

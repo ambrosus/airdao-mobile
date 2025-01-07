@@ -1,10 +1,10 @@
 import React, { Dispatch, SetStateAction, useMemo } from 'react';
 import { StyleProp, ViewStyle, TouchableOpacity } from 'react-native';
 import { upperFirst } from 'lodash';
-import { styles } from './styles';
 import { Text } from '@components/base';
-import { FiltersState } from '@features/kosmos/types';
 import { COLORS } from '@constants/colors';
+import { FiltersState } from '@features/kosmos/types';
+import { styles } from './styles';
 
 interface FiltersItemProps {
   stateKey: keyof FiltersState;

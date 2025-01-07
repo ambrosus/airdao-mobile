@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from 'react';
 import { formatEther } from 'ethers/lib/utils';
 import debounce from 'lodash/debounce';
-import { useSwapHelpers } from './use-swap-helpers';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
 import { SwapStringUtils } from '@features/swap/utils';
 import { useSwapBetterCurrency } from './use-swap-better-currency';
+import { useSwapHelpers } from './use-swap-helpers';
 
 export function useSwapFieldsHandler() {
   const {
