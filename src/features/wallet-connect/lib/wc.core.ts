@@ -20,7 +20,7 @@ export async function createWalletKit() {
     const clientId =
       await walletKit.engine.signClient.core.crypto.getClientId();
 
-    console.warn('WalletConnect ClientID:', clientId);
+    if (!clientId) throw Error();
   } catch (error) {
     console.error('Failed to get clientId', error);
   }
