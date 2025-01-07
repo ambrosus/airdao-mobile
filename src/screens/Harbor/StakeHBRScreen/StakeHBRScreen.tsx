@@ -82,7 +82,7 @@ export const StakeHBRScreen = () => {
       return setInputError(
         `Min ${NumberUtils.formatNumber(
           +ethers.utils.formatEther(limitsConfig.minStakeValue)
-        )} ${CryptoCurrencyCode.AMB}`
+        )} ${CryptoCurrencyCode.HBR}`
       );
     }
 

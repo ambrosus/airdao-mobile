@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   RefreshControl,
   ScrollView,
@@ -6,6 +6,7 @@ import {
   View,
   ViewStyle
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Spacer, Spinner } from '@components/base';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { useAvailableWithdrawLogs, useStakeHBRStore } from '@entities/harbor';
@@ -23,6 +24,12 @@ export const StakeHBRTab = ({}) => {
 
   const { logs, refetchLogs } = useAvailableWithdrawLogs(
     limitsConfig.stakeLockPeriod
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchLogs();
+    }, [refetchLogs])
   );
 
   const scrollViewContentStyle = useMemo<StyleProp<ViewStyle>>(
