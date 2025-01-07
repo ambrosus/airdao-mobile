@@ -51,14 +51,12 @@ interface InputWithoutTokenSelectProps {
     value: string;
     availableToStake?: boolean;
   };
-
   onFocus?: () => void;
   onBlur?: () => void;
   resetKeyboardState?: boolean;
   isRequiredRefetchBalance?: boolean;
   inputError?: string;
   arrow?: boolean;
-
   readonly balance?: string;
   editable?: boolean;
   onContentSizeChange?: (
@@ -66,6 +64,7 @@ interface InputWithoutTokenSelectProps {
   ) => void;
   valueColor?: string;
   renderInputLockNode?: ReactNode;
+  maxButtonLocked?: boolean;
 }
 
 export const InputWithoutTokenSelect = forwardRef<
@@ -90,7 +89,8 @@ export const InputWithoutTokenSelect = forwardRef<
       editable = true,
       onContentSizeChange,
       renderInputLockNode,
-      valueColor = COLORS.neutral900
+      valueColor = COLORS.neutral900,
+      maxButtonLocked = false
     },
     ref
   ) => {
@@ -238,7 +238,11 @@ export const InputWithoutTokenSelect = forwardRef<
               </Text>
             </Text>
             {!inputError ? (
-              <Button style={styles.button} onPress={onPressMaxAmount}>
+              <Button
+                style={styles.button}
+                disabled={maxButtonLocked}
+                onPress={onPressMaxAmount}
+              >
                 <Text
                   fontFamily="Inter_600SemiBold"
                   fontSize={scale(12)}
