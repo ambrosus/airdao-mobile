@@ -9,10 +9,12 @@ import { styles } from './styles';
 
 interface CountdownTimerProps {
   timestamp: number;
+  refetch: () => void;
 }
 
-export const CountdownTimer = ({ timestamp }: CountdownTimerProps) => {
+export const CountdownTimer = ({ timestamp, refetch }: CountdownTimerProps) => {
   const { t } = useTranslation();
+
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -33,6 +35,10 @@ export const CountdownTimer = ({ timestamp }: CountdownTimerProps) => {
         seconds: Math.max(0, duration.seconds())
       };
 
+      if (target.isBefore(moment())) {
+        refetch();
+      }
+
       // Only update state if the time left has changed
       if (JSON.stringify(newTimeLeft) !== JSON.stringify(timeLeft)) {
         setTimeLeft(newTimeLeft);
@@ -43,7 +49,7 @@ export const CountdownTimer = ({ timestamp }: CountdownTimerProps) => {
     const intervalId = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(intervalId);
-  }, [timestamp, timeLeft]);
+  }, [timestamp, timeLeft, refetch]);
 
   const formatValue = (value: number) =>
     value < 10 ? `0${value}` : value.toString();

@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { ethers } from 'ethers';
 import { CryptoCurrencyCode } from '@appTypes';
 import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { BottomSheet, TextOrSpinner } from '@components/composite';
@@ -45,17 +46,29 @@ export const WithdrawalButton = ({
 
   const disabled = useMemo(() => {
     const isErrorLog = logs?.status === LogStatus.ERROR;
+
+    const bnAmountToWithdraw = ethers.utils.parseEther(
+      !amountToWithdraw ? '0' : amountToWithdraw
+    );
+
     switch (token) {
       case CryptoCurrencyCode.HBR: {
         return (
-          deposit.isZero() || !stake.isZero() || (logs ? isErrorLog : false)
+          bnAmountToWithdraw.isZero() ||
+          deposit.isZero() ||
+          !stake.isZero() ||
+          (logs ? isErrorLog : false)
         );
       }
       case CryptoCurrencyCode.AMB: {
-        return stake.isZero() || (logs ? isErrorLog : false);
+        return (
+          bnAmountToWithdraw.isZero() ||
+          stake.isZero() ||
+          (logs ? isErrorLog : false)
+        );
       }
     }
-  }, [deposit, logs, stake, token]);
+  }, [amountToWithdraw, deposit, logs, stake, token]);
 
   const buttonStyle = useMemo<StyleProp<ViewStyle>>(
     () => ({

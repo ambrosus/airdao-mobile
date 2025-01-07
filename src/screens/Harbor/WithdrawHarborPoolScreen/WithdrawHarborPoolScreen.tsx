@@ -12,7 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CryptoCurrencyCode } from '@appTypes';
 import { HarborTabParamsList } from '@appTypes/navigation/harbor';
 import { Header } from '@components/composite';
-import { useStakeHBRStore } from '@entities/harbor';
+import { useAvailableWithdrawLogs, useStakeHBRStore } from '@entities/harbor';
 import { WithdrawalHbrYieldInput } from '@entities/harbor/components/modular';
 import { LogStatus } from '@entities/harbor/types';
 import { CountdownTimer } from '@features/harbor/components/composite';
@@ -29,19 +29,32 @@ type Props = NativeStackScreenProps<
   'WithdrawHarborPoolScreen'
 >;
 
-export const WithdrawHarborPoolScreen = ({ route }: Props) => {
+export const WithdrawHarborPoolScreen = ({ route, navigation }: Props) => {
   const { t } = useTranslation();
   const {
     params: { token, logs }
   } = route;
 
-  const { stake } = useStakeHBRStore();
+  const { stake, limitsConfig } = useStakeHBRStore();
+
+  const { logs: stateLogs, refetchLogs } = useAvailableWithdrawLogs(
+    limitsConfig.stakeLockPeriod
+  );
 
   const [amountToWithdraw, setAmountToWithdraw] = useState(
     token === CryptoCurrencyCode.AMB && logs?.status === LogStatus.ERROR
       ? NumberUtils.limitDecimalCount(ethers.utils.formatEther(stake), 2)
       : ''
   );
+
+  const refetchLogsHandle = useCallback(() => {
+    new Promise<void>((resolve) => {
+      refetchLogs();
+      resolve();
+    }).then(() => {
+      navigation.setParams({ logs: stateLogs });
+    });
+  }, [navigation, refetchLogs, stateLogs]);
 
   const onChangeAmountToWithdraw = useCallback((amount: string) => {
     setAmountToWithdraw(amount);
@@ -73,7 +86,10 @@ export const WithdrawHarborPoolScreen = ({ route }: Props) => {
 
               <View style={footerStyle}>
                 {logs?.status === LogStatus.ERROR && (
-                  <CountdownTimer timestamp={logs?.timestamp ?? 1} />
+                  <CountdownTimer
+                    timestamp={logs?.timestamp ?? 1}
+                    refetch={refetchLogsHandle}
+                  />
                 )}
 
                 <WithdrawalButton
