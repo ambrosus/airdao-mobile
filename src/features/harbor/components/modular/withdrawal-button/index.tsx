@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ethers } from 'ethers';
+import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
 import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { BottomSheet, TextOrSpinner } from '@components/composite';
@@ -27,6 +28,7 @@ export const WithdrawalButton = ({
   logs,
   amountToWithdraw
 }: WithdrawalButtonProps) => {
+  const { t } = useTranslation();
   const navigation = useNavigation<HarborNavigationProp>();
   const { wallet } = useWalletStore();
   const { hbrYieldFetcher } = useStakeHBRStore();
@@ -99,7 +101,7 @@ export const WithdrawalButton = ({
         onPress={withdrawalCallback}
       >
         <TextOrSpinner
-          label="Withdraw"
+          label={t('staking.pool.withdraw')}
           loadingLabel={undefined}
           loading={loading}
           styles={{
