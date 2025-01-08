@@ -64,6 +64,8 @@ export const TokenLogo = (props: TokenLogoProps) => {
       }
       return <AirdaoBlueIcon scale={scale} />;
     }
+    case CryptoCurrencyCode.KOS.toLowerCase():
+      return <KosmosTokenIcon scale={scale} />;
     case CryptoCurrencyCode.ADOGE.toLowerCase():
     case CryptoCurrencyCode.Airdoge.toLowerCase():
       return <AirDOGEIcon scale={scale} />;
