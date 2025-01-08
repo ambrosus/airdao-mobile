@@ -29,14 +29,34 @@ export const SWAP_SUPPORTED_TOKENS = {
         symbol: 'SAMB'
       },
       {
-        address: '0x48437113D6d4808bD281F50eEe4b87D4c58D2557',
-        name: 'Airdoge',
-        symbol: 'ADOGE'
-      },
-      {
         address: '0x2834C436d04ED155e736F994c1F3a0d05C4A8dE4',
         name: 'Staked AMB',
         symbol: 'stAMB'
+      },
+      {
+        address: '0xd09270E917024E75086e27854740871F1C8E0E10',
+        name: 'HBR',
+        symbol: 'HBR'
+      },
+      {
+        address: '0x5ceCBde7811aC0Ed86Be11827AE622b89Bc429DF',
+        name: 'AST',
+        symbol: 'AST'
+      },
+      {
+        address: '0xC15891E4dE2793726c20F53EcA6FB6319968E5F3',
+        name: 'KOS',
+        symbol: 'KOS'
+      },
+      {
+        address: '0xC410F3EB0c0f0E1EFA188D38C366536d59a265ba',
+        name: 'SWINE',
+        symbol: 'SWINE'
+      },
+      {
+        address: '0x5ECAddC28FcFc0bEDF94858c6D771420672ad2CF',
+        name: 'X3NA',
+        symbol: 'X3NA'
       }
     ],
     testnet: [
