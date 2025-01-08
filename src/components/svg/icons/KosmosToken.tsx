@@ -1,5 +1,4 @@
 import React from 'react';
-import { IconProps } from './Icon.types';
 import {
   Circle,
   ClipPath,
@@ -11,6 +10,7 @@ import {
   Svg,
   Use
 } from 'react-native-svg';
+import { IconProps } from './Icon.types';
 
 export function KosmosTokenIcon({ scale = 1 }: IconProps) {
   const size = 48;

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { DebugItem } from './components/DebugItem';
-import * as Updates from 'expo-updates';
 import messaging from '@react-native-firebase/messaging';
-import { Cache, CacheKey } from '@lib/cache';
-import { UID } from '@lib';
-import { API } from '@api/api';
 import { useFocusEffect } from '@react-navigation/native';
+import * as Updates from 'expo-updates';
+import { API } from '@api/api';
+import { UID } from '@lib';
+import { Cache, CacheKey } from '@lib/cache';
+import { DebugItem } from './components/DebugItem';
 
 export const DebugMode = () => {
   const isProd = Updates.channel === 'prod';

@@ -1,9 +1,9 @@
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { Spacer, Text } from '@components/base';
 import * as Clipboard from 'expo-clipboard';
-import { styles } from './styles';
+import { Spacer, Text } from '@components/base';
 import { StringUtils } from '@utils/string';
+import { styles } from './styles';
 
 export const DebugItem = ({ title, data }: { title: string; data: string }) => {
   const onPress = () => {
