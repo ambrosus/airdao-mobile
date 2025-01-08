@@ -40,12 +40,12 @@ export const SWAP_SUPPORTED_TOKENS = {
       },
       {
         address: '0x5ceCBde7811aC0Ed86Be11827AE622b89Bc429DF',
-        name: 'AST',
+        name: 'Astra',
         symbol: 'AST'
       },
       {
         address: '0xC15891E4dE2793726c20F53EcA6FB6319968E5F3',
-        name: 'KOS',
+        name: 'Kosmos Token',
         symbol: 'KOS'
       },
       {

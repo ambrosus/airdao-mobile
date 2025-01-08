@@ -123,7 +123,7 @@ export function useSwapBetterCurrency() {
         return singleHopAmount;
       }
 
-      if (!singleHopAmount || multiHopAmount.gt(singleHopAmount)) {
+      if (!singleHopAmount || multiHopAmount.lt(singleHopAmount)) {
         onChangeMultiHopUiState(middleHopAddress);
         return multiHopAmount;
       }
@@ -155,7 +155,6 @@ export function useSwapBetterCurrency() {
           setIsWarningToEnableMultihopActive(true);
           return ethers.utils.parseEther('0');
         }
-
         singleHopAmount = null as never;
       }
 
@@ -171,7 +170,7 @@ export function useSwapBetterCurrency() {
         return singleHopAmount;
       }
 
-      if (!singleHopAmount || multiHopAmount.lt(singleHopAmount)) {
+      if (!singleHopAmount || multiHopAmount.gt(singleHopAmount)) {
         onChangeMultiHopUiState(middleHopAddress);
         return multiHopAmount;
       }
@@ -222,6 +221,8 @@ export function useSwapBetterCurrency() {
   );
 
   return {
+    bestTradeExactIn,
+    bestTradeExactOut,
     bestTradeCurrency,
     amountOut,
     amountIn,
