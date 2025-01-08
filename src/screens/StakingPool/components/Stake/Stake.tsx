@@ -1,43 +1,47 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { staking } from '@api/staking/staking-service';
+import { ReturnedPoolDetails } from '@api/staking/types';
+import { HomeParamsList } from '@appTypes';
 import { InputRef, Row, Spacer, Text } from '@components/base';
-import { PrimaryButton } from '@components/modular';
-import { scale, verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
 import {
   BottomSheet,
   BottomSheetRef,
   InputWithIcon
 } from '@components/composite';
-import { useBalanceOfAddress, useUSDPrice } from '@hooks';
-import { AccountDBModel } from '@database';
-import { NumberUtils } from '@utils/number';
-import { StringUtils } from '@utils/string';
-import { StakePreview } from './Stake.Preview';
-import { staking } from '@api/staking/staking-service';
-import { ReturnedPoolDetails } from '@api/staking/types';
-import { HomeParamsList } from '@appTypes';
-import { StakePending } from '@screens/StakingPool/components';
 import { PercentageBox } from '@components/composite/PercentageBox';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+import { PrimaryButton } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import { AccountDBModel } from '@database';
+import { useBalanceOfAddress, useUSDPrice } from '@hooks';
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
+import { StakePending } from '@screens/StakingPool/components';
+import { NumberUtils, StringUtils, scale, verticalScale } from '@utils';
+import { StakePreview } from './Stake.Preview';
 
 const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
+
+type ScrollType = 'focus' | 'blur';
 
 interface StakeTokenProps {
   wallet: AccountDBModel | null;
   apy: number;
   pool: ReturnedPoolDetails | undefined;
   isSwiping: boolean;
+  onScroll?: (type: ScrollType) => void;
 }
 
 export const StakeToken = ({
   wallet,
   apy,
   pool,
-  isSwiping
+  isSwiping,
+  onScroll
 }: StakeTokenProps) => {
   const navigation =
     useNavigation<NavigationProp<HomeParamsList, 'StakingPool'>>();
@@ -52,6 +56,11 @@ export const StakeToken = ({
   const { data: ambBalance } = useBalanceOfAddress(wallet?.address || '');
   const stakeAmountUSD = useUSDPrice(parseFloat(stakeAmount || '0'));
 
+  const _onScroll = (type: ScrollType) => {
+    if (typeof onScroll === 'function') {
+      onScroll(type);
+    }
+  };
   const showPreview = () => {
     setTimeout(() => {
       previewBottomSheetRef.current?.show();
@@ -96,9 +105,6 @@ export const StakeToken = ({
       });
 
       if (!result) {
-        sendFirebaseEvent(CustomAppEvents.stake_error, {
-          stakeError: 'stake result not found'
-        });
         await simulateNavigationDelay(() =>
           navigation.navigate('StakeErrorScreen')
         );
@@ -143,6 +149,8 @@ export const StakeToken = ({
       </Text>
       <Spacer value={verticalScale(8)} />
       <InputWithIcon
+        onFocus={() => _onScroll('focus')}
+        onBlur={() => _onScroll('blur')}
         ref={inputRef}
         focusable={!isSwiping}
         editable={!isSwiping}
@@ -211,14 +219,17 @@ export const StakeToken = ({
         ))}
       </Row>
       <Spacer value={verticalScale(24)} />
-      <PrimaryButton onPress={showPreview} disabled={isWrongStakeValue.button}>
+      <PrimaryButton
+        onPress={showPreview}
+        disabled={isWrongStakeValue.button || !pool?.active}
+      >
         <Text
           color={
             isWrongStakeValue.button ? COLORS.alphaBlack30 : COLORS.neutral0
           }
         >
           {t(
-            isWrongStakeValue.button ? 'button.enter.amount' : 'button.preview'
+            isWrongStakeValue.button ? 'button.enter.amount' : 'common.review'
           )}
         </Text>
       </PrimaryButton>

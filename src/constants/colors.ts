@@ -1,22 +1,28 @@
 export const COLORS = {
   // NEUTRAL
   neutral0: '#FFFFFF',
+  neutral50: '#F6F7F9',
   neutral90: '#1D1D1D',
-  neutral100: '#F2F2F3',
+  neutral100: '#F1F2F5',
   neutral200: '#D5D6D9',
   neutral300: '#B8B9BF',
   neutral400: '#9B9CA5',
-  neutral500: '#7E7F8B',
+  neutral500: '#94979C',
   neutral600: '#63636D',
   neutral700: '#46464D',
-  neutral800: '#29292D',
+  neutral800: '#121212',
   neutral900: '#0C0C0D',
   neutral900Alpha: {
     5: 'rgba(14, 14, 14, 0.05)',
     60: 'rgba(14, 14, 14, 0.60)'
   },
+  asphaltBlack: '#2E313A',
+
+  primary50: '#E9EFFB',
+  primary100: '#C5D4F5',
 
   // PRIMARY
+  brand75: '#7A9DEC',
   brand100: '#EDF3FF',
   brand200: '#C9D9FF',
   brand300: '#99B8FF',
@@ -27,6 +33,7 @@ export const COLORS = {
   brand800: '#061B4A',
   brand900: '#071430',
 
+  error50: '#FFC7C7',
   error100: '#FFD9CD',
   error200: '#FFAC9A',
   error300: '#FD6E65',
@@ -37,7 +44,8 @@ export const COLORS = {
   error800: '#49121C',
   error900: '#330F16',
 
-  success100: '#C3FBE5',
+  success50: '#E5FFF7',
+  success100: '#C5EEE1',
   success200: '#73E5B7',
   success300: '#2DBA8D',
   success400: '#159F80',
@@ -47,6 +55,7 @@ export const COLORS = {
   success800: '#0D3137',
   success900: '#08222A',
 
+  warning50: '#FFF8E5',
   warning100: '#FFFBB5',
   warning200: '#FFE773',
   warning300: '#FFC93E',
@@ -75,6 +84,8 @@ export const COLORS = {
   alphaBlack60: '#0e0e0e99',
   alphaWhite5: '#ffffff0d',
   alphaWhite50: '#ffffff80',
+  alphaWhite70: '#ffffffb3',
+  alphaWhite80: '#ffffffcc',
 
   gray300: '#2F2B430D',
   gray500: '#646464',
@@ -82,6 +93,7 @@ export const COLORS = {
   gray800: '#222222',
 
   yellow500: '#ff7a00',
+  green500: '#39B38C',
   black: '#000000',
   culturedWhite: '#F3F5F7',
   darkGrey: '#2f2b43',
@@ -108,26 +120,26 @@ export const COLORS = {
   separator: '#2f2b431a',
 
   // V2
-  foregroundSecondaryContent: 'rgba(148, 151, 156, 1)'
+  foregroundSecondaryContent: 'rgba(148, 151, 156, 1)',
+  semanticsForegroundBorder: 'rgba(216, 218, 224, 1)'
 };
 
 export const CreditCardBg = [
   COLORS.brand600,
-  COLORS.brand200,
-  COLORS.neutral700,
-  COLORS.purple500
+  COLORS.purple500,
+  COLORS.green500
 ];
 
 export const CreditCardAddressColor = [
   COLORS.alphaWhite50,
-  COLORS.alphaBlack50,
+  COLORS.alphaWhite50,
   COLORS.alphaWhite50,
   COLORS.alphaWhite50
 ];
 
 export const CreditCardBalanceColor = [
-  COLORS.neutral0,
-  COLORS.neutral800,
-  COLORS.neutral0,
-  COLORS.neutral0
+  COLORS.alphaWhite70,
+  COLORS.alphaWhite70,
+  COLORS.alphaWhite70,
+  COLORS.alphaWhite70
 ];

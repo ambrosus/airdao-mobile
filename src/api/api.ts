@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { AMBTokenDTO, StakingPoolDTO } from '@models/dtos';
-import { PriceSnapshot } from '@appTypes';
-import { AMBToken } from '@models';
-import { watcherService } from './watcher-service';
-import { explorerService } from './explorer-service';
-import { cryptoService } from './crypto-service';
-import Config from '@constants/config';
 import { bridgeService } from '@api/bridge-service';
+import { PriceSnapshot } from '@appTypes';
+import Config from '@constants/config';
+import { AMBToken } from '@models';
+import { AMBTokenDTO, StakingPoolDTO } from '@models/dtos';
+import { cryptoService } from './crypto-service';
+import { explorerService } from './explorer-service';
+import { watcherService } from './watcher-service';
 
 const getAMBTokenData = async (): Promise<AMBTokenDTO> => {
   try {

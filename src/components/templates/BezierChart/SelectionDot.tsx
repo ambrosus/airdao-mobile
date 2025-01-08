@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
-import { runOnJS, useAnimatedReaction } from 'react-native-reanimated';
 import { runSpring, useValue, Circle, Group } from '@shopify/react-native-skia';
-import type { SelectionDotProps } from 'react-native-graph';
-import { moderateScale } from '@utils/scaling';
+import { runOnJS, useAnimatedReaction } from 'react-native-reanimated';
 import { COLORS } from '@constants/colors';
+import { moderateScale } from '@utils';
+import type { SelectionDotProps } from 'react-native-graph';
 
 export function SelectionDot({
   isActive,

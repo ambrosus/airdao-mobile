@@ -3,12 +3,12 @@ import {
   LayoutChangeEvent,
   Platform,
   StyleProp,
-  ViewStyle,
-  useWindowDimensions
+  useWindowDimensions,
+  ViewStyle
 } from 'react-native';
 import { Camera, PermissionStatus } from 'expo-camera';
-import { PermissionService } from '@lib';
 import { Permission } from '@appTypes';
+import { PermissionService } from '@lib';
 
 export function useBarcodeScanner() {
   const { width, height } = useWindowDimensions();
@@ -37,18 +37,15 @@ export function useBarcodeScanner() {
   useEffect(() => {
     const showRequestAlert = async () => {
       const _containerHeight = Math.floor(cameraContainerHeight);
-      const _windowHeight = Math.floor(cameraContainerHeight);
       const isAlreadyRequestedPermission = hasRequestedPermissions.current;
 
-      if (permission && permission?.status === PermissionStatus.GRANTED) {
+      if (permission?.status === PermissionStatus.GRANTED) {
         return setHasCameraPermission(true);
       }
 
-      if (_containerHeight === _windowHeight && !isAlreadyRequestedPermission) {
+      if (_containerHeight === height && !isAlreadyRequestedPermission) {
         hasRequestedPermissions.current = true;
-        const timeoutId = setTimeout(() => {
-          getCameraPermissions();
-        }, 525);
+        const timeoutId = setTimeout(getCameraPermissions, 525);
 
         return () => clearTimeout(timeoutId);
       }
@@ -60,6 +57,7 @@ export function useBarcodeScanner() {
   const onCameraLayoutHandle = useCallback(
     (event: LayoutChangeEvent) =>
       setCameraContainerHeight(event.nativeEvent.layout.height),
+
     []
   );
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Animated, Pressable } from 'react-native';
-import { styles } from '@components/templates/AddressList/styles';
 import { Button } from '@components/base';
 import { EditIcon, TrashIcon } from '@components/svg/icons';
+import { styles } from '@components/templates/AddressList/styles';
 import { COLORS } from '@constants/colors';
 
 interface Props {

@@ -1,10 +1,10 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { View } from 'react-native';
-import { styles } from './styles';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { FiltersItem } from '../../base';
 import { FiltersState } from '@features/kosmos/types';
+import { styles } from './styles';
+import { FiltersItem } from '../../base';
 
 interface FiltersSectionsProps {
   label: string;

@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react';
-import { styles } from './styles';
+import React from 'react';
 import { Row, Spacer, Text } from '@components/base';
-import { MarketType } from '@features/kosmos/types';
-import { COLORS } from '@constants/colors';
-import { useExtractToken } from '@features/kosmos/lib/hooks';
 import { TokenLogo } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import { MarketType, useToken } from '@entities/kosmos';
+import { $discount, discountColor } from '@features/kosmos/utils';
+import { NumberUtils } from '@utils';
+import { styles } from './styles';
 
 interface MarketListItemProps {
   market: MarketType;
@@ -17,15 +18,7 @@ interface StyledItemTextProps {
 }
 
 export const MarketListItem = React.memo(({ market }: MarketListItemProps) => {
-  const { token } = useExtractToken(market.payoutToken);
-
-  const discount = useMemo(() => {
-    return market.discount > 0 ? market.discount.toFixed(2) + '%' : '-';
-  }, [market.discount]);
-
-  const discountItemColor = useMemo(() => {
-    return +discount > 0 ? COLORS.success600 : COLORS.error600;
-  }, [discount]);
+  const { token } = useToken(market.payoutToken);
 
   return (
     <Row
@@ -34,14 +27,21 @@ export const MarketListItem = React.memo(({ market }: MarketListItemProps) => {
       justifyContent="space-between"
     >
       <Row width="40%" alignItems="center">
-        <TokenLogo scale={0.65} token={token?.symbol ?? ''} />
+        <TokenLogo scale={0.75} token={token?.symbol ?? ''} />
         <Spacer horizontal value={10} />
         <StyledItemText label={token?.symbol} />
       </Row>
 
-      <Row width="58.5%" alignItems="center" justifyContent="space-between">
-        <StyledItemText label={discount} color={discountItemColor} />
-        <StyledItemText label={`$${market.askingPrice.toFixed(3)}`} />
+      <Row width="58.75%" alignItems="center" justifyContent="space-between">
+        <StyledItemText
+          label={$discount(market.discount)}
+          color={discountColor(market.discount)}
+        />
+        <StyledItemText
+          label={`$${NumberUtils.numberToTransformedLocale(
+            market.askingPrice.toFixed(3)
+          )}`}
+        />
       </Row>
     </Row>
   );
@@ -49,7 +49,7 @@ export const MarketListItem = React.memo(({ market }: MarketListItemProps) => {
 
 const StyledItemText = ({
   label = '',
-  color = COLORS.neutral600
+  color = COLORS.neutral800
 }: StyledItemTextProps) => {
   return (
     <Text fontSize={16} fontFamily="Inter_500Medium" color={color}>

@@ -1,0 +1,1 @@
+export { StakedBalanceInfo } from './StakedBalanceInfo';

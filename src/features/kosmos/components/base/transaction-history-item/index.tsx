@@ -1,15 +1,16 @@
 import React, { useMemo } from 'react';
-import { Row, Spacer, Text } from '@components/base';
-import { styles } from './styles';
-import { TokenLogo } from '@components/modular';
-import { Token, TxType } from '@features/kosmos/types';
-import {
-  formatDecimals,
-  timestampToFormatedDate
-} from '@features/kosmos/utils';
-import { COLORS } from '@constants/colors';
 import { BigNumber, ethers } from 'ethers';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
+import { Row, Spacer, Text } from '@components/base';
+import { TokenLogo } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import {
+  timestampToFormattedDate,
+  Token,
+  TxType,
+  useTokensStore
+} from '@entities/kosmos';
+import { formatDecimals } from '@features/kosmos/utils';
+import { styles } from './styles';
 
 type NotRequiredToken = Token | undefined;
 
@@ -27,9 +28,9 @@ export const TransactionHistoryItem = ({
   quoteToken,
   payoutToken
 }: TransactionHistoryItemProps) => {
-  const { tokens } = useKosmosMarketsContextSelector();
+  const { tokens } = useTokensStore();
   const date = useMemo(
-    () => timestampToFormatedDate(new Date(transaction.date).getTime()),
+    () => timestampToFormattedDate(new Date(transaction.date).getTime()),
     [transaction.date]
   );
 
@@ -67,7 +68,7 @@ export const TransactionHistoryItem = ({
         <Text
           fontSize={16}
           fontFamily="Inter_600SemiBold"
-          color={COLORS.neutral600}
+          color={COLORS.neutral800}
           numberOfLines={1}
         >
           {amount}
@@ -81,7 +82,7 @@ export const TransactionHistoryItem = ({
         <Text
           fontSize={14}
           fontFamily="Inter_500Medium"
-          color={COLORS.neutral600}
+          color={COLORS.neutral800}
           numberOfLines={1}
         >
           {payout} {payoutToken?.symbol}
@@ -89,7 +90,7 @@ export const TransactionHistoryItem = ({
         <Text
           fontSize={12}
           fontFamily="Inter_500Medium"
-          color={COLORS.neutral600}
+          color={COLORS.neutral800}
           numberOfLines={1}
         >
           {date}

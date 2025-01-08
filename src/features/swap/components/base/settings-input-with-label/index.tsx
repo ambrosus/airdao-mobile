@@ -5,11 +5,11 @@ import {
   TextInputProps,
   TouchableWithoutFeedback
 } from 'react-native';
-import { styles } from './styles';
 import { Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { SwapStringUtils } from '@features/swap/utils';
 import { INITIAL_SLIPPAGE_TOLERANCE } from '@features/swap/context/initials';
+import { SwapStringUtils } from '@features/swap/utils';
+import { styles } from './styles';
 
 interface SettingsInputWithLabelProps extends TextInputProps {
   label: string;
@@ -38,9 +38,9 @@ export const SettingsInputWithLabel = ({
   return (
     <View style={styles.formWithLabel}>
       <Text
-        fontSize={16}
+        fontSize={14}
         fontFamily="Inter_500Medium"
-        color={COLORS.neutral500}
+        color={COLORS.neutral800}
       >
         {label}
       </Text>

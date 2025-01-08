@@ -1,11 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
-import { EmptyAddressListPlaceholderIcon } from '@components/svg/icons';
-import { Spacer, Text } from '@components/base';
-import { verticalScale } from '@utils/scaling';
-import { styles } from '@components/templates/LocalizedRenderEmpty/styles';
 import { useTranslation } from 'react-i18next';
+import { Spacer, Text } from '@components/base';
+import { EmptyAddressListPlaceholderIcon } from '@components/svg/icons';
+import { styles } from '@components/templates/LocalizedRenderEmpty/styles';
 import { COLORS } from '@constants/colors';
+import { verticalScale } from '@utils';
 
 type LocalizedRenderEmptyProps = {
   text: string;

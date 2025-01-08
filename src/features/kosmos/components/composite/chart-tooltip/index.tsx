@@ -2,19 +2,19 @@ import React, { useMemo } from 'react';
 import { Platform, View } from 'react-native';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
-import { TooltipState } from '../../modular/market-chart/types';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
 import {
-  TRIANGLE_WIDTH,
-  RECT_WIDTH,
   RECT_HEIGHT,
-  TRIANGLE_HEIGHT
-} from '@features/kosmos/constants';
+  RECT_WIDTH,
+  TRIANGLE_HEIGHT,
+  TRIANGLE_WIDTH
+} from '@entities/kosmos';
+import { $discount, discountColor } from '@features/kosmos/utils';
+import { styles } from './styles';
 import { ChartStrokedArrow } from '../../base';
-import { discountColor } from '@features/kosmos/utils';
+import { TooltipState } from '../../modular/market-chart/types';
 
 interface ChartTooltipProps {
   tooltip: TooltipState;
@@ -114,7 +114,7 @@ export const ChartTooltip = React.memo(({ tooltip }: ChartTooltipProps) => {
               fontSize={12}
               fontFamily="Inter_400Regular"
             >
-              {tooltip.value.discount.toFixed(2)}%
+              {$discount(tooltip.value.discount)}
             </Text>
           </Row>
         )}

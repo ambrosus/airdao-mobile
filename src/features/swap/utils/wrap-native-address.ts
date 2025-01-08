@@ -1,7 +1,7 @@
-import Config from '@constants/config';
-import { SwapToken } from '@features/swap/types';
 import { ethers } from 'ethers';
+import Config from '@constants/config';
 import { TOKEN_ADDRESSES } from '@features/swap/entities';
+import { SwapToken } from '@features/swap/types';
 import { environment } from '@utils/environment';
 
 export const addresses = TOKEN_ADDRESSES[environment];

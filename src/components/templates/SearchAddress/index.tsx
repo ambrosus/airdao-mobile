@@ -5,12 +5,7 @@ import React, {
   useState
 } from 'react';
 import { Alert, useWindowDimensions, View, ViewStyle } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { AccountTransactions, ExplorerAccountView } from '../ExplorerAccount';
-import { BarcodeScanner } from '../BarcodeScanner';
-import { TransactionDetails } from '../TransactionDetails';
-import { SearchAddressNoResult } from './SearchAddress.NoMatch';
-import { BottomSheetEditWallet } from '../BottomSheetEditWallet';
+import { useTranslation } from 'react-i18next';
 import {
   Button,
   InputRef,
@@ -25,24 +20,30 @@ import {
   CenteredSpinner,
   InputWithIcon
 } from '@components/composite';
+import { Toast, ToastPosition, ToastType } from '@components/modular';
 import { CloseIcon, ScannerQRIcon, SearchIcon } from '@components/svg/icons';
-import { scale, verticalScale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
+import { ethereumAddressRegex } from '@constants/regex';
+import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
+
+import { useAddressesStore } from '@entities/addresses';
 import {
   useExplorerInfo,
   useSearchAccount,
   useTransactionDetails,
   useTransactionsOfAccount
 } from '@hooks';
-import { etherumAddressRegex } from '@constants/regex';
-import { Toast, ToastPosition, ToastType } from '@components/modular';
-import { useAllAddresses } from '@contexts';
-import { CRYPTO_ADDRESS_MAX_LENGTH } from '@constants/variables';
-import { COLORS } from '@constants/colors';
-import { SearchTabNavigationProp } from '@appTypes';
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
+import { scale, verticalScale } from '@utils';
+import { BottomSheetEditWallet } from '../BottomSheetEditWallet';
+import { SearchAddressNoResult } from './SearchAddress.NoMatch';
+import { BarcodeScanner } from '../BarcodeScanner';
+import { AccountTransactions, ExplorerAccountView } from '../ExplorerAccount';
+import { TransactionDetails } from '../TransactionDetails';
 import { styles } from './styles';
-import { useTranslation } from 'react-i18next';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
 
 interface SearchAdressProps {
   scannerDisabled?: boolean;
@@ -60,19 +61,22 @@ export interface SearchAddressRef {
 const LIMIT = 10;
 
 export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
-  (props: SearchAdressProps, ref): JSX.Element => {
-    const {
+  (
+    {
       scannerDisabled = false,
       onContentVisibilityChanged = () => null,
       searchAddress = false
-    } = props;
-    const navigation = useNavigation<SearchTabNavigationProp>();
-    const { height: WINDOW_HEIGHT } = useWindowDimensions();
+    },
+    ref
+  ): JSX.Element => {
     const { t } = useTranslation();
+    const { height: WINDOW_HEIGHT } = useWindowDimensions();
     const { data: explorerInfo } = useExplorerInfo();
     const [address, setAddress] = useState('');
     const [searchSubmitted, setSearchSubmitted] = useState(false);
     const initialMount = useRef(true);
+
+    const { allAddresses } = useAddressesStore();
 
     const {
       data: account,
@@ -106,15 +110,13 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
     } = useTransactionsOfAccount(address, 1, LIMIT, '', !!address);
     const [searchInputFocused, setSearchInputFocused] = useState(false);
 
-    const allAdresses = useAllAddresses();
-
     const inputRef = useRef<InputRef>(null);
     const scannerModalRef = useRef<BottomSheetRef>(null);
     const scanned = useRef(false);
     const editModal = useRef<BottomSheetRef>(null);
 
     const finalAccount =
-      allAdresses.find((a) => a.address === account?.address) || account;
+      allAddresses.find((a) => a.address === account?.address) || account;
     if (searchSubmitted && finalAccount) {
       sendFirebaseEvent(CustomAppEvents.explorer_search);
     }
@@ -182,7 +184,7 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
       scannerModalRef.current?.dismiss();
     };
     const onQRCodeScanned = (data: string) => {
-      const res = data.match(etherumAddressRegex);
+      const res = data.match(ethereumAddressRegex);
       if (res && res?.length > 0) {
         hideScanner();
         inputRef.current?.setText(res[0]);
@@ -221,10 +223,6 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
     const isLoading =
       (loading && !!address && !isHashLoading) ||
       (!loading && !!address && isHashLoading);
-
-    const navigateToAddressDetails = (address: string) => {
-      navigation.navigate('Address', { address });
-    };
 
     const onChangeText = (text: string) => {
       setSearchSubmitted(false);
@@ -345,11 +343,7 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
               {t('common.transaction.details')}
             </Text>
             <Spacer value={verticalScale(24)} />
-            <TransactionDetails
-              transaction={hashData}
-              isShareable={false}
-              onPressAddress={navigateToAddressDetails}
-            />
+            <TransactionDetails transaction={hashData} isShareable={false} />
           </KeyboardDismissingView>
         ) : null}
       </>

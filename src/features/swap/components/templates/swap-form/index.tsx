@@ -1,17 +1,16 @@
 import React from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
-import { styles } from './styles';
-import { KeyboardDismissingView, Spacer } from '@components/base';
-import { FIELD } from '@features/swap/types';
-import { scale } from '@utils/scaling';
+import { SwapReverseTokens } from '@/features/swap/components/composite';
 import {
   InputWithTokenSelect,
   ReviewSwapButton,
   TokenInfoPlate
 } from '@/features/swap/components/modular';
-import { SwapReverseTokens } from '@/features/swap/components/composite';
+import { KeyboardDismissingView, Spacer } from '@components/base';
 import { useSwapInterface } from '@features/swap/lib/hooks';
-import { isIos } from '@utils/isPlatform';
+import { FIELD } from '@features/swap/types';
+import { scale, isIos } from '@utils';
+import { styles } from './styles';
 
 const KEYBOARD_BEHAVIOR = isIos ? 'padding' : 'height';
 
@@ -25,7 +24,7 @@ export const SwapForm = () => {
       behavior={KEYBOARD_BEHAVIOR}
     >
       <KeyboardDismissingView style={styles.container}>
-        <View style={styles.inner}>
+        <View style={styles.container}>
           <View>
             <Spacer value={scale(22)} />
             <InputWithTokenSelect
@@ -38,7 +37,7 @@ export const SwapForm = () => {
               estimated={isEstimatedToken.tokenB}
             />
 
-            <Spacer value={scale(24)} />
+            <Spacer value={scale(32)} />
             <TokenInfoPlate />
           </View>
 

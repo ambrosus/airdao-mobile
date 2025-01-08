@@ -1,14 +1,16 @@
 import { BigNumber, ethers, utils } from 'ethers';
-import Config from '@constants/config';
 import { poolAbi, poolsAbi } from '@api/staking/abi';
 import {
   PoolDetailsArgs,
   ReturnedPoolDetails,
   StakeArgs
 } from '@api/staking/types';
+import Config from '@constants/config';
 import { Cache, CacheKey } from '@lib/cache';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 
 const STAKE_ESTIMATED_GAS_LIMIT = 67079;
 const UNSTAKE_ESTIMATED_GAS_LIMIT = 77516;

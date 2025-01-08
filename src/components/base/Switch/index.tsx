@@ -1,7 +1,7 @@
-import { COLORS } from '@constants/colors';
 import React from 'react';
-import { ColorValue, ViewProps } from 'react-native';
+import { ColorValue, StyleProp, ViewProps, ViewStyle } from 'react-native';
 import { Switch as RNGHSwitch } from 'react-native-gesture-handler';
+import { COLORS } from '@constants/colors';
 
 interface SwitchProps {
   testID?: ViewProps['testID'];
@@ -12,6 +12,7 @@ interface SwitchProps {
     true?: ColorValue | null | undefined;
   };
   onValueChange?: (newValue: boolean) => void;
+  style?: StyleProp<ViewStyle>;
 }
 
 export function Switch(props: SwitchProps): JSX.Element {
@@ -20,7 +21,8 @@ export function Switch(props: SwitchProps): JSX.Element {
     disabled,
     value,
     onValueChange = () => null,
-    trackColor
+    trackColor,
+    style
   } = props;
   const defaultTrackColor = {
     true: COLORS.switchGreen,
@@ -29,6 +31,7 @@ export function Switch(props: SwitchProps): JSX.Element {
   return (
     <RNGHSwitch
       testID={testID}
+      style={style}
       disabled={disabled}
       onValueChange={onValueChange}
       value={value}

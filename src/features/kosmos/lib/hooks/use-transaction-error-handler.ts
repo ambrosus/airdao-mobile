@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { BigNumber, utils } from 'ethers';
 import { useTranslation } from 'react-i18next';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { MarketType } from '@features/kosmos/types';
+import { MarketType } from '@entities/kosmos';
+import { usePurchaseStore } from '@features/kosmos';
 import { useMarketDetails } from './use-market-details';
 
 export function useTransactionErrorHandler(market: MarketType | undefined) {
   const { t } = useTranslation();
   const { protocolFee, willGet, willGetSubFee } = useMarketDetails(market);
-  const { amountToBuy, bnBalance } = useKosmosMarketsContextSelector();
+  const { amountToBuy, bnBalance } = usePurchaseStore();
 
   const [error, setError] = useState('');
 

@@ -2,23 +2,27 @@ import React, { useCallback, useMemo } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FlashList, ListRenderItemInfo } from '@shopify/flash-list';
-import { styles } from './styles';
+import { useTranslation } from 'react-i18next';
 import {
   MarketListItem,
   ScreenLoader
 } from '@/features/kosmos/components/base';
-import { FiltersState, MarketType } from '@features/kosmos/types';
-import { useMarketTokens } from '@features/kosmos/lib/hooks';
 import { filter } from '@/features/kosmos/utils';
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
 import { HomeNavigationProp } from '@appTypes';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/variables';
 import {
+  FiltersState,
+  MarketType,
   useActiveMarketsQuery,
-  useClosedMarketsQuery
-} from '@features/kosmos/lib/query';
-import { useTranslation } from 'react-i18next';
-import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics/sendFirebaseEvent';
-import { CustomAppEvents } from '@lib/firebaseEventAnalytics/constants/CustomAppEvents';
+  useClosedMarketsQuery,
+  useMarketTokens
+} from '@entities/kosmos';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
+import { styles } from './styles';
 
 const ESTIMATED_ITEM_SIZE = 56;
 const ESTIMATED_LIST_SIZE = { width: DEVICE_WIDTH, height: DEVICE_HEIGHT };

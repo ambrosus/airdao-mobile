@@ -1,16 +1,14 @@
 import React, { LegacyRef, useCallback, useMemo, useState } from 'react';
 import { LayoutChangeEvent, View } from 'react-native';
-import { styles } from './styles';
-import { InputWithIcon } from '@components/composite';
 import { InputRef, Spacer, Text } from '@components/base';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
+import { InputWithIcon } from '@components/composite';
 import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { MarketType, Token } from '@features/kosmos/types';
-import { verticalScale } from '@utils/scaling';
+import { MarketType, Token } from '@entities/kosmos';
+import { usePurchaseStore } from '@features/kosmos';
 import { useTransactionErrorHandler } from '@features/kosmos/lib/hooks';
-import { StringUtils } from '@utils/string';
-import { NumberUtils } from '@utils/number';
+import { StringUtils, NumberUtils, verticalScale } from '@utils';
+import { styles } from './styles';
 
 interface BuyBondInputWithErrorProps {
   onFocus: () => void;
@@ -28,8 +26,7 @@ export const BuyBondInputWithError = ({
   inputRef
 }: BuyBondInputWithErrorProps) => {
   const { error } = useTransactionErrorHandler(market);
-  const { amountToBuy, onChangeAmountToBuy } =
-    useKosmosMarketsContextSelector();
+  const { amountToBuy, onChangeAmountToBuy } = usePurchaseStore();
 
   const [leftInputContentWidth, setLeftInputContentWidth] = useState(0);
 

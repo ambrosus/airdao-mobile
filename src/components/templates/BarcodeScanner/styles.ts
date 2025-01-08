@@ -1,10 +1,14 @@
-import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
+import { COLORS } from '@constants/colors';
+import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  header: {
+    backgroundColor: 'transparent',
+    zIndex: 1000
   },
   noAccessContainer: {
     flex: 1,

@@ -1,15 +1,16 @@
 import React, { useMemo } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { Text } from '@components//base';
 import {
+  claimPendingStyle,
   confirmationStyles,
   defaultStyle,
   errorStyle,
   pendingStyle,
   styles,
-  successStyle,
-  claimPendingStyle
+  successStyle
 } from './Status.styles';
-import { useTranslation } from 'react-i18next';
 
 interface StatusProps {
   status: string;
@@ -94,7 +95,12 @@ export const Status = ({ status, steps }: StatusProps) => {
         </Text>
       )}
 
-      <Text style={{ ...styles.statusText, ...statusStyle.text }}>
+      <Text
+        style={{
+          ...styles.statusText,
+          ...statusStyle.text
+        }}
+      >
         {statusText}
       </Text>
     </View>

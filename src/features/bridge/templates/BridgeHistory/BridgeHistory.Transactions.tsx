@@ -5,18 +5,18 @@ import {
   SectionList,
   SectionListData
 } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import moment from 'moment/moment';
-import { styles } from './styles';
-import { LocalizedRenderEmpty } from '@components/templates';
+import { useTranslation } from 'react-i18next';
 import { Spacer, Text } from '@components/base';
 import { CenteredSpinner } from '@components/composite';
-import { useBridgeHistory } from '@hooks';
-import { verticalScale } from '@utils/scaling';
+import { LocalizedRenderEmpty } from '@components/templates';
 import { COLORS } from '@constants/colors';
-import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
-import { parseBridgeTransaction } from '@lib/bridgeSDK/bridgeFunctions/parseBridgeTransaction';
 import { BridgeTransaction } from '@features/bridge/templates/BridgeTransaction';
+import { useBridgeHistory } from '@hooks/query/useBridgeHistory';
+import { parseBridgeTransaction } from '@lib/bridgeSDK/bridgeFunctions/parseBridgeTransaction';
+import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
+import { verticalScale } from '@utils';
+import { styles } from './styles';
 
 interface TransactionSection {
   title: string;

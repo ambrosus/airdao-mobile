@@ -1,16 +1,20 @@
 import React, { useMemo, useState } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { InputWithIcon } from '@components/composite';
-import { scale, verticalScale } from '@utils/scaling';
-import { styles } from './styles';
-import { ExplorerAccount } from '@models/Explorer';
-import { AccountList } from '@models/AccountList';
-import { COLORS } from '@constants/colors';
 import { SearchIcon } from '@components/svg/icons';
-import { NumberUtils } from '@utils/number';
-import { useLists } from '@contexts/ListsContext';
-import { useTranslation } from 'react-i18next';
+import { COLORS } from '@constants/colors';
+import { useListActions } from '@features/lists';
+
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
+import { AccountList } from '@models/AccountList';
+import { ExplorerAccount } from '@models/Explorer';
+import { NumberUtils, scale, verticalScale } from '@utils';
+import { styles } from './styles';
 
 export interface AddWalletToListProps {
   wallet: ExplorerAccount;
@@ -18,10 +22,15 @@ export interface AddWalletToListProps {
   onWalletMove?: (newList: AccountList) => unknown;
 }
 
-export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
-  const { wallet, lists, onWalletMove } = props;
-  const { toggleAddressesInList } = useLists((v) => v);
+export const AddWalletToList = ({
+  wallet,
+  lists,
+  onWalletMove
+}: AddWalletToListProps): JSX.Element => {
   const { t } = useTranslation();
+
+  const { onToggleAddressInList } = useListActions();
+
   const [searchText, setSearchText] = useState('');
   const filteredLists = useMemo(
     () =>
@@ -34,7 +43,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
       onWalletMove(list);
     }
     setTimeout(() => {
-      toggleAddressesInList([wallet], list);
+      onToggleAddressInList([wallet], list);
     }, 750);
   };
 
@@ -42,6 +51,7 @@ export const AddWalletToList = (props: AddWalletToListProps): JSX.Element => {
     const { item: list } = args;
     const onPress = () => {
       toggleWalletInList(list);
+      sendFirebaseEvent(CustomAppEvents.watchlist_address_group_added);
     };
 
     return (

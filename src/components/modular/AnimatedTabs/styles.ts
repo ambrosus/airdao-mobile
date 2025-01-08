@@ -1,6 +1,6 @@
-import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
+import { COLORS } from '@constants/colors';
+import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   tabBarTitle: {
@@ -13,5 +13,8 @@ export const styles = StyleSheet.create({
   tabsIndicator: {
     backgroundColor: COLORS.alphaBlack10,
     height: 0.5
+  },
+  contentContainerStyle: {
+    flexGrow: 1
   }
 });

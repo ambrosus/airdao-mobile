@@ -1,97 +1,79 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View } from 'react-native';
+import { ethers } from 'ethers';
 import { Row, Spacer, Text } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { useAMBPrice, useUSDPrice } from '@hooks';
-import { PercentChange } from '@components/composite';
+import { useUSDPrice } from '@hooks';
 import { Token } from '@models';
+import { NumberUtils, StringUtils, StringValidators, scale } from '@utils';
 import { TokenLogo, TokenLogoProps } from '../TokenLogo';
-import { NumberUtils } from '@utils/number';
 import { styles } from './styles';
-import { CryptoCurrencyCode } from '@appTypes';
 
 interface SingleAssetProps {
   token: Token;
   overrideIconVariants?: TokenLogoProps['overrideIconVariants'];
 }
 
-export const SingleAsset = (props: SingleAssetProps): JSX.Element => {
-  const { token, overrideIconVariants } = props;
+export const SingleAsset = ({
+  token,
+  overrideIconVariants
+}: SingleAssetProps): JSX.Element => {
+  const { balance, symbol, address, tokenNameFromDatabase } = token;
 
-  const { name, balance, symbol, address, tokenNameFromDatabase } = token;
-
-  const isNFT = symbol === CryptoCurrencyCode.NFT;
   const usdPrice = useUSDPrice(balance.ether, symbol);
-  const { data: ambTokenData } = useAMBPrice();
 
-  const tokenUSDBalance = isNFT
-    ? `${balance.wei} ${symbol}s`
-    : `$${NumberUtils.limitDecimalCount(usdPrice, 2)}`;
+  const tokenUSDBalance = useMemo(() => {
+    return `$${NumberUtils.numberToTransformedLocale(usdPrice.toString())}`;
+  }, [usdPrice]);
 
-  const tokenBalance = balance.formattedBalance;
+  const tokenNameOrAddress = useMemo(() => {
+    const isAddress = StringValidators.isStringAddress(symbol);
+
+    if (symbol && !isAddress) {
+      return symbol;
+    }
+
+    return StringUtils.formatAddress(address, 5, 6);
+  }, [address, symbol]);
 
   return (
     <View style={styles.container}>
-      <Row>
-        <View style={{ alignSelf: 'center' }}>
+      <Row alignItems="center" justifyContent="space-between">
+        <Row alignItems="center">
           <TokenLogo
             token={tokenNameFromDatabase}
             overrideIconVariants={overrideIconVariants}
           />
-        </View>
-        <Spacer horizontal value={scale(8)} />
-        <View style={styles.item}>
-          <Row justifyContent="space-between">
+          <Spacer horizontal value={scale(8)} />
+          <View>
             <Text
               fontFamily="Inter_500Medium"
               fontSize={16}
               color={COLORS.neutral800}
             >
-              {name || address}
+              {tokenNameOrAddress}
             </Text>
-            {usdPrice >= 0 && (
-              <Text
-                fontFamily="Mersad_600SemiBold"
-                fontSize={16}
-                color={COLORS.neutral800}
-              >
-                {tokenUSDBalance}
-              </Text>
-            )}
-          </Row>
-          {!isNFT && (
-            <>
-              <Spacer horizontal value={scale(8)} />
-              <Row justifyContent="space-between">
-                <Text
-                  fontFamily="Inter_500Medium"
-                  fontSize={14}
-                  color={COLORS.neutral400}
-                >
-                  {NumberUtils.limitDecimalCount(tokenBalance, 2)}{' '}
-                  {symbol || 'tokens'}
-                </Text>
-                <Text
-                  fontFamily="Inter_400Regular"
-                  fontSize={14}
-                  color={COLORS.neutral800}
-                >
-                  {name === 'AMB' ? (
-                    <View style={{ paddingTop: verticalScale(3) }}>
-                      <PercentChange
-                        change={ambTokenData?.percentChange24H || 0}
-                        fontSize={14}
-                      />
-                    </View>
-                  ) : (
-                    ''
-                  )}
-                </Text>
-              </Row>
-            </>
-          )}
-        </View>
+            <Spacer value={scale(2)} />
+            <Text
+              fontFamily="Inter_600SemiBold"
+              fontSize={13}
+              color={COLORS.neutral400}
+            >
+              {`${NumberUtils.numberToTransformedLocale(
+                ethers.utils.formatEther(balance.wei)
+              )} ${symbol || 'tokens'}`}
+            </Text>
+          </View>
+        </Row>
+        {!Number.isNaN(usdPrice) && (
+          <Text
+            fontFamily="Inter_400Regular"
+            fontSize={16}
+            color={COLORS.neutral800}
+          >
+            {tokenUSDBalance}
+          </Text>
+        )}
       </Row>
     </View>
   );

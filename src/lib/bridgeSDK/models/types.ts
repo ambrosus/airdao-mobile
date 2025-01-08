@@ -1,6 +1,14 @@
 import { BigNumber, BigNumberish, ethers } from 'ethers';
-import { AccountDBModel } from '@database';
 import { CryptoCurrencyCode } from '@appTypes';
+import { AccountDBModel } from '@database';
+
+export type BridgeDataState = {
+  from: string;
+  destination: string;
+  bridgeConfig: unknown;
+  ownerAddress?: string;
+  pairs: Token[][];
+};
 
 export type BridgeNetwork = 'eth' | 'bsc';
 export type Network = BridgeNetwork | 'amb';
@@ -12,6 +20,7 @@ export interface EnvData {
 }
 
 export interface Token {
+  balance: BigNumberish;
   address: string;
   bridgeNetwork: BridgeNetwork | string; // for which bridge this token was created, eth or bsc (can't be amb)
   decimals: number;

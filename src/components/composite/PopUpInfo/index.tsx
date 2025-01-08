@@ -2,10 +2,10 @@ import React from 'react';
 import { View } from 'react-native';
 import Popover, { PopoverPlacement } from 'react-native-popover-view';
 import { Button, Spacer, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
+import { scale, verticalScale } from '@utils';
 import { PopUpInfoProps } from './PopUpInfo.types';
 import { styles } from './styles';
-import { scale, verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
 
 export const PopUpInfo = (props: PopUpInfoProps): JSX.Element => {
   const {

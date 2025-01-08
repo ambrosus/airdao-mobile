@@ -3,18 +3,17 @@ import {
   NavigationContainer,
   NavigationContainerRef
 } from '@react-navigation/native';
-import { RootStack } from './stacks/RootStack';
+import { RootStackParamsList } from '@appTypes';
+import { StatusBar } from '@components/templates';
 import { navTheme } from '@constants/navTheme';
 import { NavigationProvider } from '@contexts/Navigation';
-import { StatusBar } from '@components/templates';
-import { RootStackParamsList } from '@appTypes';
+import { RootStack } from './stacks/RootStack';
 
 const Navigation = () => {
   const [currentRoute, setCurrentRoute] = useState('AppInit');
   const navigationRef =
     useRef<NavigationContainerRef<RootStackParamsList>>(null);
   const routeNameRef = useRef('');
-
   const onNavigationReady = () => {
     const currentRoute = navigationRef.current?.getCurrentRoute();
     if (currentRoute) {

@@ -1,18 +1,17 @@
-import { Button, Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import { Button, Spacer, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
+import { scale } from '@utils';
 
 interface MnemonicSelectedProps {
   word: string;
   onPress: () => unknown;
   index: number;
-  isPlacedCorrectly: boolean;
 }
 
 export const MnemonicSelected = (props: MnemonicSelectedProps) => {
-  const { onPress, isPlacedCorrectly, word, index } = props;
+  const { onPress, word, index } = props;
   return (
     <Button style={styles.container} onPress={onPress}>
       <Text
@@ -24,12 +23,12 @@ export const MnemonicSelected = (props: MnemonicSelectedProps) => {
       >
         {index}
       </Text>
-      <Spacer value={scale(8)} horizontal />
+      <Spacer value={8} horizontal />
       <Text
         align="center"
         fontSize={14}
         fontFamily="Inter_600SemiBold"
-        color={isPlacedCorrectly ? COLORS.success400 : COLORS.error400}
+        color={COLORS.success400}
       >
         {word}
       </Text>
@@ -54,7 +53,7 @@ export const MnemonicSelected = (props: MnemonicSelectedProps) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: scale(16),
-    minHeight: verticalScale(20),
+    height: 20,
     flexDirection: 'row',
     alignItems: 'center'
   }

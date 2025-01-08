@@ -1,22 +1,16 @@
 import React, { useCallback, useMemo } from 'react';
-import {
-  StyleProp,
-  TextStyle,
-  TouchableOpacity,
-  View,
-  ViewStyle
-} from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { Row, Spacer, Text } from '@components/base';
-import { useSwapContextSelector } from '@features/swap/context';
-import { SelectedTokensKeys } from '@features/swap/types';
-import { scale } from '@utils/scaling';
 import { TokenLogo } from '@components/modular';
-import { ChevronDownIcon } from '@components/svg/icons';
+import { ArrowBottomFillIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
+import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapBottomSheetHandler } from '@features/swap/lib/hooks';
+import { SelectedTokensKeys } from '@features/swap/types';
 import { SwapStringUtils } from '@features/swap/utils';
+import { scale } from '@utils';
+import { styles } from './styles';
 
 interface TokenSelectorProps {
   readonly type: SelectedTokensKeys;
@@ -31,19 +25,6 @@ export const TokenSelector = ({ type }: TokenSelectorProps) => {
     return !!selectedTokens[type];
   }, [selectedTokens, type]);
 
-  const currencySelectorStyle: StyleProp<ViewStyle> = useMemo(() => {
-    return [
-      styles.currencySelector,
-      { paddingHorizontal: scale(isSelectedToken ? 6 : 8) }
-    ];
-  }, [isSelectedToken]);
-
-  const tokenSymbolTypographyStyle: StyleProp<TextStyle> = useMemo(() => {
-    return {
-      paddingRight: scale(selectedTokens[type]?.symbol === 'AMB' ? 8 : 0)
-    };
-  }, [selectedTokens, type]);
-
   const SAMBSupportedTokenLogo = SwapStringUtils.extendedLogoVariants(
     selectedTokens[type]?.symbol ?? ''
   );
@@ -54,7 +35,7 @@ export const TokenSelector = ({ type }: TokenSelectorProps) => {
 
   return (
     <TouchableOpacity onPress={onToggleSelectTokenModal}>
-      <View style={currencySelectorStyle}>
+      <View style={styles.currencySelector}>
         <Row alignItems="center">
           {isSelectedToken && (
             <>
@@ -63,10 +44,9 @@ export const TokenSelector = ({ type }: TokenSelectorProps) => {
             </>
           )}
           <Text
-            fontSize={14}
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral900}
-            style={tokenSymbolTypographyStyle}
+            fontSize={20}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.neutral800}
           >
             {isSelectedToken
               ? selectedTokens[type]?.symbol
@@ -74,7 +54,7 @@ export const TokenSelector = ({ type }: TokenSelectorProps) => {
           </Text>
         </Row>
         <Spacer horizontal value={scale(4)} />
-        <ChevronDownIcon color={COLORS.neutral900} />
+        <ArrowBottomFillIcon />
       </View>
     </TouchableOpacity>
   );

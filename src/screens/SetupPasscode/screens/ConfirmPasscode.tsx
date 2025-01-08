@@ -1,39 +1,33 @@
 import React, { useState } from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import {
-  Alert,
-  KeyboardAvoidingView,
-  KeyboardAvoidingViewProps,
-  View
-} from 'react-native';
+import { Alert, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { BottomAwareSafeAreaView } from '@components/composite';
-import { Spacer, Text, Button } from '@components/base';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { HomeParamsList, SettingsTabNavigationProp } from '@appTypes';
+import { Button, Spacer, Text } from '@components/base';
+import { Header } from '@components/composite';
 import { Passcode } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { HomeNavigationProp, HomeParamsList } from '@appTypes';
-import { scale, verticalScale } from '@utils/scaling';
-import usePasscode from '@contexts/Passcode';
-import { isIos } from '@utils/isPlatform';
-
-const KEYBOARD_BEHAVIOR: KeyboardAvoidingViewProps['behavior'] = isIos
-  ? 'padding'
-  : 'height';
+import { usePasscodeStore } from '@features/passcode';
+import { scale, verticalScale, PasscodeUtils } from '@utils';
+import { styles } from '../SetupPasscode.styles';
 
 export const ConfirmPasscode = () => {
-  const { t } = useTranslation();
-  const navigation = useNavigation<HomeNavigationProp>();
-  const route = useRoute<RouteProp<HomeParamsList, 'ConfirmPasscode'>>();
   const { top } = useSafeAreaInsets();
-  const { setSavedPasscode } = usePasscode();
+
+  const { t } = useTranslation();
+  const navigation = useNavigation<SettingsTabNavigationProp>();
+  const route = useRoute<RouteProp<HomeParamsList>>();
+  const { onChangePasscode } = usePasscodeStore();
   const [passcode, setPasscode] = useState(['', '', '', '']);
+  // @ts-ignore
   const { passcode: originalPasscode } = route.params;
   const isButtonEnabled = passcode.join('').length === 4;
 
   const onContinuePress = async () => {
     if (passcode.join('') === originalPasscode.join('')) {
-      setSavedPasscode(passcode);
+      await PasscodeUtils.setPasscodeInDB(passcode);
+      onChangePasscode(passcode);
       navigation.navigate('SuccessSetupSecurity');
     } else {
       Alert.alert('Password dont match');
@@ -46,62 +40,49 @@ export const ConfirmPasscode = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={KEYBOARD_BEHAVIOR}
-      style={{ top, flex: 1, justifyContent: 'space-between' }}
-    >
+    <View style={{ ...styles.main, paddingTop: top }}>
       <View>
-        <View
-          style={{ borderBottomWidth: 2, borderBottomColor: COLORS.neutral100 }}
-        >
-          <Spacer value={verticalScale(23)} />
-          <View style={{ paddingHorizontal: scale(16) }}>
-            <Text
-              align="center"
-              fontSize={24}
-              fontFamily="Inter_700Bold"
-              color={COLORS.neutral800}
-            >
-              {t('security.confirm.passcode.text')}
-            </Text>
-          </View>
-          <Spacer value={verticalScale(19)} />
-        </View>
-        <Spacer value={verticalScale(23)} />
-        <Text
-          align="center"
-          fontSize={16}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral800}
-        >
-          {t('security.confirm.passcode.description')}
-        </Text>
-        <Spacer value={verticalScale(106)} />
-        <Passcode onPasscodeChange={onPasscodeChange} />
-        <Spacer value={verticalScale(50)} />
-      </View>
-      <BottomAwareSafeAreaView style={{ paddingHorizontal: scale(16) }}>
-        <Button
-          disabled={!isButtonEnabled}
-          onPress={onContinuePress}
-          type="circular"
-          style={{
-            backgroundColor: isButtonEnabled
-              ? COLORS.brand500
-              : COLORS.alphaBlack5,
-            marginBottom: verticalScale(24)
-          }}
-        >
+        <Header bottomBorder title={t('security.enter.passcode')} />
+        <View style={styles.infoContainer}>
           <Text
+            align="center"
             fontSize={16}
-            fontFamily="Inter_600SemiBold"
-            color={isButtonEnabled ? COLORS.neutral0 : COLORS.neutral600}
-            style={{ marginVertical: scale(12) }}
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral800}
           >
-            {t('button.continue')}
+            {t('security.enter.passcode.text')}
           </Text>
-        </Button>
-      </BottomAwareSafeAreaView>
-    </KeyboardAvoidingView>
+        </View>
+        <Spacer value={verticalScale(20)} />
+      </View>
+      <View>
+        <Passcode
+          isBiometricEnabled={false}
+          onPasscodeChange={onPasscodeChange}
+        />
+        <View style={styles.buttonWrapper}>
+          <Button
+            disabled={!isButtonEnabled}
+            onPress={onContinuePress}
+            type="circular"
+            style={{
+              backgroundColor: isButtonEnabled
+                ? COLORS.brand500
+                : COLORS.brand100,
+              ...styles.button
+            }}
+          >
+            <Text
+              fontSize={16}
+              fontFamily="Inter_600SemiBold"
+              color={isButtonEnabled ? COLORS.neutral0 : COLORS.brand300}
+              style={{ marginVertical: scale(12) }}
+            >
+              {t('button.confirm')}
+            </Text>
+          </Button>
+        </View>
+      </View>
+    </View>
   );
 };

@@ -19,7 +19,7 @@ module.exports = {
       config: {
         usesNonExemptEncryption: false
       },
-      bundleIdentifier: 'io.airdao.app',
+      bundleIdentifier: 'io.test.airdao',
       googleServicesFile: './firebase/GoogleService-Info.plist',
       infoPlist: {
         UIBackgroundModes: ['fetch', 'remote-notification'],
@@ -37,13 +37,13 @@ module.exports = {
         foregroundImage: './assets/adaptive-icon.png',
         backgroundColor: '#ffffff'
       },
-      package: 'io.airdao.app',
+      package: 'io.test.airdao',
       permissions: [
         'android.permission.CAMERA',
         'android.permission.RECORD_AUDIO'
       ],
       playStoreUrl:
-        'https://play.google.com/store/apps/details?id=io.airdao.app',
+        'https://play.google.com/store/apps/details?id=io.test.airdao.app',
       googleServicesFile: './firebase/google-services.json'
     },
     notification: {

@@ -103,7 +103,7 @@ export const formatAmount = (
 const minimiseAmount = (num: number): string => {
   if (!num || num === 0) return '0.00';
 
-  const suffixes = ['', 'k', 'mln', 'bln', 'trln'];
+  const suffixes = ['', 'k', 'm', 'bln', 'trln'];
   const absNum = Math.abs(num);
   let suffixIndex = Math.floor(Math.log10(absNum) / 3);
 
@@ -113,11 +113,40 @@ const minimiseAmount = (num: number): string => {
   return `${scaledNum}${suffixes[suffixIndex]}`;
 };
 
+const numberToTransformedLocale = (value: string | number) => {
+  const amount = parseFloat(value.toString().replace(/,/g, ''));
+
+  // Check if the number is zero and has a negative symbol
+  if (amount === 0 && value.toString().startsWith('-')) {
+    return '0';
+  }
+
+  const [intPart, floatPart] = amount.toString().split('.');
+
+  if (amount % 1 === 0) {
+    return amount.toLocaleString('en-US');
+  }
+
+  const formattedIntPart = parseInt(intPart, 10).toLocaleString('en-US');
+  const formattedFloatPart = floatPart ? floatPart.slice(0, 2) : '00';
+
+  return formattedFloatPart === '00'
+    ? formattedIntPart
+    : `${formattedIntPart}.${formattedFloatPart}`;
+};
+
+const formatDecimal = (value: string, decimals = 2): string => {
+  const fixed = Number(value).toFixed(decimals);
+  return fixed.replace(/\.?0+$/, '');
+};
+
 export const NumberUtils = {
   formatNumber,
   addSignToNumber,
   abbreviateNumber,
   limitDecimalCount,
   formatAmount,
-  minimiseAmount
+  minimiseAmount,
+  numberToTransformedLocale,
+  formatDecimal
 };

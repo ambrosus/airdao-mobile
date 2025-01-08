@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
-import { SwapToken } from './token';
 import { FIELD } from './field';
+import { SwapToken } from './token';
 
 export interface BalanceGettersArgs {
   token: SwapToken;

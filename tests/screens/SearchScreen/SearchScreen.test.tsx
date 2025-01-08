@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
-import { SearchScreen } from '@screens/Search';
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
+import { Explore } from '@screens/Settings/screens/Explore';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ExplorerAccountType } from '@appTypes';
@@ -93,7 +93,7 @@ const Component = () => {
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
-        <SearchScreen />
+        <Explore />
       </QueryClientProvider>
     </SafeAreaProvider>
   );

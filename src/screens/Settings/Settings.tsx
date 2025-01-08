@@ -1,47 +1,30 @@
 import React from 'react';
-import { Linking, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Linking, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import * as Updates from 'expo-updates';
-import { Button, Row, Spacer, Text } from '@components/base';
-import { ChevronDownIcon } from '@components/svg/icons';
+import { useTranslation } from 'react-i18next';
 import { SettingsTabNavigationProp } from '@appTypes';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
 import Config from '@constants/config';
-import { SETTINGS_MENU_ITEMS } from './Settings.constants';
+import { scale, verticalScale } from '@utils';
+import { SETTINGS_MENU_ITEMS, SOCIAL_GROUPS } from './Settings.constants';
 import { SettingsMenuItem } from './Settings.types';
 import { styles } from './styles';
-import { isAndroid } from '@utils/isPlatform';
 
-const iosBuildVersion = '1.3.5';
-const androidBuildVersion = '1.3.5 (91)';
-
-const stageBuildVersions = {
-  ios: `${iosBuildVersion} (${androidBuildVersion})`,
-  android: `${androidBuildVersion} (${iosBuildVersion})`
-};
-
-const isProd = Updates.channel === 'prod';
-const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
-  const { item } = props;
+export const SettingsScreen = () => {
   const { t } = useTranslation();
+
   const navigation = useNavigation<SettingsTabNavigationProp>();
-  const navigateToRoute = () => {
-    navigation.navigate(item.route);
+  const navigateToRoute = (route: any) => {
+    navigation.navigate(route);
   };
 
   const openLink = (link: string) => {
     Linking.openURL(link).then();
   };
-
-  const onPress = () => {
-    switch (item.key) {
-      case 'helpCenter': {
-        openLink(Config.AIRDAO_FAQ_URL);
-        break;
-      }
+  const onPressMenuItem = (item: SettingsMenuItem) => {
+    const { key, route } = item;
+    switch (key) {
       case 'xTwitter': {
         openLink(Config.AIRDAO_X_TWITTER_URL);
         break;
@@ -55,73 +38,65 @@ const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
         break;
       }
       default: {
-        navigateToRoute();
+        navigateToRoute(route);
       }
     }
   };
 
-  return (
-    <Button style={styles.menuItem} onPress={onPress}>
-      <Row alignItems="center" justifyContent="space-between">
+  const SettingsMenuItemView = (props: { item: SettingsMenuItem }) => {
+    const { item } = props;
+    const { t } = useTranslation();
+
+    return (
+      <Button style={styles.menuItem} onPress={() => onPressMenuItem(item)}>
         <Row alignItems="center">
           {item.icon}
           <Spacer value={scale(8)} horizontal />
           <Text
-            fontSize={16}
+            fontSize={scale(16)}
             fontFamily="Inter_500Medium"
             color={COLORS.neutral900}
           >
             {t(item.title)}
           </Text>
         </Row>
-        <ChevronDownIcon rotate="270deg" color={COLORS.neutral300} />
-      </Row>
-    </Button>
-  );
-};
-
-export const SettingsScreen = () => {
-  const { t } = useTranslation();
-  const { top } = useSafeAreaInsets();
-  const currentBuild = isAndroid
-    ? stageBuildVersions.android
-    : stageBuildVersions.ios;
-
-  const renderMenu = (item: SettingsMenuItem[], index: number) => {
-    const isNeedDelimiter = index + 1 !== SETTINGS_MENU_ITEMS.length;
+      </Button>
+    );
+  };
+  const SocialItem = ({ item }: { item: SettingsMenuItem }) => {
     return (
-      <View key={`${item[0].key}`}>
-        {item.map(
-          (menuItem): JSX.Element => (
-            <SettingsMenuItemView item={menuItem} key={menuItem.route} />
-          )
-        )}
-        {isNeedDelimiter && (
-          <View
-            style={{
-              backgroundColor: COLORS.neutral100,
-              height: 1,
-              marginVertical: 5
-            }}
-          />
-        )}
-      </View>
+      <TouchableOpacity onPress={() => onPressMenuItem(item)}>
+        {item.icon}
+      </TouchableOpacity>
     );
   };
 
   return (
-    <View style={[{ top }, styles.container]}>
-      <Text fontSize={24} fontFamily="Inter_700Bold" color={COLORS.neutral800}>
-        {t('tab.settings')}
-      </Text>
-      <View style={styles.innerContainer}>
-        {SETTINGS_MENU_ITEMS.map(renderMenu)}
-      </View>
-      {!isProd && (
-        <Text style={{ margin: 20 }}>
-          firebase event, wallet connect{currentBuild}
+    <SafeAreaView style={{ paddingTop: verticalScale(15) }}>
+      <View style={styles.header}>
+        <Text
+          fontSize={scale(24)}
+          fontFamily="Inter_700Bold"
+          color={COLORS.neutral800}
+        >
+          {t('tab.settings')}
         </Text>
-      )}
-    </View>
+      </View>
+      <View style={styles.contentWrapper}>
+        <View style={styles.container}>
+          {SETTINGS_MENU_ITEMS.map((menuItem) => (
+            <SettingsMenuItemView item={menuItem} key={menuItem.route} />
+          ))}
+        </View>
+        <View style={styles.bottomContent}>
+          <View style={styles.socialButtons}>
+            {SOCIAL_GROUPS.map((item) => (
+              <SocialItem key={item.key} item={item} />
+            ))}
+          </View>
+          <Spacer value={scale(5)} />
+        </View>
+      </View>
+    </SafeAreaView>
   );
 };

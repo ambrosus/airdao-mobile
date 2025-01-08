@@ -1,5 +1,5 @@
-import * as LocalAuth from 'expo-local-authentication';
 import { useEffect, useState } from 'react';
+import * as LocalAuth from 'expo-local-authentication';
 
 export function useSupportedBiometrics() {
   const [supportedBiometrics, setSupportedBiometrics] = useState<

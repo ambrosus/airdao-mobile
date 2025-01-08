@@ -1,16 +1,15 @@
 import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
 import { FlatList, Platform } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Language } from '@appTypes';
 import { Spacer, Text } from '@components/base';
+import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
+import { COLORS } from '@constants/colors';
+import useLocalization from '@contexts/Localizations';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { SettingsModalItem } from '@screens/Settings/screens/AppPreferences/components/SettingsModalItem';
-import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
-import useLocalization from '@contexts/Localizations';
-import { Language } from '@appTypes';
-import { LocalizationUtils } from '@utils/localization';
+import { LocalizationUtils, scale } from '@utils';
 import { styles } from '../style';
 
 type Props = {
@@ -84,10 +83,10 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
               fontSize={scale(16)}
               color={COLORS.neutral900}
             >
-              {t('settings.preferences.select.language')}
+              {t('settings.preferences.language')}
             </Text>
           }
-          titlePosition={Platform.select({ ios: 'left', default: 'center' })}
+          titlePosition={'center'}
           backIconVisible={true}
           style={styles.header}
           onBackPress={() => localRef.current?.dismiss()}

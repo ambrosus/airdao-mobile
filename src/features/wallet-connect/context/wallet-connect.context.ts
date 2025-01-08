@@ -1,12 +1,12 @@
 import { useCallback, useRef, useState } from 'react';
-import { createContextSelector } from '@utils/createContextSelector';
 import { SessionTypes } from '@walletconnect/types';
+import { BottomSheetRef } from '@components/composite';
+import { createContextSelector } from '@utils';
 import {
   CONNECT_VIEW_STEPS,
   Proposal,
   WalletConnectViewValues
 } from '../types';
-import { BottomSheetRef } from '@components/composite';
 
 type ProposalState = Proposal | null;
 
@@ -14,7 +14,7 @@ export const WalletConnectContext = () => {
   const [isWalletKitInitiated, setIsWalletKitInitiated] = useState(false);
   const [proposal, setProposal] = useState<ProposalState>(null);
   const [walletConnectStep, setWalletConnectStep] =
-    useState<WalletConnectViewValues>(CONNECT_VIEW_STEPS.APPROVE);
+    useState<WalletConnectViewValues>(CONNECT_VIEW_STEPS.INITIAL);
 
   const [activeSessions, setActiveSessions] = useState<SessionTypes.Struct[]>(
     []

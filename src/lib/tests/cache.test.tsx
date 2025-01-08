@@ -1,6 +1,6 @@
-import { Cache, CacheKey } from '../cache';
 import * as SecureStore from 'expo-secure-store';
 import { DefaultNotificationSettings } from '@constants/variables';
+import { Cache, CacheKey } from '../cache';
 
 jest.mock('expo-secure-store');
 

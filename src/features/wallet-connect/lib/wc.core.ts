@@ -1,7 +1,7 @@
 import { WalletKit, IWalletKit } from '@reown/walletkit';
 import { Core } from '@walletconnect/core';
-import { getMetadata } from '../utils/misc/metadata';
 import Constants from 'expo-constants';
+import { getMetadata } from '../utils/misc/metadata';
 
 export let walletKit: IWalletKit;
 

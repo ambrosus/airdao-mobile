@@ -1,37 +1,39 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { getSdkError, buildApprovedNamespaces } from '@walletconnect/utils';
-import { styles } from './styles';
+import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Spinner, Text } from '@components/base';
-import {
-  useWalletConnectContextSelector,
-  useExtractProposalData,
-  useHandleBottomSheetActions
-} from '@features/wallet-connect/lib/hooks';
-
-import { COLORS } from '@constants/colors';
-import { verticalScale } from '@utils/scaling';
 import {
   PrimaryButton,
   SecondaryButton,
   Toast,
   ToastType
 } from '@components/modular';
-import { EIP155_CHAINS, walletKit } from '@features/wallet-connect/utils';
-import { useWallet } from '@hooks';
+import { COLORS } from '@constants/colors';
+import { useWalletStore } from '@entities/wallet';
+import {
+  useWalletConnectContextSelector,
+  useHandleBottomSheetActions
+} from '@features/wallet-connect/lib/hooks';
 import {
   CONNECT_VIEW_STEPS,
   EIP155_SIGNING_METHODS
 } from '@features/wallet-connect/types';
-import { useTranslation } from 'react-i18next';
+import {
+  EIP155_CHAINS,
+  extractHttpsPath,
+  extractTrailingSlash,
+  walletKit
+} from '@features/wallet-connect/utils';
+import { verticalScale } from '@utils';
+import { styles } from './styles';
 
 export const WalletConnectApprovalView = () => {
   const { t } = useTranslation();
-  const { wallet } = useWallet();
+  const { wallet } = useWalletStore();
   const { proposal, setActiveSessions, setWalletConnectStep } =
     useWalletConnectContextSelector();
   const { onDismissWalletConnectBottomSheet } = useHandleBottomSheetActions();
-  const { origin } = useExtractProposalData(proposal);
 
   const [isLoadingApprove, setIsLoadingApprove] = useState(false);
 
@@ -70,11 +72,13 @@ export const WalletConnectApprovalView = () => {
   }, [proposal, onDismissWalletConnectBottomSheet]);
 
   const onShowToastNotification = useCallback(() => {
-    const extractedHttpsOrigin = origin.replace(/^https?:\/\//, '');
+    const extractedHttpsOrigin = extractHttpsPath(
+      proposal?.verifyContext.verified.origin
+    );
 
     return setTimeout(() => {
       Toast.show({
-        text: t('wallet.connect.title.success'),
+        text: t('staking.pool.success'),
         subtext: t('wallet.connect.description.success', {
           network: extractedHttpsOrigin,
           interpolation: { escapeValue: false }
@@ -82,7 +86,7 @@ export const WalletConnectApprovalView = () => {
         type: ToastType.Success
       });
     }, 500);
-  }, [origin, t]);
+  }, [proposal?.verifyContext.verified.origin, t]);
 
   const onApproveSession = useCallback(async () => {
     if (proposal) {
@@ -102,9 +106,10 @@ export const WalletConnectApprovalView = () => {
 
         onDismissWalletConnectBottomSheet();
         onShowToastNotification();
+        setWalletConnectStep(CONNECT_VIEW_STEPS.INITIAL);
       } catch (error) {
         setWalletConnectStep(CONNECT_VIEW_STEPS.CONNECT_ERROR);
-        console.error('Auth error:', error);
+        throw error;
       } finally {
         setIsLoadingApprove(false);
       }
@@ -166,7 +171,7 @@ export const WalletConnectApprovalView = () => {
         color={COLORS.black}
       >
         {t('wallet.connect.proposal', {
-          origin,
+          origin: extractTrailingSlash(proposal?.verifyContext.verified.origin),
           interpolation: { escapeValue: false }
         })}
       </Text>
@@ -178,7 +183,7 @@ export const WalletConnectApprovalView = () => {
         style={styles.description}
       >
         {t('wallet.connect.warning', {
-          origin,
+          origin: extractTrailingSlash(proposal?.verifyContext.verified.origin),
           interpolation: { escapeValue: false }
         })}
       </Text>

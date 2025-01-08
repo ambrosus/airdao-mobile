@@ -1,6 +1,6 @@
-import { COLORS } from '@constants/colors';
 import React from 'react';
 import { View } from 'react-native';
+import { COLORS } from '@constants/colors';
 
 interface SeparatorProps {
   height?: number | string;

@@ -1,18 +1,15 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { BigNumber, ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
-import { upperCase } from 'lodash';
-import { styles } from './styles';
 import { Row, Text } from '@components/base';
-import { TokenLogo } from '@components/modular';
-import { TxType } from '@features/kosmos/types';
-import { formatDecimals, getTokenByAddress } from '@features/kosmos/utils';
-import { useKosmosMarketsContextSelector } from '@features/kosmos/context';
-import { InfoIcon } from '@components/svg/icons';
-import { COLORS } from '@constants/colors';
-import { BottomSheetReviewOrder } from '@features/kosmos/components/templates/bottom-sheet-review-order';
 import { BottomSheetRef } from '@components/composite';
+import { TokenLogo } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import { $token, TxType, useTokensStore } from '@entities/kosmos';
+import { BottomSheetReviewOrder } from '@features/kosmos/components/templates/bottom-sheet-review-order';
+import { $discount, formatDecimals } from '@features/kosmos/utils';
+import { styles } from './styles';
 
 interface OrderCardDetailsProps {
   transaction: TxType;
@@ -20,18 +17,18 @@ interface OrderCardDetailsProps {
 
 export const OrderCardDetails = ({ transaction }: OrderCardDetailsProps) => {
   const { t } = useTranslation();
-  const { tokens } = useKosmosMarketsContextSelector();
+  const { tokens } = useTokensStore();
 
   const bottomSheetRef = useRef<BottomSheetRef>(null);
 
   const quoteToken = useMemo(() => {
     const address = transaction.quoteToken;
-    return getTokenByAddress(address, tokens);
+    return $token(address, tokens);
   }, [transaction, tokens]);
 
   const payoutToken = useMemo(() => {
     const address = transaction.payoutToken;
-    return getTokenByAddress(address, tokens);
+    return $token(address, tokens);
   }, [transaction, tokens]);
 
   const amount = useMemo(() => {
@@ -50,7 +47,10 @@ export const OrderCardDetails = ({ transaction }: OrderCardDetailsProps) => {
 
   return (
     <>
-      <Row alignItems="center" justifyContent="space-between">
+      <Pressable
+        style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1 }]}
+        onPress={onReviewOrderDetails}
+      >
         <Row style={styles.innerRowContainer} alignItems="center">
           <TokenLogo scale={0.65} token={quoteToken?.symbol ?? ''} />
           <Text
@@ -61,51 +61,48 @@ export const OrderCardDetails = ({ transaction }: OrderCardDetailsProps) => {
             {amount}
           </Text>
         </Row>
-        <TouchableOpacity onPress={onReviewOrderDetails}>
-          <InfoIcon color={COLORS.neutral300} scale={0.25} />
-        </TouchableOpacity>
-      </Row>
 
-      <View style={styles.innerDetailsContainer}>
-        <Row alignItems="center" justifyContent="space-between">
-          <Text
-            fontSize={12}
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral600}
-          >
-            {upperCase(t('kosmos.table.headings.discount'))}
-          </Text>
-          <Text
-            fontSize={16}
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral700}
-          >
-            {transaction.discount.toFixed(2)}%
-          </Text>
-        </Row>
-        <Row alignItems="center" justifyContent="space-between">
-          <Text
-            fontSize={12}
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral600}
-          >
-            {upperCase(t('kosmos.payout'))}
-          </Text>
-          <Text
-            fontSize={14}
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral700}
-          >
-            {formatDecimals(payout, payoutToken?.contractAddress, tokens)}{' '}
-            {payoutToken?.symbol.toUpperCase()}
-          </Text>
-        </Row>
-      </View>
+        <View style={styles.innerDetailsContainer}>
+          <Row alignItems="center" justifyContent="space-between">
+            <Text
+              fontSize={12}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral500}
+            >
+              {t('kosmos.table.headings.discount')}
+            </Text>
+            <Text
+              fontSize={16}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral700}
+            >
+              {$discount(transaction.discount)}
+            </Text>
+          </Row>
+          <Row alignItems="center" justifyContent="space-between">
+            <Text
+              fontSize={12}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral500}
+            >
+              {t('kosmos.payout')}
+            </Text>
+            <Text
+              fontSize={14}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral700}
+            >
+              {formatDecimals(payout, payoutToken?.contractAddress, tokens)}{' '}
+              {payoutToken?.symbol.toUpperCase()}
+            </Text>
+          </Row>
+        </View>
+      </Pressable>
 
       <BottomSheetReviewOrder
         ref={bottomSheetRef}
         transaction={transaction}
-        qouteToken={quoteToken}
+        quoteToken={quoteToken}
         payoutToken={payoutToken}
         payout={payout}
         amount={amount}

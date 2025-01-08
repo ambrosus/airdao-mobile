@@ -1,17 +1,12 @@
 import { StyleSheet } from 'react-native';
-import { scale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
 
 export const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  headerHistoryIcon: {
-    width: scale(32),
-    height: scale(32),
-    borderRadius: scale(32),
+  loader: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.neutral100
+    height: '100%'
+  },
+  container: {
+    flex: 1
   }
 });

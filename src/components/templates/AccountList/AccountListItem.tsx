@@ -1,9 +1,9 @@
 import React from 'react';
+import { formatUnits } from 'ethers/lib/utils';
 import { WalletCard } from '@components/modular';
 import { useAMBPrice, useUSDPrice } from '@hooks';
 import { useBalanceOfAddress } from '@hooks/query/useBalanceOfAddress';
 import { AccountListItemProps, CardType } from './AccountList.types';
-import { formatUnits } from 'ethers/lib/utils';
 
 export const AccountListItem = (props: AccountListItemProps) => {
   const { account, type } = props;

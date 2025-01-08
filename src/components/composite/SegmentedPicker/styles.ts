@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { shadow } from '@constants/shadow';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { moderateScale, scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {

@@ -1,11 +1,6 @@
+import { SWAP_SUPPORTED_TOKENS } from '@features/swap/entities';
 import { environment } from '@utils/environment';
-import {
-  SWAP_SUPPORTED_TOKENS,
-  TOKEN_ADDRESSES
-} from '@features/swap/entities';
-import { wrapNativeAddress } from './wrap-native-address';
-
-export const addresses = TOKEN_ADDRESSES[environment];
+import { addresses, wrapNativeAddress } from './wrap-native-address';
 
 export const isMultiHopSwapAvailable = (path: string[]): boolean => {
   return !!extractArrayOfMiddleMultiHopAddresses(path).address;

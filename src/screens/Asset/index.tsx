@@ -1,39 +1,38 @@
-import React from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { useCallback, useMemo } from 'react';
 import { View } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { Button, Row, Spacer, Text } from '@components/base';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { HomeNavigationProp, HomeParamsList } from '@appTypes';
+import { Button, Row, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
-import { COLORS } from '@constants/colors';
-import { StatisticsLogo } from '@components/svg/icons/Statistics';
-import { scale, verticalScale } from '@utils/scaling';
-import { useAMBPrice, useTokensAndTransactions, useUSDPrice } from '@hooks';
-import { NumberUtils } from '@utils/number';
-import { useTransactionsOfToken } from '@hooks/query/useTransactionsOfToken';
-import { AccountActions, AccountTransactions } from '@components/templates';
 import { TokenLogo } from '@components/modular';
+import { ChartIcon } from '@components/svg/icons/v2';
+import { AccountTransactions } from '@components/templates';
+import { COLORS } from '@constants/colors';
+import { AssetsAccountActionsList } from '@features/wallet-assets/components/modular';
+import { useAMBPrice, useTokensAndTransactions, useUSDPrice } from '@hooks';
+import { useTransactionsOfToken } from '@hooks/query/useTransactionsOfToken';
+import {
+  StringUtils,
+  StringValidators,
+  NumberUtils,
+  scale,
+  verticalScale
+} from '@utils';
+import { styles } from './styles';
 
 export const AssetScreen = () => {
   const {
     params: { tokenInfo, walletAccount }
   } = useRoute<RouteProp<HomeParamsList, 'AssetScreen'>>();
   const navigation = useNavigation<HomeNavigationProp>();
-  const { t } = useTranslation();
-  const { top } = useSafeAreaInsets();
-  const { data: ambPriceData } = useAMBPrice();
-  const percentChange24H = ambPriceData?.percentChange24H || 0;
-  const ambPriceUSD = ambPriceData?.priceUSD || 0;
-  const AMBBalance = tokenInfo.balance.ether;
-  const USDBalance = AMBBalance * ambPriceUSD;
 
-  const usdPrice = useUSDPrice(tokenInfo.balance.ether || 0, tokenInfo.symbol);
-  const isAMBToken = walletAccount === tokenInfo.address;
+  const { data: ambPriceData } = useAMBPrice();
 
   const {
     data: tokensAndTransactions,
-    fetchNextPage: fetchNextPageAddresss,
+    fetchNextPage: fetchNextPageAddress,
+    loading: tokensAndTransactionsLoading,
     hasNextPage: hasNextPageOfAddress
   } = useTokensAndTransactions(
     walletAccount,
@@ -41,8 +40,6 @@ export const AssetScreen = () => {
     20,
     !!walletAccount && walletAccount === tokenInfo.address
   );
-
-  const { limitDecimalCount, formatNumber } = NumberUtils;
 
   const {
     data: transactions,
@@ -58,123 +55,141 @@ export const AssetScreen = () => {
       !!tokenInfo.address &&
       walletAccount !== tokenInfo.address
   );
+
+  const percentChange24H = ambPriceData?.percentChange24H || 0;
+  const usdPrice = useUSDPrice(tokenInfo.balance.ether || 0, tokenInfo.symbol);
+  const isAMBToken = walletAccount === tokenInfo.address;
   const hasNextPage = isAMBToken ? hasNextPageOfAddress : hasNextPageOfToken;
-  const fetchNextPage = isAMBToken ? fetchNextPageAddresss : fetchNextPageToken;
+  const fetchNextPage = isAMBToken ? fetchNextPageAddress : fetchNextPageToken;
 
-  const navigateToAMBScreen = () => {
-    navigation.navigate('AMBMarketScreen');
-  };
+  const navigateToAMBScreen = useCallback(
+    () => navigation.navigate('AMBMarketScreen'),
+    [navigation]
+  );
 
-  const headerTitle =
-    tokenInfo.name === ''
-      ? tokenInfo.name
-      : tokenInfo.name === 'AirDAO'
-      ? 'AirDAO'
-      : tokenInfo.symbol || tokenInfo.address;
+  const tokenNameOrAddress = useMemo(() => {
+    const { symbol, address } = tokenInfo;
+    const isAddress = StringValidators.isStringAddress(symbol);
 
-  const tokenBalance = formatNumber(
-    +limitDecimalCount(tokenInfo.balance.formattedBalance, 2)
+    if (symbol && !isAddress) {
+      return symbol;
+    }
+
+    return StringUtils.formatAddress(address, 5, 6);
+  }, [tokenInfo]);
+
+  const renderHeaderTitleComponent = useMemo(
+    () => (
+      <Row alignItems="center">
+        <View>
+          <TokenLogo scale={0.7} token={tokenInfo.tokenNameFromDatabase} />
+        </View>
+        <Spacer horizontal value={scale(4)} />
+        <Text
+          fontSize={20}
+          fontFamily="Inter_600SemiBold"
+          color={COLORS.neutral800}
+        >
+          {tokenNameOrAddress}
+        </Text>
+      </Row>
+    ),
+    [tokenNameOrAddress, tokenInfo.tokenNameFromDatabase]
+  );
+
+  const renderHeaderRightComponent = useMemo(
+    () =>
+      tokenInfo.name === 'AirDAO' && (
+        <Button onPress={navigateToAMBScreen}>
+          <ChartIcon color={COLORS.neutral500} />
+        </Button>
+      ),
+    [navigateToAMBScreen, tokenInfo.name]
+  );
+
+  const isTransactionsLoading = useMemo(
+    () => transactionsLoading || tokensAndTransactionsLoading,
+    [tokensAndTransactionsLoading, transactionsLoading]
+  );
+
+  const txs = useMemo(
+    () =>
+      walletAccount === tokenInfo.address
+        ? tokensAndTransactions.transactions
+        : transactions,
+    [
+      tokenInfo.address,
+      tokensAndTransactions.transactions,
+      transactions,
+      walletAccount
+    ]
   );
 
   return (
-    <View style={{ top, flex: 1 }}>
+    <SafeAreaView style={styles.container}>
       <Header
         bottomBorder
-        title={
-          <Row alignItems="center">
-            <View>
-              <TokenLogo scale={0.7} token={tokenInfo.name} />
-            </View>
-            <Spacer horizontal value={scale(4)} />
-            <Text
-              fontFamily="Inter_600SemiBold"
-              fontSize={15}
-              color={COLORS.neutral800}
-            >
-              {headerTitle}
-            </Text>
-          </Row>
-        }
-        contentRight={
-          tokenInfo.name === 'AirDAO' && (
-            <Button onPress={navigateToAMBScreen}>
-              <StatisticsLogo />
-            </Button>
-          )
-        }
-        style={{ shadowColor: 'transparent' }}
+        style={styles.headerContentRightContainer}
+        title={renderHeaderTitleComponent}
+        contentRight={renderHeaderRightComponent}
       />
       <Spacer value={verticalScale(16)} />
-      <View style={{ alignItems: 'center' }}>
-        <Text
-          fontFamily="Inter_600SemiBold"
-          fontSize={16}
-          color={COLORS.neutral300}
-        >
-          {t('asset.your.balance')}
-        </Text>
-        <Row alignItems="center">
+      <View style={styles.innerContainer}>
+        <View style={styles.accountDetails}>
           <Text
+            fontSize={15}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.neutral500}
+          >
+            {StringUtils.formatAddress(walletAccount, 5, 5)}
+          </Text>
+
+          <Text
+            fontSize={22}
             fontFamily="Inter_700Bold"
-            fontWeight="900"
-            fontSize={24}
-            color={COLORS.neutral900}
+            color={COLORS.neutral800}
+            letterSpacing={-0.31}
           >
-            {tokenBalance} {tokenInfo.symbol}
+            {NumberUtils.numberToTransformedLocale(
+              tokenInfo.balance.formattedBalance
+            )}{' '}
+            {tokenInfo.symbol}
           </Text>
-          <Spacer horizontal value={scale(8)} />
-        </Row>
-        <Spacer value={scale(5)} />
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {usdPrice >= 0 && (
+
+          <Row style={styles.accountDetailsFooter} alignItems="center">
+            {!Number.isNaN(usdPrice) && (
+              <Text
+                fontSize={16}
+                fontFamily="Inter_500Medium"
+                color={COLORS.neutral800}
+              >
+                ${NumberUtils.numberToTransformedLocale(usdPrice)}
+              </Text>
+            )}
             <Text
+              fontSize={14}
               fontFamily="Inter_500Medium"
-              fontSize={12}
-              color={COLORS.neutral400}
+              color={percentChange24H > 0 ? COLORS.success400 : COLORS.error400}
             >
-              ${NumberUtils.limitDecimalCount(usdPrice, 2)}
+              {NumberUtils.addSignToNumber(percentChange24H)}% (24hr)
             </Text>
-          )}
-          <Spacer horizontal value={scale(5)} />
-          <Text
-            fontSize={14}
-            fontFamily="Inter_500Medium"
-            fontWeight="500"
-            color={percentChange24H > 0 ? COLORS.success400 : COLORS.error400}
-          >
-            {`${NumberUtils.addSignToNumber(
-              percentChange24H
-            )}% ($${NumberUtils.formatNumber(
-              (USDBalance * percentChange24H) / 100
-            )}) ${t('common.today')}`}
-          </Text>
+          </Row>
+        </View>
+        <View style={styles.actionsContainer}>
+          <AssetsAccountActionsList address={walletAccount} token={tokenInfo} />
+        </View>
+
+        <View style={styles.transactions}>
+          <AccountTransactions
+            transactions={txs}
+            listStyle={styles.transactionsList}
+            containerStyle={styles.transactionsContainer}
+            loading={isTransactionsLoading}
+            onEndReached={() => hasNextPage && fetchNextPage()}
+          />
+          <Text>asdf</Text>
         </View>
       </View>
-      <Spacer value={verticalScale(24)} />
-      <AccountActions address={walletAccount} token={tokenInfo} />
-      <Spacer value={verticalScale(24)} />
-      <View style={{ height: 1, backgroundColor: COLORS.neutral100 }} />
-      <Spacer value={verticalScale(24)} />
-      <View style={{ paddingHorizontal: scale(16) }}>
-        <Text
-          fontFamily="Inter_700Bold"
-          fontSize={20}
-          color={COLORS.neutral800}
-        >
-          {t('common.transactions')}
-        </Text>
-      </View>
-      <View style={{ flex: 1, paddingTop: verticalScale(16) }}>
-        <AccountTransactions
-          transactions={
-            walletAccount === tokenInfo.address
-              ? tokensAndTransactions.transactions
-              : transactions
-          }
-          loading={transactionsLoading}
-          onEndReached={() => hasNextPage && fetchNextPage()}
-        />
-      </View>
-    </View>
+    </SafeAreaView>
   );
 };

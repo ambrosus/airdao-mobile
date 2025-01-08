@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { Model, Q, Database as WDB } from '@nozbe/watermelondb';
+import LocalStorage from '@nozbe/watermelondb/Database/LocalStorage';
+import { Clause } from '@nozbe/watermelondb/QueryDescription';
 import { DatabaseTable } from '@appTypes';
 import { database } from './main';
-import { Model, Q, Database as WDB } from '@nozbe/watermelondb';
-import { Clause } from '@nozbe/watermelondb/QueryDescription';
-import LocalStorage from '@nozbe/watermelondb/Database/LocalStorage';
 
 class Database {
   private db: WDB | undefined;

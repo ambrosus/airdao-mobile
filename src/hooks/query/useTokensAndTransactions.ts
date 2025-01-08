@@ -1,16 +1,16 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { PaginatedQueryResponse } from '@appTypes/QueryResponse';
-import { API } from '@api/api';
-import { Token, Transaction } from '@models';
-import { PaginatedResponseBody } from '@appTypes/Pagination';
-import { TransactionDTO } from '@models/dtos/TransactionDTO';
 import { useEffect } from 'react';
-import { AirDAOEventDispatcher } from '@lib';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { API } from '@api/api';
 import {
   AirDAOEventType,
   AirDAONotificationReceiveEventPayload
 } from '@appTypes';
-import { TokenUtils } from '@utils/token';
+import { PaginatedResponseBody } from '@appTypes/Pagination';
+import { PaginatedQueryResponse } from '@appTypes/QueryResponse';
+import { AirDAOEventDispatcher } from '@lib';
+import { Token, Transaction } from '@models';
+import { TransactionDTO } from '@models/dtos/TransactionDTO';
+import { TokenUtils } from '@utils';
 
 export function useTokensAndTransactions(
   address: string,
@@ -120,8 +120,9 @@ export function useTokensAndTransactions(
     data: data?.pages
       ? { tokens: filteredTokens, transactions }
       : { tokens: [], transactions: [] },
-    loading: isInitialLoading || isFetchingNextPage,
+    loading: isInitialLoading,
     refetching: isRefetching,
+    isFetchingNextPage,
     error,
     hasNextPage: Boolean(hasNextPage),
     fetchNextPage,

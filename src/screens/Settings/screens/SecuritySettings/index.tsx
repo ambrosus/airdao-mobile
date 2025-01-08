@@ -1,22 +1,24 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
-import { Header } from '@components/composite';
-import { Button, Row, Spacer, Switch, Text } from '@components/base';
-import { ChevronDownIcon } from '@components/svg/icons';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { SettingsTabNavigationProp } from '@appTypes';
+import { Button, Row, Spacer, Switch, Text } from '@components/base';
+import { Header } from '@components/composite';
+import { COLORS } from '@constants/colors';
+import { usePasscodeStore } from '@features/passcode';
+import { usePasscodeActions } from '@features/passcode/lib/hooks';
 import { useSupportedBiometrics } from '@hooks';
-import usePasscode from '@contexts/Passcode';
+import { moderateScale, scale, verticalScale } from '@utils';
 
 export const SecuritySettingsScreen = () => {
   const { t } = useTranslation();
   const supportedBiometrics = useSupportedBiometrics();
-  const { toggleBiometricAuthentication, isFaceIDEnabled } = usePasscode();
+  const { isFaceIDEnabled } = usePasscodeStore();
+  const { onToggleBiometricAuth } = usePasscodeActions();
   const navigation = useNavigation<SettingsTabNavigationProp>();
 
   const navigateToChangePasscode = useCallback(() => {
@@ -36,17 +38,16 @@ export const SecuritySettingsScreen = () => {
           <Row
             alignItems="center"
             justifyContent="space-between"
-            style={styles.secondContainer}
+            style={styles.container}
           >
             <Text
               fontSize={16}
-              fontFamily="Inter_600SemiBold"
-              color={COLORS.neutral500}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral900}
             >
               {t('settings.security.change.passcode')}
             </Text>
             <Row alignItems="center">
-              <ChevronDownIcon rotate="270deg" color={COLORS.neutral300} />
               <Spacer value={scale(8)} horizontal />
             </Row>
           </Row>
@@ -62,8 +63,8 @@ export const SecuritySettingsScreen = () => {
           >
             <Text
               fontSize={16}
-              fontFamily="Inter_600SemiBold"
-              color={COLORS.neutral500}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral900}
             >
               {supportedBiometrics.indexOf(
                 LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
@@ -74,7 +75,7 @@ export const SecuritySettingsScreen = () => {
             <Row alignItems="center">
               <Switch
                 value={isFaceIDEnabled}
-                onValueChange={toggleBiometricAuthentication}
+                onValueChange={onToggleBiometricAuth}
               />
             </Row>
           </Row>
@@ -88,13 +89,8 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: verticalScale(16),
     paddingHorizontal: scale(16),
-    backgroundColor: COLORS.alphaBlack5,
-    borderRadius: moderateScale(16)
-  },
-  secondContainer: {
-    paddingVertical: verticalScale(20),
-    paddingHorizontal: scale(16),
-    backgroundColor: COLORS.alphaBlack5,
-    borderRadius: moderateScale(16)
+    borderRadius: moderateScale(16),
+    borderWidth: 1,
+    borderColor: COLORS.neutral100
   }
 });

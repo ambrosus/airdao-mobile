@@ -1,5 +1,8 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
+import { TransactionType } from '@appTypes';
+import { PaginatedResponseBody } from '@appTypes/Pagination';
+import Config from '@constants/config';
 import {
   ExplorerAccountDTO,
   ExplorerInfoDTO,
@@ -7,10 +10,7 @@ import {
   TokenDTO,
   TransactionDTO
 } from '@models';
-import { TransactionType } from '@appTypes';
-import { PaginatedResponseBody } from '@appTypes/Pagination';
-import Config from '@constants/config';
-import { SearchSort } from '@screens/Search/Search.types';
+import { SearchSort } from '@screens/Settings/screens/Explore/Search.types';
 // deprecated
 // const exploreApiUrl = Config.EXPLORER_API_URL;
 const explorerApiV2Url = Config.EXPLORER_API_V2_URL;

@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Row, Switch, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
 import { useSwapSettings } from '@features/swap/lib/hooks';
 
 export const SettingsExpertModeForm = () => {
@@ -13,8 +14,15 @@ export const SettingsExpertModeForm = () => {
 
   return (
     <Row alignItems="center" justifyContent="space-between">
-      <Text>{t('swap.settings.expert')}</Text>
+      <Text
+        fontSize={16}
+        fontFamily="Inter_400Regular"
+        color={COLORS.neutral800}
+      >
+        {t('swap.settings.expert')}
+      </Text>
       <Switch
+        style={{ transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }] }}
         value={_refSettingsGetter.extendedMode}
         onValueChange={onToggleExpertMode}
       />
