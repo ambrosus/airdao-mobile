@@ -3,7 +3,7 @@ import { Defs, Pattern, Rect, Svg, Image, Use } from 'react-native-svg';
 import { IconProps } from './Icon.types';
 
 export const TokenSwineIcon = ({ scale = 1 }: IconProps) => {
-  const size = 36 * scale;
+  const size = 34 * scale;
   return (
     <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} fill="none">
       <Rect width={size} height={size} fill="url(#pattern0_88_1801)" />
