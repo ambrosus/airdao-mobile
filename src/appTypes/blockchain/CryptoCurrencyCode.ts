@@ -57,6 +57,7 @@ export enum CryptoCurrencyCode {
   Harbor = 'Harbor',
   CollateralizedHarbor = 'Collateralized Harbor',
   KosmosToken = 'Kosmos Token',
+  KOS = 'KOS',
   XENA = 'X3NA',
   stAMB = 'stAMB',
   // StAMB for testnet app
