@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Spacer, Text } from '@components/base';
@@ -15,6 +15,7 @@ import { TiersSelector } from '../../base/tiers-selector';
 export const WithdrawRewardOnlyTab = () => {
   const { t } = useTranslation();
   const bottomSheetRef = useRef<BottomSheetRef>(null);
+  const [isNullAmount, setIsNullAmount] = useState(false);
   const {
     ambAmount,
     bondAmount,
@@ -33,6 +34,13 @@ export const WithdrawRewardOnlyTab = () => {
     setPreviewData(_previewData);
     bottomSheetRef.current?.show();
   }, [ambAmount, bondAmount, unStakeDelay]);
+  useEffect(() => {
+    if (+ambAmount <= 0 || +bondAmount <= 0) {
+      setIsNullAmount(true);
+    } else {
+      setIsNullAmount(false);
+    }
+  }, [ambAmount, bondAmount]);
 
   return (
     <View style={styles.main}>
@@ -42,8 +50,10 @@ export const WithdrawRewardOnlyTab = () => {
       />
       <Spacer value={scale(8)} />
       <View style={styles.buttonWrapper}>
-        <PrimaryButton onPress={onPressRewardWithdraw}>
-          <Text color={COLORS.neutral0}>{t('harbor.withdrawal.button')}</Text>
+        <PrimaryButton onPress={onPressRewardWithdraw} disabled={isNullAmount}>
+          <Text color={COLORS[isNullAmount ? 'brand300' : 'neutral0']}>
+            {t('harbor.withdrawal.button')}
+          </Text>
         </PrimaryButton>
       </View>
       <BottomSheetHarborPreView

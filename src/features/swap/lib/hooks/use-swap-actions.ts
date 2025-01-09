@@ -39,7 +39,7 @@ export function useSwapActions() {
   } = useSwapContextSelector();
 
   const { settings } = useSwapSettings();
-  const { tokensRoute, tokenToSell } = useSwapTokens();
+  const { tokensRoute, tokenToSell, tokenToReceive } = useSwapTokens();
   const { isStartsWithETH, isEndsWithETH } = useSwapHelpers();
 
   const checkAllowance = useCallback(async () => {
@@ -156,6 +156,7 @@ export function useSwapActions() {
 
     return await swapExactTokensForTokens(
       tokenToSell.AMOUNT,
+      tokenToReceive.AMOUNT,
       excludeNativeETH,
       signer,
       _slippage,
@@ -169,6 +170,7 @@ export function useSwapActions() {
     isMultiHopSwapBetterCurrency.state,
     isStartsWithETH,
     settings,
+    tokenToReceive.AMOUNT,
     tokenToSell.AMOUNT,
     tokensRoute
   ]);
