@@ -84,7 +84,7 @@ export function useSwapInterface() {
           : receivedAmountOut;
 
         setUiBottomSheetInformation({
-          priceImpact,
+          priceImpact: !priceImpact ? 0 : priceImpact,
           minimumReceivedAmount,
           lpFee: SwapStringUtils.transformRealizedLPFee(
             String(liquidityProviderFee)

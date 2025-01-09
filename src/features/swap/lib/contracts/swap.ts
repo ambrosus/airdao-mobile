@@ -12,12 +12,54 @@ import {
   wrapNativeAddress,
   getTimestampDeadline,
   withMultiHopPath,
-  dexValidators
+  dexValidators,
+  maximumAmountOut
 } from '@features/swap/utils';
 import {
   createAMBProvider,
   createRouterContract
 } from '@features/swap/utils/contracts/instances';
+
+async function swapArgsCallback(
+  amountIn: string,
+  amountOut: string,
+  path: string[],
+  address: string,
+  timestamp: number,
+  slippageTolerance: number,
+  tradeIn: boolean
+) {
+  const bnAmountIn = ethers.utils.parseEther(amountIn);
+  const bnAmountOut = ethers.utils.parseEther(amountOut);
+
+  const [, bnAmountToReceive] = await getAmountsOut({
+    amountToSell: bnAmountIn,
+    path
+  });
+
+  const [bnAmountToSell] = await getAmountsIn({
+    amountToReceive: bnAmountToReceive,
+    path
+  });
+
+  const amountOutMin = minimumAmountOut(
+    `${slippageTolerance}%`,
+    bnAmountToReceive
+  );
+
+  const amountOutMax = maximumAmountOut(
+    `${slippageTolerance}%`,
+    bnAmountToSell
+  );
+
+  return [
+    tradeIn ? bnAmountIn : bnAmountOut,
+    tradeIn ? amountOutMin : amountOutMax,
+    path,
+    address,
+    timestamp
+  ];
+}
 
 export async function getAmountsOut({
   amountToSell,
@@ -193,7 +235,8 @@ export async function swapMultiHopExactTokensForTokens(
 }
 
 export async function swapExactTokensForTokens(
-  amountToSell: string,
+  amountIn: string,
+  amountOut: string,
   path: string[],
   signer: Wallet,
   slippageTolerance: number,
@@ -202,18 +245,7 @@ export async function swapExactTokensForTokens(
 ) {
   try {
     const routerContract = createRouterContract(signer, TRADE);
-    const bnAmountToSell = ethers.utils.parseEther(amountToSell);
     const timestampDeadline = getTimestampDeadline(deadline);
-
-    const [, bnAmountToReceive] = await getAmountsOut({
-      amountToSell: bnAmountToSell,
-      path
-    });
-
-    const bnMinimumReceivedAmount = minimumAmountOut(
-      `${slippageTolerance}%`,
-      bnAmountToReceive
-    );
 
     const callSwapMethod =
       routerContract[
@@ -222,13 +254,17 @@ export async function swapExactTokensForTokens(
           : 'swapTokensForExactTokens'
       ];
 
-    const tx = await callSwapMethod(
-      bnAmountToSell,
-      bnMinimumReceivedAmount,
+    const args = await swapArgsCallback(
+      amountIn,
+      amountOut,
       path,
       signer.address,
-      timestampDeadline
+      timestampDeadline,
+      slippageTolerance,
+      tradeIn
     );
+
+    const tx = await callSwapMethod(...args);
 
     return await tx.wait();
   } catch (error) {
