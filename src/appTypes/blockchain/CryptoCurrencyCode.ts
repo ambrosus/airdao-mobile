@@ -61,5 +61,6 @@ export enum CryptoCurrencyCode {
   XENA = 'X3NA',
   stAMB = 'stAMB',
   // StAMB for testnet app
-  StAMB = 'StAMB'
+  StAMB = 'StAMB',
+  Swine = 'SWINE'
 }

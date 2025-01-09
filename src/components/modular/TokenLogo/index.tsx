@@ -16,6 +16,7 @@ import {
   LangFundIcon,
   PlutusIcon,
   TetherIcon,
+  TokenSwineIcon,
   TokenXENAIcon,
   UnknownTokenIcon,
   UsdcIcon
@@ -122,6 +123,8 @@ export const TokenLogo = (props: TokenLogoProps) => {
       return <KosmosTokenIcon scale={scale} />;
     case CryptoCurrencyCode.XENA.toLowerCase():
       return <TokenXENAIcon scale={scale} />;
+    case CryptoCurrencyCode.Swine.toLowerCase():
+      return <TokenSwineIcon scale={scale} />;
     default:
       return <UnknownTokenIcon scale={scale} />;
   }

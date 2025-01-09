@@ -20,10 +20,10 @@ export const SingleAsset = ({
 }: SingleAssetProps): JSX.Element => {
   const { balance, symbol, address, tokenNameFromDatabase } = token;
 
-  const usdPrice = useUSDPrice(balance.ether, symbol);
+  const usdPrice = useUSDPrice(+balance.ether, symbol).toFixed(18);
 
   const tokenUSDBalance = useMemo(() => {
-    return `$${NumberUtils.numberToTransformedLocale(usdPrice.toString())}`;
+    return `$${NumberUtils.limitDecimalCount(usdPrice, 2)}`;
   }, [usdPrice]);
 
   const tokenNameOrAddress = useMemo(() => {
@@ -65,7 +65,7 @@ export const SingleAsset = ({
             </Text>
           </View>
         </Row>
-        {!Number.isNaN(usdPrice) && (
+        {!Number.isNaN(+usdPrice) && (
           <Text
             fontFamily="Inter_400Regular"
             fontSize={16}

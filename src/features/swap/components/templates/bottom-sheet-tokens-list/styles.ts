@@ -5,6 +5,9 @@ export const styles = StyleSheet.create({
   heading: {
     textAlign: 'center'
   },
+  tokensListWrapper: {
+    maxHeight: '100%'
+  },
   container: {
     paddingHorizontal: scale(24)
   }
