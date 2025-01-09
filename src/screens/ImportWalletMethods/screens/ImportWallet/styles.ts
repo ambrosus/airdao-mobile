@@ -8,7 +8,8 @@ export const styles = StyleSheet.create({
   headerShadow: { shadowColor: 'transparent' },
   container: {
     flexGrow: 1,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    paddingBottom: scale(15)
   },
   descriptionWrapper: {
     paddingHorizontal: scale(16)
