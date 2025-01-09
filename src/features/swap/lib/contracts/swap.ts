@@ -13,7 +13,7 @@ import {
   getTimestampDeadline,
   withMultiHopPath,
   dexValidators,
-  maximumAmountOut
+  maximumAmountIn
 } from '@features/swap/utils';
 import {
   createAMBProvider,
@@ -47,10 +47,7 @@ async function swapArgsCallback(
     bnAmountToReceive
   );
 
-  const amountOutMax = maximumAmountOut(
-    `${slippageTolerance}%`,
-    bnAmountToSell
-  );
+  const amountOutMax = maximumAmountIn(`${slippageTolerance}%`, bnAmountToSell);
 
   return [
     tradeIn ? bnAmountIn : bnAmountOut,

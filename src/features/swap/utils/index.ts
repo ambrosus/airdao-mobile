@@ -1,5 +1,5 @@
 export * from './wrap-native-address';
-export * from './amount-received';
+export * from './prices';
 export * from './execute-swap-path';
 export * from './multi-route';
 export * from './provider-fee';

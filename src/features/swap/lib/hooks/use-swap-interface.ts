@@ -7,7 +7,7 @@ import {
   SwapStringUtils,
   isETHtoWrapped,
   isWrappedToETH,
-  maximumAmountOut,
+  maximumAmountIn,
   minimumAmountOut,
   realizedLPFee
 } from '@features/swap/utils';
@@ -54,7 +54,7 @@ export function useSwapInterface() {
         )
       );
 
-      const bnMaximumReceivedAmount = maximumAmountOut(
+      const bnMaximumReceivedAmount = maximumAmountIn(
         `${settings.current.slippageTolerance}%`,
         ethers.utils.parseEther(
           _refExactGetter ? tokenToReceive.AMOUNT : tokenToSell.AMOUNT
