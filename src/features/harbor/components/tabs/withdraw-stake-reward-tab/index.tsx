@@ -39,10 +39,11 @@ export const WithdrawStakeRewardTab = () => {
   const [amountToWithdraw, setAmountToWithdraw] = useState('');
   const [previewData, setPreviewData] = useState(DEFAULT_WITHDRAW_PREVIEW);
   const [inputError, setInputError] = useState('');
+  const [isNullInput, setIsNullInput] = useState(true);
 
   const isDisabledButton = useMemo(() => {
-    return !amountToWithdraw || !totalStaked || !!inputError;
-  }, [amountToWithdraw, inputError, totalStaked]);
+    return !amountToWithdraw || !totalStaked || !!inputError || isNullInput;
+  }, [amountToWithdraw, inputError, isNullInput, totalStaked]);
 
   const onWithdrawPress = useCallback(() => {
     const _previewData = {
@@ -56,6 +57,7 @@ export const WithdrawStakeRewardTab = () => {
   }, [ambAmount, amountToWithdraw, bondAmount, unStakeDelay.delay]);
 
   const onChangeText = (value: string) => {
+    setIsNullInput(+value <= 0);
     if (value) {
       const greaterThenBalance = parseEther(value).gt(token.balance.wei);
       if (greaterThenBalance) {
@@ -111,7 +113,9 @@ export const WithdrawStakeRewardTab = () => {
             fontFamily="Inter_500Medium"
             color={COLORS[isDisabledButton ? 'brand300' : 'neutral0']}
           >
-            {t('harbor.withdrawal.button')}
+            {t(
+              isNullInput ? 'button.enter.amount' : 'harbor.withdrawal.button'
+            )}
           </Text>
         </PrimaryButton>
       </Animated.View>

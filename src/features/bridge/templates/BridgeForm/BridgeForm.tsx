@@ -51,6 +51,7 @@ export const BridgeForm = () => {
   const keyboardHeight = useKeyboardHeight() + DEVICE_HEIGHT * 0.01;
 
   const [previewLoader, setPreviewLoader] = useState(false);
+  const [isNullInput, setIsNullInput] = useState(true);
   const [disabledComponentStyle, setDisabledComponentStyle] =
     useState<ViewStyle>({
       width: 0,
@@ -103,8 +104,8 @@ export const BridgeForm = () => {
   }, [selectedTokenPairs, amountToBridge]);
 
   const disabledButton = useMemo(() => {
-    return !amountToBridge || error || templateDataLoader;
-  }, [amountToBridge, error, templateDataLoader]);
+    return !amountToBridge || error || templateDataLoader || isNullInput;
+  }, [amountToBridge, error, isNullInput, templateDataLoader]);
 
   useEffect(() => {
     initialMargin.value = withTiming(keyboardHeight, {
@@ -336,6 +337,11 @@ export const BridgeForm = () => {
     });
   };
 
+  const onChangeText = (value: string) => {
+    setIsNullInput(+value <= 0);
+    setAmountToBridge(value);
+  };
+
   return (
     <KeyboardDismissingView style={styles.separatedContainer}>
       <View
@@ -358,7 +364,7 @@ export const BridgeForm = () => {
           // @ts-ignore
           token={selectedTokenFrom}
           bottomSheetNode={<TokenSelectData onPressItem={onTokenSelect} />}
-          onChangeText={setAmountToBridge}
+          onChangeText={onChangeText}
           onPressMaxAmount={() => {
             // do nothing
           }}
@@ -372,7 +378,9 @@ export const BridgeForm = () => {
             <Spinner />
           ) : (
             <Text color={disabledButton ? COLORS.brand300 : COLORS.neutral0}>
-              {error ? t('bridge.insufficient.funds') : t('common.review')}
+              {error
+                ? t('bridge.insufficient.funds')
+                : t(isNullInput ? 'button.enter.amount' : 'common.review')}
             </Text>
           )}
         </PrimaryButton>
