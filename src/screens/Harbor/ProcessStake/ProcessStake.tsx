@@ -22,6 +22,7 @@ import { PrimaryButton } from '@components/modular';
 import { InputWithoutTokenSelect } from '@components/templates';
 import { COLORS } from '@constants/colors';
 import { AMB_DECIMALS, DEVICE_HEIGHT } from '@constants/variables';
+import { StakedBalanceInfo } from '@entities/harbor/components/composite';
 import { DEFAULT_STAKE_PREVIEW } from '@entities/harbor/constants';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { useWalletStore } from '@entities/wallet';
@@ -29,7 +30,7 @@ import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-pre
 import { useBalanceOfAddress, useKeyboardHeight } from '@hooks';
 import { ExplorerAccount, Token } from '@models';
 import { isSmallScreen, scale, NumberUtils, TokenUtils } from '@utils';
-import { HarborTitle, RateInfo, StakedBalanceInfo } from './components';
+import { HarborTitle, RateInfo } from './components';
 import { styles } from './styles';
 
 export const ProcessStake = () => {
@@ -181,11 +182,11 @@ export const ProcessStake = () => {
           <View>
             <Spacer value={scale(8)} />
             <StakedBalanceInfo
+              title={t('harbor.staked.balance')}
               stakedValue={NumberUtils.numberToTransformedLocale(
                 NumberUtils.limitDecimalCount(+formatEther(userStaked), 2)
               )}
               coin="AMB"
-              title={t('harbor.staked.balance')}
             />
             <Spacer value={scale(8)} />
             <InputWithoutTokenSelect

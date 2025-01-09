@@ -512,6 +512,7 @@
   "harbor.staked.amount": "Stake edilen miktar",
   "harbor.staked.balance": "Stake edilen bakiye",
   "harbor.staked.info": "Havuza AMB yatırdığınızda, havuzdaki payınızı temsil eden stAMB token'ını alırsınız.",
+  "harbor.stake.pool.limit": "Total pool Limit",
 
   "harbor.stake.amount.preview.title": "Stake miktarı",
   "harbor.receive.amount.preview.title": "Alacağınız",
@@ -554,7 +555,6 @@
   "harbor.requests.date": "İstek tarihi",
   "harbor.unlock.date": "Kilit açma tarihi",
   "harbor.empty.withdrawals.list": "Şu anda herhangi bir çekim isteği yok.",
-
 
   "wallet.connect": {
     "proposal": "{{origin}} adresine bağlanınf",

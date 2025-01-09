@@ -1,1 +1,0 @@
-export { StakedBalanceInfo } from './StakedBalanceInfo';

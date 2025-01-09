@@ -117,12 +117,13 @@ class ERC20 {
   }: SetAllowanceArgs): Promise<ethers.ContractTransaction> {
     try {
       const bnAmount = ethers.utils.parseEther(amount);
-      const signer = this.createSigner(privateKey);
+
       const erc20 = new ethers.Contract(
         ethers.constants.AddressZero,
-        ERC20_ABI
+        ERC20_ABI,
+        this.createSigner(privateKey)
       );
-      const signedERC2OContract = erc20.attach(tokenAddress).connect(signer);
+      const signedERC2OContract = erc20.attach(tokenAddress);
       return await signedERC2OContract.approve(spenderAddress, bnAmount);
     } catch (error) {
       throw error;

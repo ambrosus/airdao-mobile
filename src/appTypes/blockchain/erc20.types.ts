@@ -8,6 +8,8 @@ export interface GetAllowanceArgs {
   privateKey: string;
   amount: string;
   spenderAddress: string;
+  contractAddress?: string;
+  abi?: unknown[];
 }
 
 export type SetAllowanceArgs = GetAllowanceArgs;

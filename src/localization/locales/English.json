@@ -514,6 +514,7 @@
   "harbor.staked.amount": "Staked amount",
   "harbor.staked.balance": "Staked balance",
   "harbor.staked.info": "When you deposit AMB into the pool, you receive the stAMB token, which represents your share in the pool.",
+  "harbor.stake.pool.limit": "Total pool Limit",
 
   "harbor.stake.amount.preview.title": "Stake amount",
   "harbor.receive.amount.preview.title": "You will receive",

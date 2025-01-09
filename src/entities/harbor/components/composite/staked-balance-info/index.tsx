@@ -16,14 +16,14 @@ export const StakedBalanceInfo = ({
   coin,
   title
 }: StakedBalanceInfoModel) => (
-  <Row justifyContent={'space-between'} style={styles.container}>
+  <Row justifyContent="space-between" style={styles.container}>
     <Row alignItems="center">
       <StakedBalanceIcon />
       <Spacer horizontal value={scale(8)} />
       <Text style={styles.textStyle}>{title}</Text>
     </Row>
     <Row alignItems="center">
-      <TokenLogo token={'amb'} />
+      <TokenLogo token={coin} />
       <Spacer horizontal value={scale(8)} />
       <Text style={styles.textStyle}>
         {NumberUtils.limitDecimalCount(stakedValue, 2)} {coin}

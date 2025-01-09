@@ -1,9 +1,8 @@
 import { DEFAULT_DATA } from '@entities/harbor/constants';
-import { HarborDataModel } from '@entities/harbor/model/types';
 
 type ParseDataModel = Awaited<(string | any)[]>[];
 
-export const parseData = (data: ParseDataModel): HarborDataModel => {
+export const parseData = <T>(data: ParseDataModel): T => {
   const res = DEFAULT_DATA;
 
   data
@@ -14,5 +13,5 @@ export const parseData = (data: ParseDataModel): HarborDataModel => {
       }
     })
     .filter((item) => item);
-  return res as HarborDataModel;
+  return res as T;
 };

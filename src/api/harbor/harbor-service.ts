@@ -12,7 +12,10 @@ import {
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
 
-function calculateAPR(interestNumber: number, interestPeriodNumber: number) {
+export function calculateAPR(
+  interestNumber: number,
+  interestPeriodNumber: number
+) {
   const r = interestNumber / 1000000000;
   const periodsPerYear = ((365 * 24 * 60 * 60) / interestPeriodNumber) * r;
 
