@@ -128,6 +128,7 @@ export function useSwapActions() {
 
       return await swapMultiHopExactTokensForTokens(
         tokenToSell.AMOUNT,
+        tokenToReceive.AMOUNT,
         wrapNativeAddress(path),
         signer,
         _slippage,

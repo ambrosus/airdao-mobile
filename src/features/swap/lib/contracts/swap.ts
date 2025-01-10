@@ -142,7 +142,8 @@ export async function swapExactETHForTokens(
 }
 
 export async function swapMultiHopExactTokensForTokens(
-  amountToSell: string,
+  amountIn: string,
+  amountOut: string,
   path: string[],
   signer: Wallet,
   slippageTolerance: number,
@@ -151,7 +152,7 @@ export async function swapMultiHopExactTokensForTokens(
 ) {
   try {
     const routerContract = createRouterContract(signer, TRADE);
-    const bnAmountToSell = ethers.utils.parseEther(amountToSell);
+    const bnAmountToSell = ethers.utils.parseEther(amountIn);
     const timestampDeadline = getTimestampDeadline(deadline);
 
     const amounts = await getAmountsOut({
@@ -208,13 +209,17 @@ export async function swapMultiHopExactTokensForTokens(
             : 'swapTokensForExactTokens'
         ];
 
-      tx = await callSwapMethod(
-        bnAmountToSell,
-        bnMinimumReceivedAmount,
+      const args = await swapArgsCallback(
+        amountIn,
+        amountOut,
         path,
         signer.address,
-        timestampDeadline
+        timestampDeadline,
+        slippageTolerance,
+        tradeIn
       );
+
+      tx = await callSwapMethod(...args);
     }
 
     return await tx.wait();
