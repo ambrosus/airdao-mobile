@@ -8,7 +8,7 @@ import {
   multiHopCumulativeImpact,
   singleHopImpact,
   isMultiHopSwapAvailable,
-  extractArrayOfMiddleMultiHopAddresses
+  withMultiHopPath
 } from '@features/swap/utils';
 import { useAllLiquidityPools } from './use-all-liquidity-pools';
 import { useSwapHelpers } from './use-swap-helpers';
@@ -70,19 +70,19 @@ export function useSwapPriceImpact() {
       return 0;
     }
 
-    const path = [
+    const path = withMultiHopPath([
       tokenToSell.TOKEN?.address ?? '',
-      extractArrayOfMiddleMultiHopAddresses(tokensRoute).address,
       tokenToReceive.TOKEN?.address ?? ''
-    ];
+    ]);
 
     try {
       const amountIn = ethers.utils.parseEther(tokenToSell.AMOUNT);
-      const [, ...amounts] = await getAmountsOut({
+      const amounts = await getAmountsOut({
         path,
         amountToSell: amountIn
       });
 
+      // Calculate impact only for the current path
       let totalImpact = 0;
       for (let i = 0; i < path.length - 1; i++) {
         const pairAddress = getPairAddress({
@@ -100,12 +100,12 @@ export function useSwapPriceImpact() {
         if (!reserveIn || !reserveOut) continue;
 
         const amountInWithFee = subtractRealizedLPFeeFromInput(
-          ethers.utils.formatEther(i === 0 ? amountIn : amounts[i - 1])
+          ethers.utils.formatEther(i === 0 ? amountIn : amounts[i])
         );
 
         const impact = singleHopImpact(
           amountInWithFee,
-          amounts[i],
+          amounts[i + 1],
           reserveIn,
           reserveOut
         );

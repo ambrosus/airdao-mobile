@@ -102,55 +102,63 @@ export function useSwapActions() {
   const swapTokens = useCallback(async () => {
     const signer = createSigner(await _extractPrivateKey());
     const { slippageTolerance, deadline, multihops } = settings.current;
-    const excludeNativeETH = wrapNativeAddress(tokensRoute);
-    const isMultiHopPathAvailable = isMultiHopSwapAvailable(excludeNativeETH);
-    const tradeIn = _refExactGetter;
     const _slippage = +slippageTolerance;
 
-    const isMultiHopSwapPossible =
-      multihops &&
-      isMultiHopPathAvailable &&
-      isMultiHopSwapBetterCurrency.state;
-
+    // Handle ETH wrapping/unwrapping
     if (isETHtoWrapped(tokensRoute)) {
       return await wrapETH(tokenToSell.AMOUNT, signer);
     }
-
     if (isWrappedToETH(tokensRoute)) {
       return await unwrapETH(tokenToSell.AMOUNT, signer);
     }
 
     sendFirebaseEvent(CustomAppEvents.swap_start);
-    if (isStartsWithETH && !isMultiHopSwapPossible) {
+
+    const excludeNativeETH = wrapNativeAddress(tokensRoute);
+    const isMultiHopPathAvailable = isMultiHopSwapAvailable(excludeNativeETH);
+    const isMultiHopSwapPossible =
+      multihops &&
+      isMultiHopPathAvailable &&
+      isMultiHopSwapBetterCurrency.state;
+
+    // Use the best route for the swap
+    if (isMultiHopSwapPossible) {
+      const path = [
+        ...tokensRoute.slice(0, 1),
+        ...isMultiHopSwapBetterCurrency.tokens,
+        ...tokensRoute.slice(-1)
+      ];
+
+      return await swapMultiHopExactTokensForTokens(
+        tokenToSell.AMOUNT,
+        path,
+        signer,
+        _slippage,
+        deadline,
+        _refExactGetter
+      );
+    }
+
+    // Handle direct routes
+    if (isStartsWithETH) {
       return await swapExactETHForTokens(
         tokenToSell.AMOUNT,
         excludeNativeETH,
         signer,
         _slippage,
         deadline,
-        tradeIn
+        _refExactGetter
       );
     }
 
-    if (isEndsWithETH && !isMultiHopSwapPossible) {
+    if (isEndsWithETH) {
       return await swapExactTokensForETH(
         tokenToSell.AMOUNT,
         excludeNativeETH,
         signer,
         _slippage,
         deadline,
-        tradeIn
-      );
-    }
-
-    if (multihops && isMultiHopSwapPossible) {
-      return await swapMultiHopExactTokensForTokens(
-        tokenToSell.AMOUNT,
-        tokensRoute,
-        signer,
-        _slippage,
-        deadline,
-        tradeIn
+        _refExactGetter
       );
     }
 
@@ -161,13 +169,14 @@ export function useSwapActions() {
       signer,
       _slippage,
       deadline,
-      tradeIn
+      _refExactGetter
     );
   }, [
     _extractPrivateKey,
     _refExactGetter,
     isEndsWithETH,
     isMultiHopSwapBetterCurrency.state,
+    isMultiHopSwapBetterCurrency.tokens,
     isStartsWithETH,
     settings,
     tokenToReceive.AMOUNT,

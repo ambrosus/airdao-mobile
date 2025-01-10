@@ -64,40 +64,40 @@ export function useSwapInterface() {
       const liquidityProviderFee = realizedLPFee(tokenToSell.AMOUNT);
       const allowance = await checkAllowance();
 
-      if (
-        typeof priceImpact === 'number' &&
-        typeof liquidityProviderFee === 'string' &&
-        bnMinimumReceivedAmount &&
+      // if (
+      //   typeof priceImpact === 'number' &&
+      //   typeof liquidityProviderFee === 'string' &&
+      //   bnMinimumReceivedAmount &&
+      //   bnMaximumReceivedAmount
+      // ) {
+      // Amount that could be received as minimum or maximum value
+      const receivedAmountOut = SwapStringUtils.transformMinAmountValue(
+        bnMinimumReceivedAmount
+      );
+
+      const receivedMaxAmountOut = SwapStringUtils.transformMinAmountValue(
         bnMaximumReceivedAmount
-      ) {
-        // Amount that could be received as minimum or maximum value
-        const receivedAmountOut = SwapStringUtils.transformMinAmountValue(
-          bnMinimumReceivedAmount
-        );
+      );
 
-        const receivedMaxAmountOut = SwapStringUtils.transformMinAmountValue(
-          bnMaximumReceivedAmount
-        );
+      const minimumReceivedAmount = !_refExactGetter
+        ? receivedMaxAmountOut
+        : receivedAmountOut;
 
-        const minimumReceivedAmount = !_refExactGetter
-          ? receivedMaxAmountOut
-          : receivedAmountOut;
+      setUiBottomSheetInformation({
+        priceImpact: priceImpact ?? 0,
+        minimumReceivedAmount,
+        lpFee: SwapStringUtils.transformRealizedLPFee(
+          String(liquidityProviderFee)
+        ),
+        allowance: allowance
+          ? AllowanceStatus.INCREASE
+          : AllowanceStatus.SUITABLE
+      });
 
-        setUiBottomSheetInformation({
-          priceImpact: priceImpact ?? 0,
-          minimumReceivedAmount,
-          lpFee: SwapStringUtils.transformRealizedLPFee(
-            String(liquidityProviderFee)
-          ),
-          allowance: allowance
-            ? AllowanceStatus.INCREASE
-            : AllowanceStatus.SUITABLE
-        });
-
-        setTimeout(() => {
-          onReviewSwapPreview();
-        }, 700);
-      }
+      setTimeout(() => {
+        onReviewSwapPreview();
+      }, 700);
+      // }
     } catch (error) {
       onReviewSwapDismiss();
       throw error;
