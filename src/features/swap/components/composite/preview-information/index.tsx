@@ -118,7 +118,7 @@ export const PreviewInformation = () => {
           </Text>
 
           <RightSideRowItem>
-            {`${latestSelectedTokens.current.TOKEN_A?.symbol} > ${renderHopTokensRoute} ${latestSelectedTokens.current.TOKEN_B?.symbol}`}
+            {`${latestSelectedTokens.current.TOKEN_A?.symbol} > ${renderHopTokensRoute} > ${latestSelectedTokens.current.TOKEN_B?.symbol}`}
           </RightSideRowItem>
         </Row>
       )}

@@ -5,7 +5,6 @@ import { useSwapContextSelector } from '@features/swap/context';
 import {
   calculateAllowanceWithProviderFee,
   isETHtoWrapped,
-  isMultiHopSwapAvailable,
   isWrappedToETH,
   wrapNativeAddress
 } from '@features/swap/utils';
@@ -114,12 +113,10 @@ export function useSwapActions() {
 
     sendFirebaseEvent(CustomAppEvents.swap_start);
 
-    const excludeNativeETH = wrapNativeAddress(tokensRoute);
-    const isMultiHopPathAvailable = isMultiHopSwapAvailable(excludeNativeETH);
+    const wrappedPathWithoutMultihops = wrapNativeAddress(tokensRoute);
+
     const isMultiHopSwapPossible =
-      multihops &&
-      isMultiHopPathAvailable &&
-      isMultiHopSwapBetterCurrency.state;
+      multihops && isMultiHopSwapBetterCurrency.tokens.length > 0;
 
     // Use the best route for the swap
     if (isMultiHopSwapPossible) {
@@ -131,7 +128,7 @@ export function useSwapActions() {
 
       return await swapMultiHopExactTokensForTokens(
         tokenToSell.AMOUNT,
-        path,
+        wrapNativeAddress(path),
         signer,
         _slippage,
         deadline,
@@ -143,7 +140,7 @@ export function useSwapActions() {
     if (isStartsWithETH) {
       return await swapExactETHForTokens(
         tokenToSell.AMOUNT,
-        excludeNativeETH,
+        wrappedPathWithoutMultihops,
         signer,
         _slippage,
         deadline,
@@ -154,7 +151,7 @@ export function useSwapActions() {
     if (isEndsWithETH) {
       return await swapExactTokensForETH(
         tokenToSell.AMOUNT,
-        excludeNativeETH,
+        wrappedPathWithoutMultihops,
         signer,
         _slippage,
         deadline,
@@ -165,7 +162,7 @@ export function useSwapActions() {
     return await swapExactTokensForTokens(
       tokenToSell.AMOUNT,
       tokenToReceive.AMOUNT,
-      excludeNativeETH,
+      wrappedPathWithoutMultihops,
       signer,
       _slippage,
       deadline,
@@ -175,7 +172,6 @@ export function useSwapActions() {
     _extractPrivateKey,
     _refExactGetter,
     isEndsWithETH,
-    isMultiHopSwapBetterCurrency.state,
     isMultiHopSwapBetterCurrency.tokens,
     isStartsWithETH,
     settings,
