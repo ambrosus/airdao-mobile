@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -10,6 +10,7 @@ import { BottomAwareSafeAreaView } from '@components/composite';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useAddWalletStore } from '@features/add-wallet';
+import { useEffectOnce } from '@hooks';
 import { scale, verticalScale } from '@utils';
 import { styles } from './styles';
 
@@ -20,9 +21,10 @@ export const NoWalletScreen = () => {
   const { onChangeName, onChangeMnemonicLength } = useAddWalletStore();
 
   const animationRef = useRef<LottieView>(null);
-  useEffect(() => {
+  useEffectOnce(() => {
     animationRef.current?.play();
-  }, []);
+    setInterval(() => animationRef.current?.play(), 5000);
+  });
 
   const navigateToAddWallet = (
     screen: 'ImportWalletMethods' | 'CreateWalletStep0'
