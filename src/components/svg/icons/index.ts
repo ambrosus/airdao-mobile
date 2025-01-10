@@ -108,7 +108,6 @@ export * from './WalletXs';
 export * from './SwapOppositeArrows';
 export * from './CheckIconCircle';
 export * from './RightArrowInCircle';
-export * from './Kosmos';
 export * from './TokenAirDOGE';
 export * from './WalletConnect';
 export * from './TokenAST';

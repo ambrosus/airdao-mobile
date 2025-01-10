@@ -73,7 +73,6 @@ export const Status = ({ status, steps }: StatusProps) => {
         return t('kosmos.status.closed');
       case 'pending':
       case 'claim pending':
-      case 'pending':
         return t('common.status.pending');
       case 'confirmations':
         return t('bridge.transaction.confirmations');

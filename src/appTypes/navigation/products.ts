@@ -2,7 +2,6 @@ import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CommonStackParamsList, TabsParamsList } from '@appTypes';
-import { MarketType } from '@features/kosmos/types';
 import { StakingPool } from '@models';
 
 export type ProductsParams = {
@@ -22,7 +21,6 @@ export type ProductsParams = {
 
   // Kosmos
   KosmosScreen: undefined;
-  KosmosMarketScreen: { market: MarketType };
 
   // Bridge
   Bridge: undefined;

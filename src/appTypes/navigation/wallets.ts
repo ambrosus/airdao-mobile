@@ -1,7 +1,6 @@
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { MarketType } from '@features/kosmos/types';
 import { StakingPool, Token } from '@models';
 import { CommonStackParamsList } from './common';
 import { TabsParamsList } from './tabs';
@@ -31,7 +30,6 @@ export type HomeParamsList = {
   };
   StakeErrorScreen: undefined;
   KosmosScreen: undefined;
-  KosmosMarketScreen: { market: MarketType };
   SwapScreen: undefined;
   SwapSettingsScreen: undefined;
   AddressSearch: {
