@@ -230,7 +230,7 @@
   "send.funds.use.max": "Use max",
 
   "import.wallet.methods.mnemonic": "Recovery phrase",
-  "import.wallet.methods.mnemonic.info": "Use your 12 or 24-word recovery phrase",
+  "import.wallet.methods.mnemonic.info": "Use your 12 word recovery phrase",
   "import.wallet.methods.key": "Private keys",
   "import.wallet.methods.key.info": "Enter your private key manually",
   "import.wallet.phrase.description": "Type in your recovery phrase.",

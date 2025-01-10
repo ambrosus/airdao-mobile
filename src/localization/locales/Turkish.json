@@ -230,7 +230,7 @@
   "send.funds.use.max": "Hepsini kullan",
 
   "import.wallet.methods.mnemonic": "Kurtarma ifadesi",
-  "import.wallet.methods.mnemonic.info": "12 veya 24 kelimelik kurtarma ifadenizi kullanın",
+  "import.wallet.methods.mnemonic.info": "12 kelimelik kurtarma ifadenizi kullanın.",
   "import.wallet.methods.key": "Özel anahtar",
   "import.wallet.methods.key.info": "Özel anahtarınızı manuel olarak girin",
   "import.wallet.phrase.description": "Kurtarma ifadenizi yazın.",
