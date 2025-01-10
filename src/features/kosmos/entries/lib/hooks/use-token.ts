@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
+import { $token } from './token';
 import { useMarketTokens } from './use-market-tokens';
-import { $token } from '../../utils';
 
 export function useToken(address?: string) {
   const { tokens } = useMarketTokens();

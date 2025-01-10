@@ -1,4 +1,3 @@
-export * from './token';
 export * from './timestamp';
 export * from './use-claim-bonds';
 export * from './discount';
