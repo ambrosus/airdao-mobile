@@ -2,6 +2,8 @@ import { SWAP_SUPPORTED_TOKENS } from '@features/swap/entities';
 import { environment } from '@utils/environment';
 import { addresses } from './wrap-native-address';
 
+export const MAX_HOPS = 3;
+
 export const isMultiHopSwapAvailable = (path: string[]): boolean => {
   return extractArrayOfMiddleMultiHopAddresses(path).length === 0;
 };
@@ -28,7 +30,7 @@ const ignoreTokenAddresses = [
 
 export const generateAllPossibleRoutes = (
   path: string[],
-  maxHops = 2
+  maxHops = MAX_HOPS
 ): string[][] => {
   const [startToken, endToken] = path;
   if (!startToken || !endToken) return [];

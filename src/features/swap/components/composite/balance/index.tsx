@@ -123,7 +123,7 @@ export const Balance = ({ type }: BalanceProps) => {
           )}
         </Row>
 
-        {!disabled && (
+        {!disabled && type !== FIELD.TOKEN_B && (
           <>
             <Spacer horizontal value={scale(4)} />
             <Button onPress={onSelectMaxTokensAmountPress}>

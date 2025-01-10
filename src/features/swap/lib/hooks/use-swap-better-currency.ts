@@ -1,9 +1,17 @@
 import { useCallback } from 'react';
 import { ethers, BigNumber } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
-import { dexValidators, generateAllPossibleRoutes } from '@features/swap/utils';
+import {
+  MAX_HOPS,
+  dexValidators,
+  generateAllPossibleRoutes
+} from '@features/swap/utils';
 import { getAmountsOut, getAmountsIn } from '../contracts';
 import { useSwapSettings } from './use-swap-settings';
+
+function invariant(reason: unknown, key: string) {
+  throw Error(`${reason} - ${key}`);
+}
 
 export function useSwapBetterCurrency() {
   const {
@@ -117,22 +125,31 @@ export function useSwapBetterCurrency() {
       );
 
       try {
-        for (const currentPath of possiblePaths) {
-          try {
-            const [amounts] = await getAmountsIn({
-              path: currentPath,
-              amountToReceive: bnAmountToSell
-            });
-
-            if (
-              amounts &&
-              (bestMultiHopAmount.isZero() || amounts.lt(bestMultiHopAmount))
-            ) {
-              bestMultiHopAmount = amounts;
-              bestPath = currentPath;
+        // Parallelize all getAmountsIn calls
+        const pathResults = await Promise.all(
+          possiblePaths.map(async (currentPath) => {
+            try {
+              const [amounts] = await getAmountsIn({
+                path: currentPath,
+                amountToReceive: bnAmountToSell
+              });
+              return { amounts, path: currentPath };
+            } catch {
+              return null;
             }
-          } catch (error) {
-            continue;
+          })
+        );
+
+        // Process results with for...of instead of forEach
+        for (const result of pathResults) {
+          if (result && result.amounts) {
+            if (
+              bestMultiHopAmount.isZero() ||
+              result.amounts.lt(bestMultiHopAmount)
+            ) {
+              bestMultiHopAmount = result.amounts;
+              bestPath = result.path;
+            }
           }
         }
 
@@ -167,7 +184,7 @@ export function useSwapBetterCurrency() {
         // If no valid routes found
         return ethers.utils.parseEther('0');
       } catch (error) {
-        console.error('Multi-hop route check failed:', error);
+        invariant(error, 'bestTradeExactIn route check failed:');
         if (!singleHopAmount.isZero()) {
           return singleHopAmount;
         }
@@ -199,34 +216,46 @@ export function useSwapBetterCurrency() {
 
       if (!multihops) return singleHopAmount || ethers.utils.parseEther('0');
 
-      const possiblePaths = generateAllPossibleRoutes(path, 4).filter(
+      const possiblePaths = generateAllPossibleRoutes(
+        path,
+        MAX_HOPS + 1
+      ).filter(
         (route) => route[0] === path[0] && route[route.length - 1] === path[1]
       );
 
       try {
         const bnAmountToSell = ethers.utils.parseEther(amountToSell);
 
-        for (const currentPath of possiblePaths) {
-          try {
-            const amounts = await getAmountsOut({
-              path: currentPath,
-              amountToSell: bnAmountToSell
-            });
+        // Parallelize all getAmountsOut calls
+        const pathResults = await Promise.all(
+          possiblePaths.map(async (currentPath) => {
+            try {
+              const amounts = await getAmountsOut({
+                path: currentPath,
+                amountToSell: bnAmountToSell
+              });
+              return { amounts, path: currentPath };
+            } catch {
+              return null;
+            }
+          })
+        );
 
-            const amount = amounts[amounts.length - 1];
+        // Process results with for...of instead of forEach
+        for (const result of pathResults) {
+          if (result) {
+            const amount = result.amounts[result.amounts.length - 1];
             if (
               amount &&
               (bestMultiHopAmount.isZero() || amount.gt(bestMultiHopAmount))
             ) {
               bestMultiHopAmount = amount;
-              bestPath = currentPath;
+              bestPath = result.path;
             }
-          } catch {
-            continue;
           }
         }
 
-        // Compare with single hop and update state
+        // Rest of the function remains the same
         const isBetterThanSingleHop =
           !singleHopAmount || bestMultiHopAmount.gt(singleHopAmount);
 
@@ -238,7 +267,7 @@ export function useSwapBetterCurrency() {
           }
         }
       } catch (error) {
-        console.error('Multi-hop route check failed:', error);
+        invariant(error, 'bestTradeExactOut route check failed:');
       }
 
       onChangeMultiHopUiState([]);
