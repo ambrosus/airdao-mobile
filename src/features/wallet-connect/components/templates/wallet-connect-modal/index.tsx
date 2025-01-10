@@ -13,6 +13,7 @@ import { RenderModalViewByStep } from '../../modular';
 export const WalletConnectModal = () => {
   const {
     proposal,
+    request,
     approvalConnectionBottomSheetRef,
     isWalletKitInitiated,
     walletConnectStep
@@ -24,7 +25,7 @@ export const WalletConnectModal = () => {
     return walletConnectStep.toLowerCase().includes('error');
   }, [walletConnectStep]);
 
-  if (!proposal) {
+  if (!proposal && !request?.session) {
     return null;
   }
 

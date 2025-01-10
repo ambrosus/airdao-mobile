@@ -5,14 +5,20 @@ import { createContextSelector } from '@utils';
 import {
   CONNECT_VIEW_STEPS,
   Proposal,
+  SessionRequestEvent,
   WalletConnectViewValues
 } from '../types';
 
 type ProposalState = Proposal | null;
+type RequestState = {
+  event: SessionRequestEvent;
+  session: SessionTypes.Struct;
+} | null;
 
 export const WalletConnectContext = () => {
   const [isWalletKitInitiated, setIsWalletKitInitiated] = useState(false);
   const [proposal, setProposal] = useState<ProposalState>(null);
+  const [request, setRequest] = useState<RequestState>(null);
   const [walletConnectStep, setWalletConnectStep] =
     useState<WalletConnectViewValues>(CONNECT_VIEW_STEPS.INITIAL);
 
@@ -27,6 +33,11 @@ export const WalletConnectContext = () => {
     []
   );
 
+  const onChangeRequest = useCallback(
+    (_request: RequestState) => setRequest(_request),
+    []
+  );
+
   const onChangeConnectModalViewStep = useCallback(
     (step: WalletConnectViewValues) => setWalletConnectStep(step),
     []
@@ -34,8 +45,9 @@ export const WalletConnectContext = () => {
 
   const reset = useCallback(() => {
     onChangeProposal(null);
+    onChangeRequest(null);
     onChangeConnectModalViewStep(CONNECT_VIEW_STEPS.APPROVE);
-  }, [onChangeConnectModalViewStep, onChangeProposal]);
+  }, [onChangeConnectModalViewStep, onChangeProposal, onChangeRequest]);
 
   return {
     proposal,
@@ -44,6 +56,8 @@ export const WalletConnectContext = () => {
     activeSessionsBottomSheetRef,
     walletConnectStep,
     setWalletConnectStep,
+    request,
+    onChangeRequest,
     onChangeConnectModalViewStep,
     isWalletKitInitiated,
     setIsWalletKitInitiated,
