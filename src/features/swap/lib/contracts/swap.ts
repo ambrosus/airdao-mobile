@@ -11,9 +11,8 @@ import {
   addresses,
   wrapNativeAddress,
   getTimestampDeadline,
-  withMultiHopPath,
   dexValidators,
-  maximumAmountOut
+  maximumAmountIn
 } from '@features/swap/utils';
 import {
   createAMBProvider,
@@ -47,10 +46,7 @@ async function swapArgsCallback(
     bnAmountToReceive
   );
 
-  const amountOutMax = maximumAmountOut(
-    `${slippageTolerance}%`,
-    bnAmountToSell
-  );
+  const amountOutMax = maximumAmountIn(`${slippageTolerance}%`, bnAmountToSell);
 
   return [
     tradeIn ? bnAmountIn : bnAmountOut,
@@ -146,7 +142,8 @@ export async function swapExactETHForTokens(
 }
 
 export async function swapMultiHopExactTokensForTokens(
-  amountToSell: string,
+  amountIn: string,
+  amountOut: string,
   path: string[],
   signer: Wallet,
   slippageTolerance: number,
@@ -155,26 +152,19 @@ export async function swapMultiHopExactTokensForTokens(
 ) {
   try {
     const routerContract = createRouterContract(signer, TRADE);
-    const bnAmountToSell = ethers.utils.parseEther(amountToSell);
+    const bnAmountToSell = ethers.utils.parseEther(amountIn);
     const timestampDeadline = getTimestampDeadline(deadline);
-    const _path = withMultiHopPath(path);
 
-    const bnAmountToReceiveArray = await getAmountsOut({
+    const amounts = await getAmountsOut({
       amountToSell: bnAmountToSell,
-      path: _path
+      path
     });
 
-    const bnAmountToReceive =
-      bnAmountToReceiveArray[bnAmountToReceiveArray.length - 1];
-
+    const bnAmountToReceive = amounts[amounts.length - 1];
     const bnMinimumReceivedAmount = minimumAmountOut(
       `${slippageTolerance}%`,
       bnAmountToReceive
     );
-
-    if (_path.length < 3) {
-      throw new Error('Path must contain 2 or 3 addresses');
-    }
 
     const isFromETH = path[0] === addresses.AMB;
     const isToETH = path[path.length - 1] === addresses.AMB;
@@ -191,7 +181,7 @@ export async function swapMultiHopExactTokensForTokens(
 
       tx = await callSwapMethod(
         bnMinimumReceivedAmount,
-        _path,
+        path,
         signer.address,
         timestampDeadline,
         { value: bnAmountToSell }
@@ -207,7 +197,7 @@ export async function swapMultiHopExactTokensForTokens(
       tx = await callSwapMethod(
         bnAmountToSell,
         bnMinimumReceivedAmount,
-        _path,
+        path,
         signer.address,
         timestampDeadline
       );
@@ -219,13 +209,17 @@ export async function swapMultiHopExactTokensForTokens(
             : 'swapTokensForExactTokens'
         ];
 
-      tx = await callSwapMethod(
-        bnAmountToSell,
-        bnMinimumReceivedAmount,
-        _path,
+      const args = await swapArgsCallback(
+        amountIn,
+        amountOut,
+        path,
         signer.address,
-        timestampDeadline
+        timestampDeadline,
+        slippageTolerance,
+        tradeIn
       );
+
+      tx = await callSwapMethod(...args);
     }
 
     return await tx.wait();

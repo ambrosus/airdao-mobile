@@ -89,7 +89,7 @@ export const ReviewSwapButton = () => {
   return (
     <PrimaryButton
       colors={buttonColors}
-      disabled={disabled}
+      // disabled={disabled}
       style={buttonShadow}
       onPress={onResolveBottomSheetDataPress}
     >
