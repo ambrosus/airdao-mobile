@@ -19,7 +19,7 @@ export const Staking = ({ disabled }: StakingProps) => {
 
   const navigateToStakingPools = () => {
     sendFirebaseEvent(CustomAppEvents.main_stake);
-    navigation.navigate('StakingPools');
+    navigation.navigate('Harbor');
   };
 
   return (
