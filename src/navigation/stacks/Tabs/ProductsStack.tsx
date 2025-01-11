@@ -4,8 +4,7 @@ import { ProductsParams } from '@appTypes/navigation/products';
 import { HarborStacks } from '@navigation/stacks/HarborStacks/HarborStacks';
 import { Bridge, BridgeTransferError } from '@screens/Bridge';
 import { BridgeHistory } from '@screens/BridgeHistory';
-import { KosmosScreen } from '@screens/Kosmos';
-import { KosmosMarketScreen } from '@screens/Kosmos/screens';
+import { KosmosOrderList } from '@screens/KosmosOrderList';
 import { ProductScreen } from '@screens/Products';
 import { StakingPoolScreen } from '@screens/StakingPool';
 import {
@@ -40,8 +39,7 @@ export const ProductsStack = () => {
       <Stack.Screen name="StakeErrorScreen" component={StakeErrorScreen} />
 
       {/* KOSMOS ROUTES */}
-      <Stack.Screen name="KosmosScreen" component={KosmosScreen} />
-      <Stack.Screen name="KosmosMarketScreen" component={KosmosMarketScreen} />
+      <Stack.Screen name="KosmosScreen" component={KosmosOrderList} />
 
       {/* BRIDGE ROUTES */}
       <Stack.Screen name="Bridge" component={Bridge} />

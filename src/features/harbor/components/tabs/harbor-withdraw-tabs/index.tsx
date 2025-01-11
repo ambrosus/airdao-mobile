@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { WrappedListsContainer } from '@components/base/wrapped-lists-container';
 import { AnimatedTabsV2 } from '@components/modular/AnimatedTabsV2';
-import { WrappedListsContainer } from '@features/kosmos/components/base';
 import { WithdrawRewardOnlyTab } from '../withdraw-reward-only-tab';
 import { WithdrawStakeRewardTab } from '../withdraw-stake-reward-tab';
 
