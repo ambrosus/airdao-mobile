@@ -14,6 +14,7 @@ import {
 import { supportedChains, walletKit } from '@features/wallet-connect/utils';
 import { AirDAOEventDispatcher } from '@lib';
 import { delay } from '@utils';
+import { useDecodeCallbackData } from './use-decode-callback';
 import { useHandleBottomSheetActions } from './use-handle-bottom-sheet-actions';
 import { useWalletConnectContextSelector } from './use-wallet-connect-context';
 
@@ -25,6 +26,8 @@ export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
     setWalletConnectStep,
     setActiveSessions
   } = useWalletConnectContextSelector();
+
+  const { getTransactionParamsByBytes } = useDecodeCallbackData();
 
   const onSessionProposal = useCallback(
     (proposal: SessionProposalEvent) => {
@@ -65,7 +68,7 @@ export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
   );
 
   const onSessionRequest = useCallback(
-    (event: SessionRequestEvent) => {
+    async (event: SessionRequestEvent) => {
       const { topic } = event;
       const session = walletKit.engine.signClient.session.get(topic);
 
@@ -77,6 +80,7 @@ export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
       );
 
       if (chains.length > 0 || _correctChainIds.length === 0) {
+        await getTransactionParamsByBytes(event.params.request.params[0].data);
         setWalletConnectStep(CONNECT_VIEW_STEPS.EIP155_TRANSACTION);
         onChangeRequest({ event, session });
 
@@ -84,7 +88,12 @@ export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
         InteractionManager.runAfterInteractions(onShowWalletConnectBottomSheet);
       }
     },
-    [onChangeRequest, onShowWalletConnectBottomSheet, setWalletConnectStep]
+    [
+      getTransactionParamsByBytes,
+      onChangeRequest,
+      onShowWalletConnectBottomSheet,
+      setWalletConnectStep
+    ]
   );
 
   useEffect(() => {

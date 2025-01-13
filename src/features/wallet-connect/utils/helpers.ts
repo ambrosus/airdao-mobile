@@ -77,3 +77,12 @@ export function formatJsonRpcError(id: number, message: string) {
     error
   };
 }
+
+export function httpsParser(url: string) {
+  try {
+    const parsedUrl = new URL(url);
+    return `${parsedUrl.protocol}//${parsedUrl.hostname}`;
+  } catch (error) {
+    throw new Error('Invalid URL provided.');
+  }
+}

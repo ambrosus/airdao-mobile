@@ -4,6 +4,8 @@ import { BottomSheetRef } from '@components/composite';
 import { createContextSelector } from '@utils';
 import {
   CONNECT_VIEW_STEPS,
+  DecodedTransaction,
+  DecodedTransactionState,
   Proposal,
   SessionRequestEvent,
   WalletConnectViewValues
@@ -19,6 +21,7 @@ export const WalletConnectContext = () => {
   const [isWalletKitInitiated, setIsWalletKitInitiated] = useState(false);
   const [proposal, setProposal] = useState<ProposalState>(null);
   const [request, setRequest] = useState<RequestState>(null);
+  const [transaction, setTransaction] = useState<DecodedTransactionState>(null);
   const [walletConnectStep, setWalletConnectStep] =
     useState<WalletConnectViewValues>(CONNECT_VIEW_STEPS.INITIAL);
 
@@ -43,11 +46,22 @@ export const WalletConnectContext = () => {
     []
   );
 
+  const onChangeTransactionData = useCallback(
+    (data: DecodedTransaction | null) => setTransaction(data),
+    []
+  );
+
   const reset = useCallback(() => {
     onChangeProposal(null);
     onChangeRequest(null);
+    onChangeTransactionData(null);
     onChangeConnectModalViewStep(CONNECT_VIEW_STEPS.APPROVE);
-  }, [onChangeConnectModalViewStep, onChangeProposal, onChangeRequest]);
+  }, [
+    onChangeConnectModalViewStep,
+    onChangeProposal,
+    onChangeRequest,
+    onChangeTransactionData
+  ]);
 
   return {
     proposal,
@@ -58,6 +72,8 @@ export const WalletConnectContext = () => {
     setWalletConnectStep,
     request,
     onChangeRequest,
+    transaction,
+    onChangeTransactionData,
     onChangeConnectModalViewStep,
     isWalletKitInitiated,
     setIsWalletKitInitiated,
