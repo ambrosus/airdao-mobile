@@ -145,31 +145,32 @@ export const WalletConnectTxApproval = () => {
           field="REQUEST"
           value={httpsParser(data?.event.verifyContext.verified.origin ?? '')}
         />
-        {!isWrapOrUnwrap && (
-          <DetailsRowItem
-            field={isApprovalTx ? 'APPROVE' : 'INTERACTING'}
-            value={
-              isApprovalTx
-                ? `${NumberUtils.numberToTransformedLocale(
-                    ethers.utils.formatEther(
-                      transaction?.decodedArgs?.amount ?? ZERO
-                    )
-                  )} ${
-                    isAmbTransaction
-                      ? CryptoCurrencyCode.AMB
-                      : getTokenSymbolFromDatabase(
-                          request?.params[0]?.to.toUpperCase() ?? '',
-                          true
-                        )
-                  }`
-                : StringUtils.formatAddress(
-                    transaction?.decodedArgs?.addresses?.[1] ?? '',
-                    5,
-                    6
+
+        <DetailsRowItem
+          field={isApprovalTx ? 'APPROVE' : 'INTERACTING'}
+          value={
+            isApprovalTx
+              ? `${NumberUtils.numberToTransformedLocale(
+                  ethers.utils.formatEther(
+                    transaction?.decodedArgs?.amount ?? ZERO
                   )
-            }
-          />
-        )}
+                )} ${
+                  isAmbTransaction
+                    ? CryptoCurrencyCode.AMB
+                    : getTokenSymbolFromDatabase(
+                        request?.params[0]?.to.toUpperCase() ?? '',
+                        true
+                      )
+                }`
+              : StringUtils.formatAddress(
+                  (isWrapOrUnwrap
+                    ? request?.params[0]?.to
+                    : transaction?.decodedArgs?.addresses?.[1]) ?? '',
+                  5,
+                  6
+                )
+          }
+        />
 
         <DetailsRowItem
           field={isApprovalTx ? 'SPENDER' : 'AMOUNT'}
@@ -195,14 +196,13 @@ export const WalletConnectTxApproval = () => {
                 }`
           }
         />
-        {!isWrapOrUnwrap && (
-          <DetailsRowItem
-            field="FEE"
-            value={`${NumberUtils.numberToTransformedLocale(
-              ethers.utils.formatEther(request?.params[0].gas ?? ZERO)
-            )} ${CryptoCurrencyCode.AMB}`}
-          />
-        )}
+
+        <DetailsRowItem
+          field="FEE"
+          value={`${NumberUtils.numberToTransformedLocale(
+            ethers.utils.formatEther(request?.params[0].gas ?? ZERO)
+          )} ${CryptoCurrencyCode.AMB}`}
+        />
       </View>
 
       <PrimaryButton onPress={onApprove}>
