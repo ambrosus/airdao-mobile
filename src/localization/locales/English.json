@@ -384,7 +384,7 @@
   "wallet.picker.select": "Select Wallet",
 
   "swap.route": "Route",
-  "swap.pay": "You pay",
+  "swap.pay": "You send",
   "swap.receive": "You receive",
   "swap.select.asset": "Select asset",
   "swap.text.button.max": "Max",
