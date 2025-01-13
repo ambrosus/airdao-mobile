@@ -27,6 +27,7 @@ export const YieldLabel = ({ label }: { label: string }) => {
           fontSize={14}
           fontFamily="Inter_500Medium"
           color={COLORS.brand600}
+          numberOfLines={2}
         >
           {label}
         </Text>

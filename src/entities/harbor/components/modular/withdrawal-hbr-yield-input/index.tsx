@@ -16,6 +16,7 @@ import { CryptoCurrencyCode } from '@appTypes';
 import { LockIcon } from '@components/svg/icons/v2/harbor';
 import { InputWithoutTokenSelect } from '@components/templates';
 import { COLORS } from '@constants/colors';
+import useLocalization from '@contexts/Localizations';
 import { useHBRInstance } from '@entities/harbor/lib/hooks';
 import { useStakeHBRStore } from '@entities/harbor/model';
 import { IAvailableWithdrawLogs, LogStatus } from '@entities/harbor/types';
@@ -50,6 +51,7 @@ export const WithdrawalHbrYieldInput = ({
 }: WithdrawalHbrYieldInputProps) => {
   const { wallet } = useWalletStore();
   const { stake, deposit } = useStakeHBRStore();
+  const { currentLanguage } = useLocalization();
 
   const [inputValueWidth, setInputValueWidth] = useState(0);
 
@@ -153,7 +155,7 @@ export const WithdrawalHbrYieldInput = ({
       />
 
       <View style={styles.footer}>
-        {getWithdrawInputLabel(labelStatus, logs?.timestamp)}
+        {getWithdrawInputLabel(labelStatus, logs?.timestamp, currentLanguage)}
       </View>
     </View>
   );

@@ -9,6 +9,7 @@ import { Row, Spacer, Text } from '@components/base';
 import { SecondaryButton } from '@components/modular';
 import { StakeIcon, WithdrawIcon } from '@components/svg/icons/v2/harbor';
 import { COLORS } from '@constants/colors';
+import useLocalization from '@contexts/Localizations';
 import { useGetPoolYieldAPY, useStakeHBRStore } from '@entities/harbor';
 import { IAvailableWithdrawLogs } from '@entities/harbor/types';
 import { NumberUtils, scale } from '@utils';
@@ -17,14 +18,25 @@ import { YieldLabel } from '../../base';
 import { StakedDetails } from '../../composite';
 
 const RenderAPYHeaderNode = ({ apy }: { apy?: number }) => {
-  const label = '🔥 Hot APY ';
+  const { currentLanguage } = useLocalization();
+  const { t } = useTranslation();
+  const label = `🔥 ${t('harbor.apy.value')} `;
+
+  const apyValue = useMemo(() => {
+    switch (currentLanguage) {
+      case 'en':
+        return `${apy ?? '0'}%`;
+      case 'tr':
+        return `%${apy ?? '0'}`;
+    }
+  }, [apy, currentLanguage]);
 
   return (
     <Row alignItems="center" justifyContent="center">
       <Text fontSize={14} fontFamily="Inter_500Medium" color={COLORS.neutral0}>
         {label}
         <Text fontSize={14} fontFamily="Inter_700Bold" color={COLORS.neutral0}>
-          {apy ?? '0'}%
+          {apyValue}
         </Text>
       </Text>
     </Row>
@@ -83,7 +95,7 @@ export const StakeAMBWithApyLabel = ({ logs }: StakeAMBWithApyLabelProps) => {
 
   return (
     <>
-      <YieldLabel label="Stake HBR to access high-yield AMB staking." />
+      <YieldLabel label={t('harbor.apy.label')} />
 
       <View style={styles.container}>
         <RenderAPYHeaderNode apy={apy} />

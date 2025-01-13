@@ -296,7 +296,7 @@ export const InputWithoutTokenSelect = forwardRef<
                     fontFamily="Inter_500Medium"
                     color={COLORS.neutral900}
                   >
-                    Available to Stake
+                    {t('harbor.stake.available')}
                   </Text>
                 </Row>
                 <Row alignItems="center">

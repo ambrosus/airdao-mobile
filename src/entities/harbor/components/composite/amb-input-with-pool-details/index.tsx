@@ -77,7 +77,7 @@ export const AmbInputWithPoolDetails = ({
             fontFamily="Inter_500Medium"
             color={COLORS.neutral600}
           >
-            Per Address Limit
+            {t('harbor.stake.limit.address')}
           </Text>
           <Text
             fontSize={14}

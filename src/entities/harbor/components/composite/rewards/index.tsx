@@ -1,5 +1,6 @@
 import React from 'react';
 import { ethers } from 'ethers';
+import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
 import { Row, Spacer, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
@@ -10,6 +11,7 @@ import { NumberUtils } from '@utils';
 import { styles } from './styles';
 
 export const Rewards = () => {
+  const { t } = useTranslation();
   const { rewards } = useStakeHBRStore();
 
   return (
@@ -27,7 +29,7 @@ export const Rewards = () => {
           fontFamily="Inter_500Medium"
           color={COLORS.neutral800}
         >
-          Rewards
+          {t('harbor.rewards.label')}
         </Text>
       </Row>
       <Row style={styles.rightRowContainer} alignItems="center">

@@ -1,4 +1,5 @@
 import React, { forwardRef, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BottomSheetRef, TextOrSpinner } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
@@ -18,6 +19,7 @@ export const BottomSheetReviewTransactionWithAction = forwardRef<
   BottomSheetRef,
   unknown
 >((_, ref) => {
+  const { t } = useTranslation();
   const { amount } = useStakeHBRActionsStore();
   const { _deposit, loading, success, transaction, timestamp } =
     useDepositHBR();
@@ -41,7 +43,7 @@ export const BottomSheetReviewTransactionWithAction = forwardRef<
         <TextOrSpinner
           loading={loading}
           loadingLabel={undefined}
-          label="Stake"
+          label={t('staking.header')}
           styles={buttonNodeStyles}
           spinnerColor={COLORS.brand600}
           spinnerSize="small"

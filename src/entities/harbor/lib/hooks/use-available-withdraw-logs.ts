@@ -1,14 +1,23 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
+import { useTranslation } from 'react-i18next';
 import { HBR_POOL } from '@api/harbor';
 import Config from '@constants/config';
+import useLocalization from '@contexts/Localizations';
 import { IAvailableWithdrawLogs, LogStatus } from '@entities/harbor/types';
 import { useWalletStore } from '@entities/wallet';
 
 const provider = new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
 
+const localeKey = {
+  en: 'en-US',
+  tr: 'tr-TR'
+};
+
 export function useAvailableWithdrawLogs(lockPeriod: ethers.BigNumber) {
+  const { t } = useTranslation();
   const { wallet } = useWalletStore();
+  const { currentLanguage } = useLocalization();
   const [logs, setLogs] = useState<IAvailableWithdrawLogs | null>(null);
   const stakeLockPeriod = Number(lockPeriod);
 
@@ -38,20 +47,25 @@ export function useAvailableWithdrawLogs(lockPeriod: ethers.BigNumber) {
 
       const formattedUnlockDateTime = new Date(
         unlockTimeWithPeriod
-      ).toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
+      ).toLocaleString(
+        localeKey[(currentLanguage as keyof typeof localeKey) ?? 'en'],
+        {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        }
+      );
 
       const unlockStatus = isUnlockPeriodComplete
         ? {
-            text: 'Lock period complete',
+            text: t('harbor.stake.period.complete'),
             status: 'success' as LogStatus.SUCCESS,
             timestamp: unlockTimeWithPeriod
           }
         : {
-            text: `Available on ${formattedUnlockDateTime}`,
+            text: t('harbor.stake.unlock.date', {
+              date: formattedUnlockDateTime
+            }),
             status: 'error' as LogStatus.ERROR,
             timestamp: unlockTimeWithPeriod
           };
@@ -62,7 +76,7 @@ export function useAvailableWithdrawLogs(lockPeriod: ethers.BigNumber) {
     if (withdrawalsList.length > 0) {
       setLogs(withdrawalsList[0]);
     }
-  }, [stakeLockPeriod, wallet?.address]);
+  }, [currentLanguage, stakeLockPeriod, t, wallet?.address]);
 
   useEffect(() => {
     fetchLogs();

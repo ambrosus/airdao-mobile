@@ -181,7 +181,7 @@ export const SuccessTxView = ({
       <Spacer value={scale(12)} />
       <PrimaryButton disabled={loading} onPress={onDismissBottomSheet}>
         <TextOrSpinner
-          label="Close"
+          label={t('kosmos.button.close')}
           loading={loading}
           loadingLabel={undefined}
           styles={buttonNodeStyles}

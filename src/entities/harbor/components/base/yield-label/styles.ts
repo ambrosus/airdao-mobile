@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   container: {
     width: '100%',
     paddingHorizontal: scale(14),
-    height: 32,
+    paddingVertical: 4,
     justifyContent: 'center',
     borderRadius: moderateScale(12),
     backgroundColor: 'rgba(87, 76, 255, 0.16)',

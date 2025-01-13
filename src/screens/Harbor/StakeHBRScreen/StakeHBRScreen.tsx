@@ -128,8 +128,7 @@ export const StakeHBRScreen = () => {
 
             <StakeInput
               error={inputError}
-              description="Your AMB staking limit depends on the amount of HBR staked. Stake more
-          HBR to increase your limit!"
+              description={t('harbor.stake.description')}
             />
           </View>
         </TouchableWithoutFeedback>
