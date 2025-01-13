@@ -8,6 +8,7 @@ import { Button, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { Passcode } from '@components/modular';
 import { COLORS } from '@constants/colors';
+import { DEVICE_HEIGHT } from '@constants/variables';
 import { styles } from './SetupPasscode.styles';
 
 export const SetupPasscode = () => {
@@ -60,6 +61,7 @@ export const SetupPasscode = () => {
       </View>
       <View>
         <Passcode
+          inputBottomPadding={DEVICE_HEIGHT * 0.1}
           isBiometricEnabled={false}
           onPasscodeChange={onPasscodeChange}
         />
