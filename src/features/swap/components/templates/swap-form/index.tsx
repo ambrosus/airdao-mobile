@@ -4,7 +4,7 @@ import { SwapReverseTokens } from '@/features/swap/components/composite';
 import {
   InputWithTokenSelect,
   ReviewSwapButton,
-  TokenInfoPlate
+  SwapCurrencyRate
 } from '@/features/swap/components/modular';
 import { KeyboardDismissingView, Spacer } from '@components/base';
 import { useSwapInterface } from '@features/swap/lib/hooks';
@@ -38,7 +38,7 @@ export const SwapForm = () => {
             />
 
             <Spacer value={scale(32)} />
-            <TokenInfoPlate />
+            <SwapCurrencyRate />
           </View>
 
           <View style={styles.footer}>

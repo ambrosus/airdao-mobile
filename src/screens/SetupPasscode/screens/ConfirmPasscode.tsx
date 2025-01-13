@@ -8,6 +8,7 @@ import { Button, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { Passcode } from '@components/modular';
 import { COLORS } from '@constants/colors';
+import { DEVICE_HEIGHT } from '@constants/variables';
 import { usePasscodeStore } from '@features/passcode';
 import { scale, verticalScale, PasscodeUtils } from '@utils';
 import { styles } from '../SetupPasscode.styles';
@@ -57,6 +58,7 @@ export const ConfirmPasscode = () => {
       </View>
       <View>
         <Passcode
+          inputBottomPadding={DEVICE_HEIGHT * 0.1}
           isBiometricEnabled={false}
           onPasscodeChange={onPasscodeChange}
         />

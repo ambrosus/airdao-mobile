@@ -19,12 +19,8 @@ interface BalanceProps {
 
 export const Balance = ({ type }: BalanceProps) => {
   const { t } = useTranslation();
-  const {
-    selectedTokens,
-    selectedTokensAmount,
-    _refExactGetter,
-    setIsExactIn
-  } = useSwapContextSelector();
+  const { selectedTokens, selectedTokensAmount, setIsExactIn } =
+    useSwapContextSelector();
   const { onSelectMaxTokensAmount, updateReceivedTokensOutput } =
     useSwapFieldsHandler();
 
@@ -87,20 +83,20 @@ export const Balance = ({ type }: BalanceProps) => {
   }, [isUSDPriceNegative]);
 
   const error = useMemo(() => {
-    if (!_refExactGetter || !bnBalanceAmount || !selectedTokensAmount[type])
+    if (
+      type === FIELD.TOKEN_B ||
+      !bnBalanceAmount ||
+      !selectedTokensAmount[FIELD.TOKEN_A]
+    )
       return false;
 
     const bnInputBalance = bnBalanceAmount?._hex;
     const bnSelectedAmount = ethers.utils.parseEther(
-      selectedTokensAmount[type]
+      selectedTokensAmount[FIELD.TOKEN_A]
     );
 
-    if (type === FIELD.TOKEN_A && _refExactGetter) {
-      return bnSelectedAmount.gt(bnInputBalance);
-    } else if (type === FIELD.TOKEN_B && !_refExactGetter) {
-      return bnSelectedAmount.gt(bnInputBalance);
-    }
-  }, [_refExactGetter, bnBalanceAmount, selectedTokensAmount, type]);
+    return bnSelectedAmount.gt(bnInputBalance);
+  }, [bnBalanceAmount, selectedTokensAmount, type]);
 
   return (
     <Row alignItems="center" justifyContent={containerJustifyContent}>
@@ -123,7 +119,7 @@ export const Balance = ({ type }: BalanceProps) => {
           )}
         </Row>
 
-        {!disabled && (
+        {!disabled && type !== FIELD.TOKEN_B && (
           <>
             <Spacer horizontal value={scale(4)} />
             <Button onPress={onSelectMaxTokensAmountPress}>

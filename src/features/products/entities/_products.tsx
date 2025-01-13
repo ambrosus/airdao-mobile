@@ -69,7 +69,7 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
         {
           id: 4,
           name: 'HARBOR',
-          description: t('products.kosmos.description'),
+          description: t('products.harbor.description'),
           icon: <HarborAccountAction scale={1} />,
           background: ['rgba(255, 201, 62, 1)', 'rgba(224, 131, 0, 1)'],
           color: 'rgba(255, 255, 255, 1)',

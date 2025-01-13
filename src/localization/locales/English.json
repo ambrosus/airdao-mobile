@@ -230,7 +230,7 @@
   "send.funds.use.max": "Use max",
 
   "import.wallet.methods.mnemonic": "Recovery phrase",
-  "import.wallet.methods.mnemonic.info": "Use your 12 or 24-word recovery phrase",
+  "import.wallet.methods.mnemonic.info": "Use your 12 word recovery phrase",
   "import.wallet.methods.key": "Private keys",
   "import.wallet.methods.key.info": "Enter your private key manually",
   "import.wallet.phrase.description": "Type in your recovery phrase.",
@@ -384,7 +384,7 @@
   "wallet.picker.select": "Select Wallet",
 
   "swap.route": "Route",
-  "swap.pay": "You pay",
+  "swap.pay": "You send",
   "swap.receive": "You receive",
   "swap.select.asset": "Select asset",
   "swap.text.button.max": "Max",
@@ -582,6 +582,7 @@
     "swap.description": "Earn with pools & swap tokens",
     "bridge.description": "Seamless asset transfers",
     "stake.description": "Earn AMB rewards",
-    "kosmos.description": "Earn passive income via bonds"
+    "kosmos.description": "Earn passive income via bonds",
+    "harbor.description": "Stake, earn and stay liquid"
   }
 }

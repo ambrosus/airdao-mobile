@@ -4,7 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
-import { useSwapHelpers, useSwapTokens } from '@features/swap/lib/hooks';
+import { useSwapTokens } from '@features/swap/lib/hooks';
+import { addresses } from '@features/swap/utils';
+import { getObjectKeyByValue } from '@utils';
 import { styles } from './styles';
 
 export const PreviewInformation = () => {
@@ -17,7 +19,6 @@ export const PreviewInformation = () => {
   } = useSwapContextSelector();
 
   const { tokenToSell, tokenToReceive } = useSwapTokens();
-  const { isMultiHopSwap } = useSwapHelpers();
 
   const uiPriceImpact = useMemo(() => {
     const { priceImpact } = uiBottomSheetInformation;
@@ -45,8 +46,18 @@ export const PreviewInformation = () => {
   ]);
 
   const isMultiHopRoute = useMemo(() => {
-    return isMultiHopSwap && isMultiHopSwapBetterCurrency.state;
-  }, [isMultiHopSwap, isMultiHopSwapBetterCurrency]);
+    return isMultiHopSwapBetterCurrency.tokens.length > 0;
+  }, [isMultiHopSwapBetterCurrency]);
+
+  const tokens = useMemo(() => {
+    return isMultiHopSwapBetterCurrency.tokens.map((token) =>
+      getObjectKeyByValue(addresses, token)
+    );
+  }, [isMultiHopSwapBetterCurrency.tokens]);
+
+  const renderHopTokensRoute = useMemo(() => {
+    return tokens.length > 0 ? tokens.join(' > ') : '';
+  }, [tokens]);
 
   return (
     <View style={styles.container}>
@@ -107,7 +118,7 @@ export const PreviewInformation = () => {
           </Text>
 
           <RightSideRowItem>
-            {`${latestSelectedTokens.current.TOKEN_A?.symbol} > ${isMultiHopSwapBetterCurrency.token} > ${latestSelectedTokens.current.TOKEN_B?.symbol}`}
+            {`${latestSelectedTokens.current.TOKEN_A?.symbol} > ${renderHopTokensRoute} > ${latestSelectedTokens.current.TOKEN_B?.symbol}`}
           </RightSideRowItem>
         </Row>
       )}

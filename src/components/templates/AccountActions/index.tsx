@@ -4,7 +4,7 @@ import Config from '@constants/config';
 import { ExplorerAccount, Token } from '@models';
 import { scale } from '@utils';
 import { AccountActionsKey } from './ActionButton.types';
-import { Send, Swap, Staking, Bridge, Kosmos } from './components';
+import { Send, Swap, Staking, Bridge } from './components';
 
 interface AccountActionsProps {
   account: ExplorerAccount;
@@ -59,19 +59,14 @@ export const AccountActions = ({
       Component: Bridge,
       key: AccountActionsKey.BRIDGE,
       props: { disabled: () => _isRouteActive(AccountActionsKey.BRIDGE) }
-    },
-    {
-      Component: Kosmos,
-      key: AccountActionsKey.KOSMOS,
-      props: { disabled: () => _isRouteActive(AccountActionsKey.KOSMOS) }
     }
   ];
 
   return (
     <Row
       alignItems="center"
-      justifyContent="center"
-      style={{ columnGap: scale(30) }}
+      justifyContent="space-around"
+      style={{ columnGap: scale(0) }}
     >
       {actionComponents.map(({ Component, key, props }) => (
         <Component key={key} {...props} />
