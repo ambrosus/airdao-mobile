@@ -31,22 +31,8 @@ async function swapArgsCallback(
   const bnAmountIn = ethers.utils.parseEther(amountIn);
   const bnAmountOut = ethers.utils.parseEther(amountOut);
 
-  const [, bnAmountToReceive] = await getAmountsOut({
-    amountToSell: bnAmountIn,
-    path
-  });
-
-  const [bnAmountToSell] = await getAmountsIn({
-    amountToReceive: bnAmountToReceive,
-    path
-  });
-
-  const amountOutMin = minimumAmountOut(
-    `${slippageTolerance}%`,
-    bnAmountToReceive
-  );
-
-  const amountOutMax = maximumAmountIn(`${slippageTolerance}%`, bnAmountToSell);
+  const amountOutMin = minimumAmountOut(`${slippageTolerance}%`, bnAmountOut);
+  const amountOutMax = maximumAmountIn(`${slippageTolerance}%`, bnAmountIn);
 
   return [
     tradeIn ? bnAmountIn : bnAmountOut,
