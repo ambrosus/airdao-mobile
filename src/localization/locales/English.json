@@ -582,6 +582,7 @@
     "swap.description": "Earn with pools & swap tokens",
     "bridge.description": "Seamless asset transfers",
     "stake.description": "Earn AMB rewards",
-    "kosmos.description": "Earn passive income via bonds"
+    "kosmos.description": "Earn passive income via bonds",
+    "harbor.description": "Stake, earn and stay liquid"
   }
 }

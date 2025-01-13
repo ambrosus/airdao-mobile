@@ -579,6 +579,7 @@
     "swap.description": "Havuzlarla kazanın ve token takas edin",
     "bridge.description": "Sorunsuz varlık transferleri",
     "stake.description": "AMB ödülleri kazanın",
-    "kosmos.description": "Tahviller aracılığıyla pasif gelir elde edin"
+    "kosmos.description": "Tahviller aracılığıyla pasif gelir elde edin",
+    "harbor.description": "!!!Stake, earn and stay liquid"
   }
 }
