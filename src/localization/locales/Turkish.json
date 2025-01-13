@@ -555,7 +555,6 @@
   "harbor.unlock.date": "Kilit açma tarihi",
   "harbor.empty.withdrawals.list": "Şu anda herhangi bir çekim isteği yok.",
 
-
   "wallet.connect": {
     "proposal": "{{origin}} adresine bağlanınf",
     "warning": "Cüzdanınızı {{origin}} adresine bağlamak istediğinizden emin misiniz?",
@@ -571,7 +570,15 @@
     "description.error": "Bağlanamadık. Daha sonra tekrar deneyin.",
     "title.connections": "Bağlantıları Yönet",
     "label.connections": "{{connectionsLength}} Site Bağlı",
-    "scanner": "Bağlanmak için Tara"
+    "scanner": "Bağlanmak için Tara",
+    "tx.request": "İşlem talebi",
+    "tx.approve.warning": "Bu site tokenlarınızı çekmek için izin istiyor",
+    "request.from": "‘den istek",
+    "amount.approve": "Onaylanacak miktar",
+    "request.approve": "İsteği onayla",
+    "interacting.address": "Etkileşimde bulunulan",
+    "approve.token": "Tokenı onayla",
+    "spender": "Harcayan"
   },
   "products": {
     "title.trade": "Alım satım yapın",
