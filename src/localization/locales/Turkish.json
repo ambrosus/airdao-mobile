@@ -382,7 +382,7 @@
   "wallet.picker.select": "Cüzdan seç",
 
   "swap.route": "Rota",
-  "swap.pay": "Gönderiyorsun",
+  "swap.pay": "Gönderdiğiniz",
   "swap.receive": "Alacağın",
   "swap.select.asset": "Varlık seç",
   "swap.text.button.max": "Maksimum",
@@ -554,7 +554,6 @@
   "harbor.requests.date": "İstek tarihi",
   "harbor.unlock.date": "Kilit açma tarihi",
   "harbor.empty.withdrawals.list": "Şu anda herhangi bir çekim isteği yok.",
-
 
   "wallet.connect": {
     "proposal": "{{origin}} adresine bağlanınf",
