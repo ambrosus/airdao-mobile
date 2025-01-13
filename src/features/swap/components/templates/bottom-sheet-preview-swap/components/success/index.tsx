@@ -21,7 +21,6 @@ export const SuccessSwapView = () => {
     useSwapBottomSheetHandler();
 
   const onNavigateToWallets = async () => {
-    onChangeBottomSheetSwapStatus(BottomSheetStatus.PREVIEW);
     _delayNavigation(onReviewSwapDismiss, () =>
       navigation.dispatch(
         CommonActions.reset({
@@ -29,6 +28,11 @@ export const SuccessSwapView = () => {
           routes: [{ name: 'HomeScreen' }]
         })
       )
+    );
+
+    setTimeout(
+      () => onChangeBottomSheetSwapStatus(BottomSheetStatus.PREVIEW),
+      500
     );
   };
 

@@ -1,10 +1,16 @@
 import { ethers } from 'ethers';
+import { TOKEN_ADDRESSES } from './addresses';
 
 export const SWAP_SUPPORTED_TOKENS = {
   native: {
     address: ethers.constants.AddressZero,
     name: 'AirDAO',
     symbol: 'AMB'
+  },
+  usdc: {
+    address: TOKEN_ADDRESSES.prod.USDC,
+    name: 'USDC',
+    symbol: 'USDC'
   },
   tokens: {
     prod: [

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ethers } from 'ethers';
 import {
   BottomSheetStatus,
@@ -10,13 +10,26 @@ import { BottomSheetRef } from '@components/composite';
 import { createContextSelector } from '@utils';
 import {
   INITIAL_UI_BOTTOM_SHEET_INFORMATION,
-  INITIAL_SELECTED_TOKENS,
   INITIAL_SELECTED_TOKENS_AMOUNT,
   INITIAL_SETTINGS
 } from './initials';
+import { SWAP_SUPPORTED_TOKENS } from '../entities';
+import { addresses } from '../utils';
 import { initialBalances } from '../utils/balances';
 
 export const SwapContext = () => {
+  const initialSelectedTokens = useMemo(
+    () => ({
+      TOKEN_A: SWAP_SUPPORTED_TOKENS.native,
+      TOKEN_B: {
+        address: addresses.USDC,
+        name: 'USDC',
+        symbol: 'USDC'
+      }
+    }),
+    []
+  );
+
   const bottomSheetTokenARef = useRef<BottomSheetRef>(null);
   const bottomSheetTokenBRef = useRef<BottomSheetRef>(null);
   const bottomSheetPreviewSwapRef = useRef<BottomSheetRef>(null);
@@ -28,7 +41,7 @@ export const SwapContext = () => {
 
   // Tokens connected states
   const [_refExactGetter, setIsExactIn] = useState(true);
-  const [selectedTokens, setSelectedTokens] = useState(INITIAL_SELECTED_TOKENS);
+  const [selectedTokens, setSelectedTokens] = useState(initialSelectedTokens);
   const [isWarningToEnableMultihopActive, setIsWarningToEnableMultihopActive] =
     useState(false);
 
@@ -76,13 +89,13 @@ export const SwapContext = () => {
   }, [_refPairsGetter]);
 
   const reset = useCallback(() => {
-    setSelectedTokens(INITIAL_SELECTED_TOKENS);
+    setSelectedTokens(initialSelectedTokens);
     setSelectedTokensAmount(INITIAL_SELECTED_TOKENS_AMOUNT);
     setUiBottomSheetInformation(INITIAL_UI_BOTTOM_SHEET_INFORMATION);
     setIsExactIn(true);
     setIsMultiHopSwapCurrencyBetter({ state: false, tokens: [] });
     setIsWarningToEnableMultihopActive(false);
-  }, []);
+  }, [initialSelectedTokens]);
 
   return {
     selectedTokens,
