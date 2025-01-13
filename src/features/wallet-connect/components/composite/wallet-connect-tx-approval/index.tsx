@@ -124,7 +124,11 @@ export const WalletConnectTxApproval = () => {
           color={COLORS.neutral800}
           align="center"
         >
-          {isApprovalTx ? 'Approve token' : 'Transaction request'}
+          {t(
+            isApprovalTx
+              ? 'wallet.connect.approve.token'
+              : 'wallet.connect.tx.request'
+          )}
         </Text>
 
         {isApprovalTx && (
@@ -135,7 +139,7 @@ export const WalletConnectTxApproval = () => {
             align="center"
             style={styles.approvalSubheading}
           >
-            This site wants permission to withdraw your tokens
+            {t('wallet.connect.tx.approve.warning')}
           </Text>
         )}
       </View>
@@ -210,7 +214,9 @@ export const WalletConnectTxApproval = () => {
         onPress={onApprove}
       >
         <TextOrSpinner
-          label={t(isApprovalTx ? 'Approve request' : 'button.confirm')}
+          label={t(
+            isApprovalTx ? 'wallet.connect.request.approve' : 'button.confirm'
+          )}
           loading={isLoadingApprove}
           loadingLabel={undefined}
           spinnerColor={COLORS.brand600}
@@ -223,7 +229,7 @@ export const WalletConnectTxApproval = () => {
         onPress={onReject}
       >
         <TextOrSpinner
-          label="Cancel"
+          label={t('button.cancel')}
           loading={isLoadingReject}
           loadingLabel={undefined}
           styles={{ active: { color: COLORS.brand600 } }}
