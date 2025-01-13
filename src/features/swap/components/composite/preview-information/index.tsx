@@ -46,7 +46,7 @@ export const PreviewInformation = () => {
   ]);
 
   const isMultiHopRoute = useMemo(() => {
-    return isMultiHopSwapBetterCurrency.state;
+    return isMultiHopSwapBetterCurrency.tokens.length > 0;
   }, [isMultiHopSwapBetterCurrency]);
 
   const tokens = useMemo(() => {

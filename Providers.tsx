@@ -1,14 +1,14 @@
 import React from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { LocalizationProvider } from '@contexts';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { DatabaseProvider } from '@nozbe/watermelondb/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Config from '@constants/config';
+import { LocalizationProvider } from '@contexts';
 import { Database } from '@database';
 import { BridgeContextProvider } from '@features/bridge/context';
 import { SwapContextProvider } from '@features/swap/context';
 import { WalletConnectContextProvider } from '@features/wallet-connect/context';
-import Config from '@constants/config';
 import { combineComponents } from '@utils';
 
 const queryClient = new QueryClient();
