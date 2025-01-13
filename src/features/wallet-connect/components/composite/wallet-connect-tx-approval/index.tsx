@@ -205,15 +205,23 @@ export const WalletConnectTxApproval = () => {
         />
       </View>
 
-      <PrimaryButton onPress={onApprove}>
+      <PrimaryButton
+        disabled={isLoadingApprove || isLoadingReject}
+        onPress={onApprove}
+      >
         <TextOrSpinner
           label={t(isApprovalTx ? 'Approve request' : 'button.confirm')}
           loading={isLoadingApprove}
           loadingLabel={undefined}
+          spinnerColor={COLORS.brand600}
           styles={{ active: { color: COLORS.neutral0 } }}
         />
       </PrimaryButton>
-      <SecondaryButton style={styles.secondaryButton} onPress={onReject}>
+      <SecondaryButton
+        disabled={isLoadingApprove || isLoadingReject}
+        style={styles.secondaryButton}
+        onPress={onReject}
+      >
         <TextOrSpinner
           label="Cancel"
           loading={isLoadingReject}
