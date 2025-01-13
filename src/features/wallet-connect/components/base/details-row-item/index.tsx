@@ -19,12 +19,12 @@ interface DetailsRowItemProps {
 export const DetailsRowItem = ({ field, value }: DetailsRowItemProps) => {
   const { t } = useTranslation();
   const keys: Record<Keys, string> = {
-    REQUEST: 'Request From',
-    INTERACTING: 'Interacting with',
+    REQUEST: t('wallet.connect.request.from'),
+    INTERACTING: t('wallet.connect.interacting.address'),
     AMOUNT: t('common.transaction.amount'),
     FEE: t('swap.bottom.sheet.lpfee'),
-    APPROVE: 'Amount to approve',
-    SPENDER: 'Spender'
+    APPROVE: t('wallet.connect.amount.approve'),
+    SPENDER: t('wallet.connect.spender')
   };
 
   return (

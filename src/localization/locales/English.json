@@ -557,7 +557,6 @@
   "harbor.unlock.date": "Unlock date",
   "harbor.empty.withdrawals.list": "There are no withdrawal requests at the moment.",
 
-
   "wallet.connect": {
     "proposal": "Connect to {{origin}}",
     "warning": "Are you sure you want to connect your wallet to {{origin}}",
@@ -573,7 +572,15 @@
     "description.error": "We couldn’t connect. Try again later.",
     "title.connections": "Manage Connections",
     "label.connections": "{{connectionsLength}} Sites Connected",
-    "scanner": "Scan to Connect"
+    "scanner": "Scan to Connect",
+    "tx.request": "Transaction request",
+    "tx.approve.warning": "This site wants permission to withdraw your tokens",
+    "request.from": "Request from",
+    "amount.approve": "Amount to approve",
+    "request.approve": "Approve request",
+    "interacting.address": "Interacting with",
+    "approve.token": "Approve token",
+    "spender": "Spender"
   },
 
   "products": {
