@@ -12,7 +12,7 @@ Alert.alert('envs', JSON.stringify(Constants.expoConfig?.extra?.eas));
 
 export async function createWalletKit() {
   const core = new Core({
-    projectId: Constants.expoConfig?.extra?.eas.EXPO_PUBLIC_REOWN_PROJECT_ID,
+    projectId: Constants.expoConfig?.extra?.eas.REOWN_PROJECT_ID,
     relayUrl: 'wss://relay.walletconnect.org'
   });
 

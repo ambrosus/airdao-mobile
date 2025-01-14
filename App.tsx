@@ -1,11 +1,23 @@
 import React from 'react';
-import Navigation from '@navigation/NavigationContainer';
-import { useAppInit } from '@hooks/useAppInit';
+import * as Sentry from '@sentry/react-native';
+import Constants from 'expo-constants';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Providers } from './Providers';
 import { Toast } from '@components/modular';
+import { useAppInit } from '@hooks/useAppInit';
+import Navigation from '@navigation/NavigationContainer';
+import { Providers } from './Providers';
 
-export default function App() {
+Sentry.init({
+  dsn: Constants.expoConfig?.extra?.eas.SENTRY_DSN,
+  // Set tracesSampleRate to 1.0 to capture 100% of transactions for tracing.
+  // We recommend adjusting this value in production.
+  tracesSampleRate: 1.0,
+  // profilesSampleRate is relative to tracesSampleRate.
+  // Here, we'll capture profiles for 100% of transactions.
+  profilesSampleRate: 1.0
+});
+
+function App() {
   const { isAppReady } = useAppInit();
   if (!isAppReady) {
     return null;
@@ -21,3 +33,5 @@ export default function App() {
     </Providers>
   );
 }
+
+export default Sentry.wrap(App);
