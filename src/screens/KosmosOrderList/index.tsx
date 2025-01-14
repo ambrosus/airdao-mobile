@@ -1,12 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
-import {
-  RefreshControl,
-  SafeAreaView,
-  View,
-  VirtualizedList
-} from 'react-native';
+import { RefreshControl, View, VirtualizedList } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Header } from '@components/composite';
+import { DEVICE_HEIGHT } from '@constants/variables';
 import {
   ClaimableOrderCardDetails,
   ScreenLoader,
@@ -25,6 +22,7 @@ import { styles } from './styles';
 export const KosmosOrderList = () => {
   const { transactions, isTransactionsLoading, refetchTransactions } =
     useTransactions();
+  const { top } = useSafeAreaInsets();
   const { claimingTransaction, setClaimingTransaction } = useClaimState();
   const { refetchTokens, isTokensLoading } = useMarketTokens();
 
@@ -99,9 +97,8 @@ export const KosmosOrderList = () => {
   };
 
   const getItemCount = (_data: TxType[] | []) => _data.length;
-
   return (
-    <SafeAreaView style={{ height: '100%' }}>
+    <View style={{ marginTop: top }}>
       <Header
         title="Kosmos"
         bottomBorder
@@ -111,23 +108,22 @@ export const KosmosOrderList = () => {
         backIconVisible
       />
 
-      <View style={styles.container}>
-        <View style={styles.totalReducedAmountsContainer}>
-          <TotalOrdersAmount transactions={transactions} />
-        </View>
-
-        <VirtualizedList
-          keyExtractor={listKeyExtractor}
-          initialNumToRender={4}
-          data={sortedByDateTxs}
-          refreshControl={renderRefetchController}
-          renderItem={renderOrderListItem}
-          getItemCount={getItemCount}
-          getItem={getItem}
-          ListFooterComponent={RenderListFooterComponent}
-          removeClippedSubviews
-        />
+      <View style={styles.totalReducedAmountsContainer}>
+        <TotalOrdersAmount transactions={transactions} />
       </View>
-    </SafeAreaView>
+
+      <VirtualizedList
+        contentContainerStyle={{ paddingBottom: DEVICE_HEIGHT * 0.1 }}
+        keyExtractor={listKeyExtractor}
+        initialNumToRender={4}
+        data={sortedByDateTxs}
+        refreshControl={renderRefetchController}
+        renderItem={renderOrderListItem}
+        getItemCount={getItemCount}
+        getItem={getItem}
+        ListFooterComponent={RenderListFooterComponent}
+        removeClippedSubviews
+      />
+    </View>
   );
 };
