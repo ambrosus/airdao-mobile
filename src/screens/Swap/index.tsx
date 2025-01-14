@@ -24,7 +24,6 @@ type Props = NativeStackScreenProps<HomeParamsList, 'SwapScreen'>;
 export const SwapScreen = ({ navigation }: Props) => {
   const { t } = useTranslation();
   useSwapAllBalances();
-
   useAllLiquidityPools();
   const {
     bottomSheetTokenARef,
