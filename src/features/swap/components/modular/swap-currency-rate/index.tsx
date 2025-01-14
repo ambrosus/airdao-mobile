@@ -1,16 +1,23 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import { StyleProp, TouchableOpacity, ViewStyle } from 'react-native';
 import { formatEther } from 'ethers/lib/utils';
 import { Text, Row, Spinner } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { useSwapContextSelector } from '@features/swap/context';
-import { useSwapTokens, useSwapBetterRate } from '@features/swap/lib/hooks';
-import { SwapStringUtils, plateVisibility } from '@features/swap/utils';
+import { useSwapBetterRate } from '@features/swap/lib/hooks';
+import { SwapStringUtils } from '@features/swap/utils';
 import { verticalScale } from '@utils';
 
-export const SwapCurrencyRate = () => {
-  const { _refExactGetter, _refSettingsGetter } = useSwapContextSelector();
-  const { tokensRoute, tokenToSell, tokenToReceive } = useSwapTokens();
+interface SwapCurrencyRateProps {
+  tokenToSell: string;
+  tokenToReceive: string;
+  tokensRoute: string[];
+}
+
+const _SwapCurrencyRate = ({
+  tokenToSell,
+  tokenToReceive,
+  tokensRoute
+}: SwapCurrencyRateProps) => {
   const { bestSwapRate, onToggleTokensOrder, tokens, isExecutingRate } =
     useSwapBetterRate();
 
@@ -19,7 +26,7 @@ export const SwapCurrencyRate = () => {
 
   useEffect(() => {
     (async () => {
-      if (tokenToSell.TOKEN && tokenToReceive.TOKEN) {
+      if (tokenToSell && tokenToReceive) {
         const bnAmount = await bestSwapRate(tokensRoute);
 
         const normalizedAmount = SwapStringUtils.transformAmountValue(
@@ -29,34 +36,14 @@ export const SwapCurrencyRate = () => {
         setOppositeAmountPerOneToken(normalizedAmount);
       }
     })();
-  }, [
-    _refExactGetter,
-    _refSettingsGetter,
-    bestSwapRate,
-    tokenToReceive.TOKEN,
-    tokenToSell.TOKEN,
-    tokensRoute
-  ]);
-
-  const isShowPlate = useMemo(() => {
-    return plateVisibility(
-      tokenToSell.TOKEN,
-      tokenToSell.AMOUNT,
-      tokenToReceive.TOKEN,
-      tokenToReceive.AMOUNT,
-      oppositeAmountPerOneToken
-    );
-  }, [oppositeAmountPerOneToken, tokenToReceive, tokenToSell]);
+  }, [bestSwapRate, tokenToReceive, tokenToSell, tokensRoute]);
 
   const containerStyle: StyleProp<ViewStyle> = useMemo(() => {
     return {
+      height: 52,
       paddingBottom: verticalScale(20)
     };
   }, []);
-
-  if (!isShowPlate) {
-    return null;
-  }
 
   return (
     <Row style={containerStyle} justifyContent="center" alignItems="center">
@@ -77,3 +64,10 @@ export const SwapCurrencyRate = () => {
     </Row>
   );
 };
+
+export const SwapCurrencyRate = memo(
+  _SwapCurrencyRate,
+  (prevProps, nextProps) =>
+    prevProps.tokenToReceive === nextProps.tokenToReceive &&
+    prevProps.tokenToSell === nextProps.tokenToSell
+);
