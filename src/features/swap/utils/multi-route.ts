@@ -35,12 +35,16 @@ export const generateAllPossibleRoutes = (
   const [startToken, endToken] = path;
   if (!startToken || !endToken) return [];
 
+  // Check if path includes addresses.SAMB
+  const includesSAMB = path.includes(addresses.SAMB);
+
   const availableTokens = SWAP_SUPPORTED_TOKENS.tokens[environment]
     .filter(
       (token) =>
         !ignoreTokenAddresses.includes(token.address) &&
         token.address !== startToken &&
-        token.address !== endToken
+        token.address !== endToken &&
+        !(includesSAMB && token.address === addresses.AMB) // Exclude AMB if SAMB is in path
     )
     .map((token) => token.address);
 

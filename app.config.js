@@ -28,10 +28,10 @@ module.exports = {
           'Allow $(PRODUCT_NAME) to access your microphone',
         NSFaceIDUsageDescription: 'Allow $(PRODUCT_NAME) to access FaceID'
       },
-      buildNumber: '1.3.3'
+      buildNumber: '1.3.6'
     },
     android: {
-      versionCode: 110,
+      versionCode: 111,
       softwareKeyboardLayoutMode: 'pan',
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
@@ -112,7 +112,7 @@ module.exports = {
     extra: {
       eas: {
         projectId: 'fe81238e-85e8-4ace-8b87-65ff01c085b7',
-        EXPO_PUBLIC_REOWN_PROJECT_ID: process.env.EXPO_PUBLIC_REOWN_PROJECT_ID
+        REOWN_PROJECT_ID: process.env.REOWN_PROJECT_ID
       }
     },
     runtimeVersion: {
