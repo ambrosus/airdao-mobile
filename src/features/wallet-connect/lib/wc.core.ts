@@ -1,3 +1,5 @@
+import '@walletconnect/react-native-compat';
+
 import { Alert } from 'react-native';
 import { WalletKit, IWalletKit } from '@reown/walletkit';
 import { Core } from '@walletconnect/core';
@@ -20,6 +22,10 @@ export async function createWalletKit() {
   });
 
   try {
+    Alert.alert(
+      'Wallet kit instance',
+      walletKit ? 'wallet kit exists' : 'unknown'
+    );
     const clientId =
       await walletKit.engine.signClient.core.crypto.getClientId();
 

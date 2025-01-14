@@ -1,3 +1,4 @@
+import '@walletconnect/react-native-compat';
 import { WalletKitTypes } from '@reown/walletkit';
 import { getSdkError } from '@walletconnect/utils';
 import { ethers } from 'ethers';
