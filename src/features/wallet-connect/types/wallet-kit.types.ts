@@ -1,3 +1,4 @@
+import '@walletconnect/react-native-compat';
 import { WalletKitTypes } from '@reown/walletkit';
 
 export type Proposal = WalletKitTypes.EventArguments['session_proposal'];
