@@ -7,7 +7,7 @@ import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD } from '@features/swap/types';
 import { SwapStringUtils } from '@features/swap/utils';
-import { NumberUtils, verticalScale } from '@utils';
+import { verticalScale } from '@utils';
 import { styles } from './styles';
 
 interface BottomSheetReviewTokenItemProps {
@@ -50,7 +50,7 @@ export const BottomSheetReviewTokenItem = ({
           fontFamily="Inter_600SemiBold"
           color={COLORS.neutral800}
         >
-          {NumberUtils.numberToTransformedLocale(selectedTokensAmount[type])}{' '}
+          {SwapStringUtils.transformAmountValue(selectedTokensAmount[type])}{' '}
           {selectedTokens[type]?.symbol}
         </Text>
       </View>
