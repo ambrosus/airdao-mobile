@@ -35,7 +35,7 @@ export const WithdrawRewardOnlyTab = () => {
     bottomSheetRef.current?.show();
   }, [ambAmount, bondAmount, unStakeDelay]);
   useEffect(() => {
-    if (+ambAmount <= 0 || +bondAmount <= 0) {
+    if (+ambAmount <= 0 && +bondAmount <= 0) {
       setIsNullAmount(true);
     } else {
       setIsNullAmount(false);
