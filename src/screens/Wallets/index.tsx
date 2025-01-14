@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { LayoutChangeEvent } from 'react-native';
+import { Alert, LayoutChangeEvent } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { ethers } from 'ethers';
+import Constants from 'expo-constants';
 import Animated, {
   Easing,
   useAnimatedScrollHandler,
@@ -28,6 +29,11 @@ import { useBalanceOfAddress } from '@hooks';
 import { useAllAccounts } from '@hooks/database';
 import { ExplorerAccount } from '@models';
 import { WalletUtils, scale, SCREEN_HEIGHT, verticalScale } from '@utils';
+
+Alert.alert(
+  'envs | home screen',
+  JSON.stringify(Constants.expoConfig?.extra?.eas)
+);
 
 const SPRING_CONFIG = {
   damping: 20,

@@ -1,9 +1,12 @@
+import { Alert } from 'react-native';
 import { WalletKit, IWalletKit } from '@reown/walletkit';
 import { Core } from '@walletconnect/core';
 import Constants from 'expo-constants';
 import { getMetadata } from '../utils/misc/metadata';
 
 export let walletKit: IWalletKit;
+
+Alert.alert('envs', JSON.stringify(Constants.expoConfig?.extra?.eas));
 
 export async function createWalletKit() {
   const core = new Core({
