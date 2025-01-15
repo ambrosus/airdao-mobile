@@ -85,17 +85,9 @@ export const SendFunds = ({ navigation, route }: Props) => {
     loading: isFetchingTokens
   } = useTokensAndTransactions(senderAddress || '', 1, 20, !!senderAddress);
 
-  const [selectedToken, setSelectedToken] = useState<Token>(_AMBEntity);
-
-  useEffect(() => {
-    if (tokenFromNavigationParams?.address && tokens.length > 0) {
-      const token = tokens.find(
-        (token) => token.address === tokenFromNavigationParams?.address
-      );
-
-      if (token) setSelectedToken(token);
-    }
-  }, [tokenFromNavigationParams, tokenFromNavigationParams?.address, tokens]);
+  const [selectedToken, setSelectedToken] = useState<Token>(
+    tokenFromNavigationParams ?? _AMBEntity
+  );
 
   useEffect(() => {
     if (tokens.length === 0 && tokensFromAPI.length > 0) {
