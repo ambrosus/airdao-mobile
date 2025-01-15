@@ -134,28 +134,30 @@ export const BarcodeScannerScreen = ({ navigation, route }: Props) => {
           <ScanSquare />
         </Camera>
       )}
-      <View style={styles.footer}>
-        <Row alignItems="center" style={styles.footerIconsRow}>
-          <View style={styles.iconBox}>
-            <WalletConnectIcon color={COLORS.neutral0} scale={0.4} />
-          </View>
+      {isCameraVisible && (
+        <View style={styles.footer}>
+          <Row alignItems="center" style={styles.footerIconsRow}>
+            <View style={styles.iconBox}>
+              <WalletConnectIcon color={COLORS.neutral0} scale={0.4} />
+            </View>
 
-          <View style={styles.divider} />
+            <View style={styles.divider} />
 
-          <View style={styles.iconBox}>
-            <QRCodeIcon color={COLORS.neutral0} scale={1} />
-          </View>
-        </Row>
-        <Text
-          fontSize={16}
-          fontFamily="Inter_600SemiBold"
-          color={COLORS.neutral0}
-          align="center"
-        >
-          Scan a WalletConnect QR to connect your wallet or any wallet QR to
-          view details.
-        </Text>
-      </View>
+            <View style={styles.iconBox}>
+              <QRCodeIcon color={COLORS.neutral0} scale={1} />
+            </View>
+          </Row>
+          <Text
+            fontSize={16}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.neutral0}
+            align="center"
+          >
+            Scan a WalletConnect QR to connect your wallet or any wallet QR to
+            view details.
+          </Text>
+        </View>
+      )}
     </>
   );
 };
