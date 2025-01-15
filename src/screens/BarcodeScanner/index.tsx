@@ -9,7 +9,8 @@ import {
 import { RootStackParamsList } from '@appTypes';
 import { Button, Row, Text } from '@components/base';
 import { Header } from '@components/composite';
-import { CloseIcon } from '@components/svg/icons';
+import { CloseIcon, WalletConnectIcon } from '@components/svg/icons';
+import { QRCodeIcon } from '@components/svg/icons/v2';
 import { ScanSquare } from '@components/templates/BarcodeScanner/components/ScanSquare';
 import { styles } from '@components/templates/BarcodeScanner/styles';
 import { COLORS } from '@constants/colors';
@@ -133,6 +134,28 @@ export const BarcodeScannerScreen = ({ navigation, route }: Props) => {
           <ScanSquare />
         </Camera>
       )}
+      <View style={styles.footer}>
+        <Row alignItems="center" style={styles.footerIconsRow}>
+          <View style={styles.iconBox}>
+            <WalletConnectIcon color={COLORS.neutral0} scale={0.4} />
+          </View>
+
+          <View style={styles.divider} />
+
+          <View style={styles.iconBox}>
+            <QRCodeIcon color={COLORS.neutral0} scale={1} />
+          </View>
+        </Row>
+        <Text
+          fontSize={16}
+          fontFamily="Inter_600SemiBold"
+          color={COLORS.neutral0}
+          align="center"
+        >
+          Scan a WalletConnect QR to connect your wallet or any wallet QR to
+          view details.
+        </Text>
+      </View>
     </>
   );
 };
