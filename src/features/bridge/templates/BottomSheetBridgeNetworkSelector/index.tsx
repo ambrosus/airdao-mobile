@@ -47,7 +47,7 @@ export const BottomSheetBridgeNetworkSelector = forwardRef<
   };
 
   return (
-    <BottomSheet ref={ref} swiperIconVisible={true}>
+    <BottomSheet ref={ref} swiperIconVisible={false}>
       <Spacer value={verticalScale(16)} />
       <Row justifyContent="space-between" style={styles.headerContainer}>
         <Text
