@@ -67,7 +67,7 @@ export const BottomSheetBridgePreview = forwardRef<
       closeOnBackPress={false}
       onBackdropPress={onClose}
       ref={ref}
-      swiperIconVisible={true}
+      swiperIconVisible={false}
     >
       <View style={{ marginHorizontal: scale(24) }}>
         {showHeader && (
