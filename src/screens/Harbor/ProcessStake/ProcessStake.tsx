@@ -216,8 +216,8 @@ export const ProcessStake = () => {
           <Animated.View style={[animatedMargin, styles.buttonWrapper]}>
             <PrimaryButton disabled={buttonDisabled} onPress={onReviewStake}>
               <Text
-                fontFamily="Inter_700Bold"
-                fontSize={scale(16)}
+                fontSize={scale(14)}
+                fontFamily="Inter_500Medium"
                 color={buttonDisabled ? COLORS.neutral500 : COLORS.neutral0}
               >
                 {t('button.confirm')}
