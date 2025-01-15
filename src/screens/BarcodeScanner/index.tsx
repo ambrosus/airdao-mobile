@@ -21,7 +21,8 @@ type Props = NativeStackScreenProps<
   'BarcodeScannerScreen'
 >;
 
-const MOCK_ADDRESS = 'ethereum:0xF51452e37eEbf3226BcBB25FA4f9F570f176484e';
+const MOCK_ADDRESS =
+  'wc:d022a71abc43dd08e1cff784df8cf9b1c4b1714320100df1477b765ba2748194@2?expiryTimestamp=1736943502&relay-protocol=irn&symKey=289c5eaab9c92811093dc3aa90cfd1456d7b60fb4e6ecebeb48aaff88e2a50fe';
 
 export const BarcodeScannerScreen = ({ navigation, route }: Props) => {
   const {

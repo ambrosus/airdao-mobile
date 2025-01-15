@@ -167,7 +167,7 @@ export async function swapMultiHopExactTokensForTokens(
 
       tx = await callSwapMethod(
         bnMinimumReceivedAmount,
-        path,
+        wrapNativeAddress(path),
         signer.address,
         timestampDeadline,
         { value: bnAmountToSell }
@@ -183,7 +183,7 @@ export async function swapMultiHopExactTokensForTokens(
       tx = await callSwapMethod(
         bnAmountToSell,
         bnMinimumReceivedAmount,
-        path,
+        wrapNativeAddress(path),
         signer.address,
         timestampDeadline
       );
@@ -198,7 +198,7 @@ export async function swapMultiHopExactTokensForTokens(
       const args = await swapArgsCallback(
         amountIn,
         amountOut,
-        path,
+        wrapNativeAddress(path),
         signer.address,
         timestampDeadline,
         slippageTolerance,
