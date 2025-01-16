@@ -1,5 +1,6 @@
 import React, { useMemo, useRef } from 'react';
 import { ActivityIndicator, Image, StyleProp, ViewStyle } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import {
   GestureHandlerRootView,
   PanGestureHandler,
@@ -25,6 +26,7 @@ export const WalletNoNFTsView = ({
   refetch,
   loading
 }: WalletNoNFTsViewProps) => {
+  const { t } = useTranslation();
   const scrollOffsetY = useSharedValue(0);
 
   const isRefetchedOnce = useRef<boolean>(false);
@@ -85,7 +87,7 @@ export const WalletNoNFTsView = ({
             fontFamily="Inter_500Medium"
             color={COLORS.neutral800}
           >
-            No NFTs yet.
+            {t('wallet.empty.nft.header')}
           </Text>
 
           <Text
@@ -94,8 +96,7 @@ export const WalletNoNFTsView = ({
             fontFamily="Inter_400Regular"
             style={styles.description}
           >
-            Stay tuned for upcoming events and activities to earn exclusive
-            NFTs.
+            {t('wallet.empty.nft.subheader')}
           </Text>
         </Animated.View>
       </PanGestureHandler>

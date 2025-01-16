@@ -49,13 +49,16 @@ export const WithdrawRewardOnlyTab = () => {
         ambAmount={ambAmount || '0'}
       />
       <Spacer value={scale(8)} />
-      <View style={styles.buttonWrapper}>
-        <PrimaryButton onPress={onPressRewardWithdraw} disabled={isNullAmount}>
-          <Text color={COLORS[isNullAmount ? 'brand300' : 'neutral0']}>
-            {t('harbor.withdrawal.button')}
-          </Text>
-        </PrimaryButton>
-      </View>
+
+      <PrimaryButton
+        style={styles.button}
+        onPress={onPressRewardWithdraw}
+        disabled={isNullAmount}
+      >
+        <Text color={COLORS[isNullAmount ? 'brand300' : 'neutral0']}>
+          {t('harbor.withdrawal.button')}
+        </Text>
+      </PrimaryButton>
       <BottomSheetHarborPreView
         modalType="withdraw-reward"
         previewData={previewData}

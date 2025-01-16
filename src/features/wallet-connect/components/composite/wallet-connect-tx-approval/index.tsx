@@ -47,6 +47,7 @@ export const WalletConnectTxApproval = () => {
 
   const isApprovalTx = transaction?.functionName === 'approve';
   const isAmbTransaction = request?.params[0]?.value;
+  const isWithdraw = transaction?.functionName === 'withdraw';
   const isWrapOrUnwrap =
     transaction?.functionName === 'deposit' ||
     transaction?.functionName === 'withdraw';
@@ -194,6 +195,8 @@ export const WalletConnectTxApproval = () => {
                 )} ${
                   isAmbTransaction
                     ? CryptoCurrencyCode.AMB
+                    : isWithdraw
+                    ? CryptoCurrencyCode.SAMB
                     : getTokenSymbolFromDatabase(
                         transaction?.decodedArgs?.addresses?.[0] ?? ''
                       )
@@ -203,8 +206,9 @@ export const WalletConnectTxApproval = () => {
 
         <DetailsRowItem
           field="FEE"
-          value={`${NumberUtils.numberToTransformedLocale(
-            ethers.utils.formatEther(request?.params[0].gas ?? ZERO)
+          value={`${NumberUtils.limitDecimalCount(
+            ethers.utils.formatEther(request?.params[0].gas ?? ZERO),
+            0
           )} ${CryptoCurrencyCode.AMB}`}
         />
       </View>

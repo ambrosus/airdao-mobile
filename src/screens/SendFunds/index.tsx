@@ -86,9 +86,7 @@ export const SendFunds = ({ navigation, route }: Props) => {
   } = useTokensAndTransactions(senderAddress || '', 1, 20, !!senderAddress);
 
   const [selectedToken, setSelectedToken] = useState<Token>(
-    tokens.find(
-      (token) => token.address === tokenFromNavigationParams?.address
-    ) || _AMBEntity
+    tokenFromNavigationParams ?? _AMBEntity
   );
 
   useEffect(() => {

@@ -573,6 +573,7 @@
     "title.connections": "Manage Connections",
     "label.connections": "{{connectionsLength}} Sites Connected",
     "scanner": "Scan to Connect",
+    "scanner.description": "Scan a WalletConnect QR to connect your wallet or any wallet QR to view details.",
     "tx.request": "Transaction request",
     "tx.approve.warning": "This site wants permission to withdraw your tokens",
     "request.from": "Request from",

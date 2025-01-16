@@ -111,6 +111,7 @@ export function useBarcodeScanner() {
   const cameraContainerStyle: StyleProp<ViewStyle> = useMemo(
     () => ({
       flex: 1,
+      position: 'relative',
       marginTop: imagePadding,
       marginBottom: imagePadding
     }),

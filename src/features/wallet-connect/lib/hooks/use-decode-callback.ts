@@ -18,6 +18,7 @@ export function useDecodeCallbackData() {
     rawArgs: any
   ): StandardizedDecodedArgs => {
     switch (functionName) {
+      case 'withdraw':
       case 'approve':
         return {
           addresses: [rawArgs.spender],
