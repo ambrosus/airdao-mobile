@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { BarCodeScanningResult, Camera, CameraType } from 'expo-camera';
+import { useTranslation } from 'react-i18next';
 import {
   SafeAreaView,
   useSafeAreaInsets
@@ -25,6 +26,7 @@ const MOCK_ADDRESS =
   'wc:d022a71abc43dd08e1cff784df8cf9b1c4b1714320100df1477b765ba2748194@2?expiryTimestamp=1736943502&relay-protocol=irn&symKey=289c5eaab9c92811093dc3aa90cfd1456d7b60fb4e6ecebeb48aaff88e2a50fe';
 
 export const BarcodeScannerScreen = ({ navigation, route }: Props) => {
+  const { t } = useTranslation();
   const {
     params: { onScanned }
   } = route;
@@ -154,8 +156,7 @@ export const BarcodeScannerScreen = ({ navigation, route }: Props) => {
             color={COLORS.neutral0}
             align="center"
           >
-            Scan a WalletConnect QR to connect your wallet or any wallet QR to
-            view details.
+            {t('wallet.connect.scanner.description')}
           </Text>
         </View>
       )}
