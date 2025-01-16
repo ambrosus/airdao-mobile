@@ -10,13 +10,8 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  separatedContainer: {
-    flex: 1,
-    justifyContent: 'space-between'
-  },
   inputContainerWitHeading: {
     position: 'relative',
-    flex: 1,
     flexDirection: 'column',
     alignItems: 'flex-start',
     rowGap: 8
@@ -42,5 +37,8 @@ export const styles = StyleSheet.create({
   information: {
     width: '100%',
     rowGap: 8
+  },
+  button: {
+    marginTop: scale(16)
   }
 });

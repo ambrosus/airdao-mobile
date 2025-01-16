@@ -3,9 +3,7 @@ import { scale } from '@utils';
 
 export const styles = StyleSheet.create({
   main: {
-    paddingHorizontal: scale(12),
-    height: '100%',
-    justifyContent: 'space-between'
+    paddingHorizontal: scale(12)
   },
   buttonWrapper: { paddingBottom: scale(50) }
 });
