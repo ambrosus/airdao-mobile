@@ -571,6 +571,7 @@
     "title.connections": "Bağlantıları Yönet",
     "label.connections": "{{connectionsLength}} Site Bağlı",
     "scanner": "Bağlanmak için Tara",
+    "scanner.description": "Cüzdanınızı bağlamak için WalletConnect QR'ını tarayın veya ayrıntıları görüntülemek için herhangi bir cüzdan QR'ını tarayın.",
     "tx.request": "İşlem talebi",
     "tx.approve.warning": "Bu site tokenlarınızı çekmek için izin istiyor",
     "request.from": "‘den istek",
