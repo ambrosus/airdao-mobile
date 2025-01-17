@@ -13,6 +13,7 @@ import { styles } from './styles';
 import { BottomSheetAddWalletToList } from '../BottomSheetAddWalletToList';
 
 interface ExplorerAccountProps {
+  setBottomStub?: (param: boolean) => void;
   account: ExplorerAccount;
   listInfoVisible?: boolean;
   nameVisible?: boolean;
@@ -23,7 +24,10 @@ export const ExplorerAccountView = ({
   account,
   listInfoVisible,
   nameVisible,
-  onToggleWatchlist
+  onToggleWatchlist,
+  setBottomStub = () => {
+    // do nothing
+  }
 }: ExplorerAccountProps): JSX.Element => {
   const { t } = useTranslation();
 
@@ -44,9 +48,13 @@ export const ExplorerAccountView = ({
 
   const showAddToList = () => {
     addToListModal.current?.show();
+    setTimeout(() => {
+      setBottomStub(true);
+    }, 450);
   };
 
   const hideAddToList = () => {
+    setBottomStub(false);
     setTimeout(() => addToListModal.current?.dismiss(), 250);
   };
 
@@ -232,7 +240,9 @@ export const ExplorerAccountView = ({
           </Button>
         </Row>
       </ScrollView>
+
       <BottomSheetAddWalletToList
+        onClose={() => setBottomStub(false)}
         ref={addToListModal}
         title={t('address.add.to.group')}
         wallet={account}
