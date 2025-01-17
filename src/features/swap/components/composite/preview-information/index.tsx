@@ -1,6 +1,7 @@
 import React, { ReactNode, useMemo } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { CryptoCurrencyCode } from '@appTypes';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
@@ -103,7 +104,7 @@ export const PreviewInformation = () => {
         </Text>
 
         <RightSideRowItem>
-          {`${uiBottomSheetInformation.lpFee} ${tokenToSell.TOKEN?.symbol}`}
+          {`${uiBottomSheetInformation.lpFee} ${CryptoCurrencyCode.AMB}`}
         </RightSideRowItem>
       </Row>
 
