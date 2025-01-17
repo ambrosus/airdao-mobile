@@ -8,9 +8,9 @@ import {
   isETHtoWrapped,
   isWrappedToETH,
   maximumAmountIn,
-  minimumAmountOut,
-  realizedLPFee
+  minimumAmountOut
 } from '@features/swap/utils';
+import { NumberUtils } from '@utils';
 import { useSwapActions } from './use-swap-actions';
 import { useSwapBottomSheetHandler } from './use-swap-bottom-sheet-handler';
 import { useSwapHelpers } from './use-swap-helpers';
@@ -26,7 +26,7 @@ export function useSwapInterface() {
     useSwapBottomSheetHandler();
 
   const { uiPriceImpactGetter } = useSwapPriceImpact();
-  const { checkAllowance } = useSwapActions();
+  const { checkAllowance, swapTokens } = useSwapActions();
   const { settings } = useSwapSettings();
   const { tokenToSell, tokenToReceive } = useSwapTokens();
   const { hasWrapNativeToken, isEmptyAmount } = useSwapHelpers();
@@ -61,7 +61,7 @@ export function useSwapInterface() {
         )
       );
 
-      const liquidityProviderFee = realizedLPFee(tokenToSell.AMOUNT);
+      const liquidityProviderFee = await swapTokens(true);
       const allowance = await checkAllowance();
 
       // if (
@@ -87,7 +87,10 @@ export function useSwapInterface() {
         priceImpact: priceImpact ?? 0,
         minimumReceivedAmount,
         lpFee: SwapStringUtils.transformRealizedLPFee(
-          String(liquidityProviderFee)
+          NumberUtils.limitDecimalCount(
+            ethers.utils.formatEther(liquidityProviderFee),
+            0
+          )
         ),
         allowance: allowance
           ? AllowanceStatus.INCREASE
@@ -104,15 +107,16 @@ export function useSwapInterface() {
     }
   }, [
     hasWrapNativeToken,
-    onReviewSwapPreview,
     setUiBottomSheetInformation,
+    onReviewSwapPreview,
     uiPriceImpactGetter,
     settings,
+    _refExactGetter,
     tokenToReceive.AMOUNT,
     tokenToSell.AMOUNT,
+    swapTokens,
     checkAllowance,
-    onReviewSwapDismiss,
-    _refExactGetter
+    onReviewSwapDismiss
   ]);
 
   const isEstimatedToken = useMemo(() => {
