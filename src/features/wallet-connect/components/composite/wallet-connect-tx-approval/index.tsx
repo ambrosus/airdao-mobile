@@ -74,6 +74,7 @@ export const WalletConnectTxApproval = () => {
           response: response as JsonRpcResponse
         });
       } catch (error) {
+        onDismissWalletConnectBottomSheet();
         throw error;
       }
 
@@ -101,6 +102,7 @@ export const WalletConnectTxApproval = () => {
           response: response as JsonRpcResponse
         });
       } catch (error) {
+        onDismissWalletConnectBottomSheet();
         throw error;
       }
     }
