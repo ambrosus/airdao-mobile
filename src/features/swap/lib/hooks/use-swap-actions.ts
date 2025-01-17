@@ -98,8 +98,8 @@ export function useSwapActions() {
     uiBottomSheetInformation
   ]);
 
-  const swapTokens = useCallback(
-    async (estimateGas = false) => {
+  const swapCallback = useCallback(
+    async ({ estimateGas = false }: { estimateGas?: boolean }) => {
       const signer = createSigner(await _extractPrivateKey());
       const { slippageTolerance, deadline, multihops } = settings.current;
       const _slippage = +slippageTolerance;
@@ -193,6 +193,6 @@ export function useSwapActions() {
   return {
     checkAllowance,
     setAllowance,
-    swapTokens
+    swapCallback
   };
 }

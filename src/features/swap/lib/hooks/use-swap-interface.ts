@@ -26,7 +26,7 @@ export function useSwapInterface() {
     useSwapBottomSheetHandler();
 
   const { uiPriceImpactGetter } = useSwapPriceImpact();
-  const { checkAllowance, swapTokens } = useSwapActions();
+  const { checkAllowance, swapCallback } = useSwapActions();
   const { settings } = useSwapSettings();
   const { tokenToSell, tokenToReceive } = useSwapTokens();
   const { hasWrapNativeToken, isEmptyAmount } = useSwapHelpers();
@@ -61,16 +61,9 @@ export function useSwapInterface() {
         )
       );
 
-      const liquidityProviderFee = await swapTokens(true);
+      const liquidityProviderFee = await swapCallback({ estimateGas: true });
       const allowance = await checkAllowance();
 
-      // if (
-      //   typeof priceImpact === 'number' &&
-      //   typeof liquidityProviderFee === 'string' &&
-      //   bnMinimumReceivedAmount &&
-      //   bnMaximumReceivedAmount
-      // ) {
-      // Amount that could be received as minimum or maximum value
       const receivedAmountOut = SwapStringUtils.transformMinAmountValue(
         bnMinimumReceivedAmount
       );
@@ -114,7 +107,7 @@ export function useSwapInterface() {
     _refExactGetter,
     tokenToReceive.AMOUNT,
     tokenToSell.AMOUNT,
-    swapTokens,
+    swapCallback,
     checkAllowance,
     onReviewSwapDismiss
   ]);
