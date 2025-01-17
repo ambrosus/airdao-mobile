@@ -30,7 +30,7 @@ export const SubmitSwapActions = () => {
     setIsIncreasingAllowance
   } = useSwapContextSelector();
 
-  const { setAllowance, swapTokens } = useSwapActions();
+  const { setAllowance, swapCallback } = useSwapActions();
   const { onChangeBottomSheetSwapStatus } = useSwapBottomSheetHandler();
 
   const onCompleteMultiStepSwap = useCallback(async () => {
@@ -44,7 +44,7 @@ export const SubmitSwapActions = () => {
     } else {
       try {
         setIsProcessingSwap(true);
-        const tx = await swapTokens();
+        const tx = await swapCallback({ estimateGas: false });
 
         if (!tx) {
           onChangeBottomSheetSwapStatus(BottomSheetStatus.ERROR);
@@ -73,7 +73,7 @@ export const SubmitSwapActions = () => {
     setAllowance,
     setIsIncreasingAllowance,
     setIsProcessingSwap,
-    swapTokens,
+    swapCallback,
     uiBottomSheetInformation.allowance
   ]);
 
