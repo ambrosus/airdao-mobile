@@ -7,65 +7,17 @@ import {
 } from '@features/swap/types/swap';
 import {
   isNativeWrapped,
-  minimumAmountOut,
   addresses,
   wrapNativeAddress,
   getTimestampDeadline,
   dexValidators,
-  maximumAmountIn
+  swapArgsCallback,
+  swapPayableArgsCallback
 } from '@features/swap/utils';
 import {
   createAMBProvider,
   createRouterContract
 } from '@features/swap/utils/contracts/instances';
-
-async function swapArgsCallback(
-  amountIn: string,
-  amountOut: string,
-  path: string[],
-  address: string,
-  timestamp: number,
-  slippageTolerance: number,
-  tradeIn: boolean
-) {
-  const bnAmountIn = ethers.utils.parseEther(amountIn);
-  const bnAmountOut = ethers.utils.parseEther(amountOut);
-
-  const amountOutMin = minimumAmountOut(`${slippageTolerance}%`, bnAmountOut);
-  const amountOutMax = maximumAmountIn(`${slippageTolerance}%`, bnAmountIn);
-
-  return [
-    tradeIn ? bnAmountIn : bnAmountOut,
-    tradeIn ? amountOutMin : amountOutMax,
-    path,
-    address,
-    timestamp
-  ];
-}
-
-async function swapPayableArgsCallback(
-  amountIn: string,
-  amountOut: string,
-  path: string[],
-  address: string,
-  timestamp: number,
-  slippageTolerance: number,
-  tradeIn: boolean
-) {
-  const bnAmountIn = ethers.utils.parseEther(amountIn);
-  const bnAmountOut = ethers.utils.parseEther(amountOut);
-
-  const amountOutMin = minimumAmountOut(`${slippageTolerance}%`, bnAmountOut);
-  const amountOutMax = maximumAmountIn(`${slippageTolerance}%`, bnAmountIn);
-
-  return [
-    tradeIn ? amountOutMin : amountOutMax,
-    path,
-    address,
-    timestamp,
-    { value: tradeIn ? bnAmountIn : bnAmountOut }
-  ];
-}
 
 export async function getAmountsOut({
   amountToSell,

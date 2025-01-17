@@ -8,3 +8,4 @@ export * from './token-plate';
 export * from './timestamp';
 export { dexValidators } from './validators';
 export { SwapStringUtils } from './transformers';
+export * from './swap-args.callback';
