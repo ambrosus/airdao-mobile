@@ -141,6 +141,7 @@ export function useSwapActions() {
     if (isStartsWithETH) {
       return await swapExactETHForTokens(
         tokenToSell.AMOUNT,
+        tokenToReceive.AMOUNT,
         wrappedPathWithoutMultihops,
         signer,
         _slippage,
@@ -152,6 +153,7 @@ export function useSwapActions() {
     if (isEndsWithETH) {
       return await swapExactTokensForETH(
         tokenToSell.AMOUNT,
+        tokenToReceive.AMOUNT,
         wrappedPathWithoutMultihops,
         signer,
         _slippage,
