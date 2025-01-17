@@ -14,9 +14,13 @@ import { styles } from './styles';
 
 interface WalletSessionItemProps {
   connection: SessionTypes.Struct;
+  index: number;
 }
 
-export const WalletSessionItem = ({ connection }: WalletSessionItemProps) => {
+export const WalletSessionItem = ({
+  connection,
+  index
+}: WalletSessionItemProps) => {
   const { t } = useTranslation();
   const { activeSessions, setActiveSessions } =
     useWalletConnectContextSelector();
@@ -43,15 +47,21 @@ export const WalletSessionItem = ({ connection }: WalletSessionItemProps) => {
 
       setActiveSessions(filteredPairings);
     } catch (error) {
+      setActiveSessions((prevState) =>
+        prevState.filter((_, sessionIndex) => sessionIndex !== index)
+      );
+
+      onDismissActiveSessionBottomSheet();
       throw error;
     } finally {
-      setDisconnecting(true);
+      setDisconnecting(false);
     }
   }, [
+    index,
     activeSessions,
     connection.topic,
-    onDismissActiveSessionBottomSheet,
-    setActiveSessions
+    setActiveSessions,
+    onDismissActiveSessionBottomSheet
   ]);
 
   return (
