@@ -16,8 +16,8 @@ export const WalletSessionsList = () => {
 
   const renderWalletSessionListItem = useCallback(
     (args: ListRenderItemInfo<SessionTypes.Struct>) => {
-      const { item: connection } = args;
-      return <WalletSessionItem connection={connection} />;
+      const { item: connection, index } = args;
+      return <WalletSessionItem connection={connection} index={index} />;
     },
     []
   );

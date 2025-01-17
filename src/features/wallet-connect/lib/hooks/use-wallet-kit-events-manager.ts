@@ -60,10 +60,12 @@ export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
   );
 
   const onSessionDelete = useCallback(
-    (event: SessionDeleteEvent) =>
+    (event: SessionDeleteEvent) => {
+      AirDAOEventDispatcher.dispatch(AirDAOEventType.CloseAllModals, null);
       setActiveSessions((prevState) =>
         prevState.filter((session) => session.topic !== event.topic)
-      ),
+      );
+    },
     [setActiveSessions]
   );
 

@@ -12,12 +12,13 @@ import { AddWalletToList, AddWalletToListProps } from '../AddWalletToList';
 
 interface BottomSheetAddWalletToListProps extends AddWalletToListProps {
   title: string;
+  onClose: () => void;
 }
 
 export const BottomSheetAddWalletToList = forwardRef<
   BottomSheetRef,
   BottomSheetAddWalletToListProps
->(({ title, ...addWalletToListProps }, ref) => {
+>(({ title, onClose, ...addWalletToListProps }, ref) => {
   const { t } = useTranslation();
 
   const createGroupRef = useRef<BottomSheetRef>(null);
@@ -35,6 +36,7 @@ export const BottomSheetAddWalletToList = forwardRef<
 
   return (
     <BottomSheet
+      onClose={onClose}
       ref={ref}
       height={DEVICE_HEIGHT * 0.58}
       swiperIconVisible={true}

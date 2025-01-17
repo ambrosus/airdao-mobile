@@ -7,41 +7,17 @@ import {
 } from '@features/swap/types/swap';
 import {
   isNativeWrapped,
-  minimumAmountOut,
   addresses,
   wrapNativeAddress,
   getTimestampDeadline,
   dexValidators,
-  maximumAmountIn
+  swapArgsCallback,
+  swapPayableArgsCallback
 } from '@features/swap/utils';
 import {
   createAMBProvider,
   createRouterContract
 } from '@features/swap/utils/contracts/instances';
-
-async function swapArgsCallback(
-  amountIn: string,
-  amountOut: string,
-  path: string[],
-  address: string,
-  timestamp: number,
-  slippageTolerance: number,
-  tradeIn: boolean
-) {
-  const bnAmountIn = ethers.utils.parseEther(amountIn);
-  const bnAmountOut = ethers.utils.parseEther(amountOut);
-
-  const amountOutMin = minimumAmountOut(`${slippageTolerance}%`, bnAmountOut);
-  const amountOutMax = maximumAmountIn(`${slippageTolerance}%`, bnAmountIn);
-
-  return [
-    tradeIn ? bnAmountIn : bnAmountOut,
-    tradeIn ? amountOutMin : amountOutMax,
-    path,
-    address,
-    timestamp
-  ];
-}
 
 export async function getAmountsOut({
   amountToSell,
@@ -84,27 +60,36 @@ export async function getAmountsIn({
 }
 
 export async function swapExactETHForTokens(
-  amountToSell: string,
+  amountIn: string,
+  amountOut: string,
   path: string[],
   signer: Wallet,
   slippageTolerance: number,
   deadline: string,
-  tradeIn: boolean
+  tradeIn: boolean,
+  estimateGas: boolean
 ) {
   try {
     const routerContract = createRouterContract(signer, TRADE);
-    const bnAmountToSell = ethers.utils.parseEther(amountToSell);
     const timestampDeadline = getTimestampDeadline(deadline);
 
-    const [, bnAmountToReceive] = await getAmountsOut({
-      amountToSell: bnAmountToSell,
-      path
-    });
-
-    const bnMinimumReceivedAmount = minimumAmountOut(
-      `${slippageTolerance}%`,
-      bnAmountToReceive
+    const args = await swapPayableArgsCallback(
+      amountIn,
+      amountOut,
+      wrapNativeAddress(path),
+      signer.address,
+      timestampDeadline,
+      slippageTolerance,
+      tradeIn
     );
+
+    if (estimateGas) {
+      return await routerContract.estimateGas[
+        tradeIn
+          ? 'swapExactAMBForTokensSupportingFeeOnTransferTokens'
+          : 'swapAMBForExactTokens'
+      ](...args);
+    }
 
     const callSwapMethod =
       routerContract[
@@ -113,14 +98,7 @@ export async function swapExactETHForTokens(
           : 'swapAMBForExactTokens'
       ];
 
-    const tx = await callSwapMethod(
-      bnMinimumReceivedAmount,
-      path,
-      signer.address,
-      timestampDeadline,
-      { value: bnAmountToSell }
-    );
-
+    const tx = await callSwapMethod(...args);
     return await tx.wait();
   } catch (error) {
     throw error;
@@ -134,30 +112,64 @@ export async function swapMultiHopExactTokensForTokens(
   signer: Wallet,
   slippageTolerance: number,
   deadline: string,
-  tradeIn: boolean
+  tradeIn: boolean,
+  estimateGas: boolean
 ) {
   try {
     const routerContract = createRouterContract(signer, TRADE);
-    const bnAmountToSell = ethers.utils.parseEther(amountIn);
     const timestampDeadline = getTimestampDeadline(deadline);
-
-    const amounts = await getAmountsOut({
-      amountToSell: bnAmountToSell,
-      path
-    });
-
-    const bnAmountToReceive = amounts[amounts.length - 1];
-    const bnMinimumReceivedAmount = minimumAmountOut(
-      `${slippageTolerance}%`,
-      bnAmountToReceive
-    );
 
     const isFromETH = path[0] === addresses.AMB;
     const isToETH = path[path.length - 1] === addresses.AMB;
 
+    if (estimateGas) {
+      let args;
+      if (isFromETH) {
+        args = await swapPayableArgsCallback(
+          amountIn,
+          amountOut,
+          wrapNativeAddress(path),
+          signer.address,
+          timestampDeadline,
+          slippageTolerance,
+          tradeIn
+        );
+      } else {
+        args = await swapArgsCallback(
+          amountIn,
+          amountOut,
+          path,
+          signer.address,
+          timestampDeadline,
+          slippageTolerance,
+          tradeIn
+        );
+      }
+
+      return await routerContract.estimateGas[
+        isFromETH
+          ? tradeIn
+            ? 'swapExactAMBForTokensSupportingFeeOnTransferTokens'
+            : 'swapAMBForExactTokens'
+          : tradeIn
+          ? 'swapExactTokensForTokensSupportingFeeOnTransferTokens'
+          : 'swapTokensForExactTokens'
+      ](...args);
+    }
+
     let tx;
 
     if (isFromETH) {
+      const args = await swapPayableArgsCallback(
+        amountIn,
+        amountOut,
+        wrapNativeAddress(path),
+        signer.address,
+        timestampDeadline,
+        slippageTolerance,
+        tradeIn
+      );
+
       const callSwapMethod =
         routerContract[
           tradeIn
@@ -165,14 +177,18 @@ export async function swapMultiHopExactTokensForTokens(
             : 'swapAMBForExactTokens'
         ];
 
-      tx = await callSwapMethod(
-        bnMinimumReceivedAmount,
-        wrapNativeAddress(path),
+      tx = await callSwapMethod(...args);
+    } else if (isToETH) {
+      const args = await swapArgsCallback(
+        amountIn,
+        amountOut,
+        path,
         signer.address,
         timestampDeadline,
-        { value: bnAmountToSell }
+        slippageTolerance,
+        tradeIn
       );
-    } else if (isToETH) {
+
       const callSwapMethod =
         routerContract[
           tradeIn
@@ -180,13 +196,7 @@ export async function swapMultiHopExactTokensForTokens(
             : 'swapTokensForExactAMB'
         ];
 
-      tx = await callSwapMethod(
-        bnAmountToSell,
-        bnMinimumReceivedAmount,
-        wrapNativeAddress(path),
-        signer.address,
-        timestampDeadline
-      );
+      tx = await callSwapMethod(...args);
     } else {
       const callSwapMethod =
         routerContract[
@@ -198,7 +208,7 @@ export async function swapMultiHopExactTokensForTokens(
       const args = await swapArgsCallback(
         amountIn,
         amountOut,
-        wrapNativeAddress(path),
+        path,
         signer.address,
         timestampDeadline,
         slippageTolerance,
@@ -221,11 +231,30 @@ export async function swapExactTokensForTokens(
   signer: Wallet,
   slippageTolerance: number,
   deadline: string,
-  tradeIn: boolean
+  tradeIn: boolean,
+  estimateGas: boolean
 ) {
   try {
     const routerContract = createRouterContract(signer, TRADE);
     const timestampDeadline = getTimestampDeadline(deadline);
+
+    if (estimateGas) {
+      const args = await swapArgsCallback(
+        amountIn,
+        amountOut,
+        path,
+        signer.address,
+        timestampDeadline,
+        slippageTolerance,
+        tradeIn
+      );
+
+      return await routerContract.estimateGas[
+        tradeIn
+          ? 'swapExactTokensForTokensSupportingFeeOnTransferTokens'
+          : 'swapTokensForExactTokens'
+      ](...args);
+    }
 
     const callSwapMethod =
       routerContract[
@@ -253,26 +282,45 @@ export async function swapExactTokensForTokens(
 }
 
 export async function swapExactTokensForETH(
-  amountToSell: string,
+  amountIn: string,
+  amountOut: string,
   path: string[],
   signer: Wallet,
   slippageTolerance: number,
   deadline: string,
-  tradeIn: boolean
+  tradeIn: boolean,
+  estimateGas: boolean
 ) {
   try {
     const routerContract = createRouterContract(signer, TRADE);
-    const bnAmountToSell = ethers.utils.parseEther(amountToSell);
     const timestampDeadline = getTimestampDeadline(deadline);
 
-    const [, bnAmountToReceive] = await getAmountsOut({
-      amountToSell: bnAmountToSell,
-      path
-    });
+    if (estimateGas) {
+      const args = await swapArgsCallback(
+        amountIn,
+        amountOut,
+        path,
+        signer.address,
+        timestampDeadline,
+        slippageTolerance,
+        tradeIn
+      );
 
-    const bnMinimumReceivedAmount = minimumAmountOut(
-      `${slippageTolerance}%`,
-      bnAmountToReceive
+      return await routerContract.estimateGas[
+        tradeIn
+          ? 'swapExactTokensForAMBSupportingFeeOnTransferTokens'
+          : 'swapTokensForExactAMB'
+      ](...args);
+    }
+
+    const args = await swapArgsCallback(
+      amountIn,
+      amountOut,
+      path,
+      signer.address,
+      timestampDeadline,
+      slippageTolerance,
+      tradeIn
     );
 
     const callSwapMethod =
@@ -282,13 +330,7 @@ export async function swapExactTokensForETH(
           : 'swapTokensForExactAMB'
       ];
 
-    const tx = await callSwapMethod(
-      bnAmountToSell,
-      bnMinimumReceivedAmount,
-      path,
-      signer.address,
-      timestampDeadline
-    );
+    const tx = await callSwapMethod(...args);
 
     return await tx.wait();
   } catch (error) {

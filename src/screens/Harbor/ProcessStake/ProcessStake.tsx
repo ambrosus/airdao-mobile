@@ -173,8 +173,8 @@ export const ProcessStake = () => {
           <Spacer value={scale(16)} />
           <PrimaryButton disabled={buttonDisabled} onPress={onReviewStake}>
             <Text
-              fontFamily="Inter_700Bold"
-              fontSize={scale(16)}
+              fontFamily="Inter_500Medium"
+              fontSize={scale(14)}
               color={buttonDisabled ? COLORS.neutral500 : COLORS.neutral0}
             >
               {t('button.confirm')}

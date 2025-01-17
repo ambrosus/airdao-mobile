@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
+import { DEVICE_HEIGHT } from '@constants/variables';
 import { moderateScale, scale } from '@utils';
 
 export const styles = StyleSheet.create({
@@ -23,5 +24,12 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.brand100,
     height: moderateScale(36),
     width: moderateScale(36)
+  },
+  stub: {
+    width: '100%',
+    height: DEVICE_HEIGHT * 0.5,
+    backgroundColor: COLORS.neutral0,
+    position: 'absolute',
+    bottom: 0
   }
 });
