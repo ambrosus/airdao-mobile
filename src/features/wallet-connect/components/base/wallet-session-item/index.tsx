@@ -13,13 +13,13 @@ import { walletKit } from '@features/wallet-connect/utils';
 import { styles } from './styles';
 
 interface WalletSessionItemProps {
-  connection: SessionTypes.Struct;
   index: number;
+  connection: SessionTypes.Struct;
 }
 
 export const WalletSessionItem = ({
-  connection,
-  index
+  index,
+  connection
 }: WalletSessionItemProps) => {
   const { t } = useTranslation();
   const { activeSessions, setActiveSessions } =
