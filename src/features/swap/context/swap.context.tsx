@@ -35,6 +35,7 @@ export const SwapContext = () => {
   const bottomSheetPreviewSwapRef = useRef<BottomSheetRef>(null);
   const isExactInRef = useRef<boolean>(true);
   const allPairsRef = useRef<SelectedPairsState>([]);
+  const [isExecutingPrice, setIsExecutingPrice] = useState(false);
 
   const [bottomSheetSwapStatus, setBottomSheetSwapStatus] =
     useState<BottomSheetStatus>(BottomSheetStatus.PREVIEW);
@@ -132,7 +133,9 @@ export const SwapContext = () => {
     setBalancesLoading,
     balancesLoading,
     setBottomSheetSwapStatus,
-    bottomSheetSwapStatus
+    bottomSheetSwapStatus,
+    isExecutingPrice,
+    setIsExecutingPrice
   };
 };
 
