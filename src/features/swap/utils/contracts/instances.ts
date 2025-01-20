@@ -5,7 +5,10 @@ import { FACTORY_ABI } from '@features/swap/lib/abi';
 type ProviderOrSigner = ethers.providers.JsonRpcProvider | ethers.Signer;
 
 export function createAMBProvider() {
-  return new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
+  return new ethers.providers.JsonRpcProvider(
+    Config.NETWORK_URL,
+    Config.CHAIN_ID
+  );
 }
 
 export function createSigner(
