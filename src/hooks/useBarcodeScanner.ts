@@ -112,8 +112,8 @@ export function useBarcodeScanner() {
     () => ({
       flex: 1,
       position: 'relative',
-      marginTop: imagePadding,
-      marginBottom: imagePadding
+      paddingTop: imagePadding,
+      paddingBottom: imagePadding
     }),
     [imagePadding]
   );
