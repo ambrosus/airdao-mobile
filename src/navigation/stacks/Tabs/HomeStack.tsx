@@ -10,6 +10,7 @@ import { AMBMarket } from '@screens/AMBMarket';
 import { AssetScreen } from '@screens/Asset';
 import { Bridge, BridgeTransferError } from '@screens/Bridge';
 import { BridgeHistory } from '@screens/BridgeHistory';
+import { BrowserScreen } from '@screens/Browser';
 import { KosmosOrderList } from '@screens/KosmosOrderList';
 import { NFTScreen } from '@screens/NFTScreen';
 import { Notifications } from '@screens/Notifications';
@@ -65,6 +66,7 @@ export const HomeStack = () => {
         <Stack.Screen name="KosmosScreen" component={KosmosOrderList} />
         {/* HARBOR ROUTES */}
         <Stack.Screen name="Harbor" component={HarborStacks} />
+        <Stack.Screen name="BrowserScreen" component={BrowserScreen} />
 
         {getCommonStack(Stack as any)}
       </Stack.Navigator>

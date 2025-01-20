@@ -3,7 +3,12 @@ import { CustomAppEvents } from '@lib/firebaseEventAnalytics';
 
 type AvailableProductsPath = keyof Pick<
   HomeParamsList,
-  'SwapScreen' | 'Bridge' | 'StakingPools' | 'KosmosScreen' | 'Harbor'
+  | 'SwapScreen'
+  | 'Bridge'
+  | 'StakingPools'
+  | 'KosmosScreen'
+  | 'Harbor'
+  | 'BrowserScreen'
 >;
 
 export type Product = {
