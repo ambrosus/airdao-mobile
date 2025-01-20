@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils';
+import { styles } from './styles';
 
 export const UseMax = () => {
   const { t } = useTranslation();
@@ -20,13 +20,3 @@ export const UseMax = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: COLORS.alphaBlack5,
-    paddingHorizontal: scale(12),
-    paddingVertical: verticalScale(6),
-    borderRadius: 1000,
-    alignSelf: 'baseline'
-  }
-});

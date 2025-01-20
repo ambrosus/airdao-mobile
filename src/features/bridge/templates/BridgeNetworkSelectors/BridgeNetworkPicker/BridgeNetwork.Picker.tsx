@@ -10,7 +10,7 @@ import { useBridgeContextData } from '@features/bridge/context';
 import { BottomSheetBridgeNetworkSelector } from '@features/bridge/templates/BottomSheetBridgeNetworkSelector';
 import { BridgeNetworkPickerProps, ParsedBridge } from '@models/Bridge';
 import { scale } from '@utils';
-import { styles } from '../../BridgeNetworkSelectors/styles';
+import { styles } from './styles';
 
 export const BridgeNetworkPicker = ({ type }: BridgeNetworkPickerProps) => {
   const isFrom = type === 'from';

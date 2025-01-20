@@ -9,6 +9,5 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(2),
     paddingTop: scale(8),
     paddingBottom: scale(16)
-  },
-  buttonWrapper: { marginTop: scale(16) }
+  }
 });

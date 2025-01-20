@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
     borderColor: COLORS.neutral900Alpha['5'],
     borderBottomWidth: 1
   },
-  shadows: { shadowColor: 'transparent' },
   centerAlign: {
     width: '100%',
     height: '60%',

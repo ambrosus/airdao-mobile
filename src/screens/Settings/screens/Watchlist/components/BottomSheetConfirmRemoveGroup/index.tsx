@@ -5,7 +5,7 @@ import { BottomSheetFloat } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useForwardedRef } from '@hooks';
 import { AccountList } from '@models';
-import { verticalScale, StringUtils } from '@utils';
+import { StringUtils } from '@utils';
 import { styles } from './styles';
 
 type Props = {
@@ -23,7 +23,7 @@ export const BottomSheetConfirmRemoveGroup = forwardRef<BottomSheetRef, Props>(
       <BottomSheetFloat
         ref={localRef}
         swiperIconVisible
-        containerStyle={{ paddingBottom: verticalScale(24) }}
+        containerStyle={styles.bottomSheetContainer}
       >
         <Text
           style={styles.text}

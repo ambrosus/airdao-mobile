@@ -7,15 +7,16 @@ import { Spacer, Text } from '@components/base';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { InfoIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
+import { DEFAULT_AMB_NETWORK } from '@features/bridge/constants';
 import { useBridgeContextData } from '@features/bridge/context';
 import { verticalScale } from '@utils';
 import { styles } from './BridgeTransferError.styles';
-import { DEFAULT_AMB_NETWORK } from '../../../features/bridge/constants';
 
 export const BridgeTransferError = ({}) => {
   const navigation = useNavigation<HomeNavigationProp>();
 
-  const { fromParams } = useBridgeContextData();
+  const { methods } = useBridgeContextData();
+  const { setFrom } = methods;
 
   const { t } = useTranslation();
 
@@ -45,7 +46,7 @@ export const BridgeTransferError = ({}) => {
       </PrimaryButton>
       <SecondaryButton
         onPress={() => {
-          fromParams.setter(DEFAULT_AMB_NETWORK);
+          setFrom(DEFAULT_AMB_NETWORK);
           navigation.navigate('HomeScreen');
         }}
         style={styles.button}

@@ -7,7 +7,8 @@ import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { BridgeTransactionPendingTemplate } from '@features/bridge/templates/BottomSheetBridgeTransactionPendingHistory/components';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
-import { scale, verticalScale } from '@utils';
+import { verticalScale } from '@utils';
+import { styles } from './styles';
 
 interface BottomSheetBridgeTransactionPendingHistoryProps {
   transaction: BridgeTransactionHistoryDTO;
@@ -38,7 +39,7 @@ export const BottomSheetBridgeTransactionPendingHistory = forwardRef<
   return (
     <BottomSheet ref={bottomSheetRef} swiperIconVisible>
       <Spacer value={verticalScale(16)} />
-      <View style={{ paddingHorizontal: scale(24) }}>
+      <View style={styles.stepWrapper}>
         <BridgeTransactionPendingTemplate
           transaction={transaction}
           liveTransactionInformation={liveTransactionInformation}

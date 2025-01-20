@@ -28,5 +28,10 @@ export const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  portfolio: {
+    paddingVertical: 16,
+    borderColor: COLORS.alphaBlack5,
+    borderBottomWidth: 1
   }
 });

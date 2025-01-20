@@ -18,6 +18,7 @@ export const DatePicker = (props: DatePickerProps): JSX.Element => {
   );
 
   return (
+    // @ts-ignore
     <CalendarPicker
       nextComponent={renderNextComponent()}
       selectedStartDate={selectedStartDate}
