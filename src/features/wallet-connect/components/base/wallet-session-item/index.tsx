@@ -47,11 +47,11 @@ export const WalletSessionItem = ({
 
       setActiveSessions(filteredPairings);
     } catch (error) {
+      onDismissActiveSessionBottomSheet();
       setActiveSessions((prevState) =>
         prevState.filter((_, sessionIndex) => sessionIndex !== index)
       );
 
-      onDismissActiveSessionBottomSheet();
       throw error;
     } finally {
       setDisconnecting(false);
