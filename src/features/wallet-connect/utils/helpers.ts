@@ -1,6 +1,7 @@
 import { ProposalTypes } from '@walletconnect/types';
 import { ethers } from 'ethers';
 import { extractChainData } from './presets';
+import { walletKit } from '../lib/wc.core';
 
 export function supportedChains(
   requiredNamespaces: ProposalTypes.RequiredNamespaces,
@@ -86,3 +87,25 @@ export function httpsParser(url: string) {
     throw new Error('Invalid URL provided.');
   }
 }
+
+export const validateAndFilterSessions = async (sessions: any[]) => {
+  const validSessions = [];
+
+  for (const session of sessions) {
+    try {
+      await walletKit.engine.signClient.ping({ topic: session.topic });
+      validSessions.push(session);
+    } catch (error) {
+      try {
+        await walletKit.engine.signClient.disconnect({
+          topic: session.topic,
+          reason: { code: 6000, message: 'Session is invalid' }
+        });
+      } catch (cleanupError) {
+        console.error('Error cleaning up invalid session:', cleanupError);
+      }
+    }
+  }
+
+  return validSessions;
+};

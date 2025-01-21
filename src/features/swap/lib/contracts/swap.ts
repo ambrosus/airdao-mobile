@@ -12,7 +12,8 @@ import {
   getTimestampDeadline,
   dexValidators,
   swapArgsCallback,
-  swapPayableArgsCallback
+  swapPayableArgsCallback,
+  wrapEstimatedGas
 } from '@features/swap/utils';
 import {
   createAMBProvider,
@@ -84,11 +85,13 @@ export async function swapExactETHForTokens(
     );
 
     if (estimateGas) {
-      return await routerContract.estimateGas[
+      return await wrapEstimatedGas(
+        routerContract,
         tradeIn
           ? 'swapExactAMBForTokensSupportingFeeOnTransferTokens'
-          : 'swapAMBForExactTokens'
-      ](...args);
+          : 'swapAMBForExactTokens',
+        args
+      );
     }
 
     const callSwapMethod =
@@ -146,15 +149,17 @@ export async function swapMultiHopExactTokensForTokens(
         );
       }
 
-      return await routerContract.estimateGas[
+      return await wrapEstimatedGas(
+        routerContract,
         isFromETH
           ? tradeIn
             ? 'swapExactAMBForTokensSupportingFeeOnTransferTokens'
             : 'swapAMBForExactTokens'
           : tradeIn
           ? 'swapExactTokensForTokensSupportingFeeOnTransferTokens'
-          : 'swapTokensForExactTokens'
-      ](...args);
+          : 'swapTokensForExactTokens',
+        args
+      );
     }
 
     let tx;
@@ -249,11 +254,13 @@ export async function swapExactTokensForTokens(
         tradeIn
       );
 
-      return await routerContract.estimateGas[
+      return await wrapEstimatedGas(
+        routerContract,
         tradeIn
           ? 'swapExactTokensForTokensSupportingFeeOnTransferTokens'
-          : 'swapTokensForExactTokens'
-      ](...args);
+          : 'swapTokensForExactTokens',
+        args
+      );
     }
 
     const callSwapMethod =
@@ -306,11 +313,13 @@ export async function swapExactTokensForETH(
         tradeIn
       );
 
-      return await routerContract.estimateGas[
+      return await wrapEstimatedGas(
+        routerContract,
         tradeIn
           ? 'swapExactTokensForAMBSupportingFeeOnTransferTokens'
-          : 'swapTokensForExactAMB'
-      ](...args);
+          : 'swapTokensForExactAMB',
+        args
+      );
     }
 
     const args = await swapArgsCallback(
