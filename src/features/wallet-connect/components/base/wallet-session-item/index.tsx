@@ -41,10 +41,7 @@ export const WalletSessionItem = ({
         (pairing) => pairing.topic !== connection.topic
       );
 
-      if (filteredPairings.length === 0) {
-        onDismissActiveSessionBottomSheet();
-      }
-
+      onDismissActiveSessionBottomSheet();
       setActiveSessions(filteredPairings);
     } catch (error) {
       onDismissActiveSessionBottomSheet();
