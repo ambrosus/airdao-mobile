@@ -93,7 +93,6 @@ export function useSwapInterface() {
       setTimeout(() => {
         onReviewSwapPreview();
       }, 700);
-      // }
     } catch (error) {
       onReviewSwapDismiss();
       throw error;
