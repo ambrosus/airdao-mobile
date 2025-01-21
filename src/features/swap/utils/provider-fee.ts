@@ -35,3 +35,15 @@ export function calculateAllowanceWithProviderFee(amountToSell: string) {
 
   return Number(formattedResult).toFixed(18);
 }
+
+export async function wrapEstimatedGas(
+  routerContract: ethers.Contract,
+  methodName: string,
+  args: any[]
+) {
+  try {
+    return await routerContract.estimateGas[methodName](...args);
+  } catch (error) {
+    return ethers.BigNumber.from(0);
+  }
+}
