@@ -13,6 +13,7 @@ export function useSwapFieldsHandler() {
     latestSelectedTokens,
     latestSelectedTokensAmount,
     setIsExactIn,
+    setIsExecutingPrice,
     isExactInRef
   } = useSwapContextSelector();
 
@@ -20,6 +21,7 @@ export function useSwapFieldsHandler() {
   const { isEmptyAmount } = useSwapHelpers();
 
   const updateReceivedTokensOutput = useCallback(async () => {
+    setIsExecutingPrice(true);
     const isExactIn = isExactInRef.current;
     const oppositeKey = isExactIn ? FIELD.TOKEN_B : FIELD.TOKEN_A;
     const { TOKEN_A, TOKEN_B } = latestSelectedTokens.current;
@@ -32,27 +34,35 @@ export function useSwapFieldsHandler() {
     const amountToSell = isExactIn ? AMOUNT_A : AMOUNT_B;
 
     if (isEmptyAmount(amountToSell)) return;
+    try {
+      const bnAmountToReceive = await bestTradeCurrency(amountToSell, path);
 
-    const bnAmountToReceive = await bestTradeCurrency(amountToSell, path);
+      const normalizedAmount = SwapStringUtils.transformAmountValue(
+        formatEther(bnAmountToReceive?._hex)
+      );
 
-    const normalizedAmount = SwapStringUtils.transformAmountValue(
-      formatEther(bnAmountToReceive?._hex)
-    );
-
-    setSelectedTokensAmount((prevSelectedTokensAmounts) => {
-      const currentAmount =
-        prevSelectedTokensAmounts[
-          isExactInRef.current ? FIELD.TOKEN_A : FIELD.TOKEN_B
-        ];
-      if (!isEmptyAmount(currentAmount)) {
-        return {
-          ...latestSelectedTokensAmount.current,
-          [oppositeKey]: isEmptyAmount(normalizedAmount) ? '' : normalizedAmount
-        };
-      }
-      return prevSelectedTokensAmounts;
-    });
+      setSelectedTokensAmount((prevSelectedTokensAmounts) => {
+        const currentAmount =
+          prevSelectedTokensAmounts[
+            isExactInRef.current ? FIELD.TOKEN_A : FIELD.TOKEN_B
+          ];
+        if (!isEmptyAmount(currentAmount)) {
+          return {
+            ...latestSelectedTokensAmount.current,
+            [oppositeKey]: isEmptyAmount(normalizedAmount)
+              ? ''
+              : normalizedAmount
+          };
+        }
+        return prevSelectedTokensAmounts;
+      });
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsExecutingPrice(false);
+    }
   }, [
+    setIsExecutingPrice,
     isExactInRef,
     latestSelectedTokens,
     latestSelectedTokensAmount,

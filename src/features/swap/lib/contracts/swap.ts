@@ -138,7 +138,7 @@ export async function swapMultiHopExactTokensForTokens(
         args = await swapArgsCallback(
           amountIn,
           amountOut,
-          path,
+          wrapNativeAddress(path),
           signer.address,
           timestampDeadline,
           slippageTolerance,
@@ -182,7 +182,7 @@ export async function swapMultiHopExactTokensForTokens(
       const args = await swapArgsCallback(
         amountIn,
         amountOut,
-        path,
+        wrapNativeAddress(path),
         signer.address,
         timestampDeadline,
         slippageTolerance,
@@ -208,7 +208,7 @@ export async function swapMultiHopExactTokensForTokens(
       const args = await swapArgsCallback(
         amountIn,
         amountOut,
-        path,
+        wrapNativeAddress(path),
         signer.address,
         timestampDeadline,
         slippageTolerance,

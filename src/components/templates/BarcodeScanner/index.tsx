@@ -7,6 +7,7 @@ import { Header } from '@components/composite';
 import { CloseIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { useBarcodeScanner } from '@hooks';
+import { isSmallScreen } from '@utils';
 import { ScanSquare } from './components/ScanSquare';
 import { styles } from './styles';
 
@@ -113,7 +114,7 @@ export const BarcodeScanner = ({
             </Button>
           </View>
         )}
-        <ScanSquare />
+        <ScanSquare height={isSmallScreen ? '80%' : '75%'} />
       </Camera>
     </>
   );
