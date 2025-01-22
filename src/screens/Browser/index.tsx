@@ -8,7 +8,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, ViewStyle, Alert } from 'react-native';
 import { WebView, WebViewMessageEvent } from '@metamask/react-native-webview';
 import { ethers } from 'ethers';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -24,8 +24,8 @@ import { INJECTED_PROVIDER_JS } from '@features/browser/lib';
 import { createAMBProvider } from '@features/swap/utils/contracts/instances';
 
 const SOURCE = {
-  // uri: 'https://7z2dkc.csb.app/'
-  uri: 'https://metamask.github.io/test-dapp/'
+  uri: 'https://airquest.xyz/'
+  // uri: 'https://metamask.github.io/test-dapp/'
 };
 
 interface JsonRpcRequest {
@@ -77,16 +77,9 @@ export const BrowserScreen = () => {
     }
   }, [extractWallet]);
 
-  useEffect(() => {
-    getCurrentAddress().then((address) => {
-      if (address) {
-        setConnectedAddress(address);
-      }
-    });
-  }, [getCurrentAddress]);
-
   const handleWebViewMessage = async (event: WebViewMessageEvent) => {
     try {
+      logger(event);
       const request: JsonRpcRequest = JSON.parse(event.nativeEvent.data);
       const { id, method, params } = request;
 
@@ -110,12 +103,34 @@ export const BrowserScreen = () => {
             break;
 
           case 'eth_requestAccounts': {
+            console.log('eth_requestAccounts called');
             const address = await getCurrentAddress();
             if (!address) {
               throw new Error('No account available');
             }
             response.result = [address];
             setConnectedAddress(address);
+
+            const updateScript = `
+              (function() {
+                try {
+                  if (window.ethereum) {
+                    window.ethereum.selectedAddress = '${address}';
+                    window.ethereum.isConnected = () => true;
+                    window.ethereum.chainId = '${AMB_CHAIN_ID_HEX}';
+                    
+                    // Emit proper events
+                    window.ethereum.emit('connect', { chainId: '${AMB_CHAIN_ID_HEX}' });
+                    window.ethereum.emit('accountsChanged', ['${address}']);
+                    window.ethereum.emit('chainChanged', '${AMB_CHAIN_ID_HEX}');
+                  }
+                } catch(e) {
+                  console.error('Injection error:', e);
+                }
+                return true;
+              })();
+            `;
+            webViewRef.current?.injectJavaScript(updateScript);
             break;
           }
 
@@ -250,13 +265,100 @@ export const BrowserScreen = () => {
             response.result = await handleSignTransaction(params[0]);
             break;
 
-          case 'personal_sign':
-            response.result = await handlePersonalSign(params);
-            break;
+          case 'personal_sign': {
+            try {
+              console.log('Personal sign request:', params);
+              const [message, address] = params;
 
-          case 'eth_sign':
-            response.result = await handleEthSign(params);
+              // Verify address matches
+              if (address.toLowerCase() !== connectedAddress?.toLowerCase()) {
+                throw new Error('Address mismatch');
+              }
+
+              // Create a promise that resolves when user confirms
+              const userConfirmation = new Promise((resolve, reject) => {
+                Alert.alert(
+                  'Sign Message',
+                  `Do you want to sign this message?\n\nMessage: ${message}\n\nAddress: ${address}`,
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => reject(new Error('User rejected signing')),
+                      style: 'cancel'
+                    },
+                    {
+                      text: 'Sign',
+                      onPress: () => resolve(true),
+                      style: 'default'
+                    }
+                  ],
+                  { cancelable: false }
+                );
+              });
+
+              // Wait for user confirmation before signing
+              await userConfirmation;
+
+              const wallet = await extractWallet();
+              const signature = await wallet.signMessage(
+                ethers.utils.isHexString(message)
+                  ? ethers.utils.arrayify(message)
+                  : message
+              );
+
+              console.log('Signature generated:', signature);
+              response.result = signature;
+            } catch (error) {
+              console.error('Personal sign error:', error);
+              throw error;
+            }
             break;
+          }
+
+          case 'eth_sign': {
+            try {
+              const [address, message] = params;
+
+              // Verify address matches
+              if (address.toLowerCase() !== connectedAddress?.toLowerCase()) {
+                throw new Error('Address mismatch');
+              }
+
+              // Create a promise that resolves when user confirms
+              const userConfirmation = new Promise((resolve, reject) => {
+                Alert.alert(
+                  'Sign Message',
+                  `Do you want to sign this message?\n\nMessage: ${message}\n\nAddress: ${address}`,
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => reject(new Error('User rejected signing')),
+                      style: 'cancel'
+                    },
+                    {
+                      text: 'Sign',
+                      onPress: () => resolve(true),
+                      style: 'default'
+                    }
+                  ],
+                  { cancelable: false }
+                );
+              });
+
+              // Wait for user confirmation before signing
+              await userConfirmation;
+
+              const wallet = await extractWallet();
+              const signature = await wallet.signMessage(message);
+
+              console.log('Signature generated:', signature);
+              response.result = signature;
+            } catch (error) {
+              console.error('Eth sign error:', error);
+              throw error;
+            }
+            break;
+          }
 
           case 'wallet_switchEthereumChain':
             response.result = await handleSwitchChain(params[0]);
@@ -270,6 +372,66 @@ export const BrowserScreen = () => {
             response.result = await handleGetBalance(params[0], params[1]);
             break;
 
+          case 'eth_signTypedData_v4':
+          case 'eth_signTypedData': {
+            try {
+              console.log('Sign typed data request:', params);
+              const [address, typedData] = params;
+
+              // Verify address matches
+              if (address.toLowerCase() !== connectedAddress?.toLowerCase()) {
+                throw new Error('Address mismatch');
+              }
+
+              const data =
+                typeof typedData === 'string'
+                  ? JSON.parse(typedData)
+                  : typedData;
+
+              // Create a promise that resolves when user confirms
+              const userConfirmation = new Promise((resolve, reject) => {
+                Alert.alert(
+                  'Sign Typed Data',
+                  `Do you want to sign this data?\n\nFrom: ${address}\n\nData: ${JSON.stringify(
+                    data,
+                    null,
+                    2
+                  )}`,
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => reject(new Error('User rejected signing')),
+                      style: 'cancel'
+                    },
+                    {
+                      text: 'Sign',
+                      onPress: () => resolve(true),
+                      style: 'default'
+                    }
+                  ],
+                  { cancelable: false }
+                );
+              });
+
+              // Wait for user confirmation before signing
+              await userConfirmation;
+
+              const wallet = await extractWallet();
+              const signature = await wallet._signTypedData(
+                data.domain,
+                data.types,
+                data.message
+              );
+
+              console.log('Signature generated:', signature);
+              response.result = signature;
+            } catch (error) {
+              console.error('Failed to sign typed data:', error);
+              throw error;
+            }
+            break;
+          }
+
           default:
             response.error = {
               code: 4200,
@@ -282,13 +444,12 @@ export const BrowserScreen = () => {
         requestsInProgress.current.delete(id);
       }
     } catch (error) {
-      console.error('Failed to handle WebView message:', error);
       sendResponse({
-        id: request?.id || -1,
+        id: -1,
         jsonrpc: '2.0',
         error: {
           code: 4001,
-          message: error.message || 'Unknown error occurred'
+          message: (error as Error).message || 'Unknown error occurred'
         }
       });
     }
@@ -296,7 +457,6 @@ export const BrowserScreen = () => {
 
   // Handler implementations
   const handleChainIdRequest = async () => {
-    // Get current chain ID in hex format
     return `0x${Number(AMB_CHAIN_ID_DEC).toString(16)}`;
   };
 
@@ -312,20 +472,6 @@ export const BrowserScreen = () => {
     const wallet = await extractWallet();
     const signedTx = await wallet.signTransaction(txParams);
     return signedTx;
-  };
-
-  const handlePersonalSign = async ([message, address, password]: any[]) => {
-    // Handle personal_sign
-    const wallet = await extractWallet();
-    const signature = await wallet.signMessage(message);
-    return signature;
-  };
-
-  const handleEthSign = async ([address, message]: any[]) => {
-    // Handle eth_sign
-    const wallet = await extractWallet();
-    const signature = await wallet.signMessage(message);
-    return signature;
   };
 
   const handleSwitchChain = async (params: { chainId: string }) => {
@@ -358,23 +504,38 @@ export const BrowserScreen = () => {
   };
 
   useEffect(() => {
-    if (webViewRef.current) {
+    if (webViewRef.current && connectedAddress) {
       const updateScript = `
-        if (window.ethereum) {
-          window.ethereum.selectedAddress = ${
-            connectedAddress ? `'${connectedAddress}'` : 'null'
-          };
-          const listeners = window.ethereum._events.get('accountsChanged');
-          if (listeners) {
-            listeners.forEach(listener => listener(${
-              connectedAddress ? `['${connectedAddress}']` : '[]'
-            }));
+        (function() {
+          try {
+            if (window.ethereum) {
+              window.ethereum.selectedAddress = '${connectedAddress}';
+              window.ethereum.emit('accountsChanged', ['${connectedAddress}']);
+              window.ethereum.emit('connect', { chainId: '${AMB_CHAIN_ID_HEX}' });
+            }
+          } catch(e) {
+            console.error('Connection update error:', e);
           }
-        }
+          return true;
+        })();
       `;
       webViewRef.current.injectJavaScript(updateScript);
     }
   }, [connectedAddress]);
+
+  // Add this to monitor all WebView messages
+  const logger = (event: WebViewMessageEvent) => {
+    try {
+      const data = JSON.parse(event.nativeEvent.data);
+      console.log('WebView message:', {
+        method: data.method,
+        params: data.params,
+        id: data.id
+      });
+    } catch (e) {
+      console.log('Raw WebView message:', event.nativeEvent.data);
+    }
+  };
 
   return (
     <SafeAreaView style={containerStyle}>
@@ -390,11 +551,11 @@ export const BrowserScreen = () => {
         )}
       </Row>
       <WebView
-        incognito={true}
-        userAgent="Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko"
         ref={webViewRef}
         source={SOURCE}
-        nativeConfig={{ props: { webContentsDebuggingEnabled: true } }}
+        nativeConfig={{
+          props: { webContentsDebuggingEnabled: true }
+        }}
         javaScriptEnabled={true}
         injectedJavaScriptBeforeContentLoaded={INJECTED_PROVIDER_JS}
         onMessage={handleWebViewMessage}
