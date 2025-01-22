@@ -4,6 +4,12 @@ import { FACTORY_ABI } from '@features/swap/lib/abi';
 
 type ProviderOrSigner = ethers.providers.JsonRpcProvider | ethers.Signer;
 
+/**
+ * Creates an AMB Chain provider instance
+ * @param networkUrl - @deprecated This parameter is deprecated and will be removed in the next major version.
+ * Use Config.NETWORK_URL instead.
+ * @returns ethers.providers.JsonRpcProvider
+ */
 export function createAMBProvider(networkUrl?: string) {
   return new ethers.providers.JsonRpcProvider(
     networkUrl || Config.NETWORK_URL,
