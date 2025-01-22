@@ -1,4 +1,6 @@
+// @ts-nocheck
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-console */
 import React, {
   useCallback,
   useEffect,
@@ -13,9 +15,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Row, Text } from '@components/base';
 import Config from '@constants/config';
 import { useWalletPrivateKey } from '@entities/wallet';
+
+import {
+  AMB_CHAIN_ID_DEC,
+  AMB_CHAIN_ID_HEX
+} from '@features/browser/constants';
+import { INJECTED_PROVIDER_JS } from '@features/browser/lib';
 import { createAMBProvider } from '@features/swap/utils/contracts/instances';
 
 const SOURCE = {
+  // uri: 'https://7z2dkc.csb.app/'
   uri: 'https://metamask.github.io/test-dapp/'
 };
 
@@ -44,10 +53,9 @@ export const BrowserScreen = () => {
 
   const extractWallet = useCallback(async () => {
     const privateKey = await _extractPrivateKey();
-    return new ethers.Wallet(privateKey, createAMBProvider());
+    const wallet = new ethers.Wallet(privateKey, createAMBProvider());
+    return wallet;
   }, [_extractPrivateKey]);
-
-  const INJECTED_PROVIDER_JS = '';
 
   const reload = () => webViewRef.current?.reload();
   const back = () => webViewRef.current?.goBack();
@@ -87,17 +95,20 @@ export const BrowserScreen = () => {
       }
       requestsInProgress.current.add(id);
 
-      console.warn('Incoming request:', { id, method, params });
+      console.log('Incoming request:', { id, method, params });
 
       const response: JsonRpcResponse = {
         id,
         jsonrpc: '2.0',
-        // @ts-ignore
         method
       };
 
       try {
         switch (method) {
+          case 'net_version':
+            response.result = AMB_CHAIN_ID_DEC;
+            break;
+
           case 'eth_requestAccounts': {
             const address = await getCurrentAddress();
             if (!address) {
@@ -110,6 +121,120 @@ export const BrowserScreen = () => {
 
           case 'eth_accounts': {
             response.result = connectedAddress ? [connectedAddress] : [];
+            break;
+          }
+
+          case 'wallet_requestPermissions': {
+            const permissions = params[0];
+            if (permissions?.eth_accounts) {
+              const address = await getCurrentAddress();
+              if (!address) {
+                throw new Error('No account available');
+              }
+              response.result = [
+                {
+                  // eth_accounts permission
+                  parentCapability: 'eth_accounts',
+                  date: Date.now(),
+                  caveats: [
+                    {
+                      type: 'restrictReturnedAccounts',
+                      value: [connectedAddress]
+                    }
+                  ]
+                },
+                {
+                  // permitted chains permission
+                  parentCapability: 'endowment:permitted-chains',
+                  date: Date.now(),
+                  caveats: [
+                    {
+                      type: 'restrictChains',
+                      value: [AMB_CHAIN_ID_HEX]
+                    }
+                  ]
+                }
+              ];
+              setConnectedAddress(address);
+            } else {
+              response.error = {
+                code: 4200,
+                message: 'Requested permission is not available'
+              };
+            }
+            break;
+          }
+
+          case 'wallet_revokePermissions': {
+            const permissions = params[0];
+            if (permissions?.eth_accounts) {
+              // Set a flag to prevent re-rendering loops
+              const wasConnected = !!connectedAddress;
+
+              // Update local state only if needed
+              if (wasConnected) {
+                setConnectedAddress(null);
+
+                // Send a single update to the WebView
+                const updateScript = `
+                  (function() {
+                    if (window.ethereum && window.ethereum.selectedAddress) {
+                      window.ethereum.selectedAddress = null;
+                      // Emit event only once
+                      const event = new CustomEvent('accountsChanged', { detail: [] });
+                      window.dispatchEvent(event);
+                    }
+                  })();
+                  true; // Required for iOS
+                `;
+
+                // Use requestAnimationFrame to prevent multiple updates
+                webViewRef.current?.injectJavaScript(`
+                  requestAnimationFrame(() => {
+                    ${updateScript}
+                  });
+                `);
+              }
+
+              response.result = null;
+            } else {
+              response.error = {
+                code: 4200,
+                message: 'Permission to revoke is not recognized'
+              };
+            }
+            break;
+          }
+
+          case 'wallet_getPermissions': {
+            if (connectedAddress) {
+              response.result = [
+                {
+                  // eth_accounts permission
+                  parentCapability: 'eth_accounts',
+                  date: Date.now(),
+                  caveats: [
+                    {
+                      type: 'restrictReturnedAccounts',
+                      value: [connectedAddress]
+                    }
+                  ]
+                },
+                {
+                  // permitted chains permission
+                  parentCapability: 'endowment:permitted-chains',
+                  date: Date.now(),
+                  caveats: [
+                    {
+                      type: 'restrictChains',
+                      value: ['AMB_CHAIN_ID_HEX'] // AMB Chain ID
+                    }
+                  ]
+                }
+              ];
+            } else {
+              response.result = [];
+            }
             break;
           }
 
@@ -159,12 +284,11 @@ export const BrowserScreen = () => {
     } catch (error) {
       console.error('Failed to handle WebView message:', error);
       sendResponse({
-        id: -1,
+        id: request?.id || -1,
         jsonrpc: '2.0',
         error: {
           code: 4001,
-          message:
-            (error as { message?: string })?.message || 'Unknown error occurred'
+          message: error.message || 'Unknown error occurred'
         }
       });
     }
@@ -173,7 +297,7 @@ export const BrowserScreen = () => {
   // Handler implementations
   const handleChainIdRequest = async () => {
     // Get current chain ID in hex format
-    return `0x${Number(16718).toString(16)}`;
+    return `0x${Number(AMB_CHAIN_ID_DEC).toString(16)}`;
   };
 
   const handleSendTransaction = async (txParams: any) => {
@@ -207,12 +331,14 @@ export const BrowserScreen = () => {
   const handleSwitchChain = async (params: { chainId: string }) => {
     // Handle chain switching
     const wallet = await extractWallet();
+    await wallet.switchEthereumChain(parseInt(params.chainId, 16));
     return null;
   };
 
   const handleAddChain = async (chainParams: any) => {
     // Handle adding new chain
     const wallet = await extractWallet();
+    await wallet.addChain(chainParams);
     return null;
   };
 
@@ -226,7 +352,7 @@ export const BrowserScreen = () => {
   const sendResponse = (response: JsonRpcResponse) => {
     if (webViewRef.current) {
       const messageString = JSON.stringify(response);
-      console.warn('Sending response:', messageString);
+      console.log('Sending response:', response);
       webViewRef.current.postMessage(messageString);
     }
   };
