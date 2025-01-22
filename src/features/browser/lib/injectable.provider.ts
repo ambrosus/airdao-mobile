@@ -1,3 +1,5 @@
+import { AMB_CHAIN_ID_HEX } from '../constants';
+
 export const INJECTED_PROVIDER_JS = `
   const consoleLog = (type, log) => window.ReactNativeWebView.postMessage(JSON.stringify({'type': 'Console', 'data': {'type': type, 'log': log}}));
   console = {
@@ -129,3 +131,91 @@ export const INJECTED_PROVIDER_JS = `
     }
   })();
   `;
+export const REVOKE_PERMISSIONS_JS = `
+  (function() {
+    try {
+      if (window.ethereum) {
+        // Update state first
+        window.ethereum.selectedAddress = null;
+        
+        // Then emit events once
+        if (window.ethereum._events && window.ethereum._events.get('accountsChanged')) {
+          const listeners = window.ethereum._events.get('accountsChanged');
+          const accounts = [];
+          listeners.forEach(listener => {
+            try {
+              listener(accounts);
+            } catch (e) {
+              console.error('Listener error:', e);
+            }
+          });
+        }
+
+        // Keep chainId and chain permissions intact
+        window.ethereum.chainId = '${AMB_CHAIN_ID_HEX}';
+      }
+      return true;
+    } catch (e) {
+      console.error('Revoke update error:', e);
+      return true;
+    }
+  })();
+`;
+
+export const UPDATE_ETHEREUM_STATE_JS = (address: string, chainId: string) => `
+  (function() {
+    try {
+      if (window.ethereum) {
+        // Update provider state
+        window.ethereum.selectedAddress = '${address}';
+        window.ethereum.isConnected = () => true;
+        window.ethereum.chainId = '${chainId}';
+        
+        // Emit events in correct order
+        const events = window.ethereum._events || new Map();
+        
+        // 1. Connect event
+        if (events.has('connect')) {
+          events.get('connect').forEach(listener => {
+            try {
+              listener({ chainId: '${chainId}' });
+            } catch(e) {
+              console.error('Connect event error:', e);
+            }
+          });
+        }
+
+        // 2. Chain changed event
+        if (events.has('chainChanged')) {
+          events.get('chainChanged').forEach(listener => {
+            try {
+              listener('${chainId}');
+            } catch(e) {
+              console.error('Chain change event error:', e);
+            }
+          });
+        }
+
+        // 3. Accounts changed event
+        if (events.has('accountsChanged')) {
+          events.get('accountsChanged').forEach(listener => {
+            try {
+              listener(['${address}']);
+            } catch(e) {
+              console.error('Account change event error:', e);
+            }
+          });
+        }
+
+        console.log('Ethereum state updated:', {
+          address: '${address}',
+          chainId: '${chainId}',
+          isConnected: true
+        });
+      }
+    } catch(e) {
+      console.error('State update error:', e);
+    }
+    return true;
+  })();
+`;

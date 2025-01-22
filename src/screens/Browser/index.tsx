@@ -20,12 +20,16 @@ import {
   AMB_CHAIN_ID_DEC,
   AMB_CHAIN_ID_HEX
 } from '@features/browser/constants';
-import { INJECTED_PROVIDER_JS } from '@features/browser/lib';
+import {
+  INJECTED_PROVIDER_JS,
+  REVOKE_PERMISSIONS_JS,
+  UPDATE_ETHEREUM_STATE_JS
+} from '@features/browser/lib';
 import { createAMBProvider } from '@features/swap/utils/contracts/instances';
 
 const SOURCE = {
-  uri: 'https://airquest.xyz/'
-  // uri: 'https://metamask.github.io/test-dapp/'
+  // uri: 'https://airquest.xyz/'
+  uri: 'https://metamask.github.io/test-dapp/'
 };
 
 interface JsonRpcRequest {
@@ -111,26 +115,10 @@ export const BrowserScreen = () => {
             response.result = [address];
             setConnectedAddress(address);
 
-            const updateScript = `
-              (function() {
-                try {
-                  if (window.ethereum) {
-                    window.ethereum.selectedAddress = '${address}';
-                    window.ethereum.isConnected = () => true;
-                    window.ethereum.chainId = '${AMB_CHAIN_ID_HEX}';
-                    
-                    // Emit proper events
-                    window.ethereum.emit('connect', { chainId: '${AMB_CHAIN_ID_HEX}' });
-                    window.ethereum.emit('accountsChanged', ['${address}']);
-                    window.ethereum.emit('chainChanged', '${AMB_CHAIN_ID_HEX}');
-                  }
-                } catch(e) {
-                  console.error('Injection error:', e);
-                }
-                return true;
-              })();
-            `;
-            webViewRef.current?.injectJavaScript(updateScript);
+            webViewRef.current?.injectJavaScript(
+              UPDATE_ETHEREUM_STATE_JS(address, AMB_CHAIN_ID_HEX)
+            );
+
             break;
           }
 
@@ -148,18 +136,16 @@ export const BrowserScreen = () => {
               }
               response.result = [
                 {
-                  // eth_accounts permission
                   parentCapability: 'eth_accounts',
                   date: Date.now(),
                   caveats: [
                     {
                       type: 'restrictReturnedAccounts',
-                      value: [connectedAddress]
+                      value: [address]
                     }
                   ]
                 },
                 {
-                  // permitted chains permission
                   parentCapability: 'endowment:permitted-chains',
                   date: Date.now(),
                   caveats: [
@@ -170,6 +156,13 @@ export const BrowserScreen = () => {
                   ]
                 }
               ];
+
+              if (webViewRef.current) {
+                webViewRef.current.injectJavaScript(
+                  UPDATE_ETHEREUM_STATE_JS(address, AMB_CHAIN_ID_HEX)
+                );
+              }
+
               setConnectedAddress(address);
             } else {
               response.error = {
@@ -183,35 +176,43 @@ export const BrowserScreen = () => {
           case 'wallet_revokePermissions': {
             const permissions = params[0];
             if (permissions?.eth_accounts) {
-              // Set a flag to prevent re-rendering loops
-              const wasConnected = !!connectedAddress;
-
-              // Update local state only if needed
-              if (wasConnected) {
+              if (connectedAddress) {
                 setConnectedAddress(null);
+                response.result = [
+                  {
+                    parentCapability: 'endowment:permitted-chains',
+                    date: Date.now(),
+                    caveats: [
+                      {
+                        type: 'restrictChains',
+                        value: [AMB_CHAIN_ID_HEX]
+                      }
+                    ]
+                  }
+                ];
 
-                // Send a single update to the WebView
-                const updateScript = `
-                  (function() {
-                    if (window.ethereum && window.ethereum.selectedAddress) {
-                      window.ethereum.selectedAddress = null;
-                      // Emit event only once
-                      const event = new CustomEvent('accountsChanged', { detail: [] });
-                      window.dispatchEvent(event);
-                    }
-                  })();
-                  true; // Required for iOS
-                `;
-
-                // Use requestAnimationFrame to prevent multiple updates
-                webViewRef.current?.injectJavaScript(`
-                  requestAnimationFrame(() => {
-                    ${updateScript}
-                  });
-                `);
+                if (webViewRef.current) {
+                  webViewRef.current.injectJavaScript(REVOKE_PERMISSIONS_JS);
+                }
+              } else {
+                response.result = [
+                  {
+                    parentCapability: 'endowment:permitted-chains',
+                    date: Date.now(),
+                    caveats: [
+                      {
+                        type: 'restrictChains',
+                        value: [AMB_CHAIN_ID_HEX]
+                      }
+                    ]
+                  }
+                ];
               }
-
-              response.result = null;
+            } else if (permissions?.['endowment:permitted-chains']) {
+              response.error = {
+                code: 4200,
+                message: 'Chain permissions cannot be revoked'
+              };
             } else {
               response.error = {
                 code: 4200,
@@ -222,10 +223,22 @@ export const BrowserScreen = () => {
           }
 
           case 'wallet_getPermissions': {
+            const basePermissions = [
+              {
+                parentCapability: 'endowment:permitted-chains',
+                date: Date.now(),
+                caveats: [
+                  {
+                    type: 'restrictChains',
+                    value: [AMB_CHAIN_ID_HEX]
+                  }
+                ]
+              }
+            ];
+
             if (connectedAddress) {
               response.result = [
                 {
-                  // eth_accounts permission
                   parentCapability: 'eth_accounts',
                   date: Date.now(),
                   caveats: [
@@ -235,20 +248,10 @@ export const BrowserScreen = () => {
                     }
                   ]
                 },
-                {
-                  // permitted chains permission
-                  parentCapability: 'endowment:permitted-chains',
-                  date: Date.now(),
-                  caveats: [
-                    {
-                      type: 'restrictChains',
-                      value: ['AMB_CHAIN_ID_HEX'] // AMB Chain ID
-                    }
-                  ]
-                }
+                ...basePermissions
               ];
             } else {
-              response.result = [];
+              response.result = basePermissions;
             }
             break;
           }
@@ -270,12 +273,10 @@ export const BrowserScreen = () => {
               console.log('Personal sign request:', params);
               const [message, address] = params;
 
-              // Verify address matches
               if (address.toLowerCase() !== connectedAddress?.toLowerCase()) {
                 throw new Error('Address mismatch');
               }
 
-              // Create a promise that resolves when user confirms
               const userConfirmation = new Promise((resolve, reject) => {
                 Alert.alert(
                   'Sign Message',
@@ -296,7 +297,6 @@ export const BrowserScreen = () => {
                 );
               });
 
-              // Wait for user confirmation before signing
               await userConfirmation;
 
               const wallet = await extractWallet();
@@ -319,12 +319,10 @@ export const BrowserScreen = () => {
             try {
               const [address, message] = params;
 
-              // Verify address matches
               if (address.toLowerCase() !== connectedAddress?.toLowerCase()) {
                 throw new Error('Address mismatch');
               }
 
-              // Create a promise that resolves when user confirms
               const userConfirmation = new Promise((resolve, reject) => {
                 Alert.alert(
                   'Sign Message',
@@ -345,7 +343,6 @@ export const BrowserScreen = () => {
                 );
               });
 
-              // Wait for user confirmation before signing
               await userConfirmation;
 
               const wallet = await extractWallet();
@@ -378,7 +375,6 @@ export const BrowserScreen = () => {
               console.log('Sign typed data request:', params);
               const [address, typedData] = params;
 
-              // Verify address matches
               if (address.toLowerCase() !== connectedAddress?.toLowerCase()) {
                 throw new Error('Address mismatch');
               }
@@ -388,7 +384,6 @@ export const BrowserScreen = () => {
                   ? JSON.parse(typedData)
                   : typedData;
 
-              // Create a promise that resolves when user confirms
               const userConfirmation = new Promise((resolve, reject) => {
                 Alert.alert(
                   'Sign Typed Data',
@@ -413,7 +408,6 @@ export const BrowserScreen = () => {
                 );
               });
 
-              // Wait for user confirmation before signing
               await userConfirmation;
 
               const wallet = await extractWallet();
@@ -455,41 +449,34 @@ export const BrowserScreen = () => {
     }
   };
 
-  // Handler implementations
   const handleChainIdRequest = async () => {
     return `0x${Number(AMB_CHAIN_ID_DEC).toString(16)}`;
   };
 
   const handleSendTransaction = async (txParams: any) => {
-    // Handle transaction sending
     const wallet = await extractWallet();
     const tx = await wallet.sendTransaction(txParams);
     return tx.hash;
   };
 
   const handleSignTransaction = async (txParams: any) => {
-    // Handle transaction signing
     const wallet = await extractWallet();
-    const signedTx = await wallet.signTransaction(txParams);
-    return signedTx;
+    return await wallet.signTransaction(txParams);
   };
 
   const handleSwitchChain = async (params: { chainId: string }) => {
-    // Handle chain switching
     const wallet = await extractWallet();
     await wallet.switchEthereumChain(parseInt(params.chainId, 16));
     return null;
   };
 
   const handleAddChain = async (chainParams: any) => {
-    // Handle adding new chain
     const wallet = await extractWallet();
     await wallet.addChain(chainParams);
     return null;
   };
 
   const handleGetBalance = async (address: string, blockTag = 'latest') => {
-    // Get account balance
     const provider = new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
     const balance = await provider.getBalance(address, blockTag);
     return balance.toHexString();
@@ -523,7 +510,6 @@ export const BrowserScreen = () => {
     }
   }, [connectedAddress]);
 
-  // Add this to monitor all WebView messages
   const logger = (event: WebViewMessageEvent) => {
     try {
       const data = JSON.parse(event.nativeEvent.data);
