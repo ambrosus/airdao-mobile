@@ -28,7 +28,7 @@ import {
 import { createAMBProvider } from '@features/swap/utils/contracts/instances';
 
 const SOURCE = {
-  // uri: 'https://airquest.xyz/'
+  // uri: 'https://x3na.com/'
   uri: 'https://metamask.github.io/test-dapp/'
 };
 
