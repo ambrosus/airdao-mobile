@@ -14,6 +14,7 @@ export type RootStackParamsList = {
   Passcode: PasscodeParams | undefined;
   BarcodeScannerScreen: {
     onScanned: (data: string) => void;
+    walletConnectEnabled?: boolean;
   };
 };
 

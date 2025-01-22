@@ -36,6 +36,7 @@ export const RootStack = () => {
       />
       <Stack.Screen
         name="BarcodeScannerScreen"
+        initialParams={{ walletConnectEnabled: false }}
         options={{
           presentation: 'fullScreenModal',
           animation: 'slide_from_bottom'

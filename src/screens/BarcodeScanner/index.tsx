@@ -27,7 +27,7 @@ const MOCK_ADDRESS = 'ethereum:0xF51452e37eEbf3226BcBB25FA4f9F570f176484e';
 export const BarcodeScannerScreen = ({ navigation, route }: Props) => {
   const { t } = useTranslation();
   const {
-    params: { onScanned }
+    params: { onScanned, walletConnectEnabled }
   } = route;
   const { top: topInset } = useSafeAreaInsets();
   const {
@@ -136,7 +136,7 @@ export const BarcodeScannerScreen = ({ navigation, route }: Props) => {
           <ScanSquare />
         </Camera>
       )}
-      {isCameraVisible && (
+      {isCameraVisible && walletConnectEnabled && (
         <View style={styles.footer}>
           <Row alignItems="center" style={styles.footerIconsRow}>
             <View style={styles.iconBox}>
