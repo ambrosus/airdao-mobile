@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { JsonRpcResponse } from '@walletconnect/jsonrpc-types';
 import { ethers } from 'ethers';
@@ -45,10 +45,12 @@ export const WalletConnectTxApproval = () => {
   const params = requestEvent?.params;
   const request = params?.request;
 
+  const isUnstake = transaction?.functionName === 'unstake';
   const isApprovalTx = transaction?.functionName === 'approve';
   const isAmbTransaction = request?.params[0]?.value;
   const isWithdraw = transaction?.functionName === 'withdraw';
   const isWrapOrUnwrap =
+    transaction?.functionName === 'unstake' ||
     transaction?.functionName === 'stake' ||
     transaction?.functionName === 'deposit' ||
     transaction?.functionName === 'withdraw';
@@ -122,6 +124,34 @@ export const WalletConnectTxApproval = () => {
     onDismissWalletConnectBottomSheet
   ]);
 
+  const tokenSymbol = useMemo(() => {
+    if (isAmbTransaction) return CryptoCurrencyCode.AMB;
+
+    if (isUnstake) return CryptoCurrencyCode.stAMB;
+
+    return getTokenSymbolFromDatabase(
+      request?.params[0]?.to.toUpperCase() ?? '',
+      true
+    );
+  }, [isAmbTransaction, isUnstake, request?.params]);
+
+  const amountSymbol = useMemo(() => {
+    if (isAmbTransaction) return CryptoCurrencyCode.AMB;
+
+    if (isWithdraw) return CryptoCurrencyCode.SAMB;
+
+    if (isUnstake) return CryptoCurrencyCode.BOND;
+
+    return getTokenSymbolFromDatabase(
+      transaction?.decodedArgs?.addresses?.[0] ?? ''
+    );
+  }, [
+    isAmbTransaction,
+    isUnstake,
+    isWithdraw,
+    transaction?.decodedArgs?.addresses
+  ]);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -166,14 +196,7 @@ export const WalletConnectTxApproval = () => {
                   ethers.utils.formatEther(
                     transaction?.decodedArgs?.amount ?? ZERO
                   )
-                )} ${
-                  isAmbTransaction
-                    ? CryptoCurrencyCode.AMB
-                    : getTokenSymbolFromDatabase(
-                        request?.params[0]?.to.toUpperCase() ?? '',
-                        true
-                      )
-                }`
+                )} ${tokenSymbol}`
               : StringUtils.formatAddress(
                   (isWrapOrUnwrap
                     ? request?.params[0]?.to
@@ -199,15 +222,7 @@ export const WalletConnectTxApproval = () => {
                       ? request.params[0].value
                       : transaction?.decodedArgs?.amount) ?? ZERO
                   )
-                )} ${
-                  isAmbTransaction
-                    ? CryptoCurrencyCode.AMB
-                    : isWithdraw
-                    ? CryptoCurrencyCode.SAMB
-                    : getTokenSymbolFromDatabase(
-                        transaction?.decodedArgs?.addresses?.[0] ?? ''
-                      )
-                }`
+                )} ${amountSymbol}`
           }
         />
 

@@ -26,8 +26,8 @@ export function useDecodeCallbackData() {
           amount: rawArgs.amount.toString()
         };
 
+      case 'unstake':
       case 'stake': {
-        // Handle different possible argument structures
         const amount = rawArgs.value || rawArgs.amount || rawArgs[0];
         const spender = rawArgs.spender || rawArgs.to || rawArgs[1];
         const gas = rawArgs.gas || '0';
