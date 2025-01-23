@@ -14,7 +14,7 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
       title: t('products.title.trade'),
       data: [
         {
-          id: 0,
+          id: 5,
           name: 'Browser',
           description: t('products.swap.description'),
           icon: (

@@ -55,3 +55,8 @@ export interface HarborStoreModel {
   loading: boolean;
   updateAll: (payload: string) => void;
 }
+
+export interface BrowserStoreModel {
+  connectedAddress: string;
+  setConnectedAddress: (address: string) => void;
+}

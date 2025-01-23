@@ -7,7 +7,7 @@ const uuid = randomUUID;
 export const INJECTED_PROVIDER_JS = `
   (function() {
     if (window.ethereum) return true;
-    
+
     let isInitialized = false;
     let requestCounter = 0;
     const pendingRequests = new Map();
@@ -21,7 +21,7 @@ export const INJECTED_PROVIDER_JS = `
     const eip6963ProviderInfo = {
       uuid: '${uuid()}',
       name: '${EIP6963_PROVIDER_INFO.name}',
-      icon: '${EIP6963_PROVIDER_INFO.icon}', 
+      icon: '${EIP6963_PROVIDER_INFO.icon}',
       rdns: '${EIP6963_PROVIDER_INFO.rdns}'
     };
 
@@ -42,14 +42,14 @@ export const INJECTED_PROVIDER_JS = `
         return new Promise((resolve, reject) => {
           const { method, params } = args;
           const id = requestCounter++;
-          
+
           // Special handling for eth_requestAccounts on page refresh
           if (method === 'eth_requestAccounts' && this.selectedAddress) {
             return resolve([this.selectedAddress]);
           }
-          
+
           pendingRequests.set(id, { resolve, reject });
-          
+
           window.ReactNativeWebView.postMessage(JSON.stringify({
             id,
             jsonrpc: '2.0',
@@ -88,7 +88,7 @@ export const INJECTED_PROVIDER_JS = `
               break;
           }
         }
-        
+
         return () => this._events.get(eventName).delete(callback);
       },
 
@@ -133,7 +133,7 @@ export const INJECTED_PROVIDER_JS = `
       },
 
       info: eip6963ProviderInfo,
-      
+
       announceProvider: function() {
         window.dispatchEvent(
           new CustomEvent('eip6963:announceProvider', {
@@ -150,11 +150,11 @@ export const INJECTED_PROVIDER_JS = `
       try {
         const response = JSON.parse(event.data);
         const { id, result, error } = response;
-        
+
         const pendingRequest = pendingRequests.get(id);
         if (pendingRequest) {
           pendingRequests.delete(id);
-          
+
           if (error) {
             pendingRequest.reject(new Error(error.message));
           } else {
@@ -209,7 +209,7 @@ export const UPDATE_ETHEREUM_STATE_JS = (address: string, chainId: string) => `
       if (window.ethereum) {
         window.ethereum.selectedAddress = '${address}';
         window.ethereum.chainId = '${chainId}';
-        
+
         window.ethereum.emit('connect', { chainId: '${chainId}' });
         window.ethereum.emit('chainChanged', '${chainId}');
         window.ethereum.emit('accountsChanged', ['${address}']);
