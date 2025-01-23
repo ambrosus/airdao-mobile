@@ -26,6 +26,19 @@ export function useDecodeCallbackData() {
           amount: rawArgs.amount.toString()
         };
 
+      case 'unstake':
+      case 'stake': {
+        const amount = rawArgs.value || rawArgs.amount || rawArgs[0];
+        const spender = rawArgs.spender || rawArgs.to || rawArgs[1];
+        const gas = rawArgs.gas || '0';
+
+        return {
+          addresses: [spender].filter(Boolean),
+          gas: gas,
+          amount: amount ? amount.toString() : '0'
+        };
+      }
+
       case 'addLiquidityAMB':
       case 'removeLiquidityAMB':
         return {
@@ -58,6 +71,7 @@ export function useDecodeCallbackData() {
       if (!txData) return null;
 
       const functionSignature = txData.slice(0, 10);
+
       const decodedTransaction: DecodedTransaction = {
         functionName: 'Unknown',
         decodedArgs: null
@@ -71,6 +85,7 @@ export function useDecodeCallbackData() {
 
           if (encodedSig === functionSignature) {
             const rawDecodedArgs = iface.decodeFunctionData(func.name, txData);
+
             decodedTransaction.functionName = func.name;
             decodedTransaction.decodedArgs = standardizeDecodedArgs(
               func.name,
@@ -84,6 +99,10 @@ export function useDecodeCallbackData() {
         return decodedTransaction;
       } catch (error) {
         console.error('Failed to decode transaction:', error);
+        console.error('Error details:', {
+          message: (error as Error).message,
+          stack: (error as Error).stack
+        });
         return null;
       }
     },

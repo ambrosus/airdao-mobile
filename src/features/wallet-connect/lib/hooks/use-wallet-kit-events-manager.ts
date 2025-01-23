@@ -19,7 +19,8 @@ import { useHandleBottomSheetActions } from './use-handle-bottom-sheet-actions';
 import { useWalletConnectContextSelector } from './use-wallet-connect-context';
 
 export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
-  const { onShowWalletConnectBottomSheet } = useHandleBottomSheetActions();
+  const { onShowWalletConnectBottomSheet, onDismissWalletConnectBottomSheet } =
+    useHandleBottomSheetActions();
   const {
     onChangeProposal,
     onChangeRequest,
@@ -98,11 +99,18 @@ export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
     ]
   );
 
+  const onRequestExpire = useCallback(() => {
+    onDismissWalletConnectBottomSheet();
+    setWalletConnectStep(CONNECT_VIEW_STEPS.INITIAL);
+  }, [onDismissWalletConnectBottomSheet, setWalletConnectStep]);
+
   useEffect(() => {
     if (isWalletKitInitiated) {
       walletKit.on(WALLET_CORE_EVENTS.SESSION_PROPOSAL, onSessionProposal);
       walletKit.on(WALLET_CORE_EVENTS.SESSION_DELETE, onSessionDelete);
       walletKit.on(WALLET_CORE_EVENTS.SESSION_REQUEST, onSessionRequest);
+      walletKit.on(WALLET_CORE_EVENTS.PROPOSAL_EXPIRE, onRequestExpire);
+      walletKit.on(WALLET_CORE_EVENTS.SESSION_REQUEST_EXPIRE, onRequestExpire);
 
       walletKit.engine.signClient.events.on(
         WALLET_CLIENT_EVENTS.SESSION_PING,
@@ -116,6 +124,7 @@ export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
     }
   }, [
     isWalletKitInitiated,
+    onRequestExpire,
     onSessionDelete,
     onSessionProposal,
     onSessionRequest

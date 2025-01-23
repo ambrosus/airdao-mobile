@@ -88,24 +88,52 @@ export function httpsParser(url: string) {
   }
 }
 
-export const validateAndFilterSessions = async (sessions: any[]) => {
-  const validSessions = [];
+interface Session {
+  topic: string;
+  // Add other session properties as needed
+}
 
-  for (const session of sessions) {
+export const validateAndFilterSessions = async (
+  sessions: Session[]
+): Promise<Session[]> => {
+  const validSessions: Session[] = [];
+  const PING_TIMEOUT = 3000;
+
+  const validateSession = async (session: Session) => {
     try {
-      await walletKit.engine.signClient.ping({ topic: session.topic });
+      const pingPromise = walletKit.engine.signClient.ping({
+        topic: session.topic
+      });
+      await Promise.race([
+        pingPromise,
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Ping timeout')), PING_TIMEOUT)
+        )
+      ]);
+
       validSessions.push(session);
     } catch (error) {
+      console.warn(`Session ${session.topic} is invalid:`, error);
+
       try {
         await walletKit.engine.signClient.disconnect({
           topic: session.topic,
-          reason: { code: 6000, message: 'Session is invalid' }
+          reason: {
+            code: 6000,
+            message:
+              error instanceof Error ? error.message : 'Session is invalid'
+          }
         });
       } catch (cleanupError) {
-        console.error('Error cleaning up invalid session:', cleanupError);
+        console.error(
+          `Error cleaning up invalid session ${session.topic}:`,
+          cleanupError
+        );
       }
     }
-  }
+  };
+
+  await Promise.all(sessions.map(validateSession));
 
   return validSessions;
 };
