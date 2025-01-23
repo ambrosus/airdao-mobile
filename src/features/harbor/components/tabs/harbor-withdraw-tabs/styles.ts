@@ -2,5 +2,5 @@ import { StyleSheet } from 'react-native';
 import { scale } from '@utils';
 
 export const styles = StyleSheet.create({
-  wrapper: { paddingHorizontal: scale(12) }
+  main: { height: '100%', paddingTop: scale(8) }
 });
