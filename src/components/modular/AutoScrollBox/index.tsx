@@ -57,14 +57,14 @@ export const AutoScrollBox = ({
   }, [autoScrollEnabled, contentHeight, keyboardHeight, maxPointToScroll, top]);
 
   return (
-    <>
+    <View style={styles.main}>
       {header && <View onLayout={onLayout}>{header}</View>}
       <KeyboardAwareScrollView
         innerRef={(ref) => {
           // @ts-ignore
           scrollRef.current = ref;
         }}
-        style={styles.main}
+        style={styles.keyboardWrapper}
         keyboardShouldPersistTaps={isAndroid ? 'handled' : 'always'}
         extraScrollHeight={verticalScale(EXTRA_HEIGHT)}
         enableOnAndroid
@@ -75,6 +75,6 @@ export const AutoScrollBox = ({
           {children}
         </KeyboardDismissingView>
       </KeyboardAwareScrollView>
-    </>
+    </View>
   );
 };

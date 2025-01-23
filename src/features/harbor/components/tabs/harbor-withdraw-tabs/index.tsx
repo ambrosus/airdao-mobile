@@ -13,6 +13,7 @@ import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { useWalletStore } from '@entities/wallet';
 import { WithdrawRewardOnlyTab } from '../withdraw-reward-only-tab';
 import { WithdrawStakeRewardTab } from '../withdraw-stake-reward-tab';
+import { styles } from './styles';
 
 export const HarborWithdrawTabs = () => {
   const { t } = useTranslation();
@@ -47,7 +48,7 @@ export const HarborWithdrawTabs = () => {
       <AnimatedTabsV2
         dismissOnChangeIndex
         keyboardShouldPersistTaps="handled"
-        containerStyle={{ height: '100%' }}
+        containerStyle={styles.main}
         tabs={[
           {
             title: t('harbor.withdraw.stake.reward'),
