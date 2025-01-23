@@ -30,7 +30,7 @@ export const INJECTED_PROVIDER_JS = `
       isMetaMask: true,
       selectedAddress: null,
       chainId: '${AMB_CHAIN_ID_HEX}',
-      networkVersion: '${AMB_CHAIN_ID_DEC}',
+      networkVersion: ${AMB_CHAIN_ID_DEC},
       _events: new Map(),
 
       isConnected: () => true,

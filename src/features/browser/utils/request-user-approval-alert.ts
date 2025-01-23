@@ -8,7 +8,7 @@ interface ShowConfirmationModel {
   cancelable?: boolean;
 }
 
-export const showConfirmation = async ({
+export const requestUserApproval = async ({
   header = 'Confirmation',
   message = '',
   reject,

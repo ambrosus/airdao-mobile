@@ -5,12 +5,14 @@ import { WebView } from '@metamask/react-native-webview';
 import { JsonRpcResponse } from '@walletconnect/jsonrpc-types';
 import { ethers } from 'ethers';
 import Config from '@constants/config';
-import { AMB_CHAIN_ID_DEC } from '@features/browser/constants';
-import { rpcErrorHandler } from '@features/browser/utils';
-import { createAMBProvider } from '@features/swap/utils/contracts/instances';
+import { AMB_CHAIN_ID_DEC } from '../constants';
+import { rpcErrorHandler } from '../utils';
 
 const extractWallet = async (privateKey: string) => {
-  return new ethers.Wallet(privateKey, createAMBProvider());
+  return new ethers.Wallet(
+    privateKey,
+    new ethers.providers.JsonRpcProvider(Config.NETWORK_URL, Config.CHAIN_ID)
+  );
 };
 
 const getCurrentAddress = async (privateKey: string) => {

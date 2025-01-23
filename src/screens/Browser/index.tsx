@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { WebView, WebViewMessageEvent } from '@metamask/react-native-webview';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -51,11 +51,18 @@ export const BrowserScreen = () => {
     }
   }, [connectedAddress]);
 
-  const onMessage = async (event: WebViewMessageEvent) => {
-    event.persist();
-    const privateKey = await _extractPrivateKey();
-    await handleWebViewMessage({ event, webViewRef, privateKey });
-  };
+  const onMessageEventHandler = useCallback(
+    async (event: WebViewMessageEvent) => {
+      event.persist();
+      try {
+        const privateKey = await _extractPrivateKey();
+        await handleWebViewMessage({ event, webViewRef, privateKey });
+      } catch (error) {
+        throw error;
+      }
+    },
+    [_extractPrivateKey]
+  );
 
   return (
     <SafeAreaView style={containerStyle}>
@@ -78,7 +85,7 @@ export const BrowserScreen = () => {
         }}
         javaScriptEnabled={true}
         injectedJavaScriptBeforeContentLoaded={INJECTED_PROVIDER_JS}
-        onMessage={onMessage}
+        onMessage={onMessageEventHandler}
         style={containerStyle}
         webviewDebuggingEnabled={__DEV__}
       />

@@ -4,18 +4,18 @@ import { RefObject } from 'react';
 import { WebView, WebViewMessageEvent } from '@metamask/react-native-webview';
 import { useBrowserStore } from '@entities/browser/model';
 import { AMB_CHAIN_ID_DEC } from '@features/browser/constants';
-import { rpcMethods } from '@features/browser/lib/rpc-methods';
-import { rpcErrorHandler } from '@features/browser/utils';
+import { rpcErrorHandler } from '@features/browser/utils/rpc-error-handler';
 import {
   ethRequestAccounts,
   ethSendTransaction,
-  ethSingTransaction,
-  ethSingTypesData,
+  ethSignTransaction,
+  ethSignTypesData,
   personalSing,
   walletGetPermissions,
   walletRequestPermissions,
   walletRevokePermissions
-} from './middlewareHelpers';
+} from './middleware.helpers';
+import { rpcMethods } from './rpc-methods';
 
 interface JsonRpcRequest {
   id: number;
@@ -45,8 +45,8 @@ export async function handleWebViewMessage({
   webViewRef,
   privateKey
 }: HandleWebViewMessageModel) {
-  const requestsInProgress = new Set();
   const { connectedAddress } = useBrowserStore.getState();
+  const requestsInProgress = new Set();
 
   const { handleChainIdRequest, handleGetBalance, sendResponse } = rpcMethods;
 
@@ -135,7 +135,7 @@ export async function handleWebViewMessage({
         }
 
         case 'eth_signTransaction': {
-          await ethSingTransaction({
+          await ethSignTransaction({
             params,
             response,
             privateKey
@@ -154,7 +154,7 @@ export async function handleWebViewMessage({
 
         case 'eth_signTypedData_v4':
         case 'eth_signTypedData':
-          await ethSingTypesData({
+          await ethSignTypesData({
             params,
             response,
             privateKey

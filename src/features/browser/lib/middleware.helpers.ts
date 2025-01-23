@@ -6,10 +6,8 @@ import {
   REVOKE_PERMISSIONS_JS,
   UPDATE_ETHEREUM_STATE_JS
 } from '@features/browser/lib';
-import { rpcErrorHandler, showConfirmation } from '@features/browser/utils';
+import { rpcErrorHandler, requestUserApproval } from '@features/browser/utils';
 import { rpcMethods } from './rpc-methods';
-
-const { connectedAddress, setConnectedAddress } = useBrowserStore.getState();
 
 const {
   getCurrentAddress,
@@ -24,6 +22,7 @@ export const ethRequestAccounts = async ({
   privateKey,
   webViewRef
 }: any) => {
+  const { connectedAddress, setConnectedAddress } = useBrowserStore.getState();
   console.log('eth_requestAccounts called');
   const address = await getCurrentAddress(privateKey);
   if (!address) {
@@ -56,6 +55,7 @@ export const walletRequestPermissions = async ({
   privateKey,
   webViewRef
 }: any) => {
+  const { connectedAddress, setConnectedAddress } = useBrowserStore.getState();
   try {
     if (permissions?.eth_accounts) {
       const address = await getCurrentAddress(privateKey);
@@ -113,6 +113,7 @@ export const walletRevokePermissions = async ({
   response,
   webViewRef
 }: any) => {
+  const { connectedAddress, setConnectedAddress } = useBrowserStore.getState();
   try {
     if (permissions?.eth_accounts) {
       if (connectedAddress) {
@@ -154,6 +155,7 @@ export const walletRevokePermissions = async ({
 };
 
 export const walletGetPermissions = async ({ response }: any) => {
+  const { connectedAddress } = useBrowserStore.getState();
   try {
     const basePermissions = [
       {
@@ -198,7 +200,7 @@ export const ethSendTransaction = async ({
   try {
     const txParams = params[0];
     await new Promise((resolve, reject) => {
-      showConfirmation({
+      requestUserApproval({
         header: 'Confirm Transaction',
         message:
           `Do you want to send this transaction? From: ${txParams.from}\n` +
@@ -217,7 +219,7 @@ export const ethSendTransaction = async ({
   }
 };
 
-export const ethSingTransaction = async ({
+export const ethSignTransaction = async ({
   params,
   response,
   privateKey
@@ -226,7 +228,7 @@ export const ethSingTransaction = async ({
     const txParams = params[0];
 
     await new Promise((resolve, reject) => {
-      showConfirmation({
+      requestUserApproval({
         header: 'Sign Transaction',
         message:
           `Do you want to send this transaction? From: ${txParams.from}\n` +
@@ -246,6 +248,7 @@ export const ethSingTransaction = async ({
 };
 
 export const personalSing = async ({ params, response, privateKey }: any) => {
+  const { connectedAddress } = useBrowserStore.getState();
   try {
     console.log('Personal sign request:', params);
     const [message, address] = params;
@@ -255,7 +258,7 @@ export const personalSing = async ({ params, response, privateKey }: any) => {
     }
 
     const userConfirmation = new Promise((resolve, reject) => {
-      showConfirmation({
+      requestUserApproval({
         header: 'Sign Message',
         message: 'Do you want to sign this message?',
         resolve: () => resolve(true),
@@ -275,11 +278,12 @@ export const personalSing = async ({ params, response, privateKey }: any) => {
   }
 };
 
-export const ethSingTypesData = async ({
+export const ethSignTypesData = async ({
   params,
   response,
   privateKey
 }: any) => {
+  const { connectedAddress } = useBrowserStore.getState();
   try {
     console.log('Sign typed data request:', params);
     const [address, typedData] = params;
@@ -292,7 +296,7 @@ export const ethSingTypesData = async ({
       typeof typedData === 'string' ? JSON.parse(typedData) : typedData;
 
     const userConfirmation = new Promise((resolve, reject) => {
-      showConfirmation({
+      requestUserApproval({
         header: 'Sign Typed Data',
         message: `Do you want to sign this data?\n\nFrom: ${address}\n\nData: ${JSON.stringify(
           data,
