@@ -49,10 +49,14 @@ export const WalletConnectTxApproval = () => {
   const isAmbTransaction = request?.params[0]?.value;
   const isWithdraw = transaction?.functionName === 'withdraw';
   const isWrapOrUnwrap =
+    transaction?.functionName === 'stake' ||
     transaction?.functionName === 'deposit' ||
     transaction?.functionName === 'withdraw';
 
-  const { data: account } = useAccountByAddress(request?.params[0].from, true);
+  const { data: account } = useAccountByAddress(
+    request?.params[0].from.toLowerCase(),
+    true
+  );
 
   const onApprove = useCallback(async () => {
     if (requestEvent && topic) {
@@ -151,6 +155,7 @@ export const WalletConnectTxApproval = () => {
         <DetailsRowItem
           field="REQUEST"
           value={httpsParser(data?.event.verifyContext.verified.origin ?? '')}
+          style={{ maxWidth: '60%' }}
         />
 
         <DetailsRowItem

@@ -177,5 +177,12 @@ export const APPROVAL = [
     outputs: [],
     stateMutability: 'payable',
     type: 'function'
+  },
+  {
+    inputs: [],
+    name: 'stake',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function'
   }
 ];
