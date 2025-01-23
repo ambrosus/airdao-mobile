@@ -87,6 +87,7 @@ export const BrowserScreen = () => {
       const request: JsonRpcRequest = JSON.parse(event.nativeEvent.data);
       const { id, method, params } = request;
 
+      // Skip duplicate requests
       if (requestsInProgress.current.has(id)) {
         return;
       }
@@ -112,13 +113,23 @@ export const BrowserScreen = () => {
             if (!address) {
               throw new Error('No account available');
             }
-            response.result = [address];
-            setConnectedAddress(address);
 
-            webViewRef.current?.injectJavaScript(
-              UPDATE_ETHEREUM_STATE_JS(address, AMB_CHAIN_ID_HEX)
-            );
+            // Only update if not already connected to this address
+            if (address.toLowerCase() !== connectedAddress?.toLowerCase()) {
+              response.result = [address];
+              setConnectedAddress(address);
 
+              // Delay the state update to prevent loops
+              setTimeout(() => {
+                if (webViewRef.current) {
+                  webViewRef.current.injectJavaScript(
+                    UPDATE_ETHEREUM_STATE_JS(address, AMB_CHAIN_ID_HEX)
+                  );
+                }
+              }, 100);
+            } else {
+              response.result = [address];
+            }
             break;
           }
 
@@ -134,6 +145,19 @@ export const BrowserScreen = () => {
               if (!address) {
                 throw new Error('No account available');
               }
+
+              if (address.toLowerCase() !== connectedAddress?.toLowerCase()) {
+                setConnectedAddress(address);
+
+                setTimeout(() => {
+                  if (webViewRef.current) {
+                    webViewRef.current.injectJavaScript(
+                      UPDATE_ETHEREUM_STATE_JS(address, AMB_CHAIN_ID_HEX)
+                    );
+                  }
+                }, 100);
+              }
+
               response.result = [
                 {
                   parentCapability: 'eth_accounts',
@@ -156,14 +180,6 @@ export const BrowserScreen = () => {
                   ]
                 }
               ];
-
-              if (webViewRef.current) {
-                webViewRef.current.injectJavaScript(
-                  UPDATE_ETHEREUM_STATE_JS(address, AMB_CHAIN_ID_HEX)
-                );
-              }
-
-              setConnectedAddress(address);
             } else {
               response.error = {
                 code: 4200,
@@ -178,36 +194,26 @@ export const BrowserScreen = () => {
             if (permissions?.eth_accounts) {
               if (connectedAddress) {
                 setConnectedAddress(null);
-                response.result = [
-                  {
-                    parentCapability: 'endowment:permitted-chains',
-                    date: Date.now(),
-                    caveats: [
-                      {
-                        type: 'restrictChains',
-                        value: [AMB_CHAIN_ID_HEX]
-                      }
-                    ]
-                  }
-                ];
 
-                if (webViewRef.current) {
-                  webViewRef.current.injectJavaScript(REVOKE_PERMISSIONS_JS);
-                }
-              } else {
-                response.result = [
-                  {
-                    parentCapability: 'endowment:permitted-chains',
-                    date: Date.now(),
-                    caveats: [
-                      {
-                        type: 'restrictChains',
-                        value: [AMB_CHAIN_ID_HEX]
-                      }
-                    ]
+                setTimeout(() => {
+                  if (webViewRef.current) {
+                    webViewRef.current.injectJavaScript(REVOKE_PERMISSIONS_JS);
                   }
-                ];
+                }, 100);
               }
+
+              response.result = [
+                {
+                  parentCapability: 'endowment:permitted-chains',
+                  date: Date.now(),
+                  caveats: [
+                    {
+                      type: 'restrictChains',
+                      value: [AMB_CHAIN_ID_HEX]
+                    }
+                  ]
+                }
+              ];
             } else if (permissions?.['endowment:permitted-chains']) {
               response.error = {
                 code: 4200,
@@ -260,13 +266,79 @@ export const BrowserScreen = () => {
             response.result = await handleChainIdRequest();
             break;
 
-          case 'eth_sendTransaction':
-            response.result = await handleSendTransaction(params[0]);
-            break;
+          case 'eth_sendTransaction': {
+            try {
+              const txParams = params[0];
 
-          case 'eth_signTransaction':
-            response.result = await handleSignTransaction(params[0]);
+              // Show confirmation alert
+              await new Promise((resolve, reject) => {
+                Alert.alert(
+                  'Confirm Transaction',
+                  `Do you want to send this transaction?\n\n` +
+                    `From: ${txParams.from}\n` +
+                    `To: ${txParams.to}\n` +
+                    `Value: ${txParams.value || '0'} Wei\n` +
+                    `Data: ${txParams.data || 'None'}`,
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () =>
+                        reject(new Error('User rejected transaction')),
+                      style: 'cancel'
+                    },
+                    {
+                      text: 'Send',
+                      onPress: () => resolve(true),
+                      style: 'default'
+                    }
+                  ],
+                  { cancelable: false }
+                );
+              });
+
+              response.result = await handleSendTransaction(txParams);
+            } catch (error) {
+              console.error('Transaction error:', error);
+              throw error;
+            }
             break;
+          }
+
+          case 'eth_signTransaction': {
+            try {
+              const txParams = params[0];
+
+              await new Promise((resolve, reject) => {
+                Alert.alert(
+                  'Sign Transaction',
+                  `Do you want to sign this transaction?\n\n` +
+                    `From: ${txParams.from}\n` +
+                    `To: ${txParams.to}\n` +
+                    `Value: ${txParams.value || '0'} Wei\n` +
+                    `Data: ${txParams.data || 'None'}`,
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => reject(new Error('User rejected signing')),
+                      style: 'cancel'
+                    },
+                    {
+                      text: 'Sign',
+                      onPress: () => resolve(true),
+                      style: 'default'
+                    }
+                  ],
+                  { cancelable: false }
+                );
+              });
+
+              response.result = await handleSignTransaction(txParams);
+            } catch (error) {
+              console.error('Sign transaction error:', error);
+              throw error;
+            }
+            break;
+          }
 
           case 'personal_sign': {
             try {
