@@ -4,7 +4,6 @@ import { RefObject } from 'react';
 import { WebView, WebViewMessageEvent } from '@metamask/react-native-webview';
 import { useBrowserStore } from '@entities/browser/model';
 import { AMB_CHAIN_ID_DEC } from '@features/browser/constants';
-import { rpcErrorHandler } from '@features/browser/utils/rpc-error-handler';
 import {
   ethRequestAccounts,
   ethSendTransaction,
@@ -14,7 +13,8 @@ import {
   walletGetPermissions,
   walletRequestPermissions,
   walletRevokePermissions
-} from './middleware.helpers';
+} from '@features/browser/lib/middleware.helpers';
+import { rpcErrorHandler } from '@features/browser/utils/rpc-error-handler';
 import { rpcMethods } from './rpc-methods';
 
 interface JsonRpcRequest {
