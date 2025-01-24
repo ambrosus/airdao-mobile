@@ -1,4 +1,4 @@
-import { ProposalTypes } from '@walletconnect/types';
+import { ProposalTypes, SessionTypes } from '@walletconnect/types';
 import { ethers } from 'ethers';
 import { extractChainData } from './presets';
 import { walletKit } from '../lib/wc.core';
@@ -88,18 +88,13 @@ export function httpsParser(url: string) {
   }
 }
 
-interface Session {
-  topic: string;
-  // Add other session properties as needed
-}
-
 export const validateAndFilterSessions = async (
-  sessions: Session[]
-): Promise<Session[]> => {
-  const validSessions: Session[] = [];
+  sessions: SessionTypes.Struct[]
+): Promise<SessionTypes.Struct[]> => {
+  const validSessions: SessionTypes.Struct[] = [];
   const PING_TIMEOUT = 3000;
 
-  const validateSession = async (session: Session) => {
+  const validateSession = async (session: SessionTypes.Struct) => {
     try {
       const pingPromise = walletKit.engine.signClient.ping({
         topic: session.topic
