@@ -23,7 +23,6 @@ import {
   EIP155_CHAINS,
   extractHttpsPath,
   extractTrailingSlash,
-  validateAndFilterSessions,
   walletKit
 } from '@features/wallet-connect/utils';
 import { verticalScale } from '@utils';
@@ -107,9 +106,7 @@ export const WalletConnectApprovalView = () => {
           namespaces
         });
 
-        const allSessions = Object.values(walletKit.getActiveSessions());
-        const validSessions = await validateAndFilterSessions(allSessions);
-        setActiveSessions(validSessions);
+        setActiveSessions(Object.values(walletKit.getActiveSessions()));
 
         onDismissWalletConnectBottomSheet();
         onShowToastNotification();
