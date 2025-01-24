@@ -2,11 +2,11 @@
 // tslint:disable:no-console
 import { useBrowserStore } from '@entities/browser/model';
 import { AMB_CHAIN_ID_HEX } from '@features/browser/constants';
+import { rpcErrorHandler, requestUserApproval } from '@features/browser/utils';
 import {
   REVOKE_PERMISSIONS_JS,
   UPDATE_ETHEREUM_STATE_JS
-} from '@features/browser/lib';
-import { rpcErrorHandler, requestUserApproval } from '@features/browser/utils';
+} from './injectable.provider';
 import { rpcMethods } from './rpc-methods';
 
 const {
