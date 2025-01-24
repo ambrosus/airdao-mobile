@@ -1,7 +1,8 @@
 import React from 'react';
-import { Linking, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { Linking, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
