@@ -9,7 +9,7 @@ interface StakeHeaderIconModel {
   apr: string | number;
 }
 
-export const StakeHeaderIcon = ({ apr }: StakeHeaderIconModel) => {
+export const HeaderAPYLabel = ({ apr }: StakeHeaderIconModel) => {
   return (
     <Row justifyContent="center" alignItems="center" style={styles.main}>
       <APYHeaderIcon />
