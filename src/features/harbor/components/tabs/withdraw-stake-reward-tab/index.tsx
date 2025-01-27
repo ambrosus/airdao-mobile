@@ -66,7 +66,7 @@ export const WithdrawStakeRewardTab = () => {
         token={token}
         onChangeText={onChangeText}
         onPressMaxAmount={() => {
-          setAmountToWithdraw(formatEther(userStaked));
+          onChangeText(formatEther(userStaked));
         }}
       />
       <Spacer value={scale(8)} />
