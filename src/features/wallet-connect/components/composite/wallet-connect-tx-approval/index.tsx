@@ -26,6 +26,13 @@ import { styles } from './styles';
 import { DetailsRowItem } from '../../base';
 
 const ZERO = ethers.BigNumber.from(0);
+const mappedFunctionNames = [
+  'unknown',
+  'unstake',
+  'stake',
+  'deposit',
+  'withdraw'
+];
 
 export const WalletConnectTxApproval = () => {
   const { t } = useTranslation();
@@ -49,11 +56,9 @@ export const WalletConnectTxApproval = () => {
   const isApprovalTx = transaction?.functionName === 'approve';
   const isAmbTransaction = request?.params[0]?.value;
   const isWithdraw = transaction?.functionName === 'withdraw';
-  const isWrapOrUnwrap =
-    transaction?.functionName === 'unstake' ||
-    transaction?.functionName === 'stake' ||
-    transaction?.functionName === 'deposit' ||
-    transaction?.functionName === 'withdraw';
+  const isWrapOrUnwrap = mappedFunctionNames.includes(
+    transaction?.functionName?.toLowerCase() ?? ''
+  );
 
   const { data: account } = useAccountByAddress(
     request?.params[0].from.toLowerCase(),
