@@ -145,7 +145,7 @@ export const WalletConnectTxApproval = () => {
 
     if (isWithdraw) return CryptoCurrencyCode.SAMB;
 
-    if (isUnstake) return CryptoCurrencyCode.BOND;
+    if (isUnstake) return CryptoCurrencyCode.stAMB;
 
     return getTokenSymbolFromDatabase(
       transaction?.decodedArgs?.addresses?.[0] ?? ''
