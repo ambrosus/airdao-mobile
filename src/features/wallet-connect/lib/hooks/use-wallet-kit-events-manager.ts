@@ -5,7 +5,6 @@ import { Toast, ToastType } from '@components/modular';
 import Config from '@constants/config';
 import {
   CONNECT_VIEW_STEPS,
-  SessionDeleteEvent,
   SessionProposalEvent,
   SessionRequestEvent,
   WALLET_CLIENT_EVENTS,
@@ -60,15 +59,10 @@ export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
     [onChangeProposal, onShowWalletConnectBottomSheet, setWalletConnectStep]
   );
 
-  const onSessionDelete = useCallback(
-    (event: SessionDeleteEvent) => {
-      AirDAOEventDispatcher.dispatch(AirDAOEventType.CloseAllModals, null);
-      setActiveSessions((prevState) =>
-        prevState.filter((session) => session.topic !== event.topic)
-      );
-    },
-    [setActiveSessions]
-  );
+  const onSessionDelete = useCallback(() => {
+    AirDAOEventDispatcher.dispatch(AirDAOEventType.CloseAllModals, null);
+    setActiveSessions(Object.values(walletKit.getActiveSessions()));
+  }, [setActiveSessions]);
 
   const onSessionRequest = useCallback(
     async (event: SessionRequestEvent) => {

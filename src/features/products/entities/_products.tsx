@@ -1,10 +1,13 @@
 import React from 'react';
 import { TFunction } from 'i18next';
+import { HBRIcon } from '@components/svg/icons';
 import {
   BridgeAccountActionIcon,
+  KosmosProductIcon,
+  StakeProductIcon,
   SwapAccountActionIcon
 } from '@components/svg/icons/v2/actions';
-import { HarborAccountAction } from '@components/svg/icons/v2/harbor';
+import { COLORS } from '@constants/colors';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics';
 import { SectionizedProducts } from '../utils';
 
@@ -18,7 +21,7 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
           name: t('token.actions.swap'),
           description: t('products.swap.description'),
           icon: (
-            <SwapAccountActionIcon scale={2} color="rgba(166, 129, 239, 1)" />
+            <SwapAccountActionIcon scale={2.5} color="rgba(166, 129, 239, 1)" />
           ),
           background: ['rgba(132, 224, 255, 0.2)', 'rgba(160, 99, 221, 0.2)'],
           color: 'rgba(52, 27, 104, 1)',
@@ -30,7 +33,10 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
           name: t('account.actions.bridge'),
           description: t('products.bridge.description'),
           icon: (
-            <BridgeAccountActionIcon scale={2} color="rgba(255, 152, 99, 1)" />
+            <BridgeAccountActionIcon
+              scale={2.5}
+              color="rgba(255, 152, 99, 1)"
+            />
           ),
           background: ['rgba(164, 128, 235, 0.2)', 'rgba(210, 95, 95, 0.2)'],
           color: 'rgba(118, 43, 6, 1)',
@@ -46,9 +52,7 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
           id: 2,
           name: t('account.actions.stake'),
           description: t('products.stake.description'),
-          icon: (
-            <SwapAccountActionIcon scale={2} color="rgba(255, 255, 255, 1)" />
-          ),
+          icon: <StakeProductIcon scale={2.5} color="rgba(255, 255, 255, 1)" />,
           background: ['rgba(53, 104, 221, 1)', 'rgba(33, 65, 140, 1)'],
           color: 'rgba(255, 255, 255, 1)',
           route: 'StakingPools',
@@ -59,7 +63,7 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
           name: 'KOSMOS',
           description: t('products.kosmos.description'),
           icon: (
-            <SwapAccountActionIcon scale={2} color="rgba(255, 255, 255, 1)" />
+            <KosmosProductIcon scale={2.5} color="rgba(255, 255, 255, 1)" />
           ),
           background: ['rgba(67, 68, 145, 1)', 'rgba(51, 48, 96, 1)'],
           color: 'rgba(255, 255, 255, 1)',
@@ -70,7 +74,7 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
           id: 4,
           name: 'HARBOR',
           description: t('products.harbor.description'),
-          icon: <HarborAccountAction scale={1} />,
+          icon: <HBRIcon scale={2.35} color={COLORS.neutral0} />,
           background: ['rgba(255, 201, 62, 1)', 'rgba(224, 131, 0, 1)'],
           color: 'rgba(255, 255, 255, 1)',
           route: 'Harbor',
