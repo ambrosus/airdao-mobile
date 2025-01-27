@@ -38,13 +38,11 @@ export async function swapPayableArgsCallback(
   const bnAmountOut = ethers.utils.parseEther(amountOut);
 
   const amountOutMin = minimumAmountOut(`${slippageTolerance}%`, bnAmountOut);
-  const amountOutMax = maximumAmountIn(`${slippageTolerance}%`, bnAmountIn);
+  const amountInMax = maximumAmountIn(`${slippageTolerance}%`, bnAmountIn);
 
-  return [
-    tradeIn ? amountOutMin : amountOutMax,
-    path,
-    address,
-    timestamp,
-    { value: tradeIn ? bnAmountIn : bnAmountOut }
-  ];
+  if (tradeIn) {
+    return [amountOutMin, path, address, timestamp, { value: bnAmountIn }];
+  } else {
+    return [bnAmountOut, path, address, timestamp, { value: amountInMax }];
+  }
 }

@@ -3,6 +3,16 @@ import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock';
 
 const ETH_ADDRESS = '0x0000000000000000000000000000000000000000';
 
+jest.mock('@walletconnect/react-native-compat', () => ({}));
+jest.mock('@reown/walletkit', () => ({
+  WalletKit: jest.fn(),
+  IWalletKit: jest.fn()
+}));
+
+jest.mock('@walletconnect/core', () => ({
+  Core: jest.fn()
+}));
+
 const mockIsPackageInstalled = jest.fn((value) => ({
   value,
   isInstalled: true
