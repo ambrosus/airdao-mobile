@@ -10,19 +10,16 @@ import { BottomSheetRef, Header } from '@components/composite';
 import { AutoScrollBox, PrimaryButton } from '@components/modular';
 import { InputWithoutTokenSelect } from '@components/templates';
 import { COLORS } from '@constants/colors';
-import { AMB_DECIMALS, DEVICE_HEIGHT } from '@constants/variables';
-import { StakedBalanceInfo } from '@entities/harbor/components/composite';
 import { AMB_DECIMALS } from '@constants/variables';
+import { StakedBalanceInfo } from '@entities/harbor/components/composite';
 import { DEFAULT_STAKE_PREVIEW } from '@entities/harbor/constants';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { useWalletStore } from '@entities/wallet';
 import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-preview';
 import { useBalanceOfAddress } from '@hooks';
 import { ExplorerAccount, Token } from '@models';
-import { isSmallScreen, scale, NumberUtils, TokenUtils } from '@utils';
-import { HarborTitle, RateInfo } from './components';
 import { scale, NumberUtils, TokenUtils } from '@utils';
-import { HarborTitle, RateInfo, StakedBalanceInfo } from './components';
+import { HarborTitle, RateInfo } from './components';
 import { styles } from './styles';
 
 export const ProcessStake = () => {

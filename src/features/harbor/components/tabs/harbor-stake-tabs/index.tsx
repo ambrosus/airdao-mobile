@@ -4,7 +4,6 @@ import { WrappedListsContainer } from '@components/base/wrapped-lists-container'
 import { TokenLogo } from '@components/modular';
 import { AnimatedTabsV2 } from '@components/modular/AnimatedTabsV2';
 import { useStakeUIStore } from '@entities/harbor';
-import { WrappedListsContainer } from '@features/kosmos/components/base';
 import { StakeAMBTab } from '../stake-amb-tab';
 import { StakeHBRTab } from '../stake-hbr-tab';
 
