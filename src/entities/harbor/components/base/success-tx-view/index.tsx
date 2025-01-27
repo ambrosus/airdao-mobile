@@ -67,7 +67,9 @@ export const SuccessTxView = ({
 
   const title = useMemo(() => {
     return t(
-      withdraw ? 'Withdrawal request sent' : 'harbor.successfully.stake.header'
+      withdraw
+        ? 'harbor.withdraw.preview.success.header'
+        : 'harbor.successfully.stake.header'
     );
   }, [t, withdraw]);
 
