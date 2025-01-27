@@ -1,4 +1,3 @@
-import React from 'react';
 // import { Image, Defs, Path, Pattern, Svg, Use } from 'react-native-svg';
 import { Image, View } from 'react-native';
 import { IconProps } from './Icon.types';

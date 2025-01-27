@@ -1,13 +1,14 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, render } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { COLORS } from '@constants/colors';
 import { NotificationSettingsView } from './index';
+
 import clearAllMocks = jest.clearAllMocks;
 
 jest.mock('react-native-modal', () => {
-  return ({ children }: { children: React.ReactNode }) => <>{children}</>;
+  return ({ children }: { children: ReactNode }) => <>{children}</>;
 });
 
 jest.mock('@react-native-firebase/messaging', () => {

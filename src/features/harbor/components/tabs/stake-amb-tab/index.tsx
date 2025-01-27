@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 import { Spacer } from '@components/base';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';

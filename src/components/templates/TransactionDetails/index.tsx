@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import { ReactNode, useCallback, useMemo, useRef } from 'react';
 import { Linking, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
@@ -20,7 +20,7 @@ interface TransactionDetailsProps {
   transactionTokenInfo?: TransactionTokenInfo;
 }
 
-const JustifiedRow = ({ children }: { children: React.ReactNode }) => (
+const JustifiedRow = ({ children }: { children: ReactNode }) => (
   <Row alignItems="center" justifyContent="space-between">
     {children}
   </Row>

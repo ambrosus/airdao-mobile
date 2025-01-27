@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
+import { ForwardedRef, forwardRef, RefObject, useState } from 'react';
 import { FlatList, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
 import { WalletIcon } from '@components/svg/icons/v2';

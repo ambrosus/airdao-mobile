@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React from 'react';
+
 import { Image, View } from 'react-native';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';

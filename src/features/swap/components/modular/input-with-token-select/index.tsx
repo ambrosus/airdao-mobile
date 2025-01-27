@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { LayoutChangeEvent, Platform, Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { InputRef, Text } from '@components/base';

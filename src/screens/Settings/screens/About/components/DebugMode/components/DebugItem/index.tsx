@@ -1,4 +1,3 @@
-import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { Spacer, Text } from '@components/base';

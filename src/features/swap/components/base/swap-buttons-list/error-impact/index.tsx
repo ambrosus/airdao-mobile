@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Spinner, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';

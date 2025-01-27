@@ -1,4 +1,3 @@
-import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';

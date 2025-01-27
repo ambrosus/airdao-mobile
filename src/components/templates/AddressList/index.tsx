@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { ReactElement, useCallback } from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
@@ -27,9 +27,7 @@ interface AddressListProps
   isPortfolioFlow?: boolean;
   scrollEnabled?: boolean; // default to true
   contentContainerStyle?: ScrollViewProps['contentContainerStyle'];
-  renderItem?: (
-    args: ListRenderItemInfo<ExplorerAccount>
-  ) => React.ReactElement;
+  renderItem?: (args: ListRenderItemInfo<ExplorerAccount>) => ReactElement;
   onRefresh?: () => void;
 }
 

@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, ReactNode } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { BigNumber, ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';

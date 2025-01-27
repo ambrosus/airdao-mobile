@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, RefObject } from 'react';
+import { ForwardedRef, forwardRef, RefObject } from 'react';
 import { Button, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { BottomSheetFloat } from '@components/modular';

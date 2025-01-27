@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { Pressable } from 'react-native';
 import { Text } from '@components/base';
 import { COLORS } from '@constants/colors';
@@ -11,7 +11,7 @@ interface PercentageItemProps {
 
 const MAXIMUM_AVAILABLE_VALUE = 100;
 
-export const PercentageItem = React.memo<PercentageItemProps>(
+export const PercentageItem = memo<PercentageItemProps>(
   ({ symbol, percent, onPercentItemPress }) => {
     const label = useMemo(() => {
       if (percent === MAXIMUM_AVAILABLE_VALUE) {

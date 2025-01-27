@@ -1,4 +1,3 @@
-import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { startCase, toLower } from 'lodash';
 import { useTranslation } from 'react-i18next';

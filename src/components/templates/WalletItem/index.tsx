@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { FlexAlignType, View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
 import { PercentChange } from '@components/composite';
@@ -85,4 +85,4 @@ function WalletItemView(props: WalletItemProps): JSX.Element {
   );
 }
 
-export const WalletItem = React.memo(WalletItemView);
+export const WalletItem = memo(WalletItemView);

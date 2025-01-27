@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { Spacer, Spinner } from '@components/base';
 import { useSendFundsStore } from '@features/send-funds';

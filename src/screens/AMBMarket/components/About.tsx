@@ -1,4 +1,4 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { Linking, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
@@ -17,7 +17,7 @@ import { scale, verticalScale } from '@utils';
 interface Link {
   title: string;
   url: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
 }
 
 const SOCIAL_LINKS: Link[] = [
@@ -55,7 +55,7 @@ const LinkButton = ({
 }: {
   title: string;
   url: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
 }) => {
   const openLink = () => {
     Linking.openURL(url);

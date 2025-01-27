@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { LineGraph, GraphPoint } from 'react-native-graph';
 import { Button, Row, Text } from '@components/base';

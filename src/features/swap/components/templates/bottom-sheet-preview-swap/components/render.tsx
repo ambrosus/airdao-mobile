@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { View } from 'react-native';
 import { Spacer } from '@components/base';
 import { BottomSheetReviewTokenItem } from '@features/swap/components/base';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Keyboard, View, ViewProps } from 'react-native';
 
 export function KeyboardDismissingView(

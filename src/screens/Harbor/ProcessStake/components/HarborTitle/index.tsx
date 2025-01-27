@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';

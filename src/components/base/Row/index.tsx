@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, ViewStyle } from 'react-native';
 import { RowProps } from './Row.types';
 

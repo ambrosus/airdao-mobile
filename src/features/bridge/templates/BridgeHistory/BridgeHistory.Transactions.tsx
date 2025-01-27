@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   ListRenderItemInfo,
   RefreshControl,
@@ -62,7 +62,7 @@ export const BridgeHistoryTransactions = () => {
       .map((item) => parseBridgeTransaction(item));
   }, [transactions]);
 
-  const sectionizedTransactions: TransactionSection[] = React.useMemo(() => {
+  const sectionizedTransactions: TransactionSection[] = useMemo(() => {
     const sectionMap = new Map<string, BridgeTransactionHistoryDTO[]>();
     sortedTxs.forEach((n) => {
       const key = moment(n.timestampStart * 1000).format(DAY_FORMAT);

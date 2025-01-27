@@ -1,9 +1,9 @@
-import React from 'react';
+import { forwardRef } from 'react';
 import { NumberInput } from './Input.number';
 import { TextInput } from './Input.text';
 import { InputProps, InputRef } from './Input.types';
 
-export const Input = React.forwardRef<InputRef, InputProps>((props, ref) => {
+export const Input = forwardRef<InputRef, InputProps>((props, ref) => {
   const { type, ...restProps } = props;
 
   switch (type) {

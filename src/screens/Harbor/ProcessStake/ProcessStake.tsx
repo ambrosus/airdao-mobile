@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { RefreshControl, View } from 'react-native';
 import { ethers } from 'ethers';
 import { formatEther, parseEther } from 'ethers/lib/utils';

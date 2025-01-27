@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback } from 'react';
+import { ReactNode, RefObject, forwardRef, useCallback } from 'react';
 import { Animated, TouchableOpacity, View } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { styles } from './styles';
@@ -8,8 +8,8 @@ type Props = {
   index: number;
   opacity: Animated.AnimatedInterpolation<number>;
   color?: string;
-  ref: React.RefObject<any>;
-  children: React.ReactNode;
+  ref: RefObject<any>;
+  children: ReactNode;
 };
 
 export const PortfolioScreenTabItem = forwardRef<any, Props>((props, ref) => {

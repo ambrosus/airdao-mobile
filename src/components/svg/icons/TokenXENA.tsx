@@ -1,4 +1,3 @@
-import React from 'react';
 import Svg, { Path, Rect } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons/Icon.types';
 

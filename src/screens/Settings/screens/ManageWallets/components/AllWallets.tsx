@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback } from 'react';
 import { FlatList, ListRenderItemInfo } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SettingsTabNavigationProp } from '@appTypes';
@@ -15,7 +15,7 @@ export const AllWallets = () => {
   const { data: allAccounts } = useAllAccounts();
 
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       if (allWalletsQueryInfo.refetch) allWalletsQueryInfo.refetch();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [allWalletsQueryInfo.refetch])

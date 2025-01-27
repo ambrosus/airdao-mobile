@@ -1,4 +1,4 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Spacer, Text } from '@components/base';
@@ -9,7 +9,7 @@ import { verticalScale } from '@utils';
 
 type LocalizedRenderEmptyProps = {
   text: string;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
 };
 
 export const LocalizedRenderEmpty = ({

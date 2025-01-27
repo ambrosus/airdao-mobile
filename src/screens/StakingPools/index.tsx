@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Updates from 'expo-updates';

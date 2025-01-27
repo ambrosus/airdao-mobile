@@ -1,4 +1,3 @@
-import React from 'react';
 import { formatUnits } from 'ethers/lib/utils';
 import { WalletCard } from '@components/modular';
 import { useAMBPrice, useUSDPrice } from '@hooks';

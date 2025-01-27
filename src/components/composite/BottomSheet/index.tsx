@@ -1,4 +1,5 @@
-import React, {
+import {
+  forwardRef,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -27,7 +28,7 @@ import { Toast } from '../../modular/Toast';
 
 const DEFAULT_BACKDROP_OPACITY = 1;
 
-export const BottomSheet = React.forwardRef<BottomSheetRef, BottomSheetProps>(
+export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
   (
     {
       height,

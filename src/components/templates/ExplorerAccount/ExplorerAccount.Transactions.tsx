@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef, useMemo } from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
@@ -59,25 +59,24 @@ export const AccountTransactions = forwardRef<
     },
     ref
   ) => {
-    const sectionizedTransactions: SectionedTransaction[] =
-      React.useMemo(() => {
-        const sectionMap = new Map<string, Transaction[]>();
-        transactions.forEach((n) => {
-          const key = moment(n.timestamp).format(DAY_FORMAT);
-          const transactionsInSection = sectionMap.get(key) || [];
-          transactionsInSection.push(n);
-          sectionMap.set(key, transactionsInSection);
-        });
+    const sectionizedTransactions: SectionedTransaction[] = useMemo(() => {
+      const sectionMap = new Map<string, Transaction[]>();
+      transactions.forEach((n) => {
+        const key = moment(n.timestamp).format(DAY_FORMAT);
+        const transactionsInSection = sectionMap.get(key) || [];
+        transactionsInSection.push(n);
+        sectionMap.set(key, transactionsInSection);
+      });
 
-        const sections: SectionedTransaction[] = [];
-        for (const [title, data] of sectionMap.entries()) {
-          sections.push({ type: 'header', title });
-          data.forEach((transaction) => {
-            sections.push({ type: 'transaction', transaction });
-          });
-        }
-        return sections;
-      }, [transactions]);
+      const sections: SectionedTransaction[] = [];
+      for (const [title, data] of sectionMap.entries()) {
+        sections.push({ type: 'header', title });
+        data.forEach((transaction) => {
+          sections.push({ type: 'transaction', transaction });
+        });
+      }
+      return sections;
+    }, [transactions]);
 
     const renderItem = (
       args: ListRenderItemInfo<SectionedTransaction>

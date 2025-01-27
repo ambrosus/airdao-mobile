@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { WrappedListsContainer } from '@components/base/wrapped-lists-container';
 import { TokenLogo } from '@components/modular';

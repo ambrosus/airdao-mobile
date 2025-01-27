@@ -1,4 +1,3 @@
-import React from 'react';
 import { Linking, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';

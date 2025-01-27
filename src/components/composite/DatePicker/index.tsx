@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import CalendarPicker from 'react-native-calendar-picker';
 import { Row, Spacer } from '@components/base';
 import { scale } from '@utils';

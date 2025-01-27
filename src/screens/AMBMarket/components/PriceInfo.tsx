@@ -1,4 +1,3 @@
-import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Spacer, Text } from '@components/base';
 import { LogoGradientCircular } from '@components/svg/icons';

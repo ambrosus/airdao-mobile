@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Animated from 'react-native-reanimated';
 import { Spacer, Spinner, Text } from '@components/base';

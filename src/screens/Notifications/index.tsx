@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import {
   SectionList,
   SectionListData,
@@ -37,7 +37,7 @@ export const Notifications = (): JSX.Element => {
   const settingsModal = useRef<BottomSheetRef>(null);
   const { t } = useTranslation();
 
-  const sectionizedNotificaitons: NotificationSection[] = React.useMemo(() => {
+  const sectionizedNotificaitons: NotificationSection[] = useMemo(() => {
     const sectionMap = new Map<string, Notification[]>();
     notifications.forEach((n) => {
       const key = moment(n.createdAt).format(DAY_FORMAT);

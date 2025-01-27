@@ -1,4 +1,4 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { Linking, StyleSheet, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import {
@@ -12,7 +12,7 @@ import { scale, verticalScale } from '@utils';
 
 interface MarketItem {
   title: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   url: string;
 }
 
