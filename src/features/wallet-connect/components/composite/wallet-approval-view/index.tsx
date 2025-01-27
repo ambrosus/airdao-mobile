@@ -31,8 +31,12 @@ import { styles } from './styles';
 export const WalletConnectApprovalView = () => {
   const { t } = useTranslation();
   const { wallet } = useWalletStore();
-  const { proposal, setActiveSessions, setWalletConnectStep } =
-    useWalletConnectContextSelector();
+  const {
+    proposal,
+    setActiveSessions,
+    walletConnectStep,
+    setWalletConnectStep
+  } = useWalletConnectContextSelector();
   const { onDismissWalletConnectBottomSheet } = useHandleBottomSheetActions();
 
   const [isLoadingApprove, setIsLoadingApprove] = useState(false);
@@ -112,6 +116,10 @@ export const WalletConnectApprovalView = () => {
         throw error;
       } finally {
         setIsLoadingApprove(false);
+
+        if (walletConnectStep === CONNECT_VIEW_STEPS.CONNECT_ERROR) {
+          onDismissWalletConnectBottomSheet();
+        }
       }
     }
   }, [
@@ -120,7 +128,8 @@ export const WalletConnectApprovalView = () => {
     setActiveSessions,
     onDismissWalletConnectBottomSheet,
     onShowToastNotification,
-    setWalletConnectStep
+    setWalletConnectStep,
+    walletConnectStep
   ]);
 
   const RenderFooterNode = useCallback(() => {

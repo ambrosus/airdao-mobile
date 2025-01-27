@@ -22,8 +22,8 @@ export const Balance = ({ type }: BalanceProps) => {
   const {
     selectedTokens,
     selectedTokensAmount,
-    _refExactGetter,
-    setIsExactIn
+    setIsExactIn,
+    isExecutingPrice
   } = useSwapContextSelector();
   const { onSelectMaxTokensAmount, updateReceivedTokensOutput } =
     useSwapFieldsHandler();
@@ -87,20 +87,20 @@ export const Balance = ({ type }: BalanceProps) => {
   }, [isUSDPriceNegative]);
 
   const error = useMemo(() => {
-    if (!_refExactGetter || !bnBalanceAmount || !selectedTokensAmount[type])
+    if (
+      type === FIELD.TOKEN_B ||
+      !bnBalanceAmount ||
+      !selectedTokensAmount[FIELD.TOKEN_A]
+    )
       return false;
 
     const bnInputBalance = bnBalanceAmount?._hex;
     const bnSelectedAmount = ethers.utils.parseEther(
-      selectedTokensAmount[type]
+      selectedTokensAmount[FIELD.TOKEN_A]
     );
 
-    if (type === FIELD.TOKEN_A && _refExactGetter) {
-      return bnSelectedAmount.gt(bnInputBalance);
-    } else if (type === FIELD.TOKEN_B && !_refExactGetter) {
-      return bnSelectedAmount.gt(bnInputBalance);
-    }
-  }, [_refExactGetter, bnBalanceAmount, selectedTokensAmount, type]);
+    return bnSelectedAmount.gt(bnInputBalance);
+  }, [bnBalanceAmount, selectedTokensAmount, type]);
 
   return (
     <Row alignItems="center" justifyContent={containerJustifyContent}>
@@ -116,17 +116,20 @@ export const Balance = ({ type }: BalanceProps) => {
             <Text
               fontSize={14}
               fontFamily="Inter_500Medium"
-              color={error ? COLORS.error500 : COLORS.neutral500}
+              color={COLORS[error ? 'error500' : 'neutral500']}
             >
               {maximumTokenBalance}
             </Text>
           )}
         </Row>
 
-        {!disabled && (
+        {!disabled && type !== FIELD.TOKEN_B && (
           <>
             <Spacer horizontal value={scale(4)} />
-            <Button onPress={onSelectMaxTokensAmountPress}>
+            <Button
+              disabled={isExecutingPrice}
+              onPress={onSelectMaxTokensAmountPress}
+            >
               <Text
                 fontSize={15}
                 fontFamily="Inter_500Medium"

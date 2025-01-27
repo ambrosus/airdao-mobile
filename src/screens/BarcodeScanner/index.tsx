@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { BarCodeScanningResult, Camera, CameraType } from 'expo-camera';
+import { useTranslation } from 'react-i18next';
 import {
   SafeAreaView,
   useSafeAreaInsets
@@ -9,7 +10,8 @@ import {
 import { RootStackParamsList } from '@appTypes';
 import { Button, Row, Text } from '@components/base';
 import { Header } from '@components/composite';
-import { CloseIcon } from '@components/svg/icons';
+import { CloseIcon, WalletConnectIcon } from '@components/svg/icons';
+import { QRCodeIcon } from '@components/svg/icons/v2';
 import { ScanSquare } from '@components/templates/BarcodeScanner/components/ScanSquare';
 import { styles } from '@components/templates/BarcodeScanner/styles';
 import { COLORS } from '@constants/colors';
@@ -23,8 +25,9 @@ type Props = NativeStackScreenProps<
 const MOCK_ADDRESS = 'ethereum:0xF51452e37eEbf3226BcBB25FA4f9F570f176484e';
 
 export const BarcodeScannerScreen = ({ navigation, route }: Props) => {
+  const { t } = useTranslation();
   const {
-    params: { onScanned }
+    params: { onScanned, walletConnectEnabled }
   } = route;
   const { top: topInset } = useSafeAreaInsets();
   const {
@@ -132,6 +135,29 @@ export const BarcodeScannerScreen = ({ navigation, route }: Props) => {
           )}
           <ScanSquare />
         </Camera>
+      )}
+      {isCameraVisible && walletConnectEnabled && (
+        <View style={styles.footer}>
+          <Row alignItems="center" style={styles.footerIconsRow}>
+            <View style={styles.iconBox}>
+              <WalletConnectIcon color={COLORS.neutral0} scale={0.4} />
+            </View>
+
+            <View style={styles.divider} />
+
+            <View style={styles.iconBox}>
+              <QRCodeIcon color={COLORS.neutral0} scale={1} />
+            </View>
+          </Row>
+          <Text
+            fontSize={16}
+            fontFamily="Inter_600SemiBold"
+            color={COLORS.neutral0}
+            align="center"
+          >
+            {t('wallet.connect.scanner.description')}
+          </Text>
+        </View>
       )}
     </>
   );

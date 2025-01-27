@@ -22,7 +22,7 @@ import {
   useNewNotificationsCount
 } from '@features/wallet-assets/lib/hooks';
 import { WalletSessionsLabel } from '@features/wallet-connect/components/composite';
-import { useWalletConnectContextSelector } from '@features/wallet-connect/lib/hooks';
+import { useConnectionsController } from '@features/wallet-connect/lib/hooks';
 import { useNotificationsQuery } from '@hooks';
 import { Cache, CacheKey } from '@lib/cache';
 
@@ -47,8 +47,7 @@ export const HomeHeader = React.memo(
     const { data: notifications } = useNotificationsQuery();
     const newNotificationsCount = useNewNotificationsCount();
     const { onShowBarcodeContainer } = useBarcode();
-
-    const { activeSessions } = useWalletConnectContextSelector();
+    const sessionsPerAddress = useConnectionsController();
 
     const [headerHidden, setHeaderHidden] = useState(false);
 
@@ -66,8 +65,8 @@ export const HomeHeader = React.memo(
     }));
 
     const renderContentCenter = useMemo(() => {
-      return activeSessions.length > 0 && <WalletSessionsLabel />;
-    }, [activeSessions]);
+      return sessionsPerAddress.length > 0 && <WalletSessionsLabel />;
+    }, [sessionsPerAddress]);
 
     const headerContentCenter = useMemo(() => {
       if (headerHidden) {

@@ -230,7 +230,7 @@
   "send.funds.use.max": "Hepsini kullan",
 
   "import.wallet.methods.mnemonic": "Kurtarma ifadesi",
-  "import.wallet.methods.mnemonic.info": "12 veya 24 kelimelik kurtarma ifadenizi kullanın",
+  "import.wallet.methods.mnemonic.info": "12 kelimelik kurtarma ifadenizi kullanın.",
   "import.wallet.methods.key": "Özel anahtar",
   "import.wallet.methods.key.info": "Özel anahtarınızı manuel olarak girin",
   "import.wallet.phrase.description": "Kurtarma ifadenizi yazın.",
@@ -382,7 +382,7 @@
   "wallet.picker.select": "Cüzdan seç",
 
   "swap.route": "Rota",
-  "swap.pay": "Ödeyeceğin",
+  "swap.pay": "Gönderdiğiniz",
   "swap.receive": "Alacağın",
   "swap.select.asset": "Varlık seç",
   "swap.text.button.max": "Maksimum",
@@ -583,7 +583,16 @@
     "description.error": "Bağlanamadık. Daha sonra tekrar deneyin.",
     "title.connections": "Bağlantıları Yönet",
     "label.connections": "{{connectionsLength}} Site Bağlı",
-    "scanner": "Bağlanmak için Tara"
+    "scanner": "Bağlanmak için Tara",
+    "scanner.description": "Cüzdanınızı bağlamak için WalletConnect QR'ını tarayın veya ayrıntıları görüntülemek için herhangi bir cüzdan QR'ını tarayın.",
+    "tx.request": "İşlem talebi",
+    "tx.approve.warning": "Bu site tokenlarınızı çekmek için izin istiyor",
+    "request.from": "‘den istek",
+    "amount.approve": "Onaylanacak miktar",
+    "request.approve": "İsteği onayla",
+    "interacting.address": "Etkileşimde bulunulan",
+    "approve.token": "Tokenı onayla",
+    "spender": "Harcayan"
   },
   "products": {
     "title.trade": "Alım satım yapın",
@@ -591,6 +600,7 @@
     "swap.description": "Havuzlarla kazanın ve token takas edin",
     "bridge.description": "Sorunsuz varlık transferleri",
     "stake.description": "AMB ödülleri kazanın",
-    "kosmos.description": "Tahviller aracılığıyla pasif gelir elde edin"
+    "kosmos.description": "Tahviller aracılığıyla pasif gelir elde edin",
+    "harbor.description": "Stake edin, kazanın ve likit kalın"
   }
 }

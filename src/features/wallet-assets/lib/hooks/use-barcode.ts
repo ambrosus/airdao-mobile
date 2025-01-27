@@ -104,7 +104,8 @@ export function useBarcode() {
   const onShowBarcodeContainer = useCallback(
     () =>
       navigation.navigate('BarcodeScannerScreen', {
-        onScanned: onScannedAddress
+        onScanned: onScannedAddress,
+        walletConnectEnabled: true
       }),
     [navigation, onScannedAddress]
   );

@@ -7,10 +7,10 @@ import {
   SwapStringUtils,
   isETHtoWrapped,
   isWrappedToETH,
-  maximumAmountOut,
-  minimumAmountOut,
-  realizedLPFee
+  maximumAmountIn,
+  minimumAmountOut
 } from '@features/swap/utils';
+import { NumberUtils } from '@utils';
 import { useSwapActions } from './use-swap-actions';
 import { useSwapBottomSheetHandler } from './use-swap-bottom-sheet-handler';
 import { useSwapHelpers } from './use-swap-helpers';
@@ -26,7 +26,7 @@ export function useSwapInterface() {
     useSwapBottomSheetHandler();
 
   const { uiPriceImpactGetter } = useSwapPriceImpact();
-  const { checkAllowance } = useSwapActions();
+  const { checkAllowance, swapCallback } = useSwapActions();
   const { settings } = useSwapSettings();
   const { tokenToSell, tokenToReceive } = useSwapTokens();
   const { hasWrapNativeToken, isEmptyAmount } = useSwapHelpers();
@@ -54,65 +54,61 @@ export function useSwapInterface() {
         )
       );
 
-      const bnMaximumReceivedAmount = maximumAmountOut(
+      const bnMaximumReceivedAmount = maximumAmountIn(
         `${settings.current.slippageTolerance}%`,
         ethers.utils.parseEther(
           _refExactGetter ? tokenToReceive.AMOUNT : tokenToSell.AMOUNT
         )
       );
 
-      const liquidityProviderFee = realizedLPFee(tokenToSell.AMOUNT);
+      const liquidityProviderFee = await swapCallback({ estimateGas: true });
       const allowance = await checkAllowance();
 
-      if (
-        typeof priceImpact === 'number' &&
-        typeof liquidityProviderFee === 'string' &&
-        bnMinimumReceivedAmount &&
+      const receivedAmountOut = SwapStringUtils.transformMinAmountValue(
+        bnMinimumReceivedAmount
+      );
+
+      const receivedMaxAmountOut = SwapStringUtils.transformMinAmountValue(
         bnMaximumReceivedAmount
-      ) {
-        // Amount that could be received as minimum or maximum value
-        const receivedAmountOut = SwapStringUtils.transformMinAmountValue(
-          bnMinimumReceivedAmount
-        );
+      );
 
-        const receivedMaxAmountOut = SwapStringUtils.transformMinAmountValue(
-          bnMaximumReceivedAmount
-        );
+      const minimumReceivedAmount = !_refExactGetter
+        ? receivedMaxAmountOut
+        : receivedAmountOut;
 
-        const minimumReceivedAmount = !_refExactGetter
-          ? receivedMaxAmountOut
-          : receivedAmountOut;
+      setUiBottomSheetInformation({
+        priceImpact: priceImpact ?? 0,
+        minimumReceivedAmount,
+        lpFee: SwapStringUtils.transformRealizedLPFee(
+          NumberUtils.limitDecimalCount(
+            ethers.utils.formatEther(liquidityProviderFee),
+            0
+          )
+        ),
+        allowance: allowance
+          ? AllowanceStatus.INCREASE
+          : AllowanceStatus.SUITABLE
+      });
 
-        setUiBottomSheetInformation({
-          priceImpact,
-          minimumReceivedAmount,
-          lpFee: SwapStringUtils.transformRealizedLPFee(
-            String(liquidityProviderFee)
-          ),
-          allowance: allowance
-            ? AllowanceStatus.INCREASE
-            : AllowanceStatus.SUITABLE
-        });
-
-        setTimeout(() => {
-          onReviewSwapPreview();
-        }, 700);
-      }
+      setTimeout(() => {
+        onReviewSwapPreview();
+      }, 700);
     } catch (error) {
       onReviewSwapDismiss();
       throw error;
     }
   }, [
     hasWrapNativeToken,
-    onReviewSwapPreview,
     setUiBottomSheetInformation,
+    onReviewSwapPreview,
     uiPriceImpactGetter,
     settings,
+    _refExactGetter,
     tokenToReceive.AMOUNT,
     tokenToSell.AMOUNT,
+    swapCallback,
     checkAllowance,
-    onReviewSwapDismiss,
-    _refExactGetter
+    onReviewSwapDismiss
   ]);
 
   const isEstimatedToken = useMemo(() => {

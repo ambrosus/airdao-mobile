@@ -5,6 +5,7 @@ import {
   createBottomTabNavigator
 } from '@react-navigation/bottom-tabs';
 import { TabsParamsList } from '@appTypes/navigation/tabs';
+import { WalletConnectModal } from '@features/wallet-connect/components/templates';
 import { useKeyboardHeight, usePasscodeEntryRevealer } from '@hooks';
 import TabBar from '@navigation/components/TabBar';
 import { DeviceUtils } from '@utils';
@@ -35,14 +36,17 @@ export const TabsNavigator = () => {
   );
 
   return (
-    <BottomTabs.Navigator
-      initialRouteName="Wallets"
-      screenOptions={screenOptions}
-      tabBar={renderTabBarComponent}
-    >
-      <BottomTabs.Screen name="Wallets" component={HomeStack} />
-      <BottomTabs.Screen name="Products" component={ProductsStack} />
-      <BottomTabs.Screen name="Settings" component={SettingsStack} />
-    </BottomTabs.Navigator>
+    <>
+      <BottomTabs.Navigator
+        initialRouteName="Wallets"
+        screenOptions={screenOptions}
+        tabBar={renderTabBarComponent}
+      >
+        <BottomTabs.Screen name="Wallets" component={HomeStack} />
+        <BottomTabs.Screen name="Products" component={ProductsStack} />
+        <BottomTabs.Screen name="Settings" component={SettingsStack} />
+      </BottomTabs.Navigator>
+      <WalletConnectModal />
+    </>
   );
 };

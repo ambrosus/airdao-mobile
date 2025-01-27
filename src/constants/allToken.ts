@@ -361,6 +361,12 @@ export const ALL_TOKENS_DATA: AllTokenDataModel = {
       name: 'X3NA',
       symbol: 'X3NA',
       decimals: 18
+    },
+    {
+      address: '0xC410F3EB0c0f0E1EFA188D38C366536d59a265ba',
+      name: 'SWINE',
+      symbol: 'SWINE',
+      decimals: 18
     }
   ],
   TESTNET: [

@@ -1,3 +1,4 @@
+import '@walletconnect/react-native-compat';
 import { WalletKit, IWalletKit } from '@reown/walletkit';
 import { Core } from '@walletconnect/core';
 import Constants from 'expo-constants';
@@ -7,7 +8,7 @@ export let walletKit: IWalletKit;
 
 export async function createWalletKit() {
   const core = new Core({
-    projectId: Constants.expoConfig?.extra?.eas.EXPO_PUBLIC_REOWN_PROJECT_ID,
+    projectId: Constants.expoConfig?.extra?.eas.REOWN_PROJECT_ID,
     relayUrl: 'wss://relay.walletconnect.org'
   });
 

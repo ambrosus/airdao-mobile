@@ -5,7 +5,6 @@ import { useSwapContextSelector } from '@features/swap/context';
 import {
   calculateAllowanceWithProviderFee,
   isETHtoWrapped,
-  isMultiHopSwapAvailable,
   isWrappedToETH,
   wrapNativeAddress
 } from '@features/swap/utils';
@@ -39,7 +38,7 @@ export function useSwapActions() {
   } = useSwapContextSelector();
 
   const { settings } = useSwapSettings();
-  const { tokensRoute, tokenToSell } = useSwapTokens();
+  const { tokensRoute, tokenToSell, tokenToReceive } = useSwapTokens();
   const { isStartsWithETH, isEndsWithETH } = useSwapHelpers();
 
   const checkAllowance = useCallback(async () => {
@@ -99,83 +98,101 @@ export function useSwapActions() {
     uiBottomSheetInformation
   ]);
 
-  const swapTokens = useCallback(async () => {
-    const signer = createSigner(await _extractPrivateKey());
-    const { slippageTolerance, deadline, multihops } = settings.current;
-    const excludeNativeETH = wrapNativeAddress(tokensRoute);
-    const isMultiHopPathAvailable = isMultiHopSwapAvailable(excludeNativeETH);
-    const tradeIn = _refExactGetter;
-    const _slippage = +slippageTolerance;
+  const swapCallback = useCallback(
+    async ({ estimateGas = false }: { estimateGas?: boolean }) => {
+      const signer = createSigner(await _extractPrivateKey());
+      const { slippageTolerance, deadline, multihops } = settings.current;
+      const _slippage = +slippageTolerance;
 
-    const isMultiHopSwapPossible =
-      multihops &&
-      isMultiHopPathAvailable &&
-      isMultiHopSwapBetterCurrency.state;
+      // Handle ETH wrapping/unwrapping
+      if (isETHtoWrapped(tokensRoute)) {
+        return await wrapETH(tokenToSell.AMOUNT, signer);
+      }
+      if (isWrappedToETH(tokensRoute)) {
+        return await unwrapETH(tokenToSell.AMOUNT, signer);
+      }
 
-    if (isETHtoWrapped(tokensRoute)) {
-      return await wrapETH(tokenToSell.AMOUNT, signer);
-    }
+      sendFirebaseEvent(CustomAppEvents.swap_start);
 
-    if (isWrappedToETH(tokensRoute)) {
-      return await unwrapETH(tokenToSell.AMOUNT, signer);
-    }
+      const wrappedPathWithoutMultihops = wrapNativeAddress(tokensRoute);
 
-    sendFirebaseEvent(CustomAppEvents.swap_start);
-    if (isStartsWithETH && !isMultiHopSwapPossible) {
-      return await swapExactETHForTokens(
+      const isMultiHopSwapPossible =
+        multihops && isMultiHopSwapBetterCurrency.tokens.length > 0;
+
+      // Use the best route for the swap
+      if (isMultiHopSwapPossible) {
+        const path = [
+          ...tokensRoute.slice(0, 1),
+          ...isMultiHopSwapBetterCurrency.tokens,
+          ...tokensRoute.slice(-1)
+        ];
+
+        return await swapMultiHopExactTokensForTokens(
+          tokenToSell.AMOUNT,
+          tokenToReceive.AMOUNT,
+          path,
+          signer,
+          _slippage,
+          deadline,
+          _refExactGetter,
+          estimateGas
+        );
+      }
+
+      // Handle direct routes
+      if (isStartsWithETH) {
+        return await swapExactETHForTokens(
+          tokenToSell.AMOUNT,
+          tokenToReceive.AMOUNT,
+          wrappedPathWithoutMultihops,
+          signer,
+          _slippage,
+          deadline,
+          _refExactGetter,
+          estimateGas
+        );
+      }
+
+      if (isEndsWithETH) {
+        return await swapExactTokensForETH(
+          tokenToSell.AMOUNT,
+          tokenToReceive.AMOUNT,
+          wrappedPathWithoutMultihops,
+          signer,
+          _slippage,
+          deadline,
+          _refExactGetter,
+          estimateGas
+        );
+      }
+
+      return await swapExactTokensForTokens(
         tokenToSell.AMOUNT,
-        excludeNativeETH,
+        tokenToReceive.AMOUNT,
+        wrappedPathWithoutMultihops,
         signer,
         _slippage,
         deadline,
-        tradeIn
+        _refExactGetter,
+        estimateGas
       );
-    }
-
-    if (isEndsWithETH && !isMultiHopSwapPossible) {
-      return await swapExactTokensForETH(
-        tokenToSell.AMOUNT,
-        excludeNativeETH,
-        signer,
-        _slippage,
-        deadline,
-        tradeIn
-      );
-    }
-
-    if (multihops && isMultiHopSwapPossible) {
-      return await swapMultiHopExactTokensForTokens(
-        tokenToSell.AMOUNT,
-        tokensRoute,
-        signer,
-        _slippage,
-        deadline,
-        tradeIn
-      );
-    }
-
-    return await swapExactTokensForTokens(
+    },
+    [
+      _extractPrivateKey,
+      _refExactGetter,
+      isEndsWithETH,
+      isMultiHopSwapBetterCurrency.tokens,
+      isStartsWithETH,
+      settings,
+      tokenToReceive.AMOUNT,
       tokenToSell.AMOUNT,
-      excludeNativeETH,
-      signer,
-      _slippage,
-      deadline,
-      tradeIn
-    );
-  }, [
-    _extractPrivateKey,
-    _refExactGetter,
-    isEndsWithETH,
-    isMultiHopSwapBetterCurrency.state,
-    isStartsWithETH,
-    settings,
-    tokenToSell.AMOUNT,
-    tokensRoute
-  ]);
+      tokensRoute
+    ]
+  );
 
   return {
     checkAllowance,
     setAllowance,
-    swapTokens
+    swapCallback
   };
 }

@@ -1,7 +1,5 @@
-import { SWAP_SUPPORTED_TOKENS } from '../entities';
 import {
   SelectedTokensAmountState,
-  SelectedTokensState,
   Settings,
   UIBottomSheetInformationState
 } from '../types';
@@ -14,11 +12,6 @@ export const INITIAL_SETTINGS: Settings = {
   deadline: INITIAL_DEADLINE,
   multihops: true,
   extendedMode: false
-};
-
-export const INITIAL_SELECTED_TOKENS: SelectedTokensState = {
-  TOKEN_A: SWAP_SUPPORTED_TOKENS.native,
-  TOKEN_B: null
 };
 
 export const INITIAL_SELECTED_TOKENS_AMOUNT: SelectedTokensAmountState = {

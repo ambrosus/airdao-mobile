@@ -1,3 +1,4 @@
+import '@walletconnect/react-native-compat';
 import { WalletKitTypes } from '@reown/walletkit';
 
 export type Proposal = WalletKitTypes.EventArguments['session_proposal'];
@@ -9,6 +10,10 @@ export type SessionAuthenticateEvent =
   WalletKitTypes.EventArguments['session_authenticate'];
 export type SessionDeleteEvent =
   WalletKitTypes.EventArguments['session_delete'];
+export type SessionRequestExpire =
+  WalletKitTypes.EventArguments['session_request_expire'];
+export type SessionProposalExpire =
+  WalletKitTypes.EventArguments['proposal_expire'];
 
 export enum WALLET_CORE_EVENTS {
   'SESSION_PROPOSAL' = 'session_proposal',

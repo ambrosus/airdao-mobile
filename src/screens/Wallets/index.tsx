@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { LayoutChangeEvent } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { ethers } from 'ethers';
 import Animated, {
   Easing,
   useAnimatedScrollHandler,
@@ -21,10 +20,11 @@ import {
   WalletTransactionsAndAssets
 } from '@components/templates';
 import { useCurrenciesQuery } from '@entities/currencies/lib';
-import { useWalletStore } from '@entities/wallet';
+import { _tokensOrNftMapper, useWalletStore } from '@entities/wallet';
 import { useSendFundsStore } from '@features/send-funds';
 import { HomeHeader } from '@features/wallet-assets/components/templates';
-import { useBalanceOfAddress } from '@hooks';
+import { balanceReducer } from '@features/wallet-assets/utils';
+import { useBalanceOfAddress, useTokensAndTransactions } from '@hooks';
 import { useAllAccounts } from '@hooks/database';
 import { ExplorerAccount } from '@models';
 import { WalletUtils, scale, SCREEN_HEIGHT, verticalScale } from '@utils';
@@ -91,10 +91,6 @@ export const HomeScreen = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accounts, onSetTokens, scrollIdx, setWallet]);
-
-  const isSelectAccountBalanceZero = useMemo(() => {
-    return ethers.utils.parseEther(selectedAccountBalance.wei).isZero();
-  }, [selectedAccountBalance.wei]);
 
   const onTransactionsScrollEvent = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -172,6 +168,26 @@ export const HomeScreen = () => {
     },
     [activeTabIndex, offsetScrollY]
   );
+
+  const {
+    data: { tokens }
+  } = useTokensAndTransactions(
+    selectedAccount?.address ?? '',
+    1,
+    20,
+    !!selectedAccount?.address
+  );
+
+  const tokensOrNFTs = useMemo(() => {
+    return _tokensOrNftMapper(tokens);
+  }, [tokens]);
+
+  const isSelectAccountBalanceZero = useMemo(() => {
+    return balanceReducer(
+      tokensOrNFTs.tokens,
+      selectedAccountWithBalance?.ambBalanceWei ?? '0'
+    ).isZero();
+  }, [selectedAccountWithBalance?.ambBalanceWei, tokensOrNFTs.tokens]);
 
   return (
     <SafeAreaView edges={['top']} testID="Home_Screen" style={{ flex: 1 }}>

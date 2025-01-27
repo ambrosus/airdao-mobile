@@ -7,12 +7,14 @@ import {
   useWalletConnectContextSelector,
   useWalletKitEventsManager
 } from '@features/wallet-connect/lib/hooks';
+import { CONNECT_VIEW_STEPS } from '@features/wallet-connect/types';
 import { styles } from './styles';
 import { RenderModalViewByStep } from '../../modular';
 
 export const WalletConnectModal = () => {
   const {
     proposal,
+    request,
     approvalConnectionBottomSheetRef,
     isWalletKitInitiated,
     walletConnectStep
@@ -24,7 +26,7 @@ export const WalletConnectModal = () => {
     return walletConnectStep.toLowerCase().includes('error');
   }, [walletConnectStep]);
 
-  if (!proposal) {
+  if (!proposal && !request?.session) {
     return null;
   }
 
@@ -37,7 +39,12 @@ export const WalletConnectModal = () => {
       height="100%"
     >
       <View style={styles.container}>
-        {!isError ? <WalletConnectIcon /> : <FailedIcon />}
+        {walletConnectStep ===
+        CONNECT_VIEW_STEPS.EIP155_TRANSACTION ? null : !isError ? (
+          <WalletConnectIcon />
+        ) : (
+          <FailedIcon />
+        )}
 
         {RenderModalViewByStep(walletConnectStep)}
       </View>

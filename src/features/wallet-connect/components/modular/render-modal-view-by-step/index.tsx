@@ -5,6 +5,7 @@ import {
 } from '@features/wallet-connect/types';
 import {
   WalletConnectApprovalView,
+  WalletConnectTxApproval,
   WalletConnectionFailedView,
   WalletConnectionWrongChainView
 } from '../../composite';
@@ -20,6 +21,9 @@ export function RenderModalViewByStep(step: WalletConnectViewValues) {
     }
     case CONNECT_VIEW_STEPS.WRONG_CHAIN_ERROR: {
       return <WalletConnectionWrongChainView />;
+    }
+    case CONNECT_VIEW_STEPS.EIP155_TRANSACTION: {
+      return <WalletConnectTxApproval />;
     }
     case CONNECT_VIEW_STEPS.INITIAL: {
       return null;

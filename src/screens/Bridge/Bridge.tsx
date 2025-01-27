@@ -11,6 +11,7 @@ import { useBridgeContextData } from '@features/bridge/context';
 import { usePendingTransactions } from '@features/bridge/hooks/usePendingTransactions';
 import { BridgeTemplate } from '@features/bridge/templates';
 import { StringUtils, scale } from '@utils';
+import { isTestnet } from '@utils/isEnv';
 import { styles } from './styles';
 
 export const Bridge = () => {
@@ -62,10 +63,12 @@ export const Bridge = () => {
         bottomBorder
         contentRight={renderHeaderRightContent}
       />
-      <CopyToClipboardButton
-        textToDisplay={StringUtils.formatAddress(wallet?.address ?? '', 5, 6)}
-        textToCopy={wallet?.address}
-      />
+      {(__DEV__ || isTestnet) && (
+        <CopyToClipboardButton
+          textToDisplay={StringUtils.formatAddress(wallet?.address ?? '', 5, 6)}
+          textToCopy={wallet?.address}
+        />
+      )}
       <Spacer value={scale(15)} />
       <BridgeTemplate />
     </SafeAreaView>

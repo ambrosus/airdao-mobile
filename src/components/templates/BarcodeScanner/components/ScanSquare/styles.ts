@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native';
-import { scale, verticalScale } from '@utils';
+import { isSmallScreen, scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {
-    height: '75%',
+    height: isSmallScreen ? '60%' : '70%',
     justifyContent: 'center',
     alignItems: 'center'
   },

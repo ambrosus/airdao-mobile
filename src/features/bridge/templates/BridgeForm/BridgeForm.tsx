@@ -9,22 +9,12 @@ import { Keyboard, LayoutChangeEvent, View, ViewStyle } from 'react-native';
 import { BigNumber, BigNumberish, ethers } from 'ethers';
 import { parseUnits } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming
-} from 'react-native-reanimated';
-import {
-  KeyboardDismissingView,
-  Spacer,
-  Spinner,
-  Text
-} from '@components/base';
+
+import { Spacer, Spinner, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { InputWithTokenSelect } from '@components/templates';
 import { COLORS } from '@constants/colors';
-import { DEVICE_HEIGHT } from '@constants/variables';
 import { useWalletStore } from '@entities/wallet';
 import {
   DEFAULT_TRANSACTION,
@@ -34,7 +24,6 @@ import { useBridgeContextData } from '@features/bridge/context';
 import { BottomSheetBridgePreview } from '@features/bridge/templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
 import { TokenSelectData } from '@features/bridge/templates/BridgeForm/components/TokenSelectData/TokenSelectData';
 import { getFeeData } from '@features/bridge/utils/getBridgeFee';
-import { useKeyboardHeight } from '@hooks';
 import { getAllBridgeTokenBalance } from '@lib';
 import { FeeData } from '@lib/bridgeSDK/models/types';
 
@@ -43,14 +32,14 @@ import {
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
 import { PreviewDataWithFeeModel, Tokens } from '@models/Bridge';
-import { NumberUtils, scale, verticalScale, isAndroid } from '@utils';
+import { NumberUtils, verticalScale, isAndroid } from '@utils';
 import { styles } from './styles';
 
 export const BridgeForm = () => {
   const { wallet: selectedWallet } = useWalletStore();
-  const keyboardHeight = useKeyboardHeight() + DEVICE_HEIGHT * 0.01;
 
   const [previewLoader, setPreviewLoader] = useState(false);
+  const [isNullInput, setIsNullInput] = useState(true);
   const [disabledComponentStyle, setDisabledComponentStyle] =
     useState<ViewStyle>({
       width: 0,
@@ -85,13 +74,6 @@ export const BridgeForm = () => {
     setSelectedBridgeData
   } = methods;
 
-  const initialMargin = useSharedValue(0);
-  const margin = useAnimatedStyle(() => {
-    return {
-      marginBottom: withTiming(initialMargin.value)
-    };
-  });
-
   const error = useMemo(() => {
     if (!selectedTokenPairs || amountToBridge.trim() === '') return false;
 
@@ -103,14 +85,8 @@ export const BridgeForm = () => {
   }, [selectedTokenPairs, amountToBridge]);
 
   const disabledButton = useMemo(() => {
-    return !amountToBridge || error || templateDataLoader;
-  }, [amountToBridge, error, templateDataLoader]);
-
-  useEffect(() => {
-    initialMargin.value = withTiming(keyboardHeight, {
-      duration: 0
-    });
-  }, [initialMargin, keyboardHeight]);
+    return !amountToBridge || error || templateDataLoader || isNullInput;
+  }, [amountToBridge, error, isNullInput, templateDataLoader]);
 
   const onTokenSelect = (tokenPair: Tokens[]) => {
     // @ts-ignore
@@ -336,8 +312,13 @@ export const BridgeForm = () => {
     });
   };
 
+  const onChangeText = (value: string) => {
+    setIsNullInput(+value <= 0);
+    setAmountToBridge(value);
+  };
+
   return (
-    <KeyboardDismissingView style={styles.separatedContainer}>
+    <View style={styles.container}>
       <View
         onLayout={onInputWrapperLayout}
         style={styles.inputContainerWitHeading}
@@ -358,25 +339,28 @@ export const BridgeForm = () => {
           // @ts-ignore
           token={selectedTokenFrom}
           bottomSheetNode={<TokenSelectData onPressItem={onTokenSelect} />}
-          onChangeText={setAmountToBridge}
+          onChangeText={onChangeText}
           onPressMaxAmount={() => {
             // do nothing
           }}
         />
-
-        <Spacer value={scale(32)} />
       </View>
-      <Animated.View style={[margin]}>
-        <PrimaryButton onPress={goToPreview} disabled={disabledButton}>
-          {templateDataLoader ? (
-            <Spinner />
-          ) : (
-            <Text color={disabledButton ? COLORS.brand300 : COLORS.neutral0}>
-              {error ? t('bridge.insufficient.funds') : t('common.review')}
-            </Text>
-          )}
-        </PrimaryButton>
-      </Animated.View>
+
+      <PrimaryButton
+        style={styles.button}
+        onPress={goToPreview}
+        disabled={disabledButton}
+      >
+        {templateDataLoader ? (
+          <Spinner />
+        ) : (
+          <Text color={disabledButton ? COLORS.brand300 : COLORS.neutral0}>
+            {error
+              ? t('bridge.insufficient.funds')
+              : t(isNullInput ? 'button.enter.amount' : 'common.review')}
+          </Text>
+        )}
+      </PrimaryButton>
       <Spacer value={verticalScale(isAndroid ? 30 : 0)} />
       <BottomSheetBridgePreview
         ref={previewRef}
@@ -385,6 +369,6 @@ export const BridgeForm = () => {
         previewLoader={previewLoader}
         bridgePreviewData={bridgePreviewData}
       />
-    </KeyboardDismissingView>
+    </View>
   );
 };
