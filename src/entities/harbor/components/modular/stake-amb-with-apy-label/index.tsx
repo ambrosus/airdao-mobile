@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ethers } from 'ethers';

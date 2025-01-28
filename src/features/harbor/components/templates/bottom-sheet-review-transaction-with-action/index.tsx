@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BottomSheetRef, TextOrSpinner } from '@components/composite';
 import { PrimaryButton } from '@components/modular';

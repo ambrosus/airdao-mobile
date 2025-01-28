@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { View } from 'react-native';
 import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';

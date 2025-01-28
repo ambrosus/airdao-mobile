@@ -1,4 +1,3 @@
-import React from 'react';
 import { LanguageCode } from '@appTypes';
 import { Row, Spacer, Text } from '@components/base';
 import { WithdrawWarningIcon } from '@components/svg/icons/v2/harbor';

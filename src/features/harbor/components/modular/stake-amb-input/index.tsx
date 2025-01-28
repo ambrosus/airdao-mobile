@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { View } from 'react-native';
 import { ethers } from 'ethers';
 import { CryptoCurrencyCode } from '@appTypes';
