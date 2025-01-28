@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   SectionList,
   SectionListData,
@@ -41,11 +41,22 @@ export const ProductsList = () => {
     []
   );
 
+  const devSupportedProducts = useMemo(
+    () =>
+      PRODUCTS(t).map((section) => ({
+        ...section,
+        data: section.data.filter(
+          (item) => !(!__DEV__ && item.route === 'BrowserScreen')
+        )
+      })),
+    [t]
+  );
+
   return (
     <SectionList<Product, SectionizedProducts>
       bounces={false}
       keyExtractor={(item) => item.id.toString()}
-      sections={PRODUCTS(t)}
+      sections={devSupportedProducts}
       renderSectionHeader={renderSectionHeader}
       renderItem={renderProductItem}
       style={styles.container}
