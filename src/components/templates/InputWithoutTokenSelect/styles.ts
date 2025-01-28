@@ -5,12 +5,15 @@ import { moderateScale, scale, verticalScale } from '@utils';
 export const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: COLORS.neutral0,
-    padding: scale(12),
+    paddingHorizontal: scale(12),
+    paddingVertical: scale(8),
     borderRadius: 16
   },
   errorWrap: {
     borderWidth: scale(1),
-    borderColor: COLORS.error500
+    borderColor: COLORS.error500,
+    paddingHorizontal: scale(11),
+    paddingVertical: scale(7)
   },
   selectorWrapper: {
     backgroundColor: COLORS.neutral100,
@@ -25,7 +28,8 @@ export const styles = StyleSheet.create({
     columnGap: 4
   },
   inputContainer: {
-    flex: 1
+    flex: 1,
+    position: 'relative'
   },
   input: {
     width: '100%',
@@ -47,9 +51,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center'
   },
   exchangeContainerIcon: {
-    padding: scale(8),
-    top: -10,
-    paddingHorizontal: scale(9),
+    padding: scale(10),
+    top: -16,
+    paddingHorizontal: scale(12),
     backgroundColor: COLORS.neutral0,
     borderRadius: 50,
     borderWidth: 1,
