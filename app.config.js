@@ -31,7 +31,7 @@ module.exports = {
       buildNumber: '1.3.14'
     },
     android: {
-      versionCode: 120,
+      versionCode: 121,
       softwareKeyboardLayoutMode: 'pan',
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
