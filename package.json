@@ -27,6 +27,7 @@
     "@babel/preset-env": "^7.21.5",
     "@craftzdog/react-native-buffer": "^6.0.5",
     "@ethersproject/shims": "^5.7.0",
+    "@metamask/react-native-webview": "^14.0.4",
     "@metamask/safe-event-emitter": "^3.0.0",
     "@morrowdigital/watermelondb-expo-plugin": "^2.3.1",
     "@mymonero/mymonero-paymentid-utils": "^3.0.0",

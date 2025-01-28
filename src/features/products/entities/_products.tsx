@@ -6,6 +6,7 @@ import {
   ProductStake,
   ProductSwap
 } from '@components/svg/icons/v2';
+import { SwapAccountActionIcon } from '@components/svg/icons/v2/actions';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics';
 import { SectionizedProducts } from '../utils';
 
@@ -14,6 +15,18 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
     {
       title: t('products.title.trade'),
       data: [
+        {
+          id: 5,
+          name: 'Browser',
+          description: t('products.swap.description'),
+          icon: (
+            <SwapAccountActionIcon scale={2} color="rgba(166, 129, 239, 1)" />
+          ),
+          background: ['rgba(132, 224, 255, 0.2)', 'rgba(160, 99, 221, 0.2)'],
+          color: 'rgba(52, 27, 104, 1)',
+          route: 'BrowserScreen',
+          firebaseEvent: CustomAppEvents.products_swap
+        },
         {
           id: 0,
           name: t('token.actions.swap'),
