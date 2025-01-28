@@ -1,7 +1,11 @@
 import { BigNumber } from 'ethers';
 import { create } from 'zustand';
 import { harborService } from '@api/harbor/harbor-service';
-import { HarborStoreModel, TierRewardItem } from '@entities/harbor/model/types';
+import {
+  HarborDataModel,
+  HarborStoreModel,
+  TierRewardItem
+} from '@entities/harbor/model/types';
 import { getAllHarborData } from '@entities/harbor/utils/getAllHarborData';
 import { parseData } from '@entities/harbor/utils/parceData';
 import { DEFAULT_DATA, REWARD_TIERS_LIST } from '../constants';
@@ -48,7 +52,7 @@ export const useHarborStore = create<HarborStoreModel>((set) => ({
       set({ claimAmount: await harborService.getClaimAmount(address) });
       const data = await getAllHarborData(address);
       if (data) {
-        set({ data: parseData(data) });
+        set({ data: parseData<HarborDataModel>(data) });
         return data;
       }
     } finally {

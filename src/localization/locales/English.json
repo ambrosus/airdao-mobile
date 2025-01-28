@@ -514,11 +514,14 @@
   "harbor.staked.amount": "Staked amount",
   "harbor.staked.balance": "Staked balance",
   "harbor.staked.info": "When you deposit AMB into the pool, you receive the stAMB token, which represents your share in the pool.",
+  "harbor.stake.pool.limit": "Total pool Limit",
 
   "harbor.stake.amount.preview.title": "Stake amount",
   "harbor.receive.amount.preview.title": "You will receive",
   "harbor.stake.from": "From",
   "harbor.stake.apy": "APY",
+  "harbor.apy.value": "Hot APY",
+  "harbor.stake.limit.address": "Per Address Limit",
   "harbor.successfully.stake.header": "You have successfully staked",
   "harbor.successfully.withdraw.header": "You have successfully withdraw",
 
@@ -556,6 +559,16 @@
   "harbor.requests.date": "Requests date",
   "harbor.unlock.date": "Unlock date",
   "harbor.empty.withdrawals.list": "There are no withdrawal requests at the moment.",
+  "harbor.apy.label": "Stake HBR to access high-yield AMB staking.",
+  "harbor.rewards.label": "Rewards",
+  "harbor.withdraw.warning": {
+    "regular": "Please note: to withdraw HBR, you first need to",
+    "highlight": "withdraw AMB"
+  },
+  "harbor.stake.available": "Available to Stake",
+  "harbor.stake.description": "Your AMB staking limit depends on the amount of HBR staked. Stake more HBR to increase your limit!",
+  "harbor.stake.period.complete": "Lock period complete",
+  "harbor.stake.unlock.date": "Available on {{date}}",
 
   "wallet.connect": {
     "proposal": "Connect to {{origin}}",
