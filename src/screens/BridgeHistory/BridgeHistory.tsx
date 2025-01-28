@@ -3,8 +3,8 @@ import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '@components/composite';
-import { COLORS } from '@constants/colors';
 import { BridgeHistoryTransactions } from '@features/bridge/templates/BridgeHistory/BridgeHistory.Transactions';
+import { styles } from './styles';
 
 export const BridgeHistory = () => {
   const { t } = useTranslation();
@@ -14,15 +14,9 @@ export const BridgeHistory = () => {
         closeIconVisible={true}
         title={t('bridge.history.heading')}
         backIconVisible={false}
-        style={{ shadowColor: 'transparent' }}
+        style={styles.header}
       />
-      <View
-        style={{
-          borderBottomWidth: 1,
-          borderColor: COLORS.neutral900Alpha['5'],
-          marginBottom: 15
-        }}
-      />
+      <View style={styles.container} />
       <BridgeHistoryTransactions />
     </SafeAreaView>
   );

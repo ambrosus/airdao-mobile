@@ -10,9 +10,6 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(24),
     rowGap: verticalScale(24)
   },
-  formWithLabel: {
-    rowGap: 8
-  },
   switches: {
     gap: verticalScale(16)
   }

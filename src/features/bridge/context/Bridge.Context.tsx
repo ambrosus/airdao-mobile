@@ -314,7 +314,8 @@ export const BridgeContext = () => {
     setSelectedTokenPairs,
     setBridgePreviewData,
     setProcessingTransaction,
-    setSelectedBridgeData
+    setSelectedBridgeData,
+    setFrom
   };
 
   return {

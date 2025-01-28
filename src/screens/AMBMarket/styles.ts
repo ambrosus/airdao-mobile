@@ -14,12 +14,6 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     paddingBottom: '10%'
   },
-  horizontalPadding: {
-    paddingHorizontal: scale(25)
-  },
-  shareBtn: {
-    backgroundColor: COLORS.gray300
-  },
   body: {
     backgroundColor: COLORS.neutral0,
     borderRadius: moderateScale(24),

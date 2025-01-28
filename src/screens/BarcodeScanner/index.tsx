@@ -13,9 +13,9 @@ import { Header } from '@components/composite';
 import { CloseIcon, WalletConnectIcon } from '@components/svg/icons';
 import { QRCodeIcon } from '@components/svg/icons/v2';
 import { ScanSquare } from '@components/templates/BarcodeScanner/components/ScanSquare';
-import { styles } from '@components/templates/BarcodeScanner/styles';
 import { COLORS } from '@constants/colors';
 import { useBarcodeScanner } from '@hooks';
+import { styles } from './styles';
 
 type Props = NativeStackScreenProps<
   RootStackParamsList,

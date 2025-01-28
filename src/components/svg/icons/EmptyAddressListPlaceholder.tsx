@@ -5,8 +5,8 @@ import { IconProps } from './Icon.types';
 
 export function EmptyAddressListPlaceholderIcon(props: IconProps) {
   const { color = COLORS.neutral900, scale = 1 } = props;
-  const width = 178,
-    height = 67;
+  const width = 178;
+  const height = 67;
   return (
     <Svg
       width={width * scale}

@@ -14,7 +14,6 @@ import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWall
 import { BottomSheetRemoveAddressFromCollection } from '@components/templates/BottomSheetRemoveAddressFromCollection';
 import { BottomSheetRemoveAddressFromWatchlists } from '@components/templates/BottomSheetRemoveAddressFromWatchlists';
 import { WalletItem } from '@components/templates/WalletItem';
-import { COLORS } from '@constants/colors';
 import { useSwipeableDismissListener } from '@hooks';
 import { AirDAOEventDispatcher } from '@lib';
 import { ExplorerAccount } from '@models';
@@ -65,13 +64,7 @@ export const SwipeableWalletItem = memo(
         }, 200);
       }, [item.address, navigation, timeoutRef]);
 
-      const stylesForPortfolio = isPortfolioFlow
-        ? {
-            paddingVertical: 16,
-            borderColor: COLORS.alphaBlack5,
-            borderBottomWidth: 1
-          }
-        : {};
+      const stylesForPortfolio = isPortfolioFlow ? styles.portfolio : {};
 
       const showEdit = useCallback(() => {
         editModalRef.current?.show();
@@ -133,8 +126,8 @@ export const SwipeableWalletItem = memo(
                   bottom: 0
                 }
               : {
-                  right: 0,
                   left: -(screenWidth * 0.65),
+                  right: 0,
                   top: 0,
                   bottom: 0
                 }

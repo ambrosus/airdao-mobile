@@ -3,10 +3,6 @@ import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
-  icon: {
-    alignSelf: 'center',
-    paddingTop: 16
-  },
   text: {
     marginTop: verticalScale(24),
     marginHorizontal: scale(24),
