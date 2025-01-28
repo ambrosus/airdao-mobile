@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
 import { Q } from '@nozbe/watermelondb';
+import { useQuery } from '@tanstack/react-query';
 import { DatabaseTable, QueryResponse } from '@appTypes';
 import { Database, WalletDBModel } from '@database';
 

@@ -1,33 +1,27 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import {
-  Alert,
-  Keyboard,
-  KeyboardAvoidingView,
-  TextInput,
-  View
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
-import * as LocalAuthentication from 'expo-local-authentication';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Alert, Keyboard, TextInput, View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { Passcode, PrimaryButton } from '@components/modular';
-import { KeyboardDismissingView, Spacer, Text } from '@components/base';
-import {
-  useAppState,
-  usePreventGoingBack,
-  useSupportedBiometrics
-} from '@hooks';
-import { verticalScale } from '@utils/scaling';
-import { PasscodeUtils } from '@utils/passcode';
-import { COLORS } from '@constants/colors';
-import usePasscode from '@contexts/Passcode';
+import * as LocalAuthentication from 'expo-local-authentication';
+import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { CommonStackParamsList, RootNavigationProp } from '@appTypes';
-import { Cache, CacheKey } from '@lib/cache';
-import { DeviceUtils } from '@utils/device';
+import { Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
+import { Passcode } from '@components/modular';
+import { COLORS } from '@constants/colors';
+import { usePasscodeStore } from '@features/passcode';
+import { useAppState, usePreventGoingBack } from '@hooks';
+import { Cache, CacheKey } from '@lib/cache';
+import { DeviceUtils, PasscodeUtils, verticalScale } from '@utils';
 
 export const PasscodeEntry = () => {
+  const { t } = useTranslation();
   const { params } = useRoute<RouteProp<CommonStackParamsList, 'Passcode'>>();
+  const navigation = useNavigation<RootNavigationProp>();
+  const [error, setError] = useState(false);
+
+  const { appState } = useAppState();
+  const { isFaceIDEnabled } = usePasscodeStore();
 
   const isAvailableToNavigateBack = useRef(true);
   const isAuthSuccessfulRef = useRef(false);
@@ -38,12 +32,7 @@ export const PasscodeEntry = () => {
 
   usePreventGoingBack(isPreventingNavigateBack);
 
-  const navigation = useNavigation<RootNavigationProp>();
-  const { t } = useTranslation();
-  const { isFaceIDEnabled } = usePasscode();
-  const supportedBiometrics = useSupportedBiometrics();
   const passcodeRef = useRef<TextInput>(null);
-  const { appState } = useAppState();
   const automaticFaceIdCalled = useRef(false);
 
   const closePasscodeEntry = useCallback(() => {
@@ -134,6 +123,7 @@ export const PasscodeEntry = () => {
         isAuthSuccessfulRef.current = true;
         onSuccessActions();
       } else {
+        setError(true);
         Alert.alert(
           t('security.passcode.doesnt.match'),
           t('common.please.try.again'),
@@ -145,67 +135,35 @@ export const PasscodeEntry = () => {
             }
           ]
         );
+        setError(false);
       }
     }
   };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView
-        enabled={DeviceUtils.isIOS}
-        behavior="padding"
-        style={{
-          flex: 1
-        }}
-      >
-        {params?.title && (
-          <Header title={params.title} onBackPress={closePasscodeEntry} />
-        )}
-        <KeyboardDismissingView
-          style={{ flex: 1, justifyContent: 'space-between' }}
+      {params?.title && (
+        <Header title={params.title} onBackPress={closePasscodeEntry} />
+      )}
+      <View style={{ flex: 1 }}>
+        <Text
+          fontSize={24}
+          fontFamily="Inter_700Bold"
+          color={COLORS.neutral800}
+          align="center"
+          style={{ paddingTop: verticalScale(160) }}
         >
-          <View style={{ flex: 1 }}>
-            <Text
-              fontSize={24}
-              fontFamily="Inter_700Bold"
-              color={COLORS.neutral800}
-              align="center"
-              style={{ paddingTop: verticalScale(160) }}
-            >
-              {t('login.enter.your.passcode')}
-            </Text>
-            <Spacer value={verticalScale(24)} />
-            <Passcode
-              ref={passcodeRef}
-              onPasscodeChange={handlePasscode}
-              type="change"
-            />
-          </View>
-          {isFaceIDEnabled && (
-            <PrimaryButton
-              onPress={authenticateWithBiometrics}
-              style={{
-                marginBottom: '5%',
-                width: '90%',
-                alignSelf: 'center'
-              }}
-            >
-              <Text
-                align="center"
-                fontFamily="Inter_500Medium"
-                fontSize={16}
-                color={COLORS.neutral0}
-              >
-                {supportedBiometrics.indexOf(
-                  LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
-                ) > -1
-                  ? t('login.with.face.id')
-                  : t('login.with.fingerprint')}
-              </Text>
-            </PrimaryButton>
-          )}
-        </KeyboardDismissingView>
-      </KeyboardAvoidingView>
+          {t('login.enter.your.passcode')}
+        </Text>
+        <Spacer value={verticalScale(24)} />
+        <Passcode
+          error={error}
+          ref={passcodeRef}
+          authenticateWithBiometrics={authenticateWithBiometrics}
+          onPasscodeChange={handlePasscode}
+          type="change"
+        />
+      </View>
     </SafeAreaView>
   );
 };

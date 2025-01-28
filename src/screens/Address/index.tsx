@@ -1,15 +1,20 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Platform, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { BottomSheetRef, Header } from '@components/composite';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { EditIcon, OptionsIcon } from '@components/svg/icons';
+import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { CommonStackParamsList } from '@appTypes/navigation/common';
 import { Button, Row, Spacer, Spinner, Text } from '@components/base';
+import { BottomSheetRef, Header } from '@components/composite';
+import { Toast, ToastPosition, ToastType } from '@components/modular';
+import { EditIcon, OptionsIcon } from '@components/svg/icons';
 import {
-  ExplorerAccountView,
   AccountTransactions,
+  ExplorerAccountView,
   SharePortfolio
 } from '@components/templates';
+import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
+import { COLORS } from '@constants/colors';
 import {
   useAMBPrice,
   useExplorerInfo,
@@ -17,15 +22,14 @@ import {
   useTransactionsOfAccount,
   useWatchlist
 } from '@hooks';
-import { scale, verticalScale } from '@utils/scaling';
-import { CommonStackParamsList } from '@appTypes/navigation/common';
-import { BottomSheetEditWallet } from '@components/templates/BottomSheetEditWallet';
-import { Toast, ToastPosition, ToastType } from '@components/modular';
+import {
+  StringUtils,
+  NumberUtils,
+  scale,
+  verticalScale,
+  isAndroid
+} from '@utils';
 import { styles } from './styles';
-import { COLORS } from '@constants/colors';
-import { NumberUtils } from '@utils/number';
-import { StringUtils } from '@utils/string';
-import { useTranslation } from 'react-i18next';
 
 const TRANSACTION_LIMIT = 50;
 export const AddressDetails = (): JSX.Element => {
@@ -56,6 +60,7 @@ export const AddressDetails = (): JSX.Element => {
   const { watchlist } = useWatchlist();
   const editModal = useRef<BottomSheetRef>(null);
   const shareModal = useRef<BottomSheetRef>(null);
+  const [showBottomUnderModalStub, setBottomUnderModalStub] = useState(false);
 
   const walletInWatchlist = watchlist.find((w) => w.address === address);
   const finalAccount = walletInWatchlist || account;
@@ -96,6 +101,12 @@ export const AddressDetails = (): JSX.Element => {
   //   shareModal.current?.show();
   // };
 
+  const setShowStub = (value: boolean) => {
+    if (isAndroid) {
+      setBottomUnderModalStub(value);
+    }
+  };
+
   const onToggleWatchlist = (isOnWatchlist: boolean) => {
     Toast.hide();
     const toastMessage = isOnWatchlist
@@ -121,14 +132,6 @@ export const AddressDetails = (): JSX.Element => {
       <Header
         contentRight={
           <Row alignItems="center">
-            {/*<Button*/}
-            {/*  style={styles.headerBtn}*/}
-            {/*  type="circular"*/}
-            {/*  onPress={shareShareModal}*/}
-            {/*  testID="Share_Button"*/}
-            {/*>*/}
-            {/*  <ShareIcon color={COLORS.neutral900} scale={1.1} />*/}
-            {/*</Button>*/}
             {Boolean(walletInWatchlist) && (
               <>
                 <Spacer value={scale(32)} horizontal />
@@ -149,6 +152,7 @@ export const AddressDetails = (): JSX.Element => {
         }
       />
       <ExplorerAccountView
+        setBottomStub={setShowStub}
         account={finalAccount}
         nameVisible={true}
         onToggleWatchlist={onToggleWatchlist}
@@ -187,6 +191,7 @@ export const AddressDetails = (): JSX.Element => {
         last24HourChange={ambPrice?.percentChange24H || 0}
         timestamp={ambPrice?.timestamp || new Date()}
       />
+      {isAndroid && showBottomUnderModalStub && <View style={styles.stub} />}
     </SafeAreaView>
   );
 };

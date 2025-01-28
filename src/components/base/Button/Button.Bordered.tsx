@@ -1,8 +1,8 @@
 import React from 'react';
 import { ViewStyle } from 'react-native';
+import { COLORS } from '@constants/colors';
 import { BaseButton } from './Button.Base';
 import { BorderedButtonProps } from './Button.types';
-import { COLORS } from '@constants/colors';
 
 export function BorderedButton(props: BorderedButtonProps): JSX.Element {
   const {

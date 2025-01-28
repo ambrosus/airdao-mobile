@@ -1,7 +1,7 @@
-import { Button, Row, Text } from '@components/base';
 import React from 'react';
-import { COLORS } from '@constants/colors';
 import { TextStyle, ViewStyle } from 'react-native';
+import { Button, Row, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
 import { styles as staticStyles } from './styles';
 
 export interface Segment {

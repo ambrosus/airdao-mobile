@@ -5,8 +5,8 @@ import { COLORS } from '@constants/colors';
 
 export function BackIcon(props: IconProps) {
   const { color = COLORS.brand500, scale = 1 } = props;
-  const width = 24,
-    height = 24;
+  const width = 24;
+  const height = 24;
   return (
     <Svg
       width={width * scale}

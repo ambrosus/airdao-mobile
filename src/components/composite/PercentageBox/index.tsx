@@ -1,7 +1,7 @@
 import React from 'react';
-import { styles } from './styles';
 import { Button, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { styles } from './styles';
 
 interface PercentageBoxProps {
   percentage: number;
@@ -12,7 +12,7 @@ export const PercentageBox = ({ percentage, onPress }: PercentageBoxProps) => {
   return (
     <Button onPress={() => onPress(percentage)} style={styles.percentageBox}>
       <Text
-        fontSize={14}
+        fontSize={16}
         fontFamily="Inter_500Medium"
         color={COLORS.neutral800}
       >

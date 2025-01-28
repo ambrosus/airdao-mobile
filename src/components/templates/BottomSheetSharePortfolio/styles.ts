@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { scale, verticalScale } from '@utils/scaling';
+import { scale, verticalScale } from '@utils';
+
 export const styles = StyleSheet.create({
   container: {
     paddingBottom: verticalScale(24)

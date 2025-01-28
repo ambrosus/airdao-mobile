@@ -1,7 +1,7 @@
-import Share from 'react-native-share';
-import * as ExpoSharing from 'expo-sharing';
-import { Social, SharingOptionsWithMedia } from '@appTypes';
 import { Platform } from 'react-native';
+import * as ExpoSharing from 'expo-sharing';
+import Share from 'react-native-share';
+import { Social, SharingOptionsWithMedia } from '@appTypes';
 
 const shareImage = async (options: SharingOptionsWithMedia) => {
   return await ExpoSharing.shareAsync(options.uri, {

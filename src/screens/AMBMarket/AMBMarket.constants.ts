@@ -2,7 +2,6 @@ export type InfoKey =
   | 'maxSupply'
   | 'totalSupply'
   | 'marketCap'
-  | 'fullyDilutedMarketCap'
   | 'circulatingSupply'
   | 'volume24H';
 
@@ -22,20 +21,20 @@ export const AMBMarketItemsInfo: { [key: string]: AMBMarketItem } = {
     idx: 2,
     key: 'marketCap'
   },
-  fullyDilutedMarketCap: {
-    title: 'amb.market.fully.diluted.market.cap',
-    body: 'amb.market.fully.diluted.market.cap.popup',
-    testID: 'diluted-cap-popupinfo',
-    idx: 3,
-    key: 'fullyDilutedMarketCap'
-  },
-  // volume24H: {
-  //   title: '24hr volume',
-  //   body: 'A measure of how much of a cryptocurrency was traded in the last 24 hours.',
-  //   testID: '24-hour-volume-popupinfo',
-  //   idx: 5,
-  //   key: 'volume24H'
+  // fullyDilutedMarketCap: {
+  //   title: 'amb.market.fully.diluted.market.cap',
+  //   body: 'amb.market.fully.diluted.market.cap.popup',
+  //   testID: 'diluted-cap-popupinfo',
+  //   idx: 3,
+  //   key: 'fullyDilutedMarketCap'
   // },
+  volume24H: {
+    title: '24hr volume',
+    body: 'A measure of how much of a cryptocurrency was traded in the last 24 hours.',
+    testID: '24-hour-volume-popupinfo',
+    idx: 1,
+    key: 'volume24H'
+  },
   // cexVol: {
   //   title: 'CEX Vol',
   //   body: 'A measure of how much of a cryptocurrency was traded in the last 24 hours on a centralized exchange (CEX).',
@@ -64,7 +63,7 @@ export const AMBMarketItemsInfo: { [key: string]: AMBMarketItem } = {
     title: 'amb.market.total.supply',
     body: 'amb.market.total.supply.popup',
     testID: 'total-supply-popupinfo',
-    idx: 1,
+    idx: 3,
     key: 'totalSupply'
   }
 } as const;

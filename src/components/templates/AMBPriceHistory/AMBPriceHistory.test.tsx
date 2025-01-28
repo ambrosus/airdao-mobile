@@ -1,9 +1,9 @@
 import React from 'react';
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
-import { AMBPriceHistory } from '../AMBPriceHistory';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useAMBPrice, useAMBPriceHistorical } from '@hooks';
+import { AMBPriceHistory } from '../AMBPriceHistory';
 import clearAllMocks = jest.clearAllMocks;
 
 jest.mock('@hooks', () => ({

@@ -1,4 +1,5 @@
 import React, { forwardRef } from 'react';
+import { Button, Text } from '@components/base';
 import {
   BottomSheet,
   BottomSheetProps,
@@ -6,9 +7,8 @@ import {
   Header
 } from '@components/composite';
 import { CloseIcon } from '@components/svg/icons';
-import { Button, Text } from '@components/base';
-import { useForwardedRef } from '@hooks/useForwardedRef';
 import { COLORS } from '@constants/colors';
+import { useForwardedRef } from '@hooks/useForwardedRef';
 import { styles } from './styles';
 
 interface BottomSheetWithHeaderProps extends BottomSheetProps {

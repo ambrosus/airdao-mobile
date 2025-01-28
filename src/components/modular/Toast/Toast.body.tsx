@@ -2,11 +2,11 @@ import React from 'react';
 import { View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { CloseIcon } from '@components/svg/icons';
-import { verticalScale } from '@utils/scaling';
-import { ToastAction, ToastOptions } from './Toast.types';
 import { COLORS } from '@constants/colors';
+import { verticalScale } from '@utils';
 import { ToastBg, ToastBorderColor, ToastStatusIcon } from './Toast.constants';
 import { styles } from './Toast.styles';
+import { ToastAction, ToastOptions } from './Toast.types';
 
 export const AlertBanner = (
   props: Pick<ToastOptions, 'text' | 'subtext' | 'actions' | 'type'> & {
@@ -14,7 +14,7 @@ export const AlertBanner = (
     onHide?: () => unknown;
   }
 ) => {
-  const { text, subtext, actions, type, hideVisible, onHide } = props;
+  const { text, subtext, type, actions, hideVisible, onHide } = props;
 
   const renderAction = (action: ToastAction) => {
     return (

@@ -1,31 +1,22 @@
-import React, { useState } from 'react';
-import {
-  KeyboardAvoidingView,
-  KeyboardAvoidingViewProps,
-  View
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { useEffect, useState } from 'react';
+import { BackHandler, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { BottomAwareSafeAreaView } from '@components/composite';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SettingsTabNavigationProp } from '@appTypes';
+import { Button, Text } from '@components/base';
+import { Header } from '@components/composite';
 import { Passcode } from '@components/modular';
-import { Spacer, Text, Button } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
-import { HomeNavigationProp } from '@appTypes';
-import { isIos } from '@utils/isPlatform';
-
-const KEYBOARD_BEHAVIOR: KeyboardAvoidingViewProps['behavior'] = isIos
-  ? 'padding'
-  : 'height';
+import { DEVICE_HEIGHT } from '@constants/variables';
+import { styles } from './SetupPasscode.styles';
 
 export const SetupPasscode = () => {
-  const { top } = useSafeAreaInsets();
   const { t } = useTranslation();
-  const navigation = useNavigation<HomeNavigationProp>();
+  const navigation = useNavigation<SettingsTabNavigationProp>();
   const [passcode, setPasscode] = useState(['', '', '', '']);
   const isButtonEnabled = passcode.join('').length === 4;
-
+  const { top } = useSafeAreaInsets();
   const onContinuePress = () => {
     if (passcode.every((code) => code !== '')) {
       navigation.navigate('ConfirmPasscode', { passcode });
@@ -38,29 +29,26 @@ export const SetupPasscode = () => {
     setPasscode(passcode);
   };
 
-  return (
-    <KeyboardAvoidingView
-      behavior={KEYBOARD_BEHAVIOR}
-      style={{ top, flex: 1, justifyContent: 'space-between' }}
-    >
-      <View>
-        <View
-          style={{ borderBottomWidth: 2, borderBottomColor: COLORS.neutral100 }}
-        >
-          <Spacer value={verticalScale(23)} />
-          <Text
-            align="center"
-            fontSize={24}
-            fontFamily="Inter_700Bold"
-            color={COLORS.neutral800}
-          >
-            {t('security.enter.passcode')}
-          </Text>
-          <Spacer value={scale(19)} />
-        </View>
+  useEffect(() => {
+    const onBackPress = () => true;
 
-        <Spacer value={scale(23)} />
-        <View style={{ paddingHorizontal: scale(16) }}>
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      onBackPress
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
+  return (
+    <View style={{ ...styles.main, paddingTop: top }}>
+      <View>
+        <Header
+          bottomBorder
+          backIconVisible={false}
+          title={t('security.enter.passcode')}
+        />
+        <View style={styles.infoContainer}>
           <Text
             align="center"
             fontSize={16}
@@ -69,44 +57,37 @@ export const SetupPasscode = () => {
           >
             {t('security.enter.passcode.text')}
           </Text>
-          <Spacer value={verticalScale(106)} />
-          <Passcode onPasscodeChange={onPasscodeChange} />
-          <Spacer value={verticalScale(33)} />
-          <View style={{ paddingHorizontal: scale(70) }}>
-            <Text
-              align="center"
-              fontSize={14}
-              fontFamily="Inter_400Regular"
-              color="#676B73"
-            >
-              {t('security.enter.passcode.hint')}
-            </Text>
-          </View>
-          <Spacer value={verticalScale(30)} />
         </View>
       </View>
-      <BottomAwareSafeAreaView style={{ paddingHorizontal: scale(16) }}>
-        <Button
-          disabled={!isButtonEnabled}
-          onPress={onContinuePress}
-          type="circular"
-          style={{
-            backgroundColor: isButtonEnabled
-              ? COLORS.brand500
-              : COLORS.alphaBlack5,
-            marginBottom: verticalScale(24)
-          }}
-        >
-          <Text
-            fontSize={16}
-            fontFamily="Inter_600SemiBold"
-            color={isButtonEnabled ? COLORS.neutral0 : COLORS.neutral600}
-            style={{ marginVertical: scale(12) }}
+      <View>
+        <Passcode
+          inputBottomPadding={DEVICE_HEIGHT * 0.1}
+          isBiometricEnabled={false}
+          onPasscodeChange={onPasscodeChange}
+        />
+        <View style={styles.buttonWrapper}>
+          <Button
+            disabled={!isButtonEnabled}
+            onPress={onContinuePress}
+            type="circular"
+            style={{
+              ...styles.button,
+              backgroundColor: isButtonEnabled
+                ? COLORS.brand500
+                : COLORS.brand100
+            }}
           >
-            {t('button.continue')}
-          </Text>
-        </Button>
-      </BottomAwareSafeAreaView>
-    </KeyboardAvoidingView>
+            <Text
+              fontSize={16}
+              fontFamily="Inter_600SemiBold"
+              color={isButtonEnabled ? COLORS.neutral0 : COLORS.brand300}
+              style={styles.buttonText}
+            >
+              {t('button.confirm')}
+            </Text>
+          </Button>
+        </View>
+      </View>
+    </View>
   );
 };

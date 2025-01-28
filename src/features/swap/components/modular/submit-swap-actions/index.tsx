@@ -1,64 +1,39 @@
 import React, { useCallback } from 'react';
-import { InteractionManager } from 'react-native';
+import { Alert } from 'react-native';
+import {
+  ApprovalRequiredButton,
+  SwapButton,
+  SwapErrorImpactButton
+} from '@features/swap/components/base/swap-buttons-list';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
   useSwapActions,
   useSwapBottomSheetHandler
 } from '@features/swap/lib/hooks';
+import { AllowanceStatus, BottomSheetStatus } from '@features/swap/types';
+
 import {
-  SwapErrorImpactButton,
-  ApprovalRequiredButton,
-  SwapButton
-} from '@features/swap/components/base/swap-buttons-list';
-import { useNavigation } from '@react-navigation/native';
-import { HomeNavigationProp } from '@appTypes';
-import { AllowanceStatus } from '@features/swap/types';
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
+
+const SWAP_ERROR_TITLE = 'The transaction cannot succeed due to error:';
+const SWAP_ERROR_DESCRIPTION =
+  'missing revert data in call exception; Transaction reverted without a reason string. This is probably an issue with one of the tokens you are swapping.';
 
 export const SubmitSwapActions = () => {
-  const navigation: HomeNavigationProp = useNavigation();
   const {
     uiBottomSheetInformation,
     setIsProcessingSwap,
     isProcessingSwap,
     isIncreasingAllowance,
-    setIsIncreasingAllowance,
-    selectedTokens,
-    selectedTokensAmount
+    setIsIncreasingAllowance
   } = useSwapContextSelector();
 
-  const { setAllowance, swapTokens } = useSwapActions();
-  const { onReviewSwapDismiss } = useSwapBottomSheetHandler();
-
-  const simulateNavigationDelay = useCallback(
-    async (navigate: () => void) => {
-      onReviewSwapDismiss();
-
-      InteractionManager.runAfterInteractions(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 320));
-
-        navigate();
-        setIsProcessingSwap(false);
-      });
-    },
-    [onReviewSwapDismiss, setIsProcessingSwap]
-  );
-
-  const prepareRouteParams = useCallback(() => {
-    const { TOKEN_A, TOKEN_B } = selectedTokens;
-    const { TOKEN_A: AMOUNT_A, TOKEN_B: AMOUNT_B } = selectedTokensAmount;
-
-    const routeParams = {
-      AMOUNT_A,
-      AMOUNT_B: AMOUNT_B,
-      SYMBOL_A: TOKEN_A?.symbol,
-      SYMBOL_B: TOKEN_B?.symbol
-    };
-
-    return routeParams as any;
-  }, [selectedTokens, selectedTokensAmount]);
+  const { setAllowance, swapCallback } = useSwapActions();
+  const { onChangeBottomSheetSwapStatus } = useSwapBottomSheetHandler();
 
   const onCompleteMultiStepSwap = useCallback(async () => {
-    const routeParams = prepareRouteParams();
     if (uiBottomSheetInformation.allowance === AllowanceStatus.INCREASE) {
       try {
         setIsIncreasingAllowance(true);
@@ -69,35 +44,36 @@ export const SubmitSwapActions = () => {
     } else {
       try {
         setIsProcessingSwap(true);
-        const tx = await swapTokens();
+        const tx = await swapCallback({ estimateGas: false });
 
         if (!tx) {
-          await simulateNavigationDelay(() =>
-            navigation.navigate('SwapErrorScreen', routeParams)
-          );
+          onChangeBottomSheetSwapStatus(BottomSheetStatus.ERROR);
+          sendFirebaseEvent(CustomAppEvents.swap_error, {
+            swapError: 'swapTokens-tx not found'
+          });
         } else {
-          await simulateNavigationDelay(() =>
-            navigation.navigate('SwapSuccessScreen', {
-              ...routeParams,
-              txHash: tx.transactionHash
-            })
-          );
+          sendFirebaseEvent(CustomAppEvents.swap_finish);
+          onChangeBottomSheetSwapStatus(BottomSheetStatus.SUCCESS);
         }
       } catch (error) {
-        await simulateNavigationDelay(() =>
-          navigation.navigate('SwapErrorScreen', routeParams)
-        );
+        onChangeBottomSheetSwapStatus(BottomSheetStatus.ERROR);
+        sendFirebaseEvent(CustomAppEvents.swap_error, {
+          swapError: JSON.stringify(
+            (error as { message: string })?.message ?? JSON.stringify(error)
+          )
+        });
+        Alert.alert(SWAP_ERROR_TITLE, SWAP_ERROR_DESCRIPTION);
         throw error;
+      } finally {
+        setIsProcessingSwap(false);
       }
     }
   }, [
-    navigation,
-    prepareRouteParams,
+    onChangeBottomSheetSwapStatus,
     setAllowance,
     setIsIncreasingAllowance,
     setIsProcessingSwap,
-    simulateNavigationDelay,
-    swapTokens,
+    swapCallback,
     uiBottomSheetInformation.allowance
   ]);
 

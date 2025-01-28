@@ -1,24 +1,30 @@
-import React, { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { BottomAwareSafeAreaView } from '@components/composite';
-import { PrimaryButton } from '@components/modular';
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { HomeNavigationProp } from '@appTypes';
 import { Spacer, Text } from '@components/base';
+import { BottomAwareSafeAreaView } from '@components/composite';
+
+import { PrimaryButton } from '@components/modular';
 import { SuccessIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
-import { HomeNavigationProp } from '@appTypes';
-import usePasscode from '@contexts/Passcode';
+import { usePasscodeStore } from '@features/passcode';
+import { usePasscodeActions } from '@features/passcode/lib/hooks';
+import { useEffectOnce } from '@hooks';
+import { scale, verticalScale } from '@utils';
 
 export const SuccessSetupSecurity = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
-  const { toggleBiometricAuthentication, isFaceIDEnabled } = usePasscode();
+  const { isFaceIDEnabled } = usePasscodeStore();
+  const { onToggleBiometricAuth } = usePasscodeActions();
 
-  useEffect(() => {
-    if (!isFaceIDEnabled) toggleBiometricAuthentication();
-  }, [isFaceIDEnabled, toggleBiometricAuthentication]);
+  useEffectOnce(() => {
+    if (!isFaceIDEnabled) {
+      onToggleBiometricAuth();
+    }
+  });
 
   const navigateToHome = () => {
     navigation.dispatch(

@@ -7,11 +7,11 @@ import {
   ViewStyle
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
 import { Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
-import AirDAOKeysStorage from '@lib/crypto/AirDAOKeysStorage';
+import { AirDAOKeysStorage } from '@lib';
+import { scale } from '@utils';
+import { styles } from './styles';
 
 interface AccessKeysMnemonicProps {
   walletHash: string;
@@ -83,8 +83,8 @@ export const AccessKeysMnemonicTab = ({
     <View style={styles.container}>
       <Spacer value={scale(18)} />
       <Text
-        fontSize={16}
-        fontFamily="Inter_500Medium"
+        fontSize={scale(16)}
+        fontFamily="Inter_400Regular"
         color={COLORS.neutral800}
         style={styles.heading}
       >

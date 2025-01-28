@@ -107,9 +107,10 @@ function _removeExtraDots(str: string): string {
 function wrapAndroidString(
   str: string,
   focused: boolean,
-  maxLength = 10
+  maxLength = 10,
+  _isAndroid = isAndroid
 ): string {
-  if (!focused && isAndroid && str.length > maxLength) {
+  if (!focused && _isAndroid && str.length > maxLength) {
     return `${str.slice(0, maxLength)}...`;
   }
   return str;

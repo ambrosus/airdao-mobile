@@ -1,2 +1,1 @@
-export { SwapErrorScreen } from './error';
-export { SwapSuccessScreen } from './success';
+export { SwapSettingsScreen } from './settings/settings';

@@ -1,8 +1,8 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
-import { PortfolioPerformance } from '@components/templates';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { render } from '@testing-library/react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { PortfolioPerformance } from '@components/templates';
 
 const queryClient = new QueryClient();
 

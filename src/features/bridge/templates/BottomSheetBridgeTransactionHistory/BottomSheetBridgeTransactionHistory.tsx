@@ -1,19 +1,22 @@
 import React, { forwardRef, useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
-import { styles } from './styles';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { Row, Spacer, Text } from '@components/base';
 import { useTranslation } from 'react-i18next';
-import { verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
-import { NumberUtils } from '@utils/number';
-import { TokenLogo } from '@components/modular';
-import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
-import { StringUtils } from '@utils/string';
-import { useUSDPrice } from '@hooks';
 import { CryptoCurrencyCode } from '@appTypes';
-import { NETWORK, timestamp } from '@utils/bridge';
+import { Row, Spacer, Text } from '@components/base';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
+import { TokenLogo } from '@components/modular';
+import { COLORS } from '@constants/colors';
 import { Status } from '@features/bridge/templates/BridgeTransaction/components/Status/Status';
+import { useUSDPrice } from '@hooks';
+import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
+import {
+  NETWORK,
+  timestamp,
+  verticalScale,
+  NumberUtils,
+  StringUtils
+} from '@utils';
+import { styles } from './styles';
 
 type RowRightItemType = 'default' | 'status' | 'token' | 'amount';
 
@@ -74,7 +77,7 @@ export const BottomSheetBridgeTransactionHistory = forwardRef<
       type: 'token'
     },
     {
-      key: t('common.transaction.to'),
+      key: t('common.transaction.destination'),
       value: NETWORK[transaction.networkTo as keyof typeof NETWORK],
       thumb: transaction.networkTo,
       type: 'token'

@@ -1,11 +1,10 @@
 import React, { memo } from 'react';
 import { Pressable, StyleSheet, TextStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { COLORS } from '@constants/colors';
 import { Spacer, Text } from '@components/base';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
+import { COLORS } from '@constants/colors';
 import { useCurrentRoute } from '@contexts';
-import { NavigationUtils } from '@utils/navigation';
+import { moderateScale, scale, verticalScale, NavigationUtils } from '@utils';
 
 type Props = {
   title?: string;

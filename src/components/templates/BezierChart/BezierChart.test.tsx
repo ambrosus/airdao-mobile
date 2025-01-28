@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import { BezierChart } from '@components/templates';
 import { GraphPoint } from 'react-native-graph';
+import { BezierChart } from '@components/templates';
 import { COLORS } from '@constants/colors';
 import clearAllMocks = jest.clearAllMocks;
 

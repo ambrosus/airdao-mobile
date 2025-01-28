@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { SegmentedPicker, Segment } from '@components/composite';
-import { Row, Spacer, Switch, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { verticalScale } from '@utils/scaling';
-import { useNotificationSettings } from '@hooks/cache';
 import { NotificationSettings } from '@appTypes/notification';
+import { Button, Row, Spacer, Switch, Text } from '@components/base';
+import { Segment } from '@components/composite';
+import { COLORS } from '@constants/colors';
+import { useNotificationSettings } from '@hooks/cache';
+import { scale, verticalScale } from '@utils';
 import { styles } from './styles';
 
 const Title = ({ children }: { children: React.ReactNode }) => (
   <Text
     title
     fontFamily="Inter_600SemiBold"
-    fontSize={16}
+    fontSize={scale(17)}
     color={COLORS.neutral900}
   >
     {children}
@@ -37,8 +37,6 @@ const PercentThresholds: Segment[] = [
     id: '3'
   }
 ];
-
-// TODO implement watchlists switch https://www.figma.com/file/IQTwaJxVxOXTb8x2cfaxfT/MOBILE-APP-V2.0?type=design&node-id=842-12274&mode=dev
 
 export const NotificationSettingsView = () => {
   const { data: notificationSettings, save } = useNotificationSettings();
@@ -99,29 +97,45 @@ export const NotificationSettingsView = () => {
           >
             {t('notification.settings.price.alerts.treshold.text')}
           </Text>
-          <Spacer value={verticalScale(8)} />
-          <SegmentedPicker
-            segments={PercentThresholds}
-            selectedSegment={
-              PercentThresholds.find(
-                (s) =>
-                  s.value === localNotificationSettings.pricePercentThreshold
-              )?.id || PercentThresholds[0].id
-            }
-            onSelectSegment={(selectedSegment) =>
-              onSettingsValueChange(
-                'pricePercentThreshold',
-                selectedSegment.value
-              )
-            }
-          />
-          <Spacer value={verticalScale(32)} />
+          <Spacer value={verticalScale(12)} />
+          <Row
+            justifyContent="space-between"
+            style={styles.priceAlertContainer}
+          >
+            {PercentThresholds.map((item) => {
+              const isActive =
+                item.value === localNotificationSettings.pricePercentThreshold;
+              return (
+                <Button
+                  style={{
+                    backgroundColor:
+                      COLORS[isActive ? 'brand100' : 'neutral100'],
+                    borderWidth: isActive ? 2 : 1,
+                    borderColor: COLORS[isActive ? 'brand400' : 'neutral400'],
+                    ...styles.priceAlertBtnContainer
+                  }}
+                  key={item.id}
+                  onPress={() =>
+                    onSettingsValueChange('pricePercentThreshold', item.value)
+                  }
+                >
+                  <Text
+                    style={{
+                      ...styles.btnText,
+                      color: COLORS[isActive ? 'brand500' : 'neutral900']
+                    }}
+                  >
+                    {item.title}
+                  </Text>
+                </Button>
+              );
+            })}
+          </Row>
+          <Spacer value={verticalScale(22)} />
           {/* Transaction Alerts */}
           <Row justifyContent="space-between" alignItems="center">
             <View>
-              <Title>
-                {t('notification.settings.transaction.alerts.switch')}
-              </Title>
+              <Title>{t('settings.watchlists')}</Title>
               <Spacer value={verticalScale(8)} />
               <Text
                 fontSize={12}

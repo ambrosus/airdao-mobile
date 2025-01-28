@@ -1,7 +1,7 @@
+import { useQuery } from '@tanstack/react-query';
 import { API } from '@api/api';
 import { StakingPool, StakingPoolDTO } from '@models';
-import { useQuery } from '@tanstack/react-query';
-import { TokenUtils } from '@utils/token';
+import { TokenUtils } from '@utils';
 
 export function useAmbrosusStakingPools() {
   const { data, isLoading, isRefetching, error, refetch } = useQuery<

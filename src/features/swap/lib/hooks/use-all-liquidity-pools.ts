@@ -1,13 +1,13 @@
 import { useCallback, useEffect } from 'react';
 import { ethers } from 'ethers';
+import { useSwapContextSelector } from '@features/swap/context';
 import { PAIR } from '@features/swap/lib/abi';
+import { SelectedTokensState } from '@features/swap/types';
+import { wrapNativeAddress } from '@features/swap/utils';
 import {
   createAMBProvider,
   createFactoryContract
 } from '@features/swap/utils/contracts/instances';
-import { SelectedTokensState } from '@features/swap/types';
-import { useSwapContextSelector } from '@features/swap/context';
-import { wrapNativeAddress } from '@features/swap/utils';
 
 export function useAllLiquidityPools() {
   const { setPairs, allPairsRef } = useSwapContextSelector();

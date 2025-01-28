@@ -9,21 +9,37 @@
       "distribution": "internal",
       "ios": {
         "simulator": true
+      },
+      "env": {
+        "REOWN_PROJECT_ID": "$REOWN_PROJECT_ID"
       }
     },
     "stage": {
       "channel": "stage",
       "ios": {
         "cocoapods": "1.15.2"
+      },
+      "env": {
+        "REOWN_PROJECT_ID": "$REOWN_PROJECT_ID"
       }
     },
     "prod": {
-      "channel": "main"
+      "channel": "main",
+      "env": {
+        "REOWN_PROJECT_ID": "$REOWN_PROJECT_ID"
+      }
     },
     "testnet": {
       "channel": "testnet",
+      "distribution": "internal",
       "ios": {
         "cocoapods": "1.15.2"
+      },
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "REOWN_PROJECT_ID": "$REOWN_PROJECT_ID"
       }
     }
   }

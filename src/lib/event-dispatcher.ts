@@ -1,5 +1,5 @@
-import { AirDAOEventPayload, AirDAOEventType } from '@appTypes';
 import { DeviceEventEmitter } from 'react-native';
+import { AirDAOEventPayload, AirDAOEventType } from '@appTypes';
 
 export class AirDAOEventDispatcher {
   static dispatch(type: AirDAOEventType, payload: AirDAOEventPayload) {

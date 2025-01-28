@@ -1,41 +1,41 @@
 import React, { useEffect, useMemo } from 'react';
-import * as Updates from 'expo-updates';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
-import { Header } from '@components/composite';
-import { Row, Spacer, Spinner, Text } from '@components/base';
-import { scale, verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
-import { StakingPoolList } from '@components/templates';
-import { HomeNavigationProp } from '@appTypes';
-import { StakingPool } from '@models';
-import { useAmbrosusStakingPools } from '@hooks';
-import { styles } from './styles';
-import { useStakingMultiplyContextSelector } from '@contexts';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { useBridgeContextData } from '@features/bridge/context';
+import { useNavigation } from '@react-navigation/native';
+import * as Updates from 'expo-updates';
+import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { HomeNavigationProp } from '@appTypes';
+import { Row, Spacer, Spinner, Text } from '@components/base';
+import { Header } from '@components/composite';
+import { StakingPoolList } from '@components/templates';
+import { COLORS } from '@constants/colors';
+
+import { useStakingPoolsStore } from '@entities/staking';
+import { useWalletStore } from '@entities/wallet';
+import { useAmbrosusStakingPools } from '@hooks';
+import { StakingPool } from '@models';
+import { scale, verticalScale } from '@utils';
+import { styles } from './styles';
 
 export const StakingPoolsScreen = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const { t } = useTranslation();
   const { data: stakingPools } = useAmbrosusStakingPools();
-  const { selectedAccount } = useBridgeContextData();
+  const { wallet } = useWalletStore();
 
   const navigateToPoolScreen = (pool: StakingPool) => {
     navigation.navigate('StakingPool', { pool });
   };
 
-  const { fetchPoolDetails, isInitialFetching } =
-    useStakingMultiplyContextSelector();
+  const { fetchPoolDetails, isInitialFetching } = useStakingPoolsStore();
 
   useEffect(() => {
-    if (selectedAccount?.address) {
+    if (wallet?.address) {
       (async () => {
-        await fetchPoolDetails(selectedAccount.address, true);
+        await fetchPoolDetails(wallet.address, true);
       })();
     }
-  }, [selectedAccount, fetchPoolDetails]);
+  }, [wallet, fetchPoolDetails]);
 
   const filterStakingPools = useMemo(() => {
     return Updates.channel === 'testnet'

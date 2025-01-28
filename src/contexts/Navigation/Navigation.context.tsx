@@ -1,4 +1,4 @@
-import { createContextSelector } from '@utils/createContextSelector';
+import { createContextSelector } from '@utils';
 
 const NavigationContext = ({ currentRoute }: { currentRoute: string }) => {
   return {

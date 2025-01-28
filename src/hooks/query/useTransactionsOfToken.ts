@@ -1,10 +1,10 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { PaginatedQueryResponse } from '@appTypes/QueryResponse';
 import { API } from '@api/api';
 import { PaginatedResponseBody } from '@appTypes/Pagination';
-import { TransactionDTO } from '@models/dtos/TransactionDTO';
+import { PaginatedQueryResponse } from '@appTypes/QueryResponse';
 import { Transaction } from '@models';
-import { TokenUtils } from '@utils/token';
+import { TransactionDTO } from '@models/dtos/TransactionDTO';
+import { TokenUtils } from '@utils';
 
 export function useTransactionsOfToken(
   address: string,

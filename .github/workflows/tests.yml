@@ -1,0 +1,30 @@
+name: Run Unit Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+      - stage
+      - redesign
+
+jobs:
+  tests:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run tests
+        run: yarn test

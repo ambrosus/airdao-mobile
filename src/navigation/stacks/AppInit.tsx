@@ -1,34 +1,39 @@
 import React, { useCallback, useEffect } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { RootNavigationProp } from '@appTypes';
 import { Spacer, Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
-import { RootNavigationProp } from '@appTypes';
+import { usePasscodeStore } from '@features/passcode';
+import { useInitializeWalletKit } from '@features/wallet-connect/lib/hooks';
 import { useAllWallets } from '@hooks/database';
-import usePasscode from '@contexts/Passcode';
 import { Cache, CacheKey } from '@lib/cache';
+import { scale, verticalScale } from '@utils';
 
 const AppInitialization = () => {
   const { t } = useTranslation();
+  useInitializeWalletKit();
+
+  const navigation = useNavigation<RootNavigationProp>();
   const { data: allWallets, loading } = useAllWallets();
+
   const {
     isPasscodeEnabled,
     isFaceIDEnabled,
     loading: passcodeLoading
-  } = usePasscode();
-  const navigation = useNavigation<RootNavigationProp>();
+  } = usePasscodeStore();
 
   const initApp = useCallback(async () => {
     try {
       // reset passcode state
       await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
+
       if (!loading && !passcodeLoading) {
         if (allWallets.length > 0) {
           if (!isPasscodeEnabled && !isFaceIDEnabled) {
             navigation.replace('Tabs', {
-              screen: 'Wallets',
+              screen: 'Settings',
               params: { screen: 'SetupPasscode' }
             });
           } else {
@@ -39,7 +44,7 @@ const AppInitialization = () => {
         }
       }
     } catch (error) {
-      // ignore
+      throw error;
     }
   }, [
     allWallets.length,

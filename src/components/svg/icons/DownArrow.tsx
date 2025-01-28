@@ -1,8 +1,8 @@
 import React from 'react';
+import { RotateTransform } from 'react-native';
 import { Path, Svg } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { RotateTransform } from 'react-native';
 
 export function DownArrowIcon(
   props: Omit<IconProps, 'variant'> & {

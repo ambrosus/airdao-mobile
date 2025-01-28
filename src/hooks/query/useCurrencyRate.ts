@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useAMBPrice } from './useAMBPrice';
-import { useAmbrosusStakingPools } from './useAmbrosusStakingPools';
 import { CryptoCurrencyCode } from '@appTypes';
 import { TOKEN_ADDRESSES } from '@constants/variables';
 import { useAirbondPrice } from './useAirbondPrice';
+import { useAMBPrice } from './useAMBPrice';
+import { useAmbrosusStakingPools } from './useAmbrosusStakingPools';
 
 export const useCurrencyRate = (
-  symbol: CryptoCurrencyCode = CryptoCurrencyCode.AMB
+  symbol: CryptoCurrencyCode | string = CryptoCurrencyCode.AMB
 ): number => {
   const { data: stakingPools } = useAmbrosusStakingPools();
   const { data: ambPrice } = useAMBPrice();

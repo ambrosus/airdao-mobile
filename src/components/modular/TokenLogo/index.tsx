@@ -1,24 +1,28 @@
 import React, { useMemo } from 'react';
+import { CryptoCurrencyCode } from '@appTypes';
 import {
   AirBondIcon,
   AirdaoBlueIcon,
   AirdaoWhiteIcon,
+  AirDOGEIcon,
+  ASTIcon,
   BusdIcon,
   EthTokenIcon,
   FirepotIcon,
   GanymedeIcon,
+  HBRIcon,
   HeraPoolIcon,
+  KosmosTokenIcon,
   LangFundIcon,
   PlutusIcon,
   TetherIcon,
+  TokenSwineIcon,
+  TokenXENAIcon,
   UnknownTokenIcon,
   UsdcIcon
 } from '@components/svg/icons';
-import { CryptoCurrencyCode } from '@appTypes';
-import NFTIcon from '@components/svg/icons/NFTIcon';
-import Config from '@constants/config';
-import { Token } from '@models/Token';
-import { useBridgeContextData } from '@features/bridge/context';
+import { NFTIcon } from '@components/svg/icons/NFTIcon';
+import { getTokenNameFromDatabase } from '@utils';
 
 export interface TokenLogoProps {
   token?: string;
@@ -36,44 +40,47 @@ export const TokenLogo = (props: TokenLogoProps) => {
     scale,
     token,
     address,
-    isNativeCoin,
     overrideIconVariants = { amb: 'blue', eth: 'gray' }
   } = props;
-  const { selectedAccount } = useBridgeContextData();
+
   const tokenName = useMemo(() => {
     if (address) {
-      if (isNativeCoin || selectedAccount?.address === address) {
-        return 'airdao';
-      } else {
-        return (
-          Config.ALL_TOKENS.find((token: Token) => token.address === address)
-            ?.name ?? 'unknown'
-        );
-      }
+      return getTokenNameFromDatabase(address);
     } else {
       return token;
     }
-  }, [address, isNativeCoin, selectedAccount?.address, token]);
-
+  }, [address, token]);
   switch (tokenName?.toLowerCase()) {
     case CryptoCurrencyCode.AMB.toLowerCase():
     case CryptoCurrencyCode.SAMB.toLowerCase():
+    case CryptoCurrencyCode.CollateralizedHarbor.toLowerCase():
     case CryptoCurrencyCode.SyntheticAmber.toLowerCase():
+    case CryptoCurrencyCode.Test1.toLowerCase():
+    case CryptoCurrencyCode.stAMB.toLowerCase():
+    case CryptoCurrencyCode.StAMB.toLowerCase():
+    case 'staked amb':
     case 'airdao': {
       if (overrideIconVariants.amb === 'white') {
         return <AirdaoWhiteIcon scale={scale} />;
       }
       return <AirdaoBlueIcon scale={scale} />;
     }
+    case CryptoCurrencyCode.KOS.toLowerCase():
+      return <KosmosTokenIcon scale={scale} />;
+    case CryptoCurrencyCode.ADOGE.toLowerCase():
+    case CryptoCurrencyCode.Airdoge.toLowerCase():
+      return <AirDOGEIcon scale={scale} />;
     case CryptoCurrencyCode.ETH.toLowerCase():
     case 'ethereum':
     case 'weth':
+    case 'wrapped ether':
       return (
         <EthTokenIcon scale={scale} fillColor={overrideIconVariants.eth} />
       );
     case CryptoCurrencyCode.BUSD.toLowerCase():
     case 'busd token':
     case 'wbnb':
+    case 'wrapped bnb':
     case 'bsc':
       return <BusdIcon scale={scale} />;
     case CryptoCurrencyCode.USDC.toLowerCase():
@@ -103,6 +110,21 @@ export const TokenLogo = (props: TokenLogoProps) => {
     case 'airdao nft':
     case 'nft':
       return <NFTIcon />;
+    case CryptoCurrencyCode.ASTLP.toLowerCase():
+    case CryptoCurrencyCode.AstraLiquidityPool.toLowerCase():
+    case CryptoCurrencyCode.AST.toLowerCase():
+    case CryptoCurrencyCode.Astra.toLowerCase():
+      return <ASTIcon scale={scale} />;
+    case CryptoCurrencyCode.Harbor.toLowerCase():
+    case CryptoCurrencyCode.HBR.toLowerCase():
+      return <HBRIcon scale={scale} />;
+    case CryptoCurrencyCode.KosmosToken.toLowerCase():
+    case 'kos':
+      return <KosmosTokenIcon scale={scale} />;
+    case CryptoCurrencyCode.XENA.toLowerCase():
+      return <TokenXENAIcon scale={scale} />;
+    case CryptoCurrencyCode.Swine.toLowerCase():
+      return <TokenSwineIcon scale={scale} />;
     default:
       return <UnknownTokenIcon scale={scale} />;
   }

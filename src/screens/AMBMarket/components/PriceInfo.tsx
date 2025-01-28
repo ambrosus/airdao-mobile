@@ -1,12 +1,16 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { Spacer, Text } from '@components/base';
+import { LogoGradientCircular } from '@components/svg/icons';
 import { AMBPriceHistory } from '@components/templates';
 import { COLORS } from '@constants/colors';
-import { moderateScale, verticalScale } from '@utils/scaling';
-import { LogoGradientCircular } from '@components/svg/icons';
-import { Spacer, Text } from '@components/base';
+import { moderateScale, verticalScale } from '@utils';
 
-export function AMBPriceInfo({ header }: { header?: string }): JSX.Element {
+interface AMBPriceInfoProps {
+  header?: string;
+}
+
+export function AMBPriceInfo({ header }: AMBPriceInfoProps): JSX.Element {
   return (
     <View style={styles.container}>
       {!!header && (

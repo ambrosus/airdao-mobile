@@ -2,7 +2,7 @@ import * as React from 'react';
 import Svg, { Defs, LinearGradient, Path, Rect, Stop } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons/Icon.types';
 
-function NFTIcon(props: IconProps) {
+export const NFTIcon = (props: IconProps) => {
   return (
     <Svg width={35} height={27} fill="none" {...props}>
       <Rect
@@ -33,5 +33,4 @@ function NFTIcon(props: IconProps) {
       </Defs>
     </Svg>
   );
-}
-export default NFTIcon;
+};

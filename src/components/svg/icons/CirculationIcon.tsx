@@ -1,7 +1,8 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons/Icon.types';
-const CirculationIcon = (props: IconProps) => (
+
+export const CirculationIcon = (props: IconProps) => (
   <Svg width={32} height={28} fill="none" {...props}>
     <Path
       fill="#743DE5"
@@ -9,4 +10,3 @@ const CirculationIcon = (props: IconProps) => (
     />
   </Svg>
 );
-export default CirculationIcon;

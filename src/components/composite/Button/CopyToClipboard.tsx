@@ -1,18 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { useTranslation } from 'react-i18next';
-import { TextProps } from '@components/base/Text/Text.types';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { ClipboardFilledIcon, IconProps } from '@components/svg/icons';
-import { scale } from '@utils/scaling';
+import { BaseButtonProps } from '@components/base/Button';
+import { TextProps } from '@components/base/Text/Text.types';
 import {
   Toast,
   ToastOptions,
   ToastPosition,
   ToastType
 } from '@components/modular/Toast';
-import { BaseButtonProps } from '@components/base/Button';
-import { View, ViewStyle } from 'react-native';
+import { IconProps } from '@components/svg/icons';
+import {
+  CheckboxCircleFill,
+  ClipboardFillIcon
+} from '@components/svg/icons/v2';
+import { CopyIconV2 } from '@components/svg/icons/v2/settings';
+import { COLORS } from '@constants/colors';
+import { scale } from '@utils';
 
 export interface CopyToClipboardButtonProps
   extends Omit<BaseButtonProps, 'onPress'> {
@@ -21,7 +27,10 @@ export interface CopyToClipboardButtonProps
   textProps?: TextProps;
   successText?: string;
   successTextProps?: TextProps;
+  successContainerStyle?: ViewStyle;
+  containerStyle?: ViewStyle;
   iconProps?: IconProps;
+  iconContainerStyle?: ViewStyle;
   toastProps?: Pick<ToastOptions, 'position'>;
   showToast?: boolean;
   copiedTextWrapperStyle?: ViewStyle;
@@ -36,11 +45,14 @@ export const CopyToClipboardButton = (
     textToDisplay,
     textToCopy,
     textProps,
+    iconContainerStyle,
     iconProps,
     toastProps,
     showToast = false,
     successText,
     successTextProps,
+    successContainerStyle,
+    containerStyle,
     pressableText = false,
     disableWhenCopied = false,
     copiedTextWrapperStyle,
@@ -77,16 +89,30 @@ export const CopyToClipboardButton = (
     }, 2500);
   };
 
+  const buttonMainStyle: StyleProp<ViewStyle> = useMemo(() => {
+    return copied ? { ...successContainerStyle } : { ...containerStyle };
+  }, [containerStyle, copied, successContainerStyle]);
+
   if (pressableText) {
     return (
       <Button
         {...buttonProps}
         disabled={disableWhenCopied && copied}
-        // @ts-ignore
-        style={{ ...buttonProps.style, padding: 4 }}
+        style={{
+          padding: 4,
+          alignItems: 'center',
+          ...buttonMainStyle
+        }}
         onPress={onPress}
       >
         <Row alignItems="center" style={{ minHeight: 20 }}>
+          <View style={{ ...iconContainerStyle, marginRight: scale(5) }}>
+            {copied ? (
+              <CheckboxCircleFill />
+            ) : (
+              <CopyIconV2 color={COLORS.brand500} />
+            )}
+          </View>
           {copied ? (
             <Text {...successTextProps}>
               {t(successText || t('common.copied'))}
@@ -94,14 +120,6 @@ export const CopyToClipboardButton = (
           ) : (
             <Text {...textProps}>{textToDisplay}</Text>
           )}
-          {/* <Spacer horizontal value={scale(16)} /> */}
-          {/* {showToast || !copied ? (
-            <ClipboardFilledIcon {...iconProps} />
-          ) : (
-            <Text {...successTextProps}>
-              {t(successText || t('common.copied'))}
-            </Text>
-          )} */}
         </Row>
       </Button>
     );
@@ -113,7 +131,7 @@ export const CopyToClipboardButton = (
       <Spacer horizontal value={scale(16)} />
       <Button {...buttonProps} onPress={onPress}>
         {showToast || !copied ? (
-          <ClipboardFilledIcon {...iconProps} />
+          <ClipboardFillIcon {...iconProps} />
         ) : (
           <View style={copiedTextWrapperStyle}>
             <Text {...successTextProps}>

@@ -1,7 +1,7 @@
 import React from 'react';
-import { CheckBoxFactoryProps } from './CheckBox.types';
-import { CheckBoxSquare } from './CheckBox.square';
 import { CheckBoxCircular } from './CheckBox.circular';
+import { CheckBoxSquare } from './CheckBox.square';
+import { CheckBoxFactoryProps } from './CheckBox.types';
 
 export const CheckBox = (props: CheckBoxFactoryProps): JSX.Element => {
   const { type, ...checkBoxProps } = props;

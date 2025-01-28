@@ -1,6 +1,6 @@
 import React from 'react';
-import { IconProps } from './Icon.types';
 import { Path, Svg } from 'react-native-svg';
+import { IconProps } from './Icon.types';
 
 export const CheckmarkCircleIcon = (props: IconProps): JSX.Element => {
   const { scale = 1, color = '#2DBA8D' } = props;
