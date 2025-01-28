@@ -437,6 +437,7 @@
   "bridge.preview.button": "Onaylayın",
   "bridge.preview.button.max": "Maksimum",
   "bridge.insufficient.funds": "Yetersiz bakiye",
+  "bridge.insufficient.funds.description": "!!!You do not have enough funds in your account to pay for network fees.",
 
   "bridge.transaction.info.subheader": "Transferiniz işleniyor ve 5-20 dakika içinde tamamlanacak.",
 
