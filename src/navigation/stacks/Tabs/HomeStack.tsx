@@ -1,10 +1,6 @@
-import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeParamsList } from '@appTypes/navigation/wallets';
-import {
-  WalletConnectModal,
-  WalletSessionsBottomSheet
-} from '@features/wallet-connect/components/templates';
+import { WalletSessionsBottomSheet } from '@features/wallet-connect/components/templates';
 import { HarborStacks } from '@navigation/stacks/HarborStacks/HarborStacks';
 import { AMBMarket } from '@screens/AMBMarket';
 import { AssetScreen } from '@screens/Asset';
@@ -70,7 +66,6 @@ export const HomeStack = () => {
 
         {getCommonStack(Stack as any)}
       </Stack.Navigator>
-      <WalletConnectModal />
       <WalletSessionsBottomSheet />
     </>
   );

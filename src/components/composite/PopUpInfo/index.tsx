@@ -1,4 +1,3 @@
-import React from 'react';
 import { View } from 'react-native';
 import Popover, { PopoverPlacement } from 'react-native-popover-view';
 import { Button, Spacer, Text } from '@components/base';

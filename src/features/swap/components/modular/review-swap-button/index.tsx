@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { FontFamily } from '@components/base/Text/Text.types';
@@ -33,6 +33,7 @@ export const ReviewSwapButton = () => {
   const { bnBalances } = useSwapMultiplyBalance();
   const { resolveBottomSheetData } = useSwapInterface();
   const {
+    isExecutingPrice,
     selectedTokens,
     selectedTokensAmount,
     isWarningToEnableMultihopActive
@@ -71,8 +72,12 @@ export const ReviewSwapButton = () => {
   }, [resolveBottomSheetData]);
 
   const disabled = useMemo(() => {
-    return swapButtonString !== t('common.review') || isProcessingBottomSheet;
-  }, [t, swapButtonString, isProcessingBottomSheet]);
+    return (
+      swapButtonString !== t('common.review') ||
+      isProcessingBottomSheet ||
+      isExecutingPrice
+    );
+  }, [swapButtonString, t, isProcessingBottomSheet, isExecutingPrice]);
 
   const buttonColors = useMemo(() => {
     return disabled
@@ -96,7 +101,7 @@ export const ReviewSwapButton = () => {
       <TextOrSpinner
         label={swapButtonString}
         loadingLabel={undefined}
-        loading={isProcessingBottomSheet}
+        loading={isExecutingPrice || isProcessingBottomSheet}
         styles={buttonStyles(disabled)}
       />
     </PrimaryButton>

@@ -1,4 +1,3 @@
-import React from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
@@ -24,7 +23,7 @@ export const RateInfo = ({ availableToStake, rate = 1 }: RateInfoModel) => {
       </Row>
       <Spacer value={scale(16)} />
       <Row justifyContent="space-between">
-        <Text style={styles.title}>Available to Stake</Text>
+        <Text style={styles.title}>{t('harbor.stake.available')}</Text>
         <Text style={styles.text}>
           {NumberUtils.minimiseAmount(+availableToStake)}{' '}
           <Text color={COLORS.neutral600}>AMB</Text>

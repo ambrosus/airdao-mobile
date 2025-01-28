@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { formatEther, parseEther } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
@@ -66,7 +66,7 @@ export const WithdrawStakeRewardTab = () => {
         token={token}
         onChangeText={onChangeText}
         onPressMaxAmount={() => {
-          setAmountToWithdraw(formatEther(userStaked));
+          onChangeText(formatEther(userStaked));
         }}
       />
       <Spacer value={scale(8)} />

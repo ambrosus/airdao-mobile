@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import { Explore } from '@screens/Settings/screens/Explore';
 import { SafeAreaProvider } from 'react-native-safe-area-context';

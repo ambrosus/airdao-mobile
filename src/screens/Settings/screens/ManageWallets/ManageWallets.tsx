@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from '@components/base';
@@ -6,8 +6,7 @@ import { BottomSheetRef, Header } from '@components/composite';
 import { AddIcon } from '@components/svg/icons';
 import { BottomSheetWalletCreateOrImport } from '@components/templates';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils';
-import { AllWallets } from './components';
+import { Index } from './components';
 import { styles } from './ManageWallets.styles';
 
 export const ManageWalletsScreen = () => {
@@ -20,7 +19,7 @@ export const ManageWalletsScreen = () => {
   const ImportWallet = () => (
     <>
       <Button
-        style={{ marginRight: scale(5) }}
+        style={styles.importButton}
         onPress={() => openWalletImportCreateModal()}
         type="circular"
       >
@@ -38,7 +37,7 @@ export const ManageWalletsScreen = () => {
         title={t('settings.manage.wallet')}
         style={{ shadowColor: COLORS.transparent }}
       />
-      <AllWallets />
+      <Index />
     </SafeAreaView>
   );
 };

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Row, Text } from '@components/base';
 import { TextProps } from '@components/base/Text/Text.types';
 import { COLORS } from '@constants/colors';

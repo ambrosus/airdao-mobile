@@ -1,4 +1,4 @@
-import React, {
+import {
   ForwardedRef,
   forwardRef,
   RefObject,
@@ -163,7 +163,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
               <Spacer horizontal value={scale(16)} />
             </Row>
           )}
-          <View style={{ flex: 1 }}>
+          <View style={styles.explorerItem}>
             <ExplorerWalletItem
               item={item}
               indicatorVisible={true}
@@ -257,7 +257,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
           }
           title={
             <Text
-              style={{ marginLeft: scale(24) }}
+              style={styles.headerText}
               fontFamily="Inter_700Bold"
               fontSize={18}
               numberOfLines={1}
@@ -288,7 +288,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
             )
           }
           type="text"
-          style={{ width: '65%', height: 50 }}
+          style={styles.inputWithIcon}
           placeholder={t('collection.search.public.address.placeholder')}
           placeholderTextColor="#2f2b4399"
           value={searchValue}
@@ -303,16 +303,14 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
       >
         <BarcodeScanner onScanned={onQRCodeScanned} onClose={hideScanner} />
       </BottomSheet>
-      <View style={{ paddingHorizontal: scale(24), flex: 1 }}>
+      <View style={styles.searchItem}>
         {!!searchValue ? (
           <View style={{ flex: 1 }}>
             {searchLoading && <Spinner />}
             {Boolean(searchError) && <SearchAddressNoResult />}
             {searchedAccount ? (
               <FlatList
-                contentContainerStyle={{
-                  paddingBottom: 150
-                }}
+                contentContainerStyle={styles.listContainer}
                 data={[searchedAccount]}
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
@@ -365,9 +363,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
             >
               <View style={{ width: tabWidth }}>
                 <FlatList
-                  contentContainerStyle={{
-                    paddingBottom: 150
-                  }}
+                  contentContainerStyle={styles.listContainer}
                   data={topHolders}
                   renderItem={renderItem}
                   showsVerticalScrollIndicator={false}
@@ -380,9 +376,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
               </View>
               <View style={{ width: tabWidth }}>
                 <FlatList
-                  contentContainerStyle={{
-                    paddingBottom: 150
-                  }}
+                  contentContainerStyle={styles.listContainer}
                   data={watchlist}
                   renderItem={renderItem}
                   showsVerticalScrollIndicator={false}
@@ -394,11 +388,7 @@ export const BottomSheetAddNewAddressToGroup = forwardRef<
         {selectionStarted && (
           <PrimaryButton
             onPress={submitSelectedAddresses}
-            style={{
-              position: 'absolute',
-              bottom: verticalScale(32),
-              alignSelf: 'center'
-            }}
+            style={styles.buttonContainer}
           >
             <Text
               color={COLORS.neutral0}

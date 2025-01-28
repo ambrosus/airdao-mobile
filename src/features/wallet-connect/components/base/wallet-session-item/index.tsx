@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Pressable } from 'react-native';
 import { SessionTypes } from '@walletconnect/types';
 import { getSdkError } from '@walletconnect/utils';
@@ -41,17 +41,14 @@ export const WalletSessionItem = ({
         (pairing) => pairing.topic !== connection.topic
       );
 
-      if (filteredPairings.length === 0) {
-        onDismissActiveSessionBottomSheet();
-      }
-
+      onDismissActiveSessionBottomSheet();
       setActiveSessions(filteredPairings);
     } catch (error) {
+      onDismissActiveSessionBottomSheet();
       setActiveSessions((prevState) =>
         prevState.filter((_, sessionIndex) => sessionIndex !== index)
       );
 
-      onDismissActiveSessionBottomSheet();
       throw error;
     } finally {
       setDisconnecting(false);

@@ -1,4 +1,3 @@
-import React from 'react';
 import { View } from 'react-native';
 import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
@@ -19,11 +18,7 @@ export const StakingPoolItem = (props: StakingPoolItemProps) => {
   const { t } = useTranslation();
 
   return (
-    <Row
-      alignItems="center"
-      justifyContent="space-between"
-      // style={{ opacity: stakingPool.isActive ? 1 : 0.5 }}
-    >
+    <Row alignItems="center" justifyContent="space-between">
       <Row alignItems="center">
         <TokenLogo token={stakingPool.token.name} />
         <Spacer value={scale(12)} horizontal />

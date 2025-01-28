@@ -1,4 +1,3 @@
-import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamsList } from '@appTypes';
 import { useCurrenciesQuery } from '@entities/currencies/lib';
@@ -36,6 +35,7 @@ export const RootStack = () => {
       />
       <Stack.Screen
         name="BarcodeScannerScreen"
+        initialParams={{ walletConnectEnabled: false }}
         options={{
           presentation: 'fullScreenModal',
           animation: 'slide_from_bottom'

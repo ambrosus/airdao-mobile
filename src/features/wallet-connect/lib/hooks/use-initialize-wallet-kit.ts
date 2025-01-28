@@ -1,5 +1,9 @@
 import { useCallback, useEffect } from 'react';
-import { createWalletKit, walletKit } from '@features/wallet-connect/utils';
+import {
+  createWalletKit,
+  validateAndFilterSessions,
+  walletKit
+} from '@features/wallet-connect/utils';
 import { useWalletConnectContextSelector } from './use-wallet-connect-context';
 
 export function useInitializeWalletKit() {
@@ -12,7 +16,9 @@ export function useInitializeWalletKit() {
       setIsWalletKitInitiated(true);
 
       if (walletKit) {
-        setActiveSessions(Object.values(walletKit.getActiveSessions()));
+        const allSessions = Object.values(walletKit.getActiveSessions());
+        const validSessions = await validateAndFilterSessions(allSessions);
+        setActiveSessions(validSessions);
       }
     } catch (error) {
       console.error('Error while initialize wallet kit:', error);

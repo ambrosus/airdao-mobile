@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { HomeNavigationProp } from '@appTypes';

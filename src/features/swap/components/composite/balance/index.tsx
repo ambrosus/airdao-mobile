@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { ethers } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
@@ -19,8 +19,12 @@ interface BalanceProps {
 
 export const Balance = ({ type }: BalanceProps) => {
   const { t } = useTranslation();
-  const { selectedTokens, selectedTokensAmount, setIsExactIn } =
-    useSwapContextSelector();
+  const {
+    selectedTokens,
+    selectedTokensAmount,
+    setIsExactIn,
+    isExecutingPrice
+  } = useSwapContextSelector();
   const { onSelectMaxTokensAmount, updateReceivedTokensOutput } =
     useSwapFieldsHandler();
 
@@ -112,7 +116,7 @@ export const Balance = ({ type }: BalanceProps) => {
             <Text
               fontSize={14}
               fontFamily="Inter_500Medium"
-              color={error ? COLORS.error500 : COLORS.neutral500}
+              color={COLORS[error ? 'error500' : 'neutral500']}
             >
               {maximumTokenBalance}
             </Text>
@@ -122,7 +126,10 @@ export const Balance = ({ type }: BalanceProps) => {
         {!disabled && type !== FIELD.TOKEN_B && (
           <>
             <Spacer horizontal value={scale(4)} />
-            <Button onPress={onSelectMaxTokensAmountPress}>
+            <Button
+              disabled={isExecutingPrice}
+              onPress={onSelectMaxTokensAmountPress}
+            >
               <Text
                 fontSize={15}
                 fontFamily="Inter_500Medium"

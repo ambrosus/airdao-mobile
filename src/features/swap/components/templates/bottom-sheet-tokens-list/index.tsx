@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback } from 'react';
+import { forwardRef, useCallback } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';

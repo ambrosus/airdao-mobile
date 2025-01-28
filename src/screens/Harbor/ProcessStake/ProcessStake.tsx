@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { RefreshControl, View } from 'react-native';
 import { ethers } from 'ethers';
 import { formatEther, parseEther } from 'ethers/lib/utils';
@@ -11,6 +11,7 @@ import { AutoScrollBox, PrimaryButton } from '@components/modular';
 import { InputWithoutTokenSelect } from '@components/templates';
 import { COLORS } from '@constants/colors';
 import { AMB_DECIMALS } from '@constants/variables';
+import { StakedBalanceInfo } from '@entities/harbor/components/composite';
 import { DEFAULT_STAKE_PREVIEW } from '@entities/harbor/constants';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { useWalletStore } from '@entities/wallet';
@@ -18,7 +19,7 @@ import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-pre
 import { useBalanceOfAddress } from '@hooks';
 import { ExplorerAccount, Token } from '@models';
 import { scale, NumberUtils, TokenUtils } from '@utils';
-import { HarborTitle, RateInfo, StakedBalanceInfo } from './components';
+import { HarborTitle, RateInfo } from './components';
 import { styles } from './styles';
 
 export const ProcessStake = () => {

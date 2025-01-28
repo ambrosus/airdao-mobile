@@ -3,12 +3,12 @@ import { scale } from '@utils';
 
 export const styles = StyleSheet.create({
   main: {
-    paddingHorizontal: scale(16)
+    paddingTop: scale(8),
+    paddingHorizontal: scale(12)
   },
   stakeInfoText: {
     paddingHorizontal: scale(2),
     paddingTop: scale(8),
     paddingBottom: scale(16)
-  },
-  buttonWrapper: { marginTop: scale(16) }
+  }
 });

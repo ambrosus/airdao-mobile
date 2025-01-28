@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, RefObject, useRef } from 'react';
+import { ForwardedRef, forwardRef, RefObject, useRef } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import ViewShot, { captureRef, CaptureOptions } from 'react-native-view-shot';

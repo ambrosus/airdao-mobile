@@ -1,6 +1,7 @@
-import { ProposalTypes } from '@walletconnect/types';
+import { ProposalTypes, SessionTypes } from '@walletconnect/types';
 import { ethers } from 'ethers';
 import { extractChainData } from './presets';
+import { walletKit } from '../lib/wc.core';
 
 export function supportedChains(
   requiredNamespaces: ProposalTypes.RequiredNamespaces,
@@ -86,3 +87,48 @@ export function httpsParser(url: string) {
     throw new Error('Invalid URL provided.');
   }
 }
+
+export const validateAndFilterSessions = async (
+  sessions: SessionTypes.Struct[]
+): Promise<SessionTypes.Struct[]> => {
+  const validSessions: SessionTypes.Struct[] = [];
+  const PING_TIMEOUT = 3000;
+
+  const validateSession = async (session: SessionTypes.Struct) => {
+    try {
+      const pingPromise = walletKit.engine.signClient.ping({
+        topic: session.topic
+      });
+      await Promise.race([
+        pingPromise,
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Ping timeout')), PING_TIMEOUT)
+        )
+      ]);
+
+      validSessions.push(session);
+    } catch (error) {
+      console.warn(`Session ${session.topic} is invalid:`, error);
+
+      try {
+        await walletKit.engine.signClient.disconnect({
+          topic: session.topic,
+          reason: {
+            code: 6000,
+            message:
+              error instanceof Error ? error.message : 'Session is invalid'
+          }
+        });
+      } catch (cleanupError) {
+        console.error(
+          `Error cleaning up invalid session ${session.topic}:`,
+          cleanupError
+        );
+      }
+    }
+  };
+
+  await Promise.all(sessions.map(validateSession));
+
+  return validSessions;
+};

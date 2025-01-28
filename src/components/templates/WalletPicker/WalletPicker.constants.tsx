@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   WalletAvatar1,
   WalletAvatar10,

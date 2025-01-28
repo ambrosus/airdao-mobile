@@ -1,4 +1,3 @@
-import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ProductsParams } from '@appTypes/navigation/products';
 import { HarborStacks } from '@navigation/stacks/HarborStacks/HarborStacks';

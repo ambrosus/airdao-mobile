@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { RightArrowIcon } from '@components/svg/icons/RightArrow';
 import { COLORS } from '@constants/colors';

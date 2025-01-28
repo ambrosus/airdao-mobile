@@ -109,6 +109,7 @@ export const COLORS = {
   silver: '#C0C0C0',
   lemon: '#fffbb5',
   lightYellow: '#fbf2cb',
+  salmonOrange: '#FF9863',
   orange: '#c8811a',
   activeOrange: '#e34a16',
   thinGrey: '#2f2b4380',
@@ -118,10 +119,12 @@ export const COLORS = {
   veryLightGrey: '#ffffff99',
   navyIndigo: '#162c5d',
   separator: '#2f2b431a',
+  softGrayBlue: 'rgba(88, 94, 119, 1)',
 
   // V2
   foregroundSecondaryContent: 'rgba(148, 151, 156, 1)',
-  semanticsForegroundBorder: 'rgba(216, 218, 224, 1)'
+  semanticsForegroundBorder: 'rgba(216, 218, 224, 1)',
+  pink: '#A681EF'
 };
 
 export const CreditCardBg = [

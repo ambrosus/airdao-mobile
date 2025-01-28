@@ -46,7 +46,6 @@ export async function increaseAllowance({
     );
 
     const erc20 = erc20Contract.attach(address).connect(signer);
-
     return erc20.approve(Config.ROUTER_V2_ADDRESS, amount);
   } catch (error) {
     throw error;

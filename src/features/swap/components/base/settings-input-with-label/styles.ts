@@ -6,10 +6,6 @@ export const styles = StyleSheet.create({
   formWithLabel: {
     rowGap: 8
   },
-  percentage: {
-    position: 'absolute',
-    top: verticalScale(12)
-  },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',

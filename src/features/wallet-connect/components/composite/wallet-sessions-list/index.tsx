@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
@@ -7,12 +7,12 @@ import {
   ViewStyle
 } from 'react-native';
 import { SessionTypes } from '@walletconnect/types';
-import { useWalletConnectContextSelector } from '@features/wallet-connect/lib/hooks';
+import { useConnectionsController } from '@features/wallet-connect/lib/hooks';
 import { scale } from '@utils';
 import { WalletSessionItem } from '../../base';
 
 export const WalletSessionsList = () => {
-  const { activeSessions } = useWalletConnectContextSelector();
+  const sessionsPerAddress = useConnectionsController();
 
   const renderWalletSessionListItem = useCallback(
     (args: ListRenderItemInfo<SessionTypes.Struct>) => {
@@ -41,7 +41,7 @@ export const WalletSessionsList = () => {
       <FlatList
         contentContainerStyle={contentContainerListStyles}
         keyExtractor={(item) => item.pairingTopic + Math.random()}
-        data={activeSessions}
+        data={sessionsPerAddress}
         renderItem={renderWalletSessionListItem}
       />
     </View>

@@ -9,20 +9,6 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(24),
     backgroundColor: COLORS.brand600
   },
-  innerContainer: {
-    borderRadius: 16
-  },
-  logoContainer: {
-    width: scale(102),
-    height: scale(102),
-    backgroundColor: COLORS.brand500,
-    borderRadius: 200,
-    borderWidth: 1,
-    borderColor: COLORS.neutral0,
-    transform: [{ scale: 2 }, { translateX: scale(40) }],
-    alignItems: 'flex-start',
-    flex: 1
-  },
   logo: {
     left: scale(6),
     top: scale(20),

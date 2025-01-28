@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { BarCodeScanningResult, Camera, CameraType } from 'expo-camera';
@@ -13,9 +13,9 @@ import { Header } from '@components/composite';
 import { CloseIcon, WalletConnectIcon } from '@components/svg/icons';
 import { QRCodeIcon } from '@components/svg/icons/v2';
 import { ScanSquare } from '@components/templates/BarcodeScanner/components/ScanSquare';
-import { styles } from '@components/templates/BarcodeScanner/styles';
 import { COLORS } from '@constants/colors';
 import { useBarcodeScanner } from '@hooks';
+import { styles } from './styles';
 
 type Props = NativeStackScreenProps<
   RootStackParamsList,
@@ -27,7 +27,7 @@ const MOCK_ADDRESS = 'ethereum:0xF51452e37eEbf3226BcBB25FA4f9F570f176484e';
 export const BarcodeScannerScreen = ({ navigation, route }: Props) => {
   const { t } = useTranslation();
   const {
-    params: { onScanned }
+    params: { onScanned, walletConnectEnabled }
   } = route;
   const { top: topInset } = useSafeAreaInsets();
   const {
@@ -136,7 +136,7 @@ export const BarcodeScannerScreen = ({ navigation, route }: Props) => {
           <ScanSquare />
         </Camera>
       )}
-      {isCameraVisible && (
+      {isCameraVisible && walletConnectEnabled && (
         <View style={styles.footer}>
           <Row alignItems="center" style={styles.footerIconsRow}>
             <View style={styles.iconBox}>

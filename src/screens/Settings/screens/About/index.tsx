@@ -1,4 +1,3 @@
-import React from 'react';
 import { Linking, ScrollView, View } from 'react-native';
 import Constants from 'expo-constants';
 import { useTranslation } from 'react-i18next';
@@ -8,9 +7,9 @@ import {
 } from 'react-native-safe-area-context';
 import { Button, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
-import { DebugInfo } from '@screens/Settings/screens/About/DebugInfo';
 import { scale, PlatformSpecificUtils, isAndroid } from '@utils';
 import { isTestnet } from '@utils/isEnv';
+import { DebugInfo } from 'src/screens/Settings/screens/About/components/DebugInfo';
 import { AboutMenutItem } from './About.MenuItem';
 import { styles } from './styles';
 

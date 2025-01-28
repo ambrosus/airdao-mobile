@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -172,10 +172,7 @@ export const WithdrawToken = ({
         type="number"
       />
       <Spacer value={verticalScale(24)} />
-      <Row
-        alignItems="center"
-        style={{ flexWrap: 'wrap', gap: verticalScale(16) }}
-      >
+      <Row alignItems="center" style={styles.row}>
         {WITHDRAW_PERCENTAGES.map((percentage) => (
           <PercentageBox
             key={percentage}

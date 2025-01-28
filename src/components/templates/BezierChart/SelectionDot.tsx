@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { ReactElement, useCallback } from 'react';
 import { runSpring, useValue, Circle, Group } from '@shopify/react-native-skia';
 import { runOnJS, useAnimatedReaction } from 'react-native-reanimated';
 import { COLORS } from '@constants/colors';
@@ -9,7 +9,7 @@ export function SelectionDot({
   isActive,
   circleX,
   circleY
-}: SelectionDotProps): React.ReactElement {
+}: SelectionDotProps): ReactElement {
   const outerCircleRadius = useValue(0);
   const innerCircleRadius = useValue(0);
 

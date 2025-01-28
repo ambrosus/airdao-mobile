@@ -1,12 +1,12 @@
-import React from 'react';
-import { Linking, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { Linking, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import Config from '@constants/config';
-import { scale, verticalScale } from '@utils';
+import { scale } from '@utils';
 import { SETTINGS_MENU_ITEMS, SOCIAL_GROUPS } from './Settings.constants';
 import { SettingsMenuItem } from './Settings.types';
 import { styles } from './styles';
@@ -72,7 +72,7 @@ export const SettingsScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ paddingTop: verticalScale(15) }}>
+    <SafeAreaView style={styles.main}>
       <View style={styles.header}>
         <Text
           fontSize={scale(24)}
@@ -83,7 +83,7 @@ export const SettingsScreen = () => {
         </Text>
       </View>
       <View style={styles.contentWrapper}>
-        <View style={styles.container}>
+        <View>
           {SETTINGS_MENU_ITEMS.map((menuItem) => (
             <SettingsMenuItemView item={menuItem} key={menuItem.route} />
           ))}

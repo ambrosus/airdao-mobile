@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Svg, { ClipPath, Defs, G, Path } from 'react-native-svg';
 import { IconProps } from '@components/svg/icons/Icon.types';
 import { scale as scaleFunc } from '@utils';

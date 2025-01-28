@@ -177,5 +177,30 @@ export const APPROVAL = [
     outputs: [],
     stateMutability: 'payable',
     type: 'function'
+  },
+  {
+    inputs: [],
+    name: 'stake',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function'
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'desiredCoeff',
+        type: 'uint256'
+      }
+    ],
+    name: 'unstake',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
   }
 ];

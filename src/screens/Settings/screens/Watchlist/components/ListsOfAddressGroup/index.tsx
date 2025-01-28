@@ -1,8 +1,6 @@
-import React from 'react';
 import { FlatList, View } from 'react-native';
 import { LocalizedRenderEmpty } from '@components/templates';
 import { AccountList } from '@models/AccountList';
-import { verticalScale } from '@utils';
 import { styles } from './styles';
 import { GroupItem } from '../ListsOfAddressGroup/components/GroupItem';
 
@@ -14,9 +12,7 @@ export const ListsGroups = ({ listsOfAddressGroup, onRefresh }: Props) => {
   return (
     <View testID="lists-groups" style={styles.groupsContainer}>
       <FlatList
-        contentContainerStyle={{
-          paddingBottom: 150
-        }}
+        contentContainerStyle={styles.contentContainer}
         data={listsOfAddressGroup}
         showsVerticalScrollIndicator={false}
         renderItem={({ item, index }: { item: AccountList; index: number }) => {
@@ -30,7 +26,7 @@ export const ListsGroups = ({ listsOfAddressGroup, onRefresh }: Props) => {
           );
         }}
         ListEmptyComponent={
-          <View style={{ paddingTop: verticalScale(200) }}>
+          <View style={styles.emptyList}>
             <LocalizedRenderEmpty text={'empty.groups'} />
           </View>
         }

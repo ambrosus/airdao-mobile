@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { JsonRpcResponse } from '@walletconnect/jsonrpc-types';
 import { ethers } from 'ethers';
@@ -26,6 +26,13 @@ import { styles } from './styles';
 import { DetailsRowItem } from '../../base';
 
 const ZERO = ethers.BigNumber.from(0);
+const mappedFunctionNames = [
+  'unknown',
+  'unstake',
+  'stake',
+  'deposit',
+  'withdraw'
+];
 
 export const WalletConnectTxApproval = () => {
   const { t } = useTranslation();
@@ -45,14 +52,18 @@ export const WalletConnectTxApproval = () => {
   const params = requestEvent?.params;
   const request = params?.request;
 
+  const isUnstake = transaction?.functionName === 'unstake';
   const isApprovalTx = transaction?.functionName === 'approve';
   const isAmbTransaction = request?.params[0]?.value;
   const isWithdraw = transaction?.functionName === 'withdraw';
-  const isWrapOrUnwrap =
-    transaction?.functionName === 'deposit' ||
-    transaction?.functionName === 'withdraw';
+  const isWrapOrUnwrap = mappedFunctionNames.includes(
+    transaction?.functionName?.toLowerCase() ?? ''
+  );
 
-  const { data: account } = useAccountByAddress(request?.params[0].from, true);
+  const { data: account } = useAccountByAddress(
+    request?.params[0].from.toLowerCase(),
+    true
+  );
 
   const onApprove = useCallback(async () => {
     if (requestEvent && topic) {
@@ -118,6 +129,34 @@ export const WalletConnectTxApproval = () => {
     onDismissWalletConnectBottomSheet
   ]);
 
+  const tokenSymbol = useMemo(() => {
+    if (isAmbTransaction) return CryptoCurrencyCode.AMB;
+
+    if (isUnstake) return CryptoCurrencyCode.stAMB;
+
+    return getTokenSymbolFromDatabase(
+      request?.params[0]?.to.toUpperCase() ?? '',
+      true
+    );
+  }, [isAmbTransaction, isUnstake, request?.params]);
+
+  const amountSymbol = useMemo(() => {
+    if (isAmbTransaction) return CryptoCurrencyCode.AMB;
+
+    if (isWithdraw) return CryptoCurrencyCode.SAMB;
+
+    if (isUnstake) return CryptoCurrencyCode.stAMB;
+
+    return getTokenSymbolFromDatabase(
+      transaction?.decodedArgs?.addresses?.[0] ?? ''
+    );
+  }, [
+    isAmbTransaction,
+    isUnstake,
+    isWithdraw,
+    transaction?.decodedArgs?.addresses
+  ]);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -151,6 +190,7 @@ export const WalletConnectTxApproval = () => {
         <DetailsRowItem
           field="REQUEST"
           value={httpsParser(data?.event.verifyContext.verified.origin ?? '')}
+          style={{ maxWidth: '60%' }}
         />
 
         <DetailsRowItem
@@ -161,14 +201,7 @@ export const WalletConnectTxApproval = () => {
                   ethers.utils.formatEther(
                     transaction?.decodedArgs?.amount ?? ZERO
                   )
-                )} ${
-                  isAmbTransaction
-                    ? CryptoCurrencyCode.AMB
-                    : getTokenSymbolFromDatabase(
-                        request?.params[0]?.to.toUpperCase() ?? '',
-                        true
-                      )
-                }`
+                )} ${tokenSymbol}`
               : StringUtils.formatAddress(
                   (isWrapOrUnwrap
                     ? request?.params[0]?.to
@@ -194,15 +227,7 @@ export const WalletConnectTxApproval = () => {
                       ? request.params[0].value
                       : transaction?.decodedArgs?.amount) ?? ZERO
                   )
-                )} ${
-                  isAmbTransaction
-                    ? CryptoCurrencyCode.AMB
-                    : isWithdraw
-                    ? CryptoCurrencyCode.SAMB
-                    : getTokenSymbolFromDatabase(
-                        transaction?.decodedArgs?.addresses?.[0] ?? ''
-                      )
-                }`
+                )} ${amountSymbol}`
           }
         />
 

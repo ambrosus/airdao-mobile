@@ -1,10 +1,9 @@
-import React, { useCallback } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { useCallback } from 'react';
+import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { SettingsTabNavigationProp } from '@appTypes';
 import { Button, Row, Spacer, Switch, Text } from '@components/base';
 import { Header } from '@components/composite';
@@ -12,7 +11,8 @@ import { COLORS } from '@constants/colors';
 import { usePasscodeStore } from '@features/passcode';
 import { usePasscodeActions } from '@features/passcode/lib/hooks';
 import { useSupportedBiometrics } from '@hooks';
-import { moderateScale, scale, verticalScale } from '@utils';
+import { scale, verticalScale } from '@utils';
+import { styles } from './styles';
 
 export const SecuritySettingsScreen = () => {
   const { t } = useTranslation();
@@ -27,14 +27,10 @@ export const SecuritySettingsScreen = () => {
 
   return (
     <SafeAreaView>
-      <Header
-        bottomBorder
-        title="Security"
-        style={{ shadowColor: 'transparent' }}
-      />
+      <Header bottomBorder title="Security" style={styles.header} />
       <Spacer value={verticalScale(12)} />
       <Button onPress={navigateToChangePasscode}>
-        <View style={{ paddingHorizontal: scale(18) }}>
+        <View style={styles.wrapper}>
           <Row
             alignItems="center"
             justifyContent="space-between"
@@ -55,7 +51,7 @@ export const SecuritySettingsScreen = () => {
       </Button>
       <Spacer value={verticalScale(16)} />
       {supportedBiometrics.length > 0 && (
-        <View style={{ paddingHorizontal: scale(18) }}>
+        <View style={styles.biometricWrapper}>
           <Row
             alignItems="center"
             justifyContent="space-between"
@@ -84,13 +80,3 @@ export const SecuritySettingsScreen = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    paddingVertical: verticalScale(16),
-    paddingHorizontal: scale(16),
-    borderRadius: moderateScale(16),
-    borderWidth: 1,
-    borderColor: COLORS.neutral100
-  }
-});

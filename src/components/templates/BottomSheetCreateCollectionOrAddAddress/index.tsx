@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, RefObject } from 'react';
+import { ForwardedRef, forwardRef, RefObject } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Button, Spacer, Text } from '@components/base';
@@ -6,7 +6,8 @@ import { BottomSheetRef } from '@components/composite';
 import { BottomSheetFloat, PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useForwardedRef } from '@hooks';
-import { scale, verticalScale } from '@utils';
+import { scale } from '@utils';
+import { styles } from './styles';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -27,13 +28,7 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
       swiperIconVisible
       testID="Create_Collection_Or_Add_Address_BottomSheet"
     >
-      <View
-        style={{
-          paddingHorizontal: scale(24),
-          paddingBottom: verticalScale(24)
-        }}
-        testID="BottomSheet_Content"
-      >
+      <View style={styles.main} testID="BottomSheet_Content">
         <Spacer value={scale(24)} />
         <PrimaryButton
           onPress={handleOnAddNewAddress}
@@ -51,13 +46,11 @@ export const BottomSheetCreateCollectionOrAddAddress = forwardRef<
         <Button
           onPress={handleCreateCollectionPress}
           type="circular"
-          style={{
-            backgroundColor: COLORS.alphaBlack5
-          }}
+          style={styles.button}
           testID="Create_Collection_Button"
         >
           <Text
-            style={{ marginVertical: 12 }}
+            style={styles.btnTitle}
             fontFamily="Inter_600SemiBold"
             fontSize={16}
             color={COLORS.neutral900}

@@ -13,11 +13,5 @@ export const styles = StyleSheet.create({
   },
   input: {
     width: '75%'
-  },
-  row: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between'
   }
 });

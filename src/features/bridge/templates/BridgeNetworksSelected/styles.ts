@@ -10,13 +10,5 @@ export const styles = StyleSheet.create({
     borderRadius: scale(45),
     backgroundColor: COLORS.neutral100,
     gap: scale(8)
-  },
-  reorder: {
-    width: scale(32),
-    height: scale(32),
-    borderRadius: scale(40),
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: COLORS.neutral100
   }
 });

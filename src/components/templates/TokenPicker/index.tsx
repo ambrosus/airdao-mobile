@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
@@ -8,6 +8,7 @@ import { ChevronDownIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { Token } from '@models';
 import { scale, verticalScale } from '@utils';
+import { styles } from './styles';
 
 interface TokenPickerProps {
   tokens: Token[];
@@ -42,16 +43,7 @@ export const TokenPicker = (props: TokenPickerProps) => {
 
   return (
     <>
-      <Button
-        onPress={showModal}
-        style={{
-          paddingVertical: verticalScale(6),
-          paddingHorizontal: scale(12),
-          borderRadius: 1000,
-          backgroundColor: COLORS.brand600,
-          width: scale(120)
-        }}
-      >
+      <Button onPress={showModal} style={styles.main}>
         <Row alignItems="center" justifyContent="space-between">
           <Row alignItems="center">
             <TokenLogo
@@ -70,7 +62,7 @@ export const TokenPicker = (props: TokenPickerProps) => {
       <BottomSheet
         swiperIconVisible={true}
         ref={pickerModal}
-        containerStyle={{ minHeight: verticalScale(260), maxHeight: '75%' }}
+        containerStyle={styles.container}
       >
         <Spacer value={verticalScale(16)} />
         <Text
@@ -85,7 +77,7 @@ export const TokenPicker = (props: TokenPickerProps) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           bounces={false}
-          contentContainerStyle={{ paddingBottom: verticalScale(24) }}
+          contentContainerStyle={styles.wrapper}
         >
           {tokens.map(renderToken)}
         </ScrollView>

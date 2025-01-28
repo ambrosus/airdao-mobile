@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Keyboard, ScrollView, View } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { BigNumber } from 'ethers';

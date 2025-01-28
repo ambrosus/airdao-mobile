@@ -3,6 +3,7 @@ import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
+  bottomSheetContainer: { paddingBottom: verticalScale(24) },
   icon: {
     alignSelf: 'center',
     paddingTop: 16

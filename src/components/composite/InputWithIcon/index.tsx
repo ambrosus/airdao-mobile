@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import { ReactNode, forwardRef, useState } from 'react';
 import {
   NativeSyntheticEvent,
   TextInputFocusEventData,
@@ -11,8 +11,8 @@ import { scale } from '@utils';
 import { styles } from './styles';
 
 interface InputWithIconProps extends InputProps {
-  iconLeft?: React.ReactNode;
-  iconRight?: React.ReactNode;
+  iconLeft?: ReactNode;
+  iconRight?: ReactNode;
   spacingLeft?: number;
   spacingRight?: number;
   containerStyle?: {

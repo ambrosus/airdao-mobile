@@ -1,4 +1,4 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { TextStyle, ViewStyle } from 'react-native';
 import { Button, Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
@@ -6,7 +6,7 @@ import { styles as staticStyles } from './styles';
 
 export interface Segment {
   id: string;
-  title: string | React.ReactNode;
+  title: string | ReactNode;
   value: unknown;
 }
 

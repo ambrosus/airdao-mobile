@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils';
+import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {
@@ -11,5 +11,6 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.alphaBlack10,
     borderRadius: 1000
-  }
+  },
+  row: { flexWrap: 'wrap', gap: verticalScale(16) }
 });

@@ -1,17 +1,13 @@
-import React, {
-  forwardRef,
-  useCallback,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
+import { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
 import {
   InteractionManager,
   Keyboard,
   LayoutChangeEvent,
+  NativeSyntheticEvent,
   Platform,
   Pressable,
   StyleProp,
+  TextInputContentSizeChangeEventData,
   TouchableOpacity,
   View,
   ViewStyle
@@ -28,6 +24,7 @@ import {
 import { BottomSheetRef } from '@components/composite';
 import { TokenLogo, TokenSelector } from '@components/modular';
 import { DownArrowIcon } from '@components/svg/icons';
+import { WalletStakeIcon } from '@components/svg/icons/v2/harbor';
 import { COLORS } from '@constants/colors';
 import { useForwardedRef } from '@hooks';
 import { Token } from '@models';
@@ -37,6 +34,7 @@ import { styles } from './styles';
 interface InputWithoutTokenSelectProps {
   readonly title?: string;
   readonly value: string;
+  readonly defaultValue?: string;
   readonly label?: string;
   readonly token: Token;
   readonly onChangeText: (text: string) => void;
@@ -44,13 +42,22 @@ interface InputWithoutTokenSelectProps {
   exchange?: {
     token: string;
     value: string;
+    availableToStake?: boolean;
   };
-
   onFocus?: () => void;
   onBlur?: () => void;
   resetKeyboardState?: boolean;
   isRequiredRefetchBalance?: boolean;
   inputError?: string;
+  arrow?: boolean;
+  readonly balance?: string;
+  editable?: boolean;
+  onContentSizeChange?: (
+    event: NativeSyntheticEvent<TextInputContentSizeChangeEventData>
+  ) => void;
+  valueColor?: string;
+  renderInputLockNode?: ReactNode;
+  maxButtonLocked?: boolean;
 }
 
 export const InputWithoutTokenSelect = forwardRef<
@@ -60,6 +67,7 @@ export const InputWithoutTokenSelect = forwardRef<
   (
     {
       value,
+      defaultValue,
       label,
       token,
       onChangeText,
@@ -68,7 +76,14 @@ export const InputWithoutTokenSelect = forwardRef<
       onBlur,
       resetKeyboardState = false,
       exchange,
-      inputError
+      inputError,
+      arrow = true,
+      balance,
+      editable = true,
+      onContentSizeChange,
+      renderInputLockNode,
+      valueColor = COLORS.neutral900,
+      maxButtonLocked = false
     },
     ref
   ) => {
@@ -115,17 +130,19 @@ export const InputWithoutTokenSelect = forwardRef<
     }, [inputContainerWidth, isInputFocused, value]);
 
     const inputStyle = useMemo(() => {
-      return Platform.select({
-        android: { ...styles.input, ...styles.inputAndroidSpecified },
-        ios: styles.input,
-        default: styles.input
-      });
-    }, []);
+      return {
+        ...Platform.select({
+          android: { ...styles.input, ...styles.inputAndroidSpecified },
+          ios: styles.input,
+          default: styles.input
+        }),
+        color: valueColor
+      };
+    }, [valueColor]);
 
-    const onInputContainerPress = useCallback(
-      () => textInputRef.current?.focus(),
-      []
-    );
+    const onInputContainerPress = useCallback(() => {
+      if (editable) textInputRef.current?.focus();
+    }, [editable]);
 
     const onLayoutEventHandle = useCallback(
       (event: LayoutChangeEvent) =>
@@ -180,8 +197,10 @@ export const InputWithoutTokenSelect = forwardRef<
               style={styles.inputContainer}
             >
               <TextInput
+                editable={editable}
                 ref={textInputRef}
                 value={_value}
+                defaultValue={defaultValue}
                 placeholder="0"
                 type="number"
                 numberOfLines={1}
@@ -192,7 +211,9 @@ export const InputWithoutTokenSelect = forwardRef<
                 onChangeText={onChangeTokenAmount}
                 style={inputStyle}
                 textAlign="right"
+                onContentSizeChange={onContentSizeChange}
               />
+              {renderInputLockNode}
             </Pressable>
           </View>
           <Row justifyContent="space-between" alignItems="center">
@@ -201,7 +222,7 @@ export const InputWithoutTokenSelect = forwardRef<
               <Text fontSize={scale(12)} color={COLORS.neutral900}>
                 {NumberUtils.formatNumber(
                   +NumberUtils.limitDecimalCount(
-                    token.balance.formattedBalance,
+                    balance ? balance : token.balance.formattedBalance,
                     2
                   )
                 )}{' '}
@@ -209,7 +230,11 @@ export const InputWithoutTokenSelect = forwardRef<
               </Text>
             </Text>
             {!inputError ? (
-              <Button style={styles.button} onPress={onPressMaxAmount}>
+              <Button
+                style={styles.button}
+                disabled={maxButtonLocked}
+                onPress={onPressMaxAmount}
+              >
                 <Text
                   fontFamily="Inter_600SemiBold"
                   fontSize={scale(12)}
@@ -220,7 +245,12 @@ export const InputWithoutTokenSelect = forwardRef<
               </Button>
             ) : (
               <View>
-                <Text fontSize={scale(12)} color={COLORS.error500}>
+                <Text
+                  fontSize={scale(12)}
+                  fontFamily="Inter_600SemiBold"
+                  color={COLORS.error500}
+                  style={styles.button}
+                >
                   {inputError}
                 </Text>
               </View>
@@ -234,34 +264,80 @@ export const InputWithoutTokenSelect = forwardRef<
             />
           )}
         </View>
-        {!!exchange && (
-          <>
-            <View style={styles.exchangeMain}>
-              <View style={styles.exchangeContainerIcon}>
-                <DownArrowIcon scale={0.9} />
+        {!!exchange &&
+          (exchange.availableToStake ? (
+            <>
+              {arrow ? (
+                <View style={styles.exchangeMain}>
+                  <View style={styles.exchangeContainerIcon}>
+                    <DownArrowIcon color="#585E77" scale={1.2} />
+                  </View>
+                </View>
+              ) : (
+                <Spacer value={8} />
+              )}
+              <Row
+                style={styles.exchangeRate}
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Row alignItems="center">
+                  <WalletStakeIcon />
+                  <Spacer horizontal value={4} />
+                  <Text
+                    fontSize={14}
+                    fontFamily="Inter_500Medium"
+                    color={COLORS.neutral900}
+                  >
+                    {t('harbor.stake.available')}
+                  </Text>
+                </Row>
+                <Row alignItems="center">
+                  <TokenLogo scale={0.75} token={exchange.token} />
+                  <Spacer horizontal value={scale(4)} />
+                  <Text
+                    fontSize={scale(14)}
+                    color={
+                      exchange.value ? COLORS.neutral900 : COLORS.neutral400
+                    }
+                  >
+                    {exchange.value}
+                  </Text>
+                  <Spacer horizontal value={scale(2)} />
+                  <Text fontSize={scale(14)} color={COLORS.neutral900}>
+                    {exchange.token}
+                  </Text>
+                </Row>
+              </Row>
+            </>
+          ) : (
+            <>
+              <View style={styles.exchangeMain}>
+                <View style={styles.exchangeContainerIcon}>
+                  <DownArrowIcon color="#585E77" scale={1.2} />
+                </View>
               </View>
-            </View>
-            <Row
-              style={styles.exchangeRate}
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Row alignItems="center">
-                <TokenLogo token={exchange.token} />
-                <Spacer horizontal value={scale(8)} />
-                <Text fontSize={scale(14)} color={COLORS.neutral900}>
-                  {exchange.token}
+              <Row
+                style={styles.exchangeRate}
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Row alignItems="center">
+                  <TokenLogo token={exchange.token} />
+                  <Spacer horizontal value={scale(8)} />
+                  <Text fontSize={scale(14)} color={COLORS.neutral900}>
+                    {exchange.token}
+                  </Text>
+                </Row>
+                <Text
+                  color={exchange.value ? COLORS.neutral900 : COLORS.neutral400}
+                  fontSize={scale(14)}
+                >
+                  {+exchange?.value > 0 ? exchange.value : 0}
                 </Text>
               </Row>
-              <Text
-                color={exchange.value ? COLORS.neutral900 : COLORS.neutral400}
-                fontSize={scale(14)}
-              >
-                {+exchange?.value > 0 ? exchange.value : 0}
-              </Text>
-            </Row>
-          </>
-        )}
+            </>
+          ))}
       </>
     );
   }

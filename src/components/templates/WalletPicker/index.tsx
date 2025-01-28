@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Button, Spacer, Text } from '@components/base';
@@ -6,7 +6,7 @@ import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { WalletAvatarDefault } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { AccountDBModel } from '@database';
-import { scale, verticalScale } from '@utils';
+import { verticalScale } from '@utils';
 import { styles } from './styles';
 import { WalletAvatars, avatarScale } from './WalletPicker.constants';
 import { WalletPickerItem } from './WalletPicker.item';
@@ -64,7 +64,7 @@ export const WalletPicker = (props: WalletPickerProps) => {
       <BottomSheet
         swiperIconVisible={true}
         ref={pickerModal}
-        containerStyle={{ minHeight: verticalScale(260), maxHeight: '75%' }}
+        containerStyle={styles.wrapper}
       >
         <Spacer value={verticalScale(16)} />
         <Text
@@ -79,7 +79,7 @@ export const WalletPicker = (props: WalletPickerProps) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           bounces={false}
-          contentContainerStyle={{ paddingHorizontal: scale(16) }}
+          contentContainerStyle={styles.container}
         >
           {wallets.map(renderWallet)}
         </ScrollView>
