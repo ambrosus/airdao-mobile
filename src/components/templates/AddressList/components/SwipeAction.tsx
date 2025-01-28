@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { Animated, Pressable } from 'react-native';
 import { Button } from '@components/base';
 import { EditIcon, TrashIcon } from '@components/svg/icons';
@@ -11,7 +11,7 @@ interface Props {
   handleConfirmRemove: () => void;
   showEdit: () => void;
 }
-export const SwipeAction: React.FC<Props> = ({
+export const SwipeAction: FC<Props> = ({
   dragX,
   onPress,
   handleConfirmRemove,

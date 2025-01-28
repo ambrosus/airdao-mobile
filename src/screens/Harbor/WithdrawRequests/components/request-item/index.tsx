@@ -1,4 +1,3 @@
-import React from 'react';
 import { View } from 'react-native';
 import { formatEther } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';

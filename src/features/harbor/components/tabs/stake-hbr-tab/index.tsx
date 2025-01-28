@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   RefreshControl,
   ScrollView,
@@ -7,15 +7,15 @@ import {
   ViewStyle
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { Spacer, Spinner } from '@components/base';
+import { Spinner, Spacer } from '@components/base';
 import { DEVICE_HEIGHT } from '@constants/variables';
-import { useAvailableWithdrawLogs, useStakeHBRStore } from '@entities/harbor';
+import { useStakeHBRStore, useAvailableWithdrawLogs } from '@entities/harbor';
 import { Rewards } from '@entities/harbor/components/composite';
 import { StakeAMBWithApyLabel } from '@entities/harbor/components/modular';
 import { useWalletStore } from '@entities/wallet';
-import { StakedHBRContainerWithRedirect } from '@features/harbor/components/templates';
 import { isSmallScreen, verticalScale } from '@utils';
 import { styles } from './styles';
+import { StakedHBRContainerWithRedirect } from '../../templates';
 
 export const StakeHBRTab = ({}) => {
   const { wallet } = useWalletStore();

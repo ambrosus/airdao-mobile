@@ -1,4 +1,3 @@
-import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeParamsList } from '@appTypes/navigation/wallets';
 import { WalletSessionsBottomSheet } from '@features/wallet-connect/components/templates';

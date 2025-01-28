@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 
 export const Divider = ({ children }: PropsWithChildren) => {

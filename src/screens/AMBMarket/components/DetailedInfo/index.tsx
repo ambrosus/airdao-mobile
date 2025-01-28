@@ -1,15 +1,14 @@
-import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { startCase, toLower } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { styles } from './styles';
 import {
+  InfoKey,
   AMBMarketItem,
-  AMBMarketItemsInfo,
-  InfoKey
-} from '../../AMBMarket.constants';
+  AMBMarketItemsInfo
+} from '@screens/AMBMarket/AMBMarket.constants';
+import { verticalScale } from '@utils';
 
 type AMBDetailedInfoProps = {
   [key in InfoKey]: string;
@@ -53,3 +52,9 @@ export function AMBDetailedInfo(props: AMBDetailedInfoProps): JSX.Element {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  item: {
+    marginBottom: verticalScale(24)
+  }
+});

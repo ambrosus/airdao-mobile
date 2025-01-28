@@ -1,10 +1,9 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { SettingsTabNavigationProp } from '@appTypes';
 import { Button, Row, Spacer, Switch, Text } from '@components/base';
 import { Header } from '@components/composite';

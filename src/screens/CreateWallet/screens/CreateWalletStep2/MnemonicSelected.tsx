@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { styles } from './Step2.styles';

@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { BarcodeScanner } from '@components/templates';
 import { DEVICE_HEIGHT } from '@constants/variables';

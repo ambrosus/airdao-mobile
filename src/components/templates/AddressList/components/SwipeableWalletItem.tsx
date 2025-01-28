@@ -1,4 +1,4 @@
-import React, { forwardRef, memo, useCallback, useRef, useState } from 'react';
+import { forwardRef, memo, useCallback, useRef, useState } from 'react';
 import { Dimensions, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Swipeable } from 'react-native-gesture-handler';

@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { fireEvent, render } from '@testing-library/react-native';
 import { SingleGroupScreen } from '@screens/SingleCollection';
 import { SafeAreaProvider } from 'react-native-safe-area-context';

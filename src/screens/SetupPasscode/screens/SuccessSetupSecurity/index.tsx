@@ -1,4 +1,3 @@
-import React from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +9,7 @@ import { COLORS } from '@constants/colors';
 import { usePasscodeStore } from '@features/passcode';
 import { usePasscodeActions } from '@features/passcode/lib/hooks';
 import { useEffectOnce } from '@hooks';
-import { verticalScale } from '@utils';
+import { scale, verticalScale } from '@utils';
 import { styles } from './styles';
 
 export const SuccessSetupSecurity = () => {

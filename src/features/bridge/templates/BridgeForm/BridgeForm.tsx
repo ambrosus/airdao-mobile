@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Keyboard, LayoutChangeEvent, View, ViewStyle } from 'react-native';
 import { BigNumber, BigNumberish, ethers } from 'ethers';
 import { parseUnits } from 'ethers/lib/utils';

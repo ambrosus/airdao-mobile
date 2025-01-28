@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { FlatList, ListRenderItemInfo } from 'react-native';
 import { Button } from '@components/base';
 import {

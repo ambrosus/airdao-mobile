@@ -1,5 +1,5 @@
 // ShimmerLoader.js
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { View, StyleSheet, Dimensions, DimensionValue } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Reanimated, {

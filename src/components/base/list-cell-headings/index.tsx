@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import capitalize from 'lodash/capitalize';
 import { useTranslation } from 'react-i18next';

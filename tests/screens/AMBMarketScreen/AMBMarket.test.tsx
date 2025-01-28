@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
 import { AMBMarket } from '@screens/AMBMarket';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';

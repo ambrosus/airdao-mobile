@@ -1,4 +1,3 @@
-import React from 'react';
 import { DimensionValue, View } from 'react-native';
 import { COLORS } from '@constants/colors';
 

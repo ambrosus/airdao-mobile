@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { FC, useState } from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
@@ -25,7 +25,7 @@ interface DebugItemModel {
 
 const watcherAPI = `${Config.WALLET_API_URL}/api/v1/watcher`;
 
-export const DebugInfo: React.FC = () => {
+export const DebugInfo: FC = () => {
   const [debugData, setDebugData] = useState([]);
 
   const getAllData = async () => {

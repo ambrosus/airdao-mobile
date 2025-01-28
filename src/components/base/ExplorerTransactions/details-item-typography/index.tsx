@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useMemo } from 'react';
+import { PropsWithChildren, useMemo } from 'react';
 import { StyleProp, TextStyle } from 'react-native';
 import { Text } from '@components/base';
 import { TextProps } from '@components/base/Text/Text.types';

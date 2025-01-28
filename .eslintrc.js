@@ -78,6 +78,9 @@ module.exports = {
     'no-multiple-empty-lines': ['error', { max: 1, maxBOF: 1 }]
   },
   settings: {
+    'react': {
+      version: 'detect'
+    },
     'import/core-modules': ['react', 'react-native'],
     'import/resolver': {
       typescript: {

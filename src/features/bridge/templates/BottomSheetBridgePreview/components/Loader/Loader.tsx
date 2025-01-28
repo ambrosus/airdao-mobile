@@ -1,4 +1,3 @@
-import React from 'react';
 import { View } from 'react-native';
 import { Spacer, Spinner } from '@components/base';
 import { styles } from './styles';

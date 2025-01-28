@@ -1,4 +1,3 @@
-import React from 'react';
 import { Image, View } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';

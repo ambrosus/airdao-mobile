@@ -1,54 +1,52 @@
-import React, { useImperativeHandle, useRef, useState } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { TextInput as RNTextInput, StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { moderateScale, scale, verticalScale } from '@utils';
 import { InputProps, InputRef } from './Input.types';
 
-export const TextInput = React.forwardRef<InputRef, InputProps>(
-  (props, ref) => {
-    const { value, style = {}, onChangeValue, ...restProps } = props;
-    const rnInputRef = useRef<RNTextInput>(null);
-    const [focused, setFocused] = useState(false);
-    const styles = [
-      defaultStyles.container,
-      style,
-      focused ? [defaultStyles.focusedStyle, [props.focusedStyles]] : {}
-    ];
+export const TextInput = forwardRef<InputRef, InputProps>((props, ref) => {
+  const { value, style = {}, onChangeValue, ...restProps } = props;
+  const rnInputRef = useRef<RNTextInput>(null);
+  const [focused, setFocused] = useState(false);
+  const styles = [
+    defaultStyles.container,
+    style,
+    focused ? [defaultStyles.focusedStyle, [props.focusedStyles]] : {}
+  ];
 
-    useImperativeHandle(
-      ref,
-      () => {
-        return {
-          focus() {
-            rnInputRef.current?.focus();
-          },
-          blur() {
-            rnInputRef.current?.blur();
-          },
-          clear() {
-            rnInputRef.current?.clear();
-          },
-          setText(text: string) {
-            rnInputRef.current?.setNativeProps({ text });
-          }
-        };
-      },
-      []
-    );
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        focus() {
+          rnInputRef.current?.focus();
+        },
+        blur() {
+          rnInputRef.current?.blur();
+        },
+        clear() {
+          rnInputRef.current?.clear();
+        },
+        setText(text: string) {
+          rnInputRef.current?.setNativeProps({ text });
+        }
+      };
+    },
+    []
+  );
 
-    return (
-      <RNTextInput
-        ref={rnInputRef}
-        value={value}
-        onChangeText={onChangeValue}
-        style={styles}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        {...restProps}
-      />
-    );
-  }
-);
+  return (
+    <RNTextInput
+      ref={rnInputRef}
+      value={value}
+      onChangeText={onChangeValue}
+      style={styles}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      {...restProps}
+    />
+  );
+});
 
 const defaultStyles = StyleSheet.create({
   container: {

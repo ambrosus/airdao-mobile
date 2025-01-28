@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { BigNumber, ethers } from 'ethers';
 import { t } from 'i18next';
 import { CryptoCurrencyCode } from '@appTypes';

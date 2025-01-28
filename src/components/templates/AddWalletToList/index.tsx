@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';

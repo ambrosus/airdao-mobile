@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { Pressable, View } from 'react-native';
 import { BigNumber, ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
