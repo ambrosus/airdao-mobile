@@ -436,18 +436,17 @@
   "bridge.preview.gas.fee": "Gaz Ücreti",
   "bridge.preview.button": "Onaylayın",
   "bridge.preview.button.max": "Maksimum",
-  "bridge.insufficient.funds": "Yetersiz bakiye",
 
   "bridge.transaction.info.subheader": "Transferiniz işleniyor ve 5-20 dakika içinde tamamlanacak.",
-
   "bridge.transfer.failed.header": "Köprü İşlemi Başarısız",
   "bridge.transfer.failed.sub.header": "İşleminiz gerçekleştirilirken bir hata oluştu.",
   "bridge.transfer.failed.to.wallet.btn": "Cüzdana git",
   "bridge.amount.less.then.fee": "Bakiye ücretten daha az",
-
   "bridge.insufficient.funds.to.pay.fee.header": "İşlem ücretleri için yetersiz {{symbol}}}.",
   "bridge.insufficient.funds.to.pay.fee.subHeader": "Lütfen ağ maliyetlerini karşılamak için {{symbol}}} ekleyin.",
   "bridge.unknown.error": "Bilinmeyen hata",
+  "bridge.insufficient.funds": "Yetersiz bakiye",
+  "bridge.insufficient.funds.description": "!!!You do not have enough funds in your account to pay for network fees.",
 
   "kosmos.primary.tabs.market": "Piyasalar",
   "kosmos.primary.tabs.orders": "Siparişlerim",

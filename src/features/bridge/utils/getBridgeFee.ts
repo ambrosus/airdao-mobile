@@ -49,7 +49,6 @@ export const getFeeData = async ({
       }
     }
   } catch (e) {
-    return e;
-    // ignore
+    throw e;
   }
 };
