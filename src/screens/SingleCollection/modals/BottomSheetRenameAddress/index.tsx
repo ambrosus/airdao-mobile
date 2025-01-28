@@ -8,7 +8,6 @@ import { BottomSheetFloat, PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useForwardedRef } from '@hooks/useForwardedRef';
 import { styles } from '@screens/SingleCollection/modals/BottomSheetRenameAddress/styles';
-import { scale, verticalScale } from '@utils';
 
 type Props = {
   ref: RefObject<BottomSheetRef>;
@@ -27,7 +26,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
     return (
       <BottomSheetFloat
         ref={localRef}
-        containerStyle={{ paddingBottom: verticalScale(24) }}
+        containerStyle={styles.container}
         swiperIconVisible
       >
         <Spacer value={24} />
@@ -49,7 +48,7 @@ export const BottomSheetRenameAddress = forwardRef<BottomSheetRef, Props>(
           style={[styles.bottomSheetInput]}
         />
         <Spacer value={24} />
-        <View style={{ paddingHorizontal: scale(24) }}>
+        <View style={styles.buttonWrapper}>
           <PrimaryButton
             onPress={() => {
               handleOnRename(localAddressName !== address && localAddressName);

@@ -48,13 +48,7 @@ export const BottomSheetWalletCreateOrImport = forwardRef<
   const AddWalletButton = useCallback(
     () => (
       <Button onPress={navigateToWalletCreate} style={styles.buttonWrapper}>
-        <View
-          style={{
-            backgroundColor: COLORS.brand600,
-            borderRadius: 50,
-            padding: 5
-          }}
-        >
+        <View style={styles.wrapper}>
           <AddIcon color={COLORS.neutral0} scale={1.3} />
         </View>
         <Spacer value={15} />

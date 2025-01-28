@@ -2,7 +2,7 @@ import { PropsWithChildren, useMemo } from 'react';
 import { StyleProp, TextStyle } from 'react-native';
 import { Text } from '@components/base';
 import { TextProps } from '@components/base/Text/Text.types';
-import { COLORS } from '@constants/colors';
+import { styles } from './styles';
 
 interface DetailsItemTypographyProps extends PropsWithChildren {
   readonly type?: 'key' | 'value';
@@ -17,18 +17,10 @@ export const DetailsItemTypography = ({
   const _props = useMemo(() => {
     switch (type) {
       case 'key': {
-        return {
-          fontSize: 15,
-          fontFamily: 'Inter_500Medium',
-          color: COLORS.neutral500
-        };
+        return styles.keyStyle;
       }
       case 'value': {
-        return {
-          fontSize: 14,
-          fontFamily: 'Inter_500Medium',
-          color: COLORS.neutral800
-        };
+        return styles.valueStyle;
       }
     }
   }, [type]) as TextProps;

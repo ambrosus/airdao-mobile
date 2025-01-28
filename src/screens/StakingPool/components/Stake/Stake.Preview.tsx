@@ -1,10 +1,11 @@
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useUSDPrice } from '@hooks';
 import { StringUtils, NumberUtils, scale, verticalScale } from '@utils';
+import { styles } from './styles';
 
 interface StakePreviewProps {
   walletAddress: string;
@@ -22,7 +23,7 @@ export const StakePreview = ({
   const { t } = useTranslation();
   const usdAmount = useUSDPrice(amount);
   return (
-    <View style={styles.container}>
+    <View style={styles.containerPreview}>
       <Text
         fontSize={20}
         fontFamily="Inter_700Bold"
@@ -113,10 +114,3 @@ export const StakePreview = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: scale(24),
-    paddingTop: verticalScale(16)
-  }
-});

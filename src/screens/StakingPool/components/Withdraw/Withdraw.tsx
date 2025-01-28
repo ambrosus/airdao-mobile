@@ -172,10 +172,7 @@ export const WithdrawToken = ({
         type="number"
       />
       <Spacer value={verticalScale(24)} />
-      <Row
-        alignItems="center"
-        style={{ flexWrap: 'wrap', gap: verticalScale(16) }}
-      >
+      <Row alignItems="center" style={styles.row}>
         {WITHDRAW_PERCENTAGES.map((percentage) => (
           <PercentageBox
             key={percentage}

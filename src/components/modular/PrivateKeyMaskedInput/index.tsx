@@ -7,15 +7,17 @@ import {
   TextStyle
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { InputRef, TextInputProps } from '@components/base';
+import { InputRef, InputProps } from '@components/base';
+// import { InputRef, TextInputProps } from '@components/base';
 import { TextInput } from '@components/base/Input/Input.text';
 import { COLORS } from '@constants/colors';
-import { Clipboard, moderateScale, scale, verticalScale } from '@utils';
+import { Clipboard } from '@utils';
+import { styles } from './styles';
 
 type SelectionKeys = 'start' | 'end';
 type SelectionObject = Record<SelectionKeys, null | number>;
 
-type PrivateKeyMaskedInputProps = TextInputProps & {
+type PrivateKeyMaskedInputProps = InputProps & {
   color?: string;
   value: string;
   secureTextEntry: boolean;
@@ -38,17 +40,8 @@ export const PrivateKeyMaskedInput = forwardRef<
   const { t } = useTranslation();
   const inputStyle: StyleProp<TextStyle> = useMemo(() => {
     return {
-      color: color || COLORS.neutral900,
-      width: '100%',
-      height: 90,
-      borderRadius: moderateScale(12),
-      paddingHorizontal: scale(16),
-      paddingTop: verticalScale(12),
-      paddingBottom: verticalScale(12),
-      fontSize: 16,
-      fontFamily: 'Inter_400Regular',
-      textAlign: 'left',
-      verticalAlign: 'top'
+      ...styles.inputStyle,
+      color: color || COLORS.neutral900
     };
   }, [color]);
 

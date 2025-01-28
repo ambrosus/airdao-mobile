@@ -14,7 +14,7 @@ import { useStakingPoolsStore } from '@entities/staking';
 import { useWalletStore } from '@entities/wallet';
 import { useAmbrosusStakingPools } from '@hooks';
 import { StakingPool } from '@models';
-import { scale, verticalScale } from '@utils';
+import { verticalScale } from '@utils';
 import { styles } from './styles';
 
 export const StakingPoolsScreen = () => {
@@ -84,10 +84,7 @@ export const StakingPoolsScreen = () => {
       ) : (
         <StakingPoolList
           stakingPools={filterStakingPools}
-          contentContainerStyle={{
-            paddingHorizontal: scale(16),
-            paddingTop: verticalScale(16)
-          }}
+          contentContainerStyle={styles.listContainer}
           ItemSeparatorComponent={() => <Spacer value={verticalScale(16)} />}
           onPressItem={navigateToPoolScreen}
         />

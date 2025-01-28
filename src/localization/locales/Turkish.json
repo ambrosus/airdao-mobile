@@ -436,18 +436,17 @@
   "bridge.preview.gas.fee": "Gaz Ücreti",
   "bridge.preview.button": "Onaylayın",
   "bridge.preview.button.max": "Maksimum",
-  "bridge.insufficient.funds": "Yetersiz bakiye",
 
   "bridge.transaction.info.subheader": "Transferiniz işleniyor ve 5-20 dakika içinde tamamlanacak.",
-
   "bridge.transfer.failed.header": "Köprü İşlemi Başarısız",
   "bridge.transfer.failed.sub.header": "İşleminiz gerçekleştirilirken bir hata oluştu.",
   "bridge.transfer.failed.to.wallet.btn": "Cüzdana git",
   "bridge.amount.less.then.fee": "Bakiye ücretten daha az",
-
   "bridge.insufficient.funds.to.pay.fee.header": "İşlem ücretleri için yetersiz {{symbol}}}.",
   "bridge.insufficient.funds.to.pay.fee.subHeader": "Lütfen ağ maliyetlerini karşılamak için {{symbol}}} ekleyin.",
   "bridge.unknown.error": "Bilinmeyen hata",
+  "bridge.insufficient.funds": "Yetersiz bakiye",
+  "bridge.insufficient.funds.description": "!!!You do not have enough funds in your account to pay for network fees.",
 
   "kosmos.primary.tabs.market": "Piyasalar",
   "kosmos.primary.tabs.orders": "Siparişlerim",
@@ -512,11 +511,14 @@
   "harbor.staked.amount": "Stake edilen miktar",
   "harbor.staked.balance": "Stake edilen bakiye",
   "harbor.staked.info": "Havuza AMB yatırdığınızda, havuzdaki payınızı temsil eden stAMB token'ını alırsınız.",
+  "harbor.stake.pool.limit": "Toplam havuz limiti",
 
   "harbor.stake.amount.preview.title": "Stake miktarı",
   "harbor.receive.amount.preview.title": "Alacağınız",
   "harbor.stake.from": "Gönderen",
   "harbor.stake.apy": "APY",
+  "harbor.apy.value": "Yüksek APY",
+  "harbor.stake.limit.address": "Adres Başına Limit",
   "harbor.successfully.stake.header": "Başarıyla stake ettiniz",
   "harbor.successfully.withdraw.header": "Başarıyla çektiniz",
 
@@ -554,6 +556,16 @@
   "harbor.requests.date": "İstek tarihi",
   "harbor.unlock.date": "Kilit açma tarihi",
   "harbor.empty.withdrawals.list": "Şu anda herhangi bir çekim isteği yok.",
+  "harbor.apy.label": "Yüksek getirili AMB staking'e erişmek için HBR stake edin.",
+  "harbor.rewards.label": "Ödüller",
+  "harbor.withdraw.warning": {
+    "regular": "Lütfen unutmayın: HBR'yi çekmek için önce",
+    "highlight": "AMB'yi çekmeniz gerekir"
+  },
+  "harbor.stake.available": "Stake için müsait",
+  "harbor.stake.description": "AMB staking limitiniz, stake edilen HBR miktarına bağlıdır. Limitinizi artırmak için daha fazla HBR stake edin!",
+  "harbor.stake.period.complete": "Kilitleme süresi tamamlandı",
+  "harbor.stake.unlock.date": "Şu tarihte müsait {{date}}",
 
   "wallet.connect": {
     "proposal": "{{origin}} adresine bağlanınf",

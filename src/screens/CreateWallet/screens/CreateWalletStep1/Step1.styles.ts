@@ -6,6 +6,8 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1
   },
+  header: { shadowColor: 'transparent' },
+  wrapper: { paddingHorizontal: scale(28) },
   innerContainer: {
     flex: 1,
     justifyContent: 'space-between',
@@ -15,9 +17,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  column: {
-    flex: 1
   },
   mnemonic: {
     flexDirection: 'row',

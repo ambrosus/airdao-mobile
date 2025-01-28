@@ -13,6 +13,7 @@ import { usePasscodeStore } from '@features/passcode';
 import { useAppState, usePreventGoingBack } from '@hooks';
 import { Cache, CacheKey } from '@lib/cache';
 import { DeviceUtils, PasscodeUtils, verticalScale } from '@utils';
+import { styles } from './styles';
 
 export const PasscodeEntry = () => {
   const { t } = useTranslation();
@@ -141,17 +142,17 @@ export const PasscodeEntry = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={styles.mainFlex}>
       {params?.title && (
         <Header title={params.title} onBackPress={closePasscodeEntry} />
       )}
-      <View style={{ flex: 1 }}>
+      <View style={styles.mainFlex}>
         <Text
           fontSize={24}
           fontFamily="Inter_700Bold"
           color={COLORS.neutral800}
           align="center"
-          style={{ paddingTop: verticalScale(160) }}
+          style={styles.passcodeText}
         >
           {t('login.enter.your.passcode')}
         </Text>

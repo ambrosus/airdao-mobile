@@ -79,6 +79,9 @@ export const BridgeContext = () => {
         errorCode === BRIDGE_ERROR_CODES.INSUFFICIENT_FUNDS &&
         errorMethods === METHODS_FROM_ERRORS.ESTIMATE_GAS;
 
+      const amountToSmall = errorMessage.includes(
+        BRIDGE_ERROR_CODES.AMOUNT_TO_SMALL
+      );
       sendFirebaseEvent(CustomAppEvents.bridge_error, {
         bridgeError: errorMessage
       });
@@ -95,6 +98,13 @@ export const BridgeContext = () => {
               'bridge.insufficient.funds.to.pay.fee.subHeader'
             ).replace('{{symbol}}', networkNativeToken.symbol || '')
           });
+        case amountToSmall:
+          return Toast.show({
+            type,
+            text: t('bridge.insufficient.funds'),
+            subtext: t('bridge.insufficient.funds.description')
+          });
+
         default:
           return Toast.show({
             type,
@@ -304,7 +314,8 @@ export const BridgeContext = () => {
     setSelectedTokenPairs,
     setBridgePreviewData,
     setProcessingTransaction,
-    setSelectedBridgeData
+    setSelectedBridgeData,
+    setFrom
   };
 
   return {

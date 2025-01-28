@@ -7,15 +7,12 @@
   "Portuguese": "Português",
   "Russian": "Русский",
   "Chinese": "Chinese",
-
   "tab.wallets": "Wallets",
   "tab.watchlist": "Watchlist",
   "tab.explore": "Explore",
   "tab.settings": "Settings",
   "tab.notifications": "Notifications",
-
   "airdao.wallet": "AirDAO Wallet",
-
   "account": {
     "actions": {
       "swap": "Swap",
@@ -25,7 +22,6 @@
       "bridge": "Bridge"
     }
   },
-
   "address.add.group": "Add to group",
   "address.add.to.group": "Add address to group",
   "address.add.to.selected.group": "Add address to {{selectedGroup}}",
@@ -40,10 +36,8 @@
   "address.rename": "Rename address",
   "address.share.performance": "Share address performance",
   "address.watchlisted": "Watchlisted",
-
   "alert.invalid.qr.code.msg": "Invalid QR code",
   "alert.scan.again.msg": "Scan again",
-
   "amb.market.about.airdao": "About AirDAO",
   "amb.market.circulating.supply": "Circulating supply",
   "amb.market.circulating.supply.popup": "The amount of coins that are circulating in the market and are in public hands. It is analogous to the flowing shares in the stock market.",
@@ -60,7 +54,6 @@
   "amb.market.stats": "Stats",
   "amb.market.total.supply": "Total supply",
   "amb.market.total.supply.popup": "The amount of coins that have been already created, minus any coins that have been burned, providing a measure of the current supply of a cryptocurrency.",
-
   "button.add": "Add",
   "button.add.wallet": "Add wallet",
   "button.cancel": "Cancel",
@@ -88,19 +81,16 @@
   "button.importing.wallet": "Importing wallet",
   "button.sending": "Sending",
   "button.insufficient.funds": "Insufficient funds",
-
   "change.passcode.confirm.new.passcode": "Confirm new passcode",
   "change.passcode.enter.new.passcode": "Enter your passcode",
   "change.passcode.success": "Passcode changed!",
   "change.passcode.header.old": "Current passcode",
   "change.passcode.header.new": "New passcode",
   "change.passcode.header.confirm": "Confirm passcode",
-
   "chart.timeframe.24H": "24 hrs",
   "chart.timeframe.daily": "1D",
   "chart.timeframe.weekly": "1W",
   "chart.timeframe.monthly": "1M",
-
   "collection.add.address": "Add address",
   "collection.create": "Create group",
   "collection.create.new": "Create new group",
@@ -109,7 +99,6 @@
   "collection.search.input": "Search groups",
   "collection.search.public.address.placeholder": "Search public address",
   "collection.total.balance": "TOTAL VALUE",
-
   "common.address": "Address",
   "common.address_plural": "Addresses",
   "common.address.with.count": "{{count}} address",
@@ -160,7 +149,6 @@
   "common.details": "Details",
   "common.day": "day",
   "common.days": "days",
-
   "create.wallet.backup": "Backup your wallet",
   "create.wallet.backup.header": "Backup wallet",
   "create.wallet.backup.popup": "recovery phrase.",
@@ -178,38 +166,31 @@
   "create.wallet.verify.text": "Write down your recovery phrase exactly as shown. You’ll verify it later. Keep it private and secure!",
   "create.wallet.recovery.phrase": "Recovery phrase",
   "create.wallet.recovery.phrase.error": "Verification failed. Tap the words in the correct order to continue.",
-
   "empty.addresses": "Add an address to your watchlist and track any wallet",
   "empty.assets": "No assets yet",
   "empty.groups": "Create personalized groups to easily track multiple addresses",
   "empty.notifications": "You have no notifications right now.",
   "empty.notifications.check.later": "Please come back later.",
-
   "explore.search.check.typos": "Please check for any typos or try a different address",
   "explore.search.no.account.info": "Could not load accounts info",
   "explore.search.no.matches": "Oops! No matches found",
   "explore.search.placeholder": "Search Address or TX hash",
   "explore.single.address.holding": "Holds {{share}}% of supply",
-
   "notification.settings": "Notification settings",
   "notification.settings.price.alerts.switch": "Price alerts",
   "notification.settings.price.alerts.treshold": "Price alerts treshold",
   "notification.settings.price.alerts.treshold.text": "Set 24hr price change amount to receive notifications.",
   "notification.settings.transaction.alerts.switch": "Transaction alerts",
   "notification.settings.transaction.alerts.switch.text": "Get notified of updates in your watchlist.",
-
   "asset.your.balance": "YOUR BALANCE",
-
   "transaction.modal": {
     "buttons": {
       "explorer": "View on Explorer",
       "share": "Share"
     }
   },
-
   "receive.funds": "Receive funds",
   "receive.funds.amb.network.only": "Assets can only be sent within the AirDAO network",
-
   "send.funds.balance": "Balance",
   "send.funds.error.insufficient.balance": "Insufficient balance to pay the network fee. Adjust the amount or top up wallet to proceed.",
   "send.funds.error.network": "Bad internet connection!",
@@ -228,7 +209,6 @@
   "send.funds.sent": "sent",
   "send.funds.transfer.fee": "Estimated transfer fee",
   "send.funds.use.max": "Use max",
-
   "import.wallet.methods.mnemonic": "Recovery phrase",
   "import.wallet.methods.mnemonic.info": "Use your 12 word recovery phrase",
   "import.wallet.methods.key": "Private keys",
@@ -242,7 +222,6 @@
   "import.wallet.common.title": "Import wallet",
   "import.wallet.key.input.label": "Private key",
   "import.wallet.key": "Private key",
-
   "import.wallet.key.show": "Show private key",
   "import.wallet.key.hide": "Hide private key",
   "import.wallet.key.error.exist": "Wallet already imported. Please use a different recovery method or access your existing wallet.",
@@ -253,9 +232,7 @@
   "import.wallet.toast.title": "Wallet imported!",
   "import.private.key.error": "The private key doesn’t correspond to any wallet. Please try again",
   "import.private.key.already.exist": "Wallet already exist",
-
   "import.wallet.error": "Import failed. Tap the words in the correct order to continue.",
-
   "no.wallet.address.tracking": "Address tracking",
   "no.wallet.address.tracking.description": "Stay in the know with real-time address tracking.",
   "no.wallet.create.new": "Create new wallet",
@@ -265,7 +242,6 @@
   "no.wallet.send.receive.description": "Safely send and receive funds with just a few taps.",
   "no.wallet.stay.informed": "Stay informed",
   "no.wallet.stay.informed.description": "Get updates for transactions and important wallet activity.",
-
   "settings.about": "About",
   "settings.help": "Help center",
   "settings.manage.wallet": "Manage wallets",
@@ -277,16 +253,13 @@
   "settings.twitter": "X (formerly Twitter)",
   "settings.telegram": "Telegram",
   "settings.medium": "Medium",
-
   "settings.preferences.currency": "Currency",
   "settings.preferences.language": "Language",
   "settings.preferences.select.language": "Select language",
   "settings.preferences.select.base.currency": "Select base currency",
-
   "settings.about.privacy": "Privacy policy",
   "settings.about.rate": "Rate us",
   "settings.about.terms": "Terms of service",
-
   "singleWallet.name": "Name",
   "singleWallet.remove": "Remove",
   "singleWallet.remove.alert.title": "Are you sure you want to delete this wallet?",
@@ -301,11 +274,9 @@
   "singleWallet.tab.phrase": "Recovery phrase",
   "singleWallet.tab.keys": "Private keys",
   "singleWallet.tab.phrase.warn": "Make sure to write it down as shown.",
-
   "login.enter.your.passcode": "Enter your passcode",
   "login.with.face.id": "Sign in with Face ID",
   "login.with.fingerprint": "Sign in with fingerprint",
-
   "security.authenticate.with.face.id": "Authenticate with Face ID",
   "security.authenticate.with.fingerprint": "Authenticate with fingerprint",
   "security.confirm.passcode.description": "Re-enter your passcode to secure your wallet",
@@ -318,7 +289,6 @@
   "security.manage": " to manage your wallet security.",
   "security.passcode.doesnt.match": "Passcode doesn't match",
   "security.wallet.protected": "Your wallet is now protected. Go to",
-
   "settings.security.change.passcode": "Change passcode",
   "settings.security.face.id.not.available": "Face ID is not available on this device",
   "settings.security.face.id.not.accessible": "Face ID is not accessible on this device",
@@ -326,16 +296,13 @@
   "settings.security.fingerprint.not.accessible": "Fingerprint is not accessible on this device",
   "settings.security.no.biometrics.available": "No biometrics authentication is available on this device",
   "settings.security.press.to.open.settings": "Press here to open settings",
-
   "share.tx.fee": "Tx Fee",
   "share.time": "Time",
   "share.24hr": "24hr",
-
   "staking.apy": "APY",
   "staking.current.stake": "Currently staking {{amount}} {{symbol}}",
   "staking.header": "Stake",
   "staking.pools": "Pools",
-
   "staking.pool.apy": "APY",
   "staking.pool.earnings": "Earnings",
   "staking.pool.preview": "Preview",
@@ -357,7 +324,6 @@
   "staking.pool.success": "Success!",
   "staking.pool.stake.warning": "A minimum of 1000 AMB is required to stake.",
   "staking.pool.withdraw.warning": "A minimum of 1000 AMB is required to withdraw.",
-
   "toast.address.watchlisted.msg": "Way to go! Address watchlisted.",
   "toast.the.address.upper.case": "The address",
   "toast.the.message.lower.case": "the address",
@@ -368,21 +334,17 @@
   "toast.you.added.address.to.watchlist": "{{name}} is now on your Watchlist!",
   "toast.you.removed.address.from.watchlist": "You removed {{name}} from watchlist!",
   "toast.wallet.created": "Backup successful!",
-
   "token.picker.select": "Select asset to send",
   "token.actions.swap": "Swap",
   "token.actions.stake": "Stake",
-
   "wallet.assets.empty.description": "Deposit Funds to unlock your wallet features.",
   "wallet.assets.deposit.button": "Deposit funds",
   "wallet.empty.nft.header": "No NFTs yet.",
   "wallet.empty.nft.subheader": "Stay tuned for upcoming events and activities where you can earn exclusive NFTs.",
-
   "wallet.my.assets": "Assets",
   "wallets.nfts": "NFTs",
   "wallet.history": "History",
   "wallet.picker.select": "Select Wallet",
-
   "swap.route": "Route",
   "swap.pay": "You send",
   "swap.receive": "You receive",
@@ -425,12 +387,10 @@
   "bridge.transaction.preview.header": "Sending {{amount}} {{symbol}} to {{network}}",
   "bridge.transaction.preview.time": "Estimated arrival time",
   "bridge.transaction.success.description": "You sent ${{amount}} ${{symbol}}",
-
   "bridge.select.network": "Select network",
   "bridge.select.assets": "Select asset",
   "bridge.set.amount": "Set amount",
   "bridge.amount.network.fee": "Network fee",
-
   "bridge.preview.title": "Preview",
   "bridge.preview.receive": "You’ll receive",
   "bridge.preview.bridge.fee": "Bridge fee",
@@ -438,19 +398,16 @@
   "bridge.preview.gas.fee": "Gas fee",
   "bridge.preview.button": "Confirm",
   "bridge.preview.button.max": "Max",
-  "bridge.insufficient.funds": "Insufficient balance",
-
   "bridge.transaction.info.subheader": "Your transfer is being processed and will be completed within 5-20 minutes.",
-
   "bridge.transfer.failed.header": "Bridge Transaction Failed",
   "bridge.transfer.failed.sub.header": "An error occurred while processing your transaction.",
   "bridge.transfer.failed.to.wallet.btn": "Go to wallet",
   "bridge.amount.less.then.fee": "Amount less then fee",
-
   "bridge.insufficient.funds.to.pay.fee.header": "Insufficient {{symbol}} for transaction fees.",
   "bridge.insufficient.funds.to.pay.fee.subHeader": "Please add {{symbol}} to cover network costs.",
   "bridge.unknown.error": "Unknown error",
-
+  "bridge.insufficient.funds": "Insufficient balance",
+  "bridge.insufficient.funds.description": "You do not have enough funds in your account to pay for network fees.",
   "kosmos.primary.tabs.market": "Markets",
   "kosmos.primary.tabs.orders": "My orders",
   "kosmos.table.headings.discount": "Discount",
@@ -458,7 +415,6 @@
   "kosmos.orders.total.bonded": "TOTAL VALUE BONDED",
   "kosmos.orders.claimable": "CLAIMABLE",
   "kosmos.payout": "Payout",
-
   "kosmos.button.reset": "Reset",
   "kosmos.button.apply": "Apply",
   "kosmos.button.claimed": "Claimed",
@@ -469,14 +425,12 @@
   "kosmos.button.ready.claim": "Ready to claim",
   "kosmos.button.claiming": "Claiming",
   "kosmos.button.processing": "Processing",
-
   "kosmos.status.all": "All",
   "kosmos.status.closed": "Closed",
   "kosmos.status.active": "Active",
   "kosmos.filter": "Filter",
   "kosmos.filter.by": "Filter by",
   "kosmos.filter.payment": "Payment token",
-
   "kosmos.success.toast": "Success! You claimed ${{amount}}",
   "kosmos.buy.success.toast": "Success! You bought {{amount}} {{amountSymbol}} bond",
   "kosmos.input.error.max.bondable": "Enter amount less than max bondable value",
@@ -493,15 +447,11 @@
   "kosmos.bought": "You bought",
   "kosmos.getting": "You will get",
   "kosmos.protocol.fee": "Protocol fee",
-
   "kosmos.chart.explanation.bond": "Bond price",
   "kosmos.chart.explanation.market": "Market price",
-
   "kosmos.market.tabs.buy.bond": "Buy Bond",
   "kosmos.market.tabs.history": "History",
-
   "settings.version": "Version",
-
   "harbor.requests.header": "My Requests",
   "harbor.withdraw.header": "Withdraw",
   "harbor.stakeAMB.header": "Stake AMB",
@@ -514,49 +464,50 @@
   "harbor.staked.amount": "Staked amount",
   "harbor.staked.balance": "Staked balance",
   "harbor.staked.info": "When you deposit AMB into the pool, you receive the stAMB token, which represents your share in the pool.",
-
+  "harbor.stake.pool.limit": "Total pool Limit",
   "harbor.stake.amount.preview.title": "Stake amount",
   "harbor.receive.amount.preview.title": "You will receive",
   "harbor.stake.from": "From",
   "harbor.stake.apy": "APY",
+  "harbor.apy.value": "Hot APY",
+  "harbor.stake.limit.address": "Per Address Limit",
   "harbor.successfully.stake.header": "You have successfully staked",
   "harbor.successfully.withdraw.header": "You have successfully withdraw",
-
   "harbor.withdraw.stake.reward": "Stake + Rewards",
   "harbor.withdraw.reward": "Rewards only",
   "harbor.tiers.container.header": "Reward Distribution",
-
   "harbor.exchange.rate": "Exchange rate",
   "harbor.withdrawal.delay": "Withdrawal Delay",
   "harbor.withdrawal.button": "Request Withdrawal",
   "harbor.transaction.failed": "The transaction was failed.",
-
   "harbor.withdraw.preview.success.header": "Withdrawal request sent",
   "harbor.withdraw.amount": "Withdrawal amount",
   "harbor.withdraw.preview.amb.reward": "Reward AMB",
   "harbor.withdraw.preview.bond.reward": "Reward BOND",
   "harbor.withdraw.preview.delay": "Withdrawal Delay",
-
   "harbor.button.processing": "Processing",
-
   "harbor.tier.1.header": "New Stakers",
   "harbor.tier.1.content": "25% rewards available immediately, increasing by 1% every 250K blocks.",
-
   "harbor.tier.2.header": "1yr+ Stakers",
   "harbor.tier.2.content": "50% rewards available immediately, increasing by 1% every 250K blocks.",
-
   "harbor.tier.3.header": "2yrs+ Stakers",
   "harbor.tier.3.content": "75% rewards available immediately, increasing by 1% every 250K blocks.",
-
   "harbor.tier.4.header": "3yrs+ Stakers",
   "harbor.tier.4.content": "100% rewards available immediately, increasing by 1% every 250K blocks.",
-
   "harbor.tier.info": "Remaining rewards are available as $BOND, which can be exchanged on the Bond marketplace.",
-
   "harbor.requests.date": "Requests date",
   "harbor.unlock.date": "Unlock date",
   "harbor.empty.withdrawals.list": "There are no withdrawal requests at the moment.",
-
+  "harbor.apy.label": "Stake HBR to access high-yield AMB staking.",
+  "harbor.rewards.label": "Rewards",
+  "harbor.withdraw.warning": {
+    "regular": "Please note: to withdraw HBR, you first need to",
+    "highlight": "withdraw AMB"
+  },
+  "harbor.stake.available": "Available to Stake",
+  "harbor.stake.description": "Your AMB staking limit depends on the amount of HBR staked. Stake more HBR to increase your limit!",
+  "harbor.stake.period.complete": "Lock period complete",
+  "harbor.stake.unlock.date": "Available on {{date}}",
   "wallet.connect": {
     "proposal": "Connect to {{origin}}",
     "warning": "Are you sure you want to connect your wallet to {{origin}}",
@@ -583,7 +534,6 @@
     "approve.token": "Approve token",
     "spender": "Spender"
   },
-
   "products": {
     "title.trade": "Trade",
     "title.earn": "Earn",

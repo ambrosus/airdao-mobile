@@ -20,11 +20,7 @@ export const styles = StyleSheet.create({
     height: moderateScale(36),
     width: moderateScale(36)
   },
-  headerWatchListBtn: {
-    backgroundColor: COLORS.brand100,
-    height: moderateScale(36),
-    width: moderateScale(36)
-  },
+
   stub: {
     width: '100%',
     height: DEVICE_HEIGHT * 0.5,

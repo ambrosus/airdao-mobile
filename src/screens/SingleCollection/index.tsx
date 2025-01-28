@@ -60,7 +60,7 @@ export const SingleGroupScreen = () => {
   return (
     <SafeAreaView
       edges={['top']}
-      style={{ flex: 1 }}
+      style={styles.main}
       testID="Single_Collection"
     >
       <Header
@@ -75,14 +75,8 @@ export const SingleGroupScreen = () => {
             {selectedList.name}
           </Text>
         }
-        centerContainerStyle={{
-          maxWidth: '70%',
-          alignItems: 'flex-start',
-          paddingLeft: scale(28)
-        }}
-        style={{
-          shadowColor: COLORS.transparent
-        }}
+        centerContainerStyle={styles.headerContainer}
+        style={styles.headerStyle}
         contentRight={
           <>
             <Button
@@ -106,7 +100,7 @@ export const SingleGroupScreen = () => {
         }
       />
       <Spacer value={32} />
-      <View style={{ alignItems: 'center' }}>
+      <View style={styles.balanceWrapper}>
         <Text
           color={COLORS.alphaBlack50}
           fontFamily="Inter_600SemiBold"
@@ -115,7 +109,7 @@ export const SingleGroupScreen = () => {
           {t('collection.total.balance')}
         </Text>
         <Spacer value={verticalScale(8)} />
-        <View style={{ flexDirection: 'row' }}>
+        <View style={styles.infoContainer}>
           <TokenLogo token={'AirDao'} />
           <Spacer horizontal value={verticalScale(8)} />
           <Text
@@ -140,16 +134,13 @@ export const SingleGroupScreen = () => {
         </Text>
       </View>
       <Spacer value={verticalScale(16)} />
-      <View
-        style={{ flex: 1, paddingHorizontal: scale(16) }}
-        testID="List_Of_Addresses"
-      >
+      <View style={styles.addressList} testID="List_Of_Addresses">
         <AddressList
           data={sortListByKey(accounts || [], 'ambBalance', 'desc')}
           emptyText={''}
           isPortfolioFlow={true}
           removeType="collection"
-          contentContainerStyle={{ paddingBottom: '10%' }}
+          contentContainerStyle={styles.addressList}
           onRefresh={refetchAddresses}
         />
       </View>

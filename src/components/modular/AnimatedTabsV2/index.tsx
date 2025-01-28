@@ -29,6 +29,7 @@ interface AnimatedV2TabsProps {
   containerStyle?: ViewStyle;
   customTabBarStyle?: ViewStyle;
   keyboardShouldPersistTaps?: 'always' | 'handled' | 'never' | undefined;
+  onChangeActiveIndex?: (payload: number) => void;
 }
 
 export const AnimatedTabsV2 = ({
@@ -36,7 +37,8 @@ export const AnimatedTabsV2 = ({
   dismissOnChangeIndex,
   containerStyle,
   keyboardShouldPersistTaps,
-  customTabBarStyle
+  customTabBarStyle,
+  onChangeActiveIndex
 }: AnimatedV2TabsProps) => {
   const TABS_MARGIN = scale(20);
   const TABS_LENGTH = tabs.length;
@@ -61,8 +63,9 @@ export const AnimatedTabsV2 = ({
       }
       scrollView.current?.scrollTo({ x: TAB_WIDTH * idx, animated: true });
       setCurrentIndex(idx);
+      onChangeActiveIndex && onChangeActiveIndex(idx);
     },
-    [dismissOnChangeIndex, TAB_WIDTH]
+    [dismissOnChangeIndex, TAB_WIDTH, onChangeActiveIndex]
   );
 
   useEffect(() => {
@@ -104,8 +107,9 @@ export const AnimatedTabsV2 = ({
       const scrollOffsetX = event.nativeEvent.contentOffset.x;
       const newIndex = Math.round(scrollOffsetX / TAB_WIDTH);
       setCurrentIndex(newIndex);
+      onChangeActiveIndex && onChangeActiveIndex(newIndex);
     },
-    [TAB_WIDTH]
+    [TAB_WIDTH, onChangeActiveIndex]
   );
 
   return (

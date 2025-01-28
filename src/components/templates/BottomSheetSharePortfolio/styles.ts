@@ -8,10 +8,6 @@ export const styles = StyleSheet.create({
   newListTitle: {
     alignSelf: 'center'
   },
-  icon: {
-    alignSelf: 'center',
-    paddingTop: 16
-  },
   portfolioPerfomance: {
     marginHorizontal: scale(24),
     marginTop: verticalScale(17)
