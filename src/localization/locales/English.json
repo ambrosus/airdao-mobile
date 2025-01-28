@@ -398,7 +398,6 @@
   "bridge.preview.gas.fee": "Gas fee",
   "bridge.preview.button": "Confirm",
   "bridge.preview.button.max": "Max",
-
   "bridge.transaction.info.subheader": "Your transfer is being processed and will be completed within 5-20 minutes.",
   "bridge.transfer.failed.header": "Bridge Transaction Failed",
   "bridge.transfer.failed.sub.header": "An error occurred while processing your transaction.",
@@ -409,7 +408,6 @@
   "bridge.unknown.error": "Unknown error",
   "bridge.insufficient.funds": "Insufficient balance",
   "bridge.insufficient.funds.description": "You do not have enough funds in your account to pay for network fees.",
-
   "kosmos.primary.tabs.market": "Markets",
   "kosmos.primary.tabs.orders": "My orders",
   "kosmos.table.headings.discount": "Discount",
@@ -467,7 +465,6 @@
   "harbor.staked.balance": "Staked balance",
   "harbor.staked.info": "When you deposit AMB into the pool, you receive the stAMB token, which represents your share in the pool.",
   "harbor.stake.pool.limit": "Total pool Limit",
-
   "harbor.stake.amount.preview.title": "Stake amount",
   "harbor.receive.amount.preview.title": "You will receive",
   "harbor.stake.from": "From",
@@ -501,7 +498,6 @@
   "harbor.requests.date": "Requests date",
   "harbor.unlock.date": "Unlock date",
   "harbor.empty.withdrawals.list": "There are no withdrawal requests at the moment.",
-
   "harbor.apy.label": "Stake HBR to access high-yield AMB staking.",
   "harbor.rewards.label": "Rewards",
   "harbor.withdraw.warning": {
@@ -512,7 +508,6 @@
   "harbor.stake.description": "Your AMB staking limit depends on the amount of HBR staked. Stake more HBR to increase your limit!",
   "harbor.stake.period.complete": "Lock period complete",
   "harbor.stake.unlock.date": "Available on {{date}}",
-
   "wallet.connect": {
     "proposal": "Connect to {{origin}}",
     "warning": "Are you sure you want to connect your wallet to {{origin}}",
