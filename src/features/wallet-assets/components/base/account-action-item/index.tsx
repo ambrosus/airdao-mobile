@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Pressable } from 'react-native';
 import { Text } from '@components/base';
 import { COLORS } from '@constants/colors';

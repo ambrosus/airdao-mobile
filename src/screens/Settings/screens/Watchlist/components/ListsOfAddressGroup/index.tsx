@@ -1,4 +1,3 @@
-import React from 'react';
 import { FlatList, View } from 'react-native';
 import { LocalizedRenderEmpty } from '@components/templates';
 import { AccountList } from '@models/AccountList';

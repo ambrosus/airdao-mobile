@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { DimensionValue, View } from 'react-native';
 import { isSmallScreen } from '@utils';
 import { styles } from './styles';

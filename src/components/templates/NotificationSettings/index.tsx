@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { NotificationSettings } from '@appTypes/notification';
@@ -9,7 +9,7 @@ import { useNotificationSettings } from '@hooks/cache';
 import { scale, verticalScale } from '@utils';
 import { styles } from './styles';
 
-const Title = ({ children }: { children: React.ReactNode }) => (
+const Title = ({ children }: { children: ReactNode }) => (
   <Text
     title
     fontFamily="Inter_600SemiBold"

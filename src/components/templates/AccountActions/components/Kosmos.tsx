@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProp } from '@appTypes';
 import { KosmosAccountActionIcon } from '@components/svg/icons/v2/actions';

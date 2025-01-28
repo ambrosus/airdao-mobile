@@ -1,7 +1,8 @@
 import 'moment/min/locales';
-import React, {
+import {
   createContext,
   FC,
+  ReactNode,
   useContext,
   useEffect,
   useState
@@ -23,7 +24,7 @@ const LocalizationContext = createContext<ILanguageContext>({
   currentLanguage: 'en'
 });
 
-export const LocalizationProvider: FC<{ children: React.ReactNode }> = ({
+export const LocalizationProvider: FC<{ children: ReactNode }> = ({
   children
 }) => {
   const [currentLanguage, setLanguage] = useState<LanguageCode>('en');

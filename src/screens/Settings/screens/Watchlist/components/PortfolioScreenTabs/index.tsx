@@ -1,4 +1,5 @@
-import React, {
+import {
+  createRef,
   useCallback,
   useEffect,
   useMemo,
@@ -63,7 +64,7 @@ export const PortfolioScreenTabs = <T extends Route>(props: Props<T>) => {
   const refs = useMemo(
     () =>
       [...new Array(props.navigationState.routes.length)].map(() =>
-        React.createRef<View>()
+        createRef<View>()
       ),
     [props.navigationState.routes.length]
   );

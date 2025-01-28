@@ -1,5 +1,4 @@
-import React from 'react';
-import { Linking, View } from 'react-native';
+import { Linking, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
 import {
@@ -12,8 +11,7 @@ import {
 } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import Config from '@constants/config';
-import { verticalScale } from '@utils';
-import { styles } from './styles';
+import { scale, verticalScale } from '@utils';
 
 interface Link {
   title: string;
@@ -106,3 +104,25 @@ export function AMBAbout(): JSX.Element {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  linkBtn: {
+    backgroundColor: COLORS.primary50,
+    paddingHorizontal: scale(16),
+    paddingVertical: verticalScale(8),
+    gap: 10
+  },
+  socialButtons: {
+    flex: 1,
+    flexWrap: 'wrap',
+    rowGap: scale(16),
+    columnGap: verticalScale(16)
+  },
+  websiteArrowRotateIcon: {
+    transform: [
+      {
+        rotate: '-45deg'
+      }
+    ]
+  }
+});

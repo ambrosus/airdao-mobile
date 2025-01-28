@@ -1,4 +1,3 @@
-import React from 'react';
 import { View } from 'react-native';
 import { formatUnits } from 'ethers/lib/utils';
 import { Row, Spacer, Text } from '@components/base';

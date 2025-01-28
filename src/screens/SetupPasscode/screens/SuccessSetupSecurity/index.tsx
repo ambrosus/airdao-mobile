@@ -1,18 +1,16 @@
-import React from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { HomeNavigationProp } from '@appTypes';
 import { Spacer, Text } from '@components/base';
 import { BottomAwareSafeAreaView } from '@components/composite';
-
 import { PrimaryButton } from '@components/modular';
 import { SuccessIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { usePasscodeStore } from '@features/passcode';
 import { usePasscodeActions } from '@features/passcode/lib/hooks';
 import { useEffectOnce } from '@hooks';
-import { verticalScale } from '@utils';
+import { scale, verticalScale } from '@utils';
 import { styles } from './styles';
 
 export const SuccessSetupSecurity = () => {
@@ -65,7 +63,12 @@ export const SuccessSetupSecurity = () => {
         </Text>
       </View>
       <BottomAwareSafeAreaView>
-        <PrimaryButton onPress={navigateToHome} style={styles.button}>
+        <PrimaryButton
+          onPress={navigateToHome}
+          style={{
+            paddingHorizontal: scale(16)
+          }}
+        >
           <Text
             align="center"
             fontSize={16}

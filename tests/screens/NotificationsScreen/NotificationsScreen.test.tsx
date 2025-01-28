@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import React from 'react';
+
 import { Notifications } from '@screens/Notifications';
 import { fireEvent, render } from '@testing-library/react-native';
 import clearAllMocks = jest.clearAllMocks;

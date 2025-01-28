@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { COLORS } from '@constants/colors';
 import { cssShadowToNative } from '@utils';

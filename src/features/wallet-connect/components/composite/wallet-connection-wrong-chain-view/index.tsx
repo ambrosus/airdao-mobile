@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { View } from 'react-native';
 import { Text } from '@components/base';
 import { SecondaryButton } from '@components/modular';

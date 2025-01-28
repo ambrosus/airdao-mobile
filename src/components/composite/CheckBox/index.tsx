@@ -1,4 +1,3 @@
-import React from 'react';
 import { CheckBoxCircular } from './CheckBox.circular';
 import { CheckBoxSquare } from './CheckBox.square';
 import { CheckBoxFactoryProps } from './CheckBox.types';

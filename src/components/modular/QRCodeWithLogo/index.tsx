@@ -1,4 +1,3 @@
-import React from 'react';
 import { View } from 'react-native';
 import { QRCode, QRCodeProps } from '@components/base';
 import { LogoBigSVG } from '@components/svg/icons';

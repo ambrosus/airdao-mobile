@@ -1,4 +1,3 @@
-import React from 'react';
 import { Row, Spacer, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
 import { StakedBalanceIcon } from '@components/svg/icons/v2/harbor';

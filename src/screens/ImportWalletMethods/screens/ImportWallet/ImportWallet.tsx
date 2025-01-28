@@ -1,10 +1,11 @@
-import React, {
+import {
   RefObject,
   useEffect,
   useMemo,
   useRef,
   useState,
-  useCallback
+  useCallback,
+  createRef
 } from 'react';
 import {
   Alert,
@@ -76,7 +77,7 @@ export const ImportWallet = () => {
   const inputs = useRef(
     Array(12)
       .fill(null)
-      .map(() => React.createRef<InputRef>() as unknown as RefObject<InputRef>)
+      .map(() => createRef<InputRef>() as unknown as RefObject<InputRef>)
   );
 
   useEffect(() => {

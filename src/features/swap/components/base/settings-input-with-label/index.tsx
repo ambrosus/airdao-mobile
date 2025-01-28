@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useRef } from 'react';
+import { ReactNode, useCallback, useRef } from 'react';
 import {
   View,
   TextInput,

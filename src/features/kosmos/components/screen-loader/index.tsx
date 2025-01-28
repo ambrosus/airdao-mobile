@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { DimensionValue, StyleProp, View, ViewStyle } from 'react-native';
 import { Spinner } from '@components/base';
 

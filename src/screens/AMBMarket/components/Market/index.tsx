@@ -1,5 +1,4 @@
-import React from 'react';
-import { Linking, View } from 'react-native';
+import { Linking, StyleSheet, View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import {
   BinanceIcon,
@@ -8,8 +7,7 @@ import {
   MexcIcon
 } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils';
-import { styles } from './styles';
+import { scale, verticalScale } from '@utils';
 
 interface MarketItem {
   title: string;
@@ -68,3 +66,9 @@ export function AMBMarket(): JSX.Element {
 
   return <View>{marketItems.map(renderItem)}</View>;
 }
+
+const styles = StyleSheet.create({
+  item: {
+    marginBottom: verticalScale(24)
+  }
+});

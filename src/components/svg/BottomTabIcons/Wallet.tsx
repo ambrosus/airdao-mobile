@@ -1,4 +1,3 @@
-import React from 'react';
 import { IconProps, WalletIcon } from '@components/svg/icons';
 
 export function WalletTabIcon(props: Omit<IconProps, 'variant' | 'scale'>) {

@@ -1,4 +1,4 @@
-import React, { forwardRef, RefObject, useMemo } from 'react';
+import { forwardRef, RefObject, useMemo } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { BigNumber } from 'ethers';
 import { useTranslation } from 'react-i18next';

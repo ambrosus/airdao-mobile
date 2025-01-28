@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { FlatList, View } from 'react-native';
 import { formatUnits } from 'ethers/lib/utils';
 import { Text } from '@components/base';

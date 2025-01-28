@@ -1,4 +1,3 @@
-import React from 'react';
 import { Circle, Defs, Image, Pattern, Svg, Use } from 'react-native-svg';
 import { IconProps } from './Icon.types';
 

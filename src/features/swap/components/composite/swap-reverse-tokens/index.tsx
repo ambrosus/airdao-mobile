@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { View } from 'react-native';
 import { Divider } from '@/features/swap/components/base';
 import { Button, Spacer } from '@components/base';

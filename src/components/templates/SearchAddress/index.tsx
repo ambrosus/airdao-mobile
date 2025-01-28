@@ -1,9 +1,4 @@
-import React, {
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-  useState
-} from 'react';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { Alert, useWindowDimensions, View, ViewStyle } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import {

@@ -1,10 +1,9 @@
-import React from 'react';
 import { Image } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
 import { WalletIcon } from '@components/svg/icons/v2';
 import { COLORS, CreditCardBg } from '@constants/colors';
 import { WalletDBModel } from '@database';
-import { StringUtils, scale } from '@utils';
+import { StringUtils, moderateScale, scale } from '@utils';
 import { styles } from './styles';
 
 interface WalletItemProps {
@@ -41,7 +40,7 @@ export const WalletItem = (props: WalletItemProps) => {
         {isSelectedWallet && (
           <Image
             source={require('@assets/icons/checkmark-circle.png')}
-            style={styles.image}
+            style={{ height: moderateScale(20), width: moderateScale(20) }}
           />
         )}
         <Spacer value={scale(16)} horizontal />

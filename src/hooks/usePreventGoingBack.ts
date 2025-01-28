@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { MutableRefObject, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 export const usePreventGoingBack = (
-  canGoBack: React.MutableRefObject<boolean>,
+  canGoBack: MutableRefObject<boolean>,
   callback?: () => unknown
 ) => {
   const navigation = useNavigation();

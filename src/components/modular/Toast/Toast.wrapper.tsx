@@ -1,4 +1,4 @@
-import React, {
+import {
   forwardRef,
   useCallback,
   useImperativeHandle,
@@ -43,7 +43,7 @@ export const ToastWrapper = forwardRef((_, ref) => {
 
   const [toastVisible, setToastVisible] = useState(true);
   const [options, setOptions] =
-    React.useState<Omit<ToastOptions, 'duration'>>(defaultOptions);
+    useState<Omit<ToastOptions, 'duration'>>(defaultOptions);
   const duration = useRef(TOAST_DEFAULT_DURATION);
   const timerRef = useRef<NodeJS.Timer | null>(null);
   const isTopToast = options.position === ToastPosition.Top;
@@ -96,7 +96,7 @@ export const ToastWrapper = forwardRef((_, ref) => {
 
   useImperativeHandle(
     ref,
-    React.useCallback(
+    useCallback(
       () => ({
         show,
         hide

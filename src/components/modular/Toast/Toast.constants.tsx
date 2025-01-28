@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { Spinner } from '@components/base';
 import { InfoIcon, QuestionMarkIcon, WarningIcon } from '@components/svg/icons';
 import { CheckboxCircleFill } from '@components/svg/icons/v2';

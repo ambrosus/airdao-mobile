@@ -1,11 +1,11 @@
-import React from 'react';
+import { PropsWithChildren } from 'react';
 import { StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button } from '@components/base';
 import { ButtonProps } from '@components/base/Button';
 import { moderateScale, scale, verticalScale } from '@utils';
 
-export interface GradientButtonProps extends React.PropsWithChildren {
+export interface GradientButtonProps extends PropsWithChildren {
   onPress: () => void;
   colors?: string[];
   locations?: number[];

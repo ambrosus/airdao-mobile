@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 import { COLORS } from '@constants/colors';
 import { IconProps } from './Icon.types';

@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useRef } from 'react';
+import { forwardRef, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';

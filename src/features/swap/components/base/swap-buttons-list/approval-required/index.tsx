@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { StyleProp, TextStyle, ViewStyle, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Spinner, Text } from '@components/base';

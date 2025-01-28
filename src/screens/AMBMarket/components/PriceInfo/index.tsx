@@ -1,10 +1,9 @@
-import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Spacer, Text } from '@components/base';
 import { LogoGradientCircular } from '@components/svg/icons';
 import { AMBPriceHistory } from '@components/templates';
 import { COLORS } from '@constants/colors';
-import { styles } from './styles';
+import { moderateScale, verticalScale } from '@utils';
 
 interface AMBPriceInfoProps {
   header?: string;
@@ -30,3 +29,13 @@ export function AMBPriceInfo({ header }: AMBPriceInfoProps): JSX.Element {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: COLORS.neutral0,
+    borderRadius: moderateScale(24),
+    paddingTop: verticalScale(20),
+    paddingBottom: verticalScale(29),
+    alignItems: 'center'
+  }
+});

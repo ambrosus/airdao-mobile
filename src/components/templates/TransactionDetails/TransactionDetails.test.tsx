@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from '@testing-library/react-native';
 import { ExplorerAccountType, TransactionType } from '@appTypes';
 import { TransactionDetails } from '@components/templates';

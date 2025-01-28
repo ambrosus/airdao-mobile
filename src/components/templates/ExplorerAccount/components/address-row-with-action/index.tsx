@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Pressable, StyleProp, View, ViewStyle } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { Row } from '@components/base';
