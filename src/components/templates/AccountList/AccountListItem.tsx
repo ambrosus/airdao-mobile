@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatUnits } from 'ethers/lib/utils';
 import { WalletCard } from '@components/modular';
 import { useAMBPrice, useUSDPrice } from '@hooks';
 import { useBalanceOfAddress } from '@hooks/query/useBalanceOfAddress';
@@ -17,7 +18,7 @@ export const AccountListItem = (props: AccountListItemProps) => {
       return (
         <WalletCard
           address={account.address}
-          ambBalance={Number(ambBalance.ether)}
+          ambBalance={formatUnits(ambBalance.wei, 18)}
           usdBalance={usdBalance}
           balanceLoading={balanceLoading}
           change24HR={ambPrice?.percentChange24H}

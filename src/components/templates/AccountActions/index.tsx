@@ -1,32 +1,76 @@
-import React from 'react';
+import React, { ComponentType, useCallback } from 'react';
 import { Row } from '@components/base';
-import { scale } from '@utils/scaling';
-import { Swap } from './Swap';
-import { Send } from './Send';
-import { Staking } from './Staking';
-import { Bridge } from './Bridge';
-import { Token } from '@models';
-import { AccountDBModel } from '@database';
-import { Kosmos } from './Kosmos';
+import Config from '@constants/config';
+import { ExplorerAccount, Token } from '@models';
+import { scale } from '@utils';
+import { AccountActionsKey } from './ActionButton.types';
+import { Send, Swap, Staking, Bridge } from './components';
 
 interface AccountActionsProps {
-  address: string;
+  account: ExplorerAccount;
   token?: Token;
-  selectedAccount: AccountDBModel | null;
+  disabled: boolean;
 }
-export const AccountActions = (props: AccountActionsProps) => {
-  const { address, token } = props;
+
+type ActionComponentProps = {
+  disabled: () => boolean;
+  account?: ExplorerAccount;
+  token?: Token;
+};
+
+export const AccountActions = ({
+  account,
+  token,
+  disabled
+}: AccountActionsProps) => {
+  const _isRouteActive = useCallback(
+    (key: string) => {
+      return !disabled && Config.walletActions[key];
+    },
+    [disabled]
+  );
+
+  const actionComponents: {
+    Component: ComponentType<ActionComponentProps>;
+    key: string;
+    props: ActionComponentProps;
+  }[] = [
+    {
+      // @ts-ignore
+      Component: Send,
+      key: AccountActionsKey.SEND,
+      props: {
+        account,
+        token,
+        disabled: () => _isRouteActive(AccountActionsKey.SEND)
+      }
+    },
+    {
+      Component: Swap,
+      key: AccountActionsKey.SWAP,
+      props: { disabled: () => _isRouteActive(AccountActionsKey.SWAP) }
+    },
+    {
+      Component: Staking,
+      key: AccountActionsKey.STAKE,
+      props: { disabled: () => _isRouteActive(AccountActionsKey.STAKE) }
+    },
+    {
+      Component: Bridge,
+      key: AccountActionsKey.BRIDGE,
+      props: { disabled: () => _isRouteActive(AccountActionsKey.BRIDGE) }
+    }
+  ];
+
   return (
     <Row
       alignItems="center"
-      justifyContent="center"
-      style={{ columnGap: scale(30) }}
+      justifyContent="space-around"
+      style={{ columnGap: scale(0) }}
     >
-      <Swap />
-      <Send address={address} token={token} />
-      <Staking />
-      <Bridge />
-      <Kosmos />
+      {actionComponents.map(({ Component, key, props }) => (
+        <Component key={key} {...props} />
+      ))}
     </Row>
   );
 };

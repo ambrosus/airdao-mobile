@@ -1,4 +1,4 @@
-import { NotificationDTO } from './NotificationDTO';
+import { NotificationDTO } from '@models';
 
 interface WatcherInfoAddress {
   address: string;
@@ -8,8 +8,9 @@ interface WatcherInfoAddress {
 export interface WatcherInfoDTO {
   addresses: WatcherInfoAddress[];
   created_at: string;
+  device_id: string;
   historical_notifications: NotificationDTO[];
-  id: string;
+  _id: string;
   push_token: string;
   threshold: number;
   token_price: number;

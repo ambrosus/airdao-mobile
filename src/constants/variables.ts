@@ -1,8 +1,10 @@
-import { NotificationSettings } from '@appTypes/notification';
 import { Dimensions } from 'react-native';
+import { NotificationSettings } from '@appTypes/notification';
 
 export const DEVICE_WIDTH = Dimensions.get('window').width;
 export const DEVICE_HEIGHT = Dimensions.get('window').height;
+
+export const AMB_DECIMALS = 18;
 
 export const DECIMAL_LIMIT = {
   CRYPTO: 5,

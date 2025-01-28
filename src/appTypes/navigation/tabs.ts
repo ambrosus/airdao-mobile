@@ -1,14 +1,18 @@
-import { NavigatorScreenParams } from '@react-navigation/native';
-import { SearchTabParamsList } from './search';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { HomeParamsList, PortfolioParamsPortfolio } from '@appTypes';
+import { NavigatorScreenParams } from '@react-navigation/native';
+import { HomeParamsList, SettingsTabParamsList } from '@appTypes';
 
 export type TabsParamsList = {
   Wallets: NavigatorScreenParams<HomeParamsList>;
-  Search: NavigatorScreenParams<SearchTabParamsList>;
-  Portfolio: NavigatorScreenParams<PortfolioParamsPortfolio>;
-  Settings: undefined;
-  Tabs: { screen: string };
+  Products: NavigatorScreenParams<HomeParamsList>;
+  Settings: NavigatorScreenParams<SettingsTabParamsList>;
+  Tabs: {
+    screen: string;
+    params: {
+      screen: 'CreateWalletStep0' | 'ImportWalletMethods';
+      params: { from: string };
+    };
+  };
 };
 
 export type TabsNavigationProp = BottomTabNavigationProp<TabsParamsList>;

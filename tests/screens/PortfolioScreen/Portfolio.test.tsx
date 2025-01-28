@@ -1,9 +1,9 @@
 import React from 'react';
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { PortfolioScreen } from '@screens/Portfolio';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
+import { Watchlist } from '@screens/Settings/screens/Watchlist';
 import clearAllMocks = jest.clearAllMocks;
 
 Object.defineProperty(Array.prototype, 'indexOfItem', {
@@ -85,7 +85,7 @@ const PortfolioWatchlists = () => {
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
         <NavigationContainer>
-          <PortfolioScreen route={{ params: { tabs: { activeTab: 0 } } }} />
+          <Watchlist route={{ params: { tabs: { activeTab: 0 } } }} />
         </NavigationContainer>
       </QueryClientProvider>
     </SafeAreaProvider>
@@ -97,7 +97,7 @@ const PortfolioCollections = () => {
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
         <NavigationContainer>
-          <PortfolioScreen route={{ params: { tabs: { activeTab: 1 } } }} />
+          <Watchlist route={{ params: { tabs: { activeTab: 1 } } }} />
         </NavigationContainer>
       </QueryClientProvider>
     </SafeAreaProvider>

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { scale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { scale } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {
@@ -8,16 +8,16 @@ export const styles = StyleSheet.create({
     alignItems: 'flex-start',
     rowGap: 4
   },
+  pickerContainer: {
+    paddingHorizontal: scale(5)
+  },
   select: {
     width: scale(134),
-    height: 32,
-    paddingHorizontal: scale(11),
+    height: scale(40),
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: COLORS.separator,
+    borderColor: COLORS.neutral200,
+    backgroundColor: COLORS.neutral100,
     borderRadius: scale(134)
-  },
-  selectInnerRowGap: {
-    columnGap: 4
   }
 });

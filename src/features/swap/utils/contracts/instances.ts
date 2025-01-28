@@ -6,7 +6,9 @@ import { AmbErrorProvider } from '@lib';
 type ProviderOrSigner = ethers.providers.JsonRpcProvider | ethers.Signer;
 
 export function createAMBProvider() {
-  return new AmbErrorProvider(Config.NETWORK_URL, Config.CHAIN_ID);
+  if (__DEV__) return new AmbErrorProvider(Config.NETWORK_URL, Config.CHAIN_ID);
+
+  return new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
 }
 
 export function createSigner(

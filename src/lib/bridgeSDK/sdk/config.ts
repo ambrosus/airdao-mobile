@@ -1,3 +1,4 @@
+import { isAddress } from 'ethers/lib/utils';
 import {
   BridgeAddresses,
   BridgeNetwork,
@@ -6,7 +7,6 @@ import {
   Network,
   Token
 } from '../models/types';
-import { isAddress } from 'ethers/lib/utils';
 
 export function formatBridgeAddresses(config: Config): BridgeAddresses {
   const result: BridgeAddresses = {};

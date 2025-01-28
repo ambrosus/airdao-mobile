@@ -5,13 +5,13 @@ import {
   TextStyle as RNTextStyle,
   TextStyle
 } from 'react-native';
+import { COLORS } from '@constants/colors';
 import {
   DEFAULT_FONT_SIZE,
   fontSizeMapping,
   fontWeightMapping
 } from './Text.constants';
 import { FontSizeKey, TextProps } from './Text.types';
-import { COLORS } from '@constants/colors';
 
 export function Text(props: TextProps): JSX.Element {
   const {
@@ -23,6 +23,7 @@ export function Text(props: TextProps): JSX.Element {
     align = 'auto',
     fontFamily = 'Inter_500Medium',
     testID,
+    letterSpacing = -0.31,
     ...restProps
   } = props;
 
@@ -65,6 +66,7 @@ export function Text(props: TextProps): JSX.Element {
     color,
     textAlign: align,
     opacity,
+    letterSpacing,
     fontSize: getFontSize(),
     fontWeight: getFontWeight(),
     ...fixMisplacement()

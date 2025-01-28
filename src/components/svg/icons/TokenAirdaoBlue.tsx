@@ -15,7 +15,7 @@ export function AirdaoBlueIcon(props: Omit<IconProps, 'color'>) {
     >
       <Path
         d="M8.895 2.854a15.242 15.242 0 0122.863 13.2 15.242 15.242 0 01-22.863 13.2 15.242 15.242 0 010-26.4z"
-        fill="#457EFF"
+        fill="#3668DD"
       />
       <Path
         fillRule="evenodd"

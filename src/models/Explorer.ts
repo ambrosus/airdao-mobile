@@ -1,6 +1,6 @@
 import { CacheableAccount, ExplorerAccountType } from '@appTypes';
-import { ExplorerAccountDTO, ExplorerInfoDTO } from './dtos';
 import { AccountDBModel } from '@database';
+import { ExplorerAccountDTO, ExplorerInfoDTO } from './dtos';
 
 export class ExplorerInfo {
   totalAddresses: number;
@@ -18,6 +18,7 @@ export class ExplorerAccount implements CacheableAccount {
   _id: string;
   address: string;
   ambBalance: number;
+  ambBalanceWei: string;
   transactionCount: number;
   type: ExplorerAccountType;
   name: string;
@@ -27,6 +28,7 @@ export class ExplorerAccount implements CacheableAccount {
     this._id = details._id || details.address;
     this.address = details.address;
     this.ambBalance = details.balance?.ether || 0;
+    this.ambBalanceWei = details.balance?.wei || '0';
     this.transactionCount = details.totalTx;
     this.type = details.type;
     this.name = '';

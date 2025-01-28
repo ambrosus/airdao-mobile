@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { QueryResponse } from '@appTypes/QueryResponse';
 import { API } from '@api/api';
-import { ExplorerInfoDTO } from '@models/index';
+import { QueryResponse } from '@appTypes/QueryResponse';
 import { ExplorerInfo } from '@models/Explorer';
+import { ExplorerInfoDTO } from '@models/index';
 
 export function useExplorerInfo(): QueryResponse<ExplorerInfo | undefined> {
   const { data, isLoading, error, refetch } = useQuery<ExplorerInfoDTO>(

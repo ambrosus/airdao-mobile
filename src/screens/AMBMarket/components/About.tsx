@@ -1,17 +1,18 @@
 import React from 'react';
 import { Linking, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
 import {
   BrowserIcon,
   DiscordIcon,
   GitHubIcon,
+  RightArrowIcon,
   TelegramIcon,
   TwitterIcon
 } from '@components/svg/icons';
-import { scale, verticalScale } from '@utils/scaling';
-import { useTranslation } from 'react-i18next';
+import { COLORS } from '@constants/colors';
 import Config from '@constants/config';
+import { scale, verticalScale } from '@utils';
 
 interface Link {
   title: string;
@@ -68,7 +69,7 @@ const LinkButton = ({
         <Text
           fontSize={12}
           fontFamily="Inter_500Medium"
-          color={COLORS.neutral700}
+          color={COLORS.brand600}
         >
           {title}
         </Text>
@@ -84,15 +85,22 @@ export function AMBAbout(): JSX.Element {
       <Text
         fontSize={14}
         fontFamily="Inter_500Medium"
-        color={COLORS.neutral400}
+        color={COLORS.neutral800}
+        letterSpacing={-0.31}
       >
         {t('amb.market.statistics.text')}
       </Text>
       <Spacer value={verticalScale(16)} />
       <Row alignItems="center" style={styles.socialButtons}>
-        {SOCIAL_LINKS.map((link) => (
-          <LinkButton key={link.url} {...link} />
-        ))}
+        <LinkButton
+          title={SOCIAL_LINKS[0].title}
+          url={SOCIAL_LINKS[0].url}
+          icon={
+            <View style={styles.websiteArrowRotateIcon}>
+              <RightArrowIcon color={COLORS.brand600} />
+            </View>
+          }
+        />
       </Row>
     </View>
   );
@@ -100,9 +108,9 @@ export function AMBAbout(): JSX.Element {
 
 const styles = StyleSheet.create({
   linkBtn: {
-    backgroundColor: COLORS.alphaBlack5,
-    paddingHorizontal: scale(10),
-    paddingVertical: verticalScale(4),
+    backgroundColor: COLORS.primary50,
+    paddingHorizontal: scale(16),
+    paddingVertical: verticalScale(8),
     gap: 10
   },
   socialButtons: {
@@ -110,5 +118,12 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     rowGap: scale(16),
     columnGap: verticalScale(16)
+  },
+  websiteArrowRotateIcon: {
+    transform: [
+      {
+        rotate: '-45deg'
+      }
+    ]
   }
 });

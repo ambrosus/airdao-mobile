@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
+import { Spacer, Text } from '@components/base';
+import { TokenLogo } from '@components/modular';
+import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD } from '@features/swap/types';
 import { SwapStringUtils } from '@features/swap/utils';
-import { TokenLogo } from '@components/modular';
-import { Spacer, Text } from '@components/base';
-import { verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
+import { verticalScale } from '@utils';
+import { styles } from './styles';
 
 interface BottomSheetReviewTokenItemProps {
   type: keyof typeof FIELD;
@@ -36,9 +36,9 @@ export const BottomSheetReviewTokenItem = ({
   return (
     <View style={combinedTypeContainerStyle}>
       <Text
-        fontSize={14}
-        fontFamily="Inter_500Medium"
-        color={COLORS.neutral400}
+        fontSize={13}
+        fontFamily="Inter_600SemiBold"
+        color={COLORS.neutral500}
       >
         {label}
       </Text>
@@ -46,8 +46,8 @@ export const BottomSheetReviewTokenItem = ({
         <TokenLogo token={token} scale={0.65} />
         <Spacer horizontal value={4} />
         <Text
-          fontSize={14}
-          fontFamily="Inter_500Medium"
+          fontSize={17}
+          fontFamily="Inter_600SemiBold"
           color={COLORS.neutral800}
         >
           {SwapStringUtils.transformAmountValue(selectedTokensAmount[type])}{' '}

@@ -1,0 +1,30 @@
+name: Lint Codebase
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+      - stage
+      - redesign
+
+jobs:
+  lint:
+    name: Run Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run lint
+        run: yarn lint

@@ -1,19 +1,24 @@
 import { StyleSheet } from 'react-native';
-import { scale } from '@utils/scaling';
+import { scale } from '@utils';
 
 export const styles = StyleSheet.create({
+  loader: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '30%'
+  },
   container: {
     flex: 1
   },
-  separatedContainer: {
-    flex: 1,
-    justifyContent: 'space-between'
-  },
   inputContainerWitHeading: {
-    flex: 1,
+    position: 'relative',
     flexDirection: 'column',
     alignItems: 'flex-start',
     rowGap: 8
+  },
+  disabledInputContainer: {
+    zIndex: 1000,
+    position: 'absolute'
   },
   inputContainerWithSelector: {
     position: 'relative',
@@ -32,5 +37,8 @@ export const styles = StyleSheet.create({
   information: {
     width: '100%',
     rowGap: 8
+  },
+  button: {
+    marginTop: scale(16)
   }
 });

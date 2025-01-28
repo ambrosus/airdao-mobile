@@ -1,8 +1,8 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import React from 'react';
-import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup/index';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup/index';
 import clearAllMocks = jest.clearAllMocks;
 
 const queryClient = new QueryClient();

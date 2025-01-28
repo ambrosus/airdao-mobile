@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from 'react';
 import { formatEther } from 'ethers/lib/utils';
 import debounce from 'lodash/debounce';
-import { useSwapHelpers } from './use-swap-helpers';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
 import { SwapStringUtils } from '@features/swap/utils';
 import { useSwapBetterCurrency } from './use-swap-better-currency';
+import { useSwapHelpers } from './use-swap-helpers';
 
 export function useSwapFieldsHandler() {
   const {
@@ -13,13 +13,15 @@ export function useSwapFieldsHandler() {
     latestSelectedTokens,
     latestSelectedTokensAmount,
     setIsExactIn,
+    setIsExecutingPrice,
     isExactInRef
   } = useSwapContextSelector();
 
-  const { getOppositeReceivedTokenAmount } = useSwapBetterCurrency();
+  const { bestTradeCurrency } = useSwapBetterCurrency();
   const { isEmptyAmount } = useSwapHelpers();
 
   const updateReceivedTokensOutput = useCallback(async () => {
+    setIsExecutingPrice(true);
     const isExactIn = isExactInRef.current;
     const oppositeKey = isExactIn ? FIELD.TOKEN_B : FIELD.TOKEN_A;
     const { TOKEN_A, TOKEN_B } = latestSelectedTokens.current;
@@ -32,35 +34,40 @@ export function useSwapFieldsHandler() {
     const amountToSell = isExactIn ? AMOUNT_A : AMOUNT_B;
 
     if (isEmptyAmount(amountToSell)) return;
+    try {
+      const bnAmountToReceive = await bestTradeCurrency(amountToSell, path);
 
-    const bnAmountToReceive = await getOppositeReceivedTokenAmount(
-      amountToSell,
-      path
-    );
+      const normalizedAmount = SwapStringUtils.transformAmountValue(
+        formatEther(bnAmountToReceive?._hex)
+      );
 
-    const normalizedAmount = SwapStringUtils.transformAmountValue(
-      formatEther(bnAmountToReceive?._hex)
-    );
-
-    setSelectedTokensAmount((prevSelectedTokensAmounts) => {
-      const currentAmount =
-        prevSelectedTokensAmounts[
-          isExactInRef.current ? FIELD.TOKEN_A : FIELD.TOKEN_B
-        ];
-      if (!isEmptyAmount(currentAmount)) {
-        return {
-          ...latestSelectedTokensAmount.current,
-          [oppositeKey]: normalizedAmount
-        };
-      }
-      return prevSelectedTokensAmounts;
-    });
+      setSelectedTokensAmount((prevSelectedTokensAmounts) => {
+        const currentAmount =
+          prevSelectedTokensAmounts[
+            isExactInRef.current ? FIELD.TOKEN_A : FIELD.TOKEN_B
+          ];
+        if (!isEmptyAmount(currentAmount)) {
+          return {
+            ...latestSelectedTokensAmount.current,
+            [oppositeKey]: isEmptyAmount(normalizedAmount)
+              ? ''
+              : normalizedAmount
+          };
+        }
+        return prevSelectedTokensAmounts;
+      });
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsExecutingPrice(false);
+    }
   }, [
+    setIsExecutingPrice,
     isExactInRef,
     latestSelectedTokens,
     latestSelectedTokensAmount,
     isEmptyAmount,
-    getOppositeReceivedTokenAmount,
+    bestTradeCurrency,
     setSelectedTokensAmount
   ]);
 

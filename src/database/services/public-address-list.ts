@@ -1,6 +1,6 @@
+import { Q } from '@nozbe/watermelondb';
 import { CacheableAccount, DatabaseTable } from '@appTypes';
 import Database from '@database/Database';
-import { Q } from '@nozbe/watermelondb';
 import { PublicAddressListDbModel } from '@database/models';
 import { PublicAddressDB } from './public-address';
 

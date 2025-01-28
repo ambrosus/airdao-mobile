@@ -5,22 +5,21 @@ import {
   SectionListRenderItemInfo,
   View
 } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 import {
   SafeAreaView,
   useSafeAreaInsets
 } from 'react-native-safe-area-context';
-import { NotificationSettingsView } from '@components/templates';
-import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { Spacer, Text } from '@components/base';
-import { Notification } from '@models/Notification';
-import { verticalScale } from '@utils/scaling';
-import { COLORS } from '@constants/colors';
+import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { BellIcon } from '@components/svg/icons';
+import { NotificationSettingsView } from '@components/templates';
+import { COLORS } from '@constants/colors';
 import { useNotificationsQuery } from '@hooks/query';
-import { DeviceUtils } from '@utils/device';
-import { NotificationsHeader, NotificationBox } from './components';
+import { Notification } from '@models/Notification';
+import { DeviceUtils, verticalScale } from '@utils';
+import { NotificationBox, NotificationsHeader } from './components';
 import { styles } from './styles';
 
 interface NotificationSection {
@@ -70,8 +69,8 @@ export const Notifications = (): JSX.Element => {
   const renderNotification = (
     args: SectionListRenderItemInfo<Notification>
   ) => {
-    const { item } = args;
-    return <NotificationBox notification={item} />;
+    const { item: notification } = args;
+    return <NotificationBox notification={notification} />;
   };
 
   const renderSectionHeader = (info: {
@@ -81,7 +80,7 @@ export const Notifications = (): JSX.Element => {
       <>
         {info.section.index !== 0 && (
           <>
-            <Spacer value={verticalScale(40)} />
+            <Spacer value={verticalScale(28)} />
           </>
         )}
         <Text
@@ -91,7 +90,7 @@ export const Notifications = (): JSX.Element => {
         >
           {info.section.title.toUpperCase()}
         </Text>
-        <Spacer value={verticalScale(16)} />
+        <Spacer value={verticalScale(12)} />
       </>
     );
   };
@@ -127,7 +126,7 @@ export const Notifications = (): JSX.Element => {
         sections={sectionizedNotificaitons}
         renderItem={renderNotification}
         ListEmptyComponent={renderEmpty}
-        ItemSeparatorComponent={() => <Spacer value={verticalScale(16)} />}
+        ItemSeparatorComponent={() => <Spacer value={verticalScale(8)} />}
         contentContainerStyle={styles.list}
         renderSectionHeader={renderSectionHeader}
         stickySectionHeadersEnabled={false}
@@ -138,7 +137,7 @@ export const Notifications = (): JSX.Element => {
         {DeviceUtils.isIOS && <Spacer value={topInset} />}
         <Header
           bottomBorder
-          title={t('notification.settings')}
+          title={t('tab.settings')}
           style={{
             shadowColor: 'transparent',
             zIndex: 1000

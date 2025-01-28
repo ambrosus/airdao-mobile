@@ -1,20 +1,23 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import {
+  FlatList,
   ListRenderItemInfo,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   RefreshControl,
-  SectionList,
-  SectionListData,
-  StyleSheet
+  StyleProp,
+  StyleSheet,
+  ViewStyle
 } from 'react-native';
 import moment from 'moment';
-import { useTranslation } from 'react-i18next';
-import { Transaction } from '@models';
-import { scale, verticalScale } from '@utils/scaling';
-import { CenteredSpinner } from '@components/composite';
+import Animated from 'react-native-reanimated';
 import { Spacer, Text } from '@components/base';
-import { ExplorerAccountTransactionItem } from './ExplorerAccount.TransactionItem';
-import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
+import { CenteredSpinner } from '@components/composite';
 import { COLORS } from '@constants/colors';
+import { Transaction } from '@models';
+import { scale, verticalScale } from '@utils';
+import { ExplorerAccountTransactionItem } from './components';
+import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
 
 interface ExplorerAccountViewTransactionsProps {
   transactions: Transaction[];
@@ -23,120 +26,129 @@ interface ExplorerAccountViewTransactionsProps {
   isRefreshing?: boolean;
   onEndReached?: () => unknown;
   onRefresh?: () => unknown;
+  onTransactionsScrollEvent?: (
+    event: NativeSyntheticEvent<NativeScrollEvent>
+  ) => void;
+  containerStyle?: StyleProp<ViewStyle>;
+  listStyle?: StyleProp<ViewStyle>;
 }
 
-interface TransactionSection {
-  title: string;
-  data: Transaction[];
-  index: number;
+interface SectionedTransaction {
+  type: 'header' | 'transaction';
+  title?: string;
+  transaction?: Transaction;
 }
-const DAY_FORMAT = 'MMM DD YYYY';
 
-export const AccountTransactions = (
-  props: ExplorerAccountViewTransactionsProps
-): JSX.Element => {
-  const {
-    transactions,
-    loading,
-    showTransactionDetailsOnPress,
-    isRefreshing,
-    onRefresh,
-    onEndReached
-  } = props;
-  const { t } = useTranslation();
+const DAY_FORMAT = 'MMM DD, YYYY';
 
-  const sectionizedTransactions: TransactionSection[] = React.useMemo(() => {
-    const sectionMap = new Map<string, Transaction[]>();
-    transactions.forEach((n) => {
-      const key = moment(n.timestamp).format(DAY_FORMAT);
-      const transactionsInSection = sectionMap.get(key) || [];
-      transactionsInSection.push(n);
-      sectionMap.set(key, transactionsInSection);
-    });
-    const sections: TransactionSection[] = [];
-    let index = 0;
-    for (const [date, transactions] of sectionMap) {
-      const today = moment().format(DAY_FORMAT);
-      const yesterday = moment().subtract(1, 'day').format(DAY_FORMAT);
-      const title =
-        date === today
-          ? t('common.today')
-          : date === yesterday
-          ? t('common.yesterday')
-          : date;
-      sections.push({ title, data: transactions, index });
-      index++;
-    }
-    return sections;
-  }, [transactions, t]);
+export const AccountTransactions = forwardRef<
+  FlatList,
+  ExplorerAccountViewTransactionsProps
+>(
+  (
+    {
+      transactions,
+      loading,
+      showTransactionDetailsOnPress,
+      isRefreshing,
+      onRefresh,
+      onEndReached,
+      onTransactionsScrollEvent,
+      containerStyle,
+      listStyle
+    },
+    ref
+  ) => {
+    const sectionizedTransactions: SectionedTransaction[] =
+      React.useMemo(() => {
+        const sectionMap = new Map<string, Transaction[]>();
+        transactions.forEach((n) => {
+          const key = moment(n.timestamp).format(DAY_FORMAT);
+          const transactionsInSection = sectionMap.get(key) || [];
+          transactionsInSection.push(n);
+          sectionMap.set(key, transactionsInSection);
+        });
 
-  const renderTransaction = (
-    args: ListRenderItemInfo<Transaction>
-  ): JSX.Element => {
-    return (
-      <ExplorerAccountTransactionItem
-        transaction={args.item}
-        disabled={showTransactionDetailsOnPress}
-      />
-    );
-  };
+        const sections: SectionedTransaction[] = [];
+        for (const [title, data] of sectionMap.entries()) {
+          sections.push({ type: 'header', title });
+          data.forEach((transaction) => {
+            sections.push({ type: 'transaction', transaction });
+          });
+        }
+        return sections;
+      }, [transactions]);
 
-  const renderSectionHeader = (info: {
-    section: SectionListData<Transaction, TransactionSection>;
-  }) => {
+    const renderItem = (
+      args: ListRenderItemInfo<SectionedTransaction>
+    ): JSX.Element => {
+      if (args.item.type === 'header') {
+        return (
+          <Text
+            fontFamily="Inter_600SemiBold"
+            fontSize={13}
+            color={COLORS.neutral500}
+          >
+            {args.item.title}
+          </Text>
+        );
+      }
+
+      return (
+        <ExplorerAccountTransactionItem
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          transaction={args.item.transaction!}
+          disabled={showTransactionDetailsOnPress}
+        />
+      );
+    };
+
     return (
       <>
-        {info.section.index !== 0 && (
-          <>
-            <Spacer value={verticalScale(40)} />
-          </>
-        )}
-        <Text
-          fontFamily="Inter_600SemiBold"
-          fontSize={16}
-          color={COLORS.neutral300}
-        >
-          {info.section.title.toUpperCase()}
-        </Text>
-        <Spacer value={verticalScale(16)} />
+        <Animated.FlatList
+          ref={ref}
+          keyExtractor={(item, idx) =>
+            item.type === 'transaction'
+              ? `${item.transaction?.hash}-${idx}`
+              : `header-${idx}`
+          }
+          data={sectionizedTransactions}
+          renderItem={renderItem}
+          onScroll={onTransactionsScrollEvent}
+          ListEmptyComponent={
+            loading ? null : (
+              <LocalizedRenderEmpty text={'common.no.transactions'} />
+            )
+          }
+          ItemSeparatorComponent={() => <Spacer value={16} />}
+          style={listStyle}
+          contentContainerStyle={[styles.list, containerStyle]}
+          onEndReached={onEndReached}
+          showsVerticalScrollIndicator={false}
+          scrollEventThrottle={16}
+          testID="Transactions_List"
+          ListFooterComponent={() =>
+            loading && <CenteredSpinner containerStyle={styles.loader} />
+          }
+          refreshControl={
+            <RefreshControl
+              onRefresh={onRefresh}
+              refreshing={Boolean(isRefreshing)}
+            />
+          }
+        />
       </>
     );
-  };
-
-  return (
-    <>
-      <SectionList<Transaction, TransactionSection>
-        keyExtractor={(item, idx) => `${item.hash}-${idx}`}
-        sections={sectionizedTransactions}
-        renderItem={renderTransaction}
-        ListEmptyComponent={
-          loading ? null : (
-            <LocalizedRenderEmpty text={'common.no.transactions'} />
-          )
-        }
-        ItemSeparatorComponent={() => <Spacer value={32} />}
-        contentContainerStyle={styles.list}
-        renderSectionHeader={renderSectionHeader}
-        onEndReached={onEndReached}
-        stickySectionHeadersEnabled={false}
-        showsVerticalScrollIndicator={false}
-        testID="Transactions_List"
-        ListFooterComponent={() => (loading ? <CenteredSpinner /> : <></>)}
-        refreshControl={
-          <RefreshControl
-            onRefresh={onRefresh}
-            refreshing={Boolean(isRefreshing)}
-          />
-        }
-      />
-    </>
-  );
-};
+  }
+);
 
 const styles = StyleSheet.create({
   list: {
     flexGrow: 1,
     paddingHorizontal: scale(16),
-    paddingBottom: '40%'
+    paddingBottom: '60%'
+  },
+  loader: {
+    marginTop: verticalScale(8)
   }
 });

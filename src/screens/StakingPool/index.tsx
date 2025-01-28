@@ -1,63 +1,50 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  View
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, ScrollView, View } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import { BigNumber } from 'ethers';
-import { styles } from './style';
+import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { CryptoCurrencyCode, HomeParamsList } from '@appTypes';
 import { Row, Spacer, Spinner, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { AnimatedTabs, TokenLogo } from '@components/modular';
-import { COLORS } from '@constants/colors';
-import { scale, SCREEN_HEIGHT, verticalScale } from '@utils/scaling';
-import { shadow } from '@constants/shadow';
-import { CryptoCurrencyCode, HomeParamsList } from '@appTypes';
-import { StakingInfo } from './components';
 import { WalletPicker } from '@components/templates';
+import { COLORS } from '@constants/colors';
+import { shadow } from '@constants/shadow';
+import { DEVICE_HEIGHT } from '@constants/variables';
+import { useStakingPoolDetails, useStakingPoolsStore } from '@entities/staking';
+import { useWalletStore } from '@entities/wallet';
 import { useAllAccounts } from '@hooks/database';
+import { StakeToken } from '@screens/StakingPool/components/Stake/Stake';
+import { TokenUtils, scale, verticalScale } from '@utils';
+import { StakingInfo } from './components';
 import { WithdrawToken } from './components/Withdraw';
-import {
-  usePoolDetailsByName,
-  useStakingMultiplyContextSelector
-} from '@contexts';
+import { styles } from './style';
 
-import { TokenUtils } from '@utils/token';
-import { StakeToken } from './components/Stake/Stake';
-import { useBridgeContextData } from '@features/bridge/context';
-import { DeviceUtils } from '@utils/device';
-import { useKeyboardHeight } from '@hooks';
-
-const KEYBOARD_BEHAVIOR = DeviceUtils.isIOS ? 'position' : 'height';
+const CURRENCY = CryptoCurrencyCode.AMB;
 
 export const StakingPoolScreen = () => {
-  const { params } = useRoute<RouteProp<HomeParamsList, 'StakingPool'>>();
-  const { pool } = params;
-  const { totalStake, apy } = pool;
-  const { selectedAccount, setSelectedAccount } = useBridgeContextData();
-  const { data: allWallets } = useAllAccounts();
   const { t } = useTranslation();
-  const poolStakingDetails = usePoolDetailsByName(pool.token.name);
-  const currency = CryptoCurrencyCode.AMB;
+  const { top } = useSafeAreaInsets();
+  const {
+    params: { pool }
+  } = useRoute<RouteProp<HomeParamsList, 'StakingPool'>>();
+
+  const { wallet, setWallet } = useWalletStore();
+  const { data: allWallets } = useAllAccounts();
+
+  const { fetchPoolDetails, isFetching } = useStakingPoolsStore();
+  const poolStakingDetails = useStakingPoolDetails(pool.token.name);
 
   const [isTabsSwiping, setIsTabsSwiping] = useState<boolean>(false);
-
-  const { top } = useSafeAreaInsets();
-
-  const { fetchPoolDetails, isFetching } = useStakingMultiplyContextSelector();
-
+  const [scrollEnabled, setScrollEnabled] = useState(false);
   useEffect(() => {
-    if (selectedAccount?.address) {
+    if (wallet?.address) {
       (async () => {
-        await fetchPoolDetails(selectedAccount.address);
+        await fetchPoolDetails(wallet.address);
       })();
     }
-  }, [selectedAccount, fetchPoolDetails]);
+  }, [wallet, fetchPoolDetails]);
 
   const earning =
     (Number(pool.apy) * Number(poolStakingDetails?.user.amb)) / 100;
@@ -74,31 +61,20 @@ export const StakingPoolScreen = () => {
     }
   };
 
-  const keyboardVerticalOffset = useMemo(() => {
-    return Platform.select({
-      ios: -verticalScale(SCREEN_HEIGHT / 5.5),
-      android: verticalScale(24)
-    });
-  }, []);
-
   const scrollViewRef = useRef<ScrollView>(null);
-  const keyboardHeight = useKeyboardHeight();
 
-  useEffect(() => {
-    if (DeviceUtils.isAndroid && keyboardHeight > 0) {
-      scrollViewRef.current?.scrollToEnd();
-    }
-  }, [keyboardHeight]);
+  const onScroll = (type: 'focus' | 'blur') => {
+    const multiplier = DEVICE_HEIGHT < 822 ? 0.27 : 0.2;
+
+    const value = type === 'focus' ? DEVICE_HEIGHT * multiplier : 0;
+    setScrollEnabled(true);
+    scrollViewRef?.current?.scrollTo({ y: value, animated: true });
+    setScrollEnabled(false);
+  };
 
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          paddingTop: top,
-          zIndex: 1000,
-          backgroundColor: COLORS.neutral0
-        }}
-      >
+      <View style={{ ...styles.wrapper, paddingTop: top }}>
         <Header
           title={
             <Row alignItems="center">
@@ -116,9 +92,9 @@ export const StakingPoolScreen = () => {
           contentRight={
             allWallets.length > 1 && (
               <WalletPicker
-                selectedWallet={selectedAccount}
+                selectedWallet={wallet}
                 wallets={allWallets}
-                onSelectWallet={setSelectedAccount}
+                onSelectWallet={setWallet}
               />
             )
           }
@@ -134,71 +110,65 @@ export const StakingPoolScreen = () => {
         </View>
       ) : (
         <>
-          <KeyboardAvoidingView
-            style={styles.container}
-            contentContainerStyle={styles.contentContainerStyle}
-            keyboardVerticalOffset={keyboardVerticalOffset}
-            behavior={KEYBOARD_BEHAVIOR}
+          <ScrollView
+            ref={scrollViewRef}
+            bounces={false}
+            scrollEnabled={scrollEnabled}
+            contentInsetAdjustmentBehavior="always"
+            overScrollMode="never"
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
           >
-            <ScrollView
-              ref={scrollViewRef}
-              bounces={false}
-              scrollEnabled={DeviceUtils.isAndroid}
-              contentInsetAdjustmentBehavior="always"
-              overScrollMode="never"
-              keyboardShouldPersistTaps="handled"
-              showsVerticalScrollIndicator={false}
-            >
-              <View style={styles.stakingInfoContainer}>
-                <StakingInfo
-                  totalStake={totalStake}
-                  currency={currency}
-                  userStaking={
-                    poolStakingDetails?.user.raw ?? BigNumber.from(0)
-                  }
-                  earnings={earning}
-                  apy={apy}
-                />
-              </View>
-              <Spacer value={verticalScale(24)} />
-              <AnimatedTabs
-                dismissOnChangeIndex
-                keyboardShouldPersistTaps="handled"
-                containerStyle={styles.tabsContainer}
-                onSwipeStateHandle={onSwipeStateHandle}
-                tabs={[
-                  {
-                    title: t('staking.pool.stake'),
-                    view: (
-                      <>
-                        <Spacer value={verticalScale(24)} />
-                        <StakeToken
-                          isSwiping={isTabsSwiping}
-                          pool={poolStakingDetails}
-                          wallet={selectedAccount}
-                          apy={apy}
-                        />
-                      </>
-                    )
-                  },
-                  {
-                    title: t('staking.pool.withdraw'),
-                    view: (
-                      <>
-                        <Spacer value={verticalScale(24)} />
-                        <WithdrawToken
-                          isSwiping={isTabsSwiping}
-                          pool={poolStakingDetails}
-                          wallet={selectedAccount}
-                          apy={apy}
-                        />
-                      </>
-                    )
-                  }
-                ]}
+            <View style={styles.stakingInfoContainer}>
+              <StakingInfo
+                totalStake={pool.totalStake}
+                currency={CURRENCY}
+                userStaking={poolStakingDetails?.user.raw ?? BigNumber.from(0)}
+                earnings={earning}
+                apy={pool.apy}
               />
-            </ScrollView>
-          </KeyboardAvoidingView>
+            </View>
+            <Spacer value={verticalScale(24)} />
+            <AnimatedTabs
+              dismissOnChangeIndex
+              keyboardShouldPersistTaps="handled"
+              containerStyle={styles.tabsContainer}
+              onSwipeStateHandle={onSwipeStateHandle}
+              tabs={[
+                {
+                  title: t('staking.pool.stake'),
+                  view: (
+                    <>
+                      <Spacer value={verticalScale(24)} />
+                      <StakeToken
+                        onScroll={onScroll}
+                        isSwiping={isTabsSwiping}
+                        pool={poolStakingDetails}
+                        wallet={wallet}
+                        apy={pool.apy}
+                      />
+                    </>
+                  )
+                },
+                {
+                  title: t('staking.pool.unstake'),
+                  view: (
+                    <>
+                      <Spacer value={verticalScale(24)} />
+                      <WithdrawToken
+                        onScroll={onScroll}
+                        isSwiping={isTabsSwiping}
+                        pool={poolStakingDetails}
+                        wallet={wallet}
+                        apy={pool.apy}
+                      />
+                    </>
+                  )
+                }
+              ]}
+            />
+            <Spacer value={DEVICE_HEIGHT} />
+          </ScrollView>
         </>
       )}
     </View>

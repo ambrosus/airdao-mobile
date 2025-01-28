@@ -5,9 +5,9 @@ import { Button, Row, Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { SingleAsset, TokenLogo } from '@components/modular';
 import { ChevronDownIcon } from '@components/svg/icons';
-import { Token } from '@models';
-import { scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { Token } from '@models';
+import { scale, verticalScale } from '@utils';
 
 interface TokenPickerProps {
   tokens: Token[];

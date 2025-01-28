@@ -1,9 +1,11 @@
+import _ from 'lodash';
 import { QueryResponse } from '@appTypes';
 import { AccountDBModel } from '@database';
 import { useAllAccounts } from './useAllAccounts';
 
 export const useAccountByAddress = (
-  address: string
+  address: string,
+  toLowerCase = false
 ): QueryResponse<AccountDBModel | null> => {
   const {
     data: allAccounts,
@@ -12,7 +14,11 @@ export const useAccountByAddress = (
   } = useAllAccounts();
   const accountByHash =
     allAccounts?.length > 0
-      ? allAccounts.find((account) => account.address === address) || null
+      ? allAccounts.find(
+          (account) =>
+            (toLowerCase ? _.toLower(account.address) : account.address) ===
+            address
+        ) || null
       : null;
 
   return {

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import KeysUtills from '@utils/keys';
+import { KeysUtils } from '@utils/keys';
 const bip32 = require('bip32');
 
 interface CacheRoots {
@@ -12,7 +12,7 @@ class AirDAOKeys {
   async getSeedCached(mnemonic: string) {
     const mnemonicCache = mnemonic.toLowerCase();
     if (typeof CACHE[mnemonicCache] === 'undefined') {
-      CACHE[mnemonicCache] = await KeysUtills.bip39MnemonicToSeed(
+      CACHE[mnemonicCache] = await KeysUtils.bip39MnemonicToSeed(
         mnemonic.toLowerCase()
       );
     }

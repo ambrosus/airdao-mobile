@@ -1,23 +1,31 @@
-import { Config as BridgeConfig, Network } from '@lib/bridgeSDK/models/types';
 import Config from '@constants/config';
+import { getAllBridgeTokenBalance } from '@lib/bridgeSDK/bridgeFunctions/getAllBridgeTokenBalance';
+import { Config as BridgeConfig, Network } from '@lib/bridgeSDK/models/types';
 import { MySdk } from '../sdk';
 import { currentProvider } from './currentProveder';
 
 export async function getBridgePairs({
   from,
-  to,
-  bridgeConfig
+  destination,
+  bridgeConfig,
+  ownerAddress
 }: {
   from: Network | string;
-  to: Network | string;
+  destination: Network | string;
   bridgeConfig: BridgeConfig;
+  ownerAddress: string;
 }) {
   const sdk = new MySdk(bridgeConfig, Config.BRIDGE_RELAY_URLS);
   const provider = currentProvider(from);
-  return {
-    name: `${from}->${to}`,
+  const pairs = await getAllBridgeTokenBalance(
     // @ts-ignore
-    pairs: sdk.getPairs(from, to),
+    sdk.getPairs(from, destination),
+    from,
+    ownerAddress
+  );
+  return {
+    name: `${from}->${destination}`,
+    pairs,
     provider
   };
 }

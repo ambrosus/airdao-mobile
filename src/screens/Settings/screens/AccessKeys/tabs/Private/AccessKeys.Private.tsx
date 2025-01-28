@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { Cache, CacheKey } from '@lib/cache';
 import { Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { scale } from '@utils/scaling';
 import { CopyToClipboardButton } from '@components/composite';
+import { COLORS } from '@constants/colors';
+import { Cache, CacheKey } from '@lib/cache';
+import { scale } from '@utils';
+import { styles } from './styles';
 
 interface AccessKeysPrivateProps {
   walletHash: string;
@@ -47,14 +47,14 @@ export const AccessKeysPrivateTab = ({
         pressableText={true}
         showToast={false}
         iconProps={{ scale: 0 }}
-        style={styles.copyButton}
+        containerStyle={styles.copyButton}
         textProps={{
-          color: COLORS.neutral900,
+          color: COLORS.brand500,
           fontSize: 14,
           fontFamily: 'Inter_500Medium'
         }}
         successTextProps={{
-          color: COLORS.success600,
+          color: COLORS.brand500,
           fontSize: 14,
           fontFamily: 'Inter_500Medium'
         }}

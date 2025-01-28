@@ -1,13 +1,12 @@
+import React, { PropsWithChildren, ReactNode } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { BigNumber, ethers } from 'ethers';
+import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { useCurrencyRate } from '@hooks';
-import { NumberUtils } from '@utils/number';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
-import React, { PropsWithChildren, ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
-import { BigNumber } from 'ethers';
+import { moderateScale, scale, verticalScale, NumberUtils } from '@utils';
 
 interface StakingInfoProps {
   totalStake: number;
@@ -31,6 +30,7 @@ const Title = (props: PropsWithChildren) => {
 };
 
 export const StakingInfo = (props: StakingInfoProps) => {
+  const { t } = useTranslation();
   const { totalStake, currency, userStaking, earnings, apy } = props;
   const exchangeRate = useCurrencyRate(currency);
   const userStakingUsd =
@@ -39,7 +39,6 @@ export const StakingInfo = (props: StakingInfoProps) => {
   const totalStakingUSD = totalStake * exchangeRate;
 
   const earningsUsd = exchangeRate * earnings;
-  const { t } = useTranslation();
 
   return (
     <View style={styles.container}>
@@ -97,7 +96,8 @@ export const StakingInfo = (props: StakingInfoProps) => {
               fontSize={14}
               fontWeight="600"
             >
-              {NumberUtils.formatAmount(userStaking)} AMB
+              {NumberUtils.formatDecimal(ethers.utils.formatEther(userStaking))}{' '}
+              AMB
             </Text>
             <Spacer value={scale(8)} horizontal />
             <Text

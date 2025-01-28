@@ -1,107 +1,91 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
+import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import {
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  ScrollView,
-  View,
-  useWindowDimensions
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
+import LottieView from 'lottie-react-native';
 import { useTranslation } from 'react-i18next';
-import { PrimaryButton, SecondaryButton } from '@components/modular';
-import { BottomAwareSafeAreaView } from '@components/composite';
-import { Row, Spacer, Text } from '@components/base';
 import { RootNavigationProp } from '@appTypes';
+import { Spacer, Text } from '@components/base';
+import { BottomAwareSafeAreaView } from '@components/composite';
+import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils/scaling';
-import { useAddWalletContext } from '@contexts';
-import { NoWalletStep, StepCircle, StepInfo } from './components';
-import { NoWalletSteps } from './NoWallet.constants';
+import { useAddWalletStore } from '@features/add-wallet';
+import { useEffectOnce } from '@hooks';
+import { scale, verticalScale } from '@utils';
 import { styles } from './styles';
 
 export const NoWalletScreen = () => {
-  const { setWalletName, setMnemonicLength } = useAddWalletContext();
-  const navigation = useNavigation<RootNavigationProp>();
-  const [currentStep, setCurrentStep] = useState(0);
-  const { width: WINDOW_WIDTH } = useWindowDimensions();
   const { t } = useTranslation();
+  const navigation = useNavigation<RootNavigationProp>();
 
-  const onScrollEndDrag = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    setCurrentStep(
-      Math.floor(
-        event.nativeEvent.contentOffset.x / parseInt(WINDOW_WIDTH.toString())
-      )
-    );
-  };
+  const { onChangeName, onChangeMnemonicLength } = useAddWalletStore();
 
-  const renderStep = (step: StepInfo) => {
-    return <NoWalletStep key={step.title} step={step} />;
-  };
+  const animationRef = useRef<LottieView>(null);
+  useEffectOnce(() => {
+    animationRef.current?.play();
+    setInterval(() => animationRef.current?.play(), 5000);
+  });
 
-  const navigateToNewWallet = () => {
-    setWalletName('');
-    setMnemonicLength(128);
-    navigation.navigate('Tabs', {
-      screen: 'Wallets',
-      params: { screen: 'CreateWalletStep0' }
-    });
-  };
-
-  const navigateToImportWallet = () => {
-    setWalletName('');
-    setMnemonicLength(128);
-    navigation.navigate('Tabs', {
-      screen: 'Wallets',
-      params: { screen: 'ImportWalletMethods' }
+  const navigateToAddWallet = (
+    screen: 'ImportWalletMethods' | 'CreateWalletStep0'
+  ) => {
+    onChangeName('');
+    onChangeMnemonicLength(128);
+    navigation.replace('Tabs', {
+      screen: 'Settings',
+      params: {
+        screen,
+        params: { from: 'WelcomeScreen' }
+      }
     });
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={{ flex: 5 }}>
-        <ScrollView
-          bounces={false}
-          onMomentumScrollEnd={onScrollEndDrag}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-        >
-          {NoWalletSteps.map(renderStep)}
-        </ScrollView>
-        <Spacer value={verticalScale(24)} />
-        <Row
-          alignItems="center"
-          justifyContent="center"
-          style={{ columnGap: scale(16) }}
-        >
-          <StepCircle step={0} currentStep={currentStep} />
-          <StepCircle step={1} currentStep={currentStep} />
-          <StepCircle step={2} currentStep={currentStep} />
-        </Row>
+    <LinearGradient colors={[COLORS.brand200, 'white']}>
+      <View style={styles.container}>
+        <LottieView
+          ref={animationRef}
+          style={styles.animationContainer}
+          loop={false}
+          source={require('../../assets/lottie/welcomeScreen.json')}
+        />
+        <Spacer value={verticalScale(15)} />
+        <View style={styles.textContainer}>
+          <Text style={styles.welcomeText}>Welcome to</Text>
+          <Spacer value={verticalScale(5)} />
+          <Text style={[styles.welcomeText, styles.airDaoText]}>
+            AirDAO Wallet
+          </Text>
+          <Spacer value={verticalScale(20)} />
+          <Text style={styles.infoText}>Wallet - Trade - DeFi</Text>
+          <Spacer value={verticalScale(30)} />
+        </View>
+        <BottomAwareSafeAreaView style={styles.buttons}>
+          <PrimaryButton
+            onPress={() => navigateToAddWallet('CreateWalletStep0')}
+          >
+            <Text
+              fontSize={scale(17)}
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.neutral0}
+            >
+              {t('no.wallet.create.new')}
+            </Text>
+          </PrimaryButton>
+          <Spacer value={verticalScale(24)} />
+          <SecondaryButton
+            onPress={() => navigateToAddWallet('ImportWalletMethods')}
+          >
+            <Text
+              fontSize={scale(17)}
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.brand500}
+            >
+              {t('no.wallet.import')}
+            </Text>
+          </SecondaryButton>
+        </BottomAwareSafeAreaView>
       </View>
-      <Spacer value={verticalScale(24)} />
-      <BottomAwareSafeAreaView style={styles.buttons}>
-        <PrimaryButton onPress={navigateToNewWallet}>
-          <Text
-            fontSize={16}
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral0}
-          >
-            {t('no.wallet.create.new')}
-          </Text>
-        </PrimaryButton>
-        <Spacer value={verticalScale(24)} />
-        <SecondaryButton onPress={navigateToImportWallet}>
-          <Text
-            fontSize={16}
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral900}
-          >
-            {t('no.wallet.import')}
-          </Text>
-        </SecondaryButton>
-      </BottomAwareSafeAreaView>
-    </SafeAreaView>
+    </LinearGradient>
   );
 };

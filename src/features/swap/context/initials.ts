@@ -1,10 +1,8 @@
 import {
   SelectedTokensAmountState,
-  SelectedTokensState,
   Settings,
   UIBottomSheetInformationState
 } from '../types';
-import { SWAP_SUPPORTED_TOKENS } from '../entities';
 
 export const INITIAL_SLIPPAGE_TOLERANCE = '0.50';
 export const INITIAL_DEADLINE = '20';
@@ -14,11 +12,6 @@ export const INITIAL_SETTINGS: Settings = {
   deadline: INITIAL_DEADLINE,
   multihops: true,
   extendedMode: false
-};
-
-export const INITIAL_SELECTED_TOKENS: SelectedTokensState = {
-  TOKEN_A: SWAP_SUPPORTED_TOKENS.native,
-  TOKEN_B: null
 };
 
 export const INITIAL_SELECTED_TOKENS_AMOUNT: SelectedTokensAmountState = {

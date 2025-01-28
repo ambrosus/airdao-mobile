@@ -1,6 +1,6 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '@components/composite';
 import { NotificationSettingsView } from '@components/templates';
 
@@ -10,7 +10,7 @@ export const NotificationSettingsScreen = () => {
     <SafeAreaView>
       <Header
         bottomBorder
-        title={t('settings.notifications')}
+        title={t('tab.notifications')}
         style={{ backgroundColor: 'transparent' }}
       />
       <NotificationSettingsView />

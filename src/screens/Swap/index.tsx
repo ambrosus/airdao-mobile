@@ -1,25 +1,29 @@
-import React, { useCallback, useMemo, useRef } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useCallback, useMemo } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
-import { styles } from './styles';
-import { BottomSheetRef, Header } from '@components/composite';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { HomeParamsList } from '@appTypes';
+import { Button } from '@components/base';
+import { Header } from '@components/composite';
+import { SettingsFilledIcon } from '@components/svg/icons';
+import { COLORS } from '@constants/colors';
 import {
   BottomSheetPreviewSwap,
-  BottomSheetSwapSettings,
   BottomSheetTokensList,
   SwapForm
 } from '@features/swap/components/templates';
 import { useSwapContextSelector } from '@features/swap/context';
-import { FIELD } from '@features/swap/types';
-import { SettingsFilledIcon } from '@components/svg/icons';
-import { COLORS } from '@constants/colors';
-import { Button } from '@components/base';
 import { useAllLiquidityPools } from '@features/swap/lib/hooks';
+import { useSwapAllBalances } from '@features/swap/lib/hooks/use-swap-all-balances';
+import { FIELD } from '@features/swap/types';
+import { styles } from './styles';
 
-export const SwapScreen = () => {
+type Props = NativeStackScreenProps<HomeParamsList, 'SwapScreen'>;
+
+export const SwapScreen = ({ navigation }: Props) => {
   const { t } = useTranslation();
-  const bottomSheetSwapSettingsRef = useRef<BottomSheetRef>(null);
+  useSwapAllBalances();
   useAllLiquidityPools();
   const {
     bottomSheetTokenARef,
@@ -30,21 +34,27 @@ export const SwapScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      return () => reset();
-    }, [reset])
+      const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+        const resetActions = ['RESET', 'GO_BACK'];
+        if (resetActions.includes(e.data.action.type)) reset();
+      });
+
+      return unsubscribe;
+    }, [navigation, reset])
   );
 
-  const onShowBottomSheetSwapSettings = useCallback(() => {
-    bottomSheetSwapSettingsRef.current?.show();
-  }, []);
+  const onNavigateToSwapSettings = useCallback(
+    () => navigation.navigate('SwapSettingsScreen'),
+    [navigation]
+  );
 
   const renderHeaderRightContent = useMemo(() => {
     return (
-      <Button onPress={onShowBottomSheetSwapSettings}>
+      <Button onPress={onNavigateToSwapSettings}>
         <SettingsFilledIcon color={COLORS.neutral400} />
       </Button>
     );
-  }, [onShowBottomSheetSwapSettings]);
+  }, [onNavigateToSwapSettings]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -58,7 +68,6 @@ export const SwapScreen = () => {
 
       <BottomSheetTokensList ref={bottomSheetTokenARef} type={FIELD.TOKEN_A} />
       <BottomSheetTokensList ref={bottomSheetTokenBRef} type={FIELD.TOKEN_B} />
-      <BottomSheetSwapSettings ref={bottomSheetSwapSettingsRef} />
       <BottomSheetPreviewSwap ref={bottomSheetPreviewSwapRef} />
     </SafeAreaView>
   );

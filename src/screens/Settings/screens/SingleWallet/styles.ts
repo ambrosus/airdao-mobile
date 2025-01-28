@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { moderateScale, scale, verticalScale } from '@utils/scaling';
 import { COLORS } from '@constants/colors';
+import { moderateScale, scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {
@@ -11,9 +11,6 @@ export const styles = StyleSheet.create({
     paddingTop: verticalScale(32),
     justifyContent: 'space-between'
   },
-  nameInput: {
-    marginHorizontal: scale(16)
-  },
   input: {
     shadowColor: COLORS.transparent,
     borderWidth: 1,
@@ -21,6 +18,10 @@ export const styles = StyleSheet.create({
     color: COLORS.alphaBlack60
   },
   addressContainer: {
+    marginTop: scale(15),
+    borderRadius: 24,
+    paddingVertical: scale(25),
+    backgroundColor: COLORS.neutral50,
     paddingHorizontal: scale(24),
     alignSelf: 'center'
   },
@@ -32,8 +33,12 @@ export const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: COLORS.neutral100
   },
+  copyAddressButtonWrapper: {
+    marginTop: verticalScale(16),
+    height: 33
+  },
   copyButton: {
-    backgroundColor: COLORS.alphaBlack5,
+    backgroundColor: COLORS.brand100,
     borderRadius: 1000,
     alignSelf: 'center',
     paddingVertical: verticalScale(6),
@@ -43,16 +48,15 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 1000,
-    paddingVertical: verticalScale(12),
+    paddingVertical: verticalScale(16),
     paddingHorizontal: scale(16),
     marginHorizontal: scale(24)
   },
   accessKeysButton: {
-    backgroundColor: COLORS.neutral100,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 1000,
-    paddingVertical: verticalScale(12),
+    flexDirection: 'row',
+    paddingVertical: verticalScale(16),
     paddingHorizontal: scale(16),
     marginHorizontal: scale(24)
   },

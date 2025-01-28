@@ -1,22 +1,27 @@
 import { useCallback } from 'react';
-import {
-  addresses,
-  isMultiHopSwapAvailable,
-  extractArrayOfMiddleMultiHopAddresses,
-  dexValidators
-} from '@features/swap/utils';
-import { getObjectKeyByValue } from '@utils/object';
 import { ethers, BigNumber } from 'ethers';
-import { getAmountsOut, getAmountsIn } from '../contracts';
 import { useSwapContextSelector } from '@features/swap/context';
+import {
+  MAX_HOPS,
+  dexValidators,
+  generateAllPossibleRoutes
+} from '@features/swap/utils';
+import { getAmountsOut, getAmountsIn } from '../contracts';
 import { useSwapSettings } from './use-swap-settings';
 
+function invariant(reason: unknown, key: string) {
+  throw Error(`${reason} - ${key}`);
+}
+
 export function useSwapBetterCurrency() {
-  const { setIsMultiHopSwapCurrencyBetter, isExactInRef } =
-    useSwapContextSelector();
+  const {
+    setIsMultiHopSwapCurrencyBetter,
+    setIsWarningToEnableMultihopActive,
+    isExactInRef
+  } = useSwapContextSelector();
   const { settings } = useSwapSettings();
 
-  const getTokenAmountOut = useCallback(
+  const amountOut = useCallback(
     async (amountToSell: string, path: string[]) => {
       const bnAmountToSell = ethers.utils.parseEther(amountToSell);
       const prices = await getAmountsOut({
@@ -29,7 +34,7 @@ export function useSwapBetterCurrency() {
     []
   );
 
-  const getTokenAmountIn = useCallback(
+  const amountIn = useCallback(
     async (amountToReceive: string, path: string[]) => {
       const bnAmountToReceive = ethers.utils.parseEther(amountToReceive);
       const prices = await getAmountsIn({
@@ -42,13 +47,12 @@ export function useSwapBetterCurrency() {
     []
   );
 
-  const getTokenAmountOutWithMultiRoute = useCallback(
-    async (amountToSell: string, path: string[], middleAddress: string) => {
-      const [addressFrom, addressTo] = path;
+  const amountOutWithHop = useCallback(
+    async (amountToSell: string, fullPath: string[]): Promise<BigNumber> => {
       const bnAmountToSell = ethers.utils.parseEther(amountToSell);
 
       const prices = await getAmountsOut({
-        path: [addressFrom, middleAddress, addressTo],
+        path: fullPath,
         amountToSell: bnAmountToSell
       });
 
@@ -57,13 +61,12 @@ export function useSwapBetterCurrency() {
     []
   );
 
-  const getTokenAmountInWithMultiRoute = useCallback(
-    async (amountToSell: string, path: string[], middleAddress: string) => {
-      const [addressFrom, addressTo] = path;
+  const amountInWithHop = useCallback(
+    async (amountToSell: string, fullPath: string[]): Promise<BigNumber> => {
       const bnAmountToSell = ethers.utils.parseEther(amountToSell);
 
       const prices = await getAmountsIn({
-        path: [addressFrom, middleAddress, addressTo],
+        path: fullPath,
         amountToReceive: bnAmountToSell
       });
 
@@ -75,157 +78,235 @@ export function useSwapBetterCurrency() {
   const resetMultiHopUiState = useCallback(() => {
     return setIsMultiHopSwapCurrencyBetter({
       state: false,
-      token: ''
+      tokens: []
     });
   }, [setIsMultiHopSwapCurrencyBetter]);
 
   const onChangeMultiHopUiState = useCallback(
-    (middleHopAddress: string) => {
+    (middleHopAddresses: string[]) => {
       setIsMultiHopSwapCurrencyBetter({
         state: true,
-        token: getObjectKeyByValue(addresses, middleHopAddress) ?? ''
+        tokens: middleHopAddresses
       });
     },
     [setIsMultiHopSwapCurrencyBetter]
   );
 
-  const getOppositeReceivedTokenAmount = useCallback(
+  const bestTradeExactIn = useCallback(
+    async (
+      amountToSell: string,
+      path: string[],
+      multihops: boolean
+    ): Promise<BigNumber> => {
+      let singleHopAmount: BigNumber = BigNumber.from('0');
+      let bestMultiHopAmount: BigNumber = BigNumber.from('0');
+      let bestPath: string[] = [];
+
+      const bnAmountToSell = ethers.utils.parseEther(amountToSell);
+
+      // Try single hop first
+      try {
+        const [amounts] = await getAmountsIn({
+          path,
+          amountToReceive: bnAmountToSell
+        });
+        singleHopAmount = amounts;
+      } catch (error) {
+        if (!multihops) {
+          setIsWarningToEnableMultihopActive(true);
+          return ethers.utils.parseEther('0');
+        }
+      }
+
+      if (!multihops) return singleHopAmount || ethers.utils.parseEther('0');
+
+      const possiblePaths = generateAllPossibleRoutes(path, 3).filter(
+        (route) => route[0] === path[0] && route[route.length - 1] === path[1]
+      );
+
+      try {
+        // Parallelize all getAmountsIn calls
+        const pathResults = await Promise.all(
+          possiblePaths.map(async (currentPath) => {
+            try {
+              const [amounts] = await getAmountsIn({
+                path: currentPath,
+                amountToReceive: bnAmountToSell
+              });
+              return { amounts, path: currentPath };
+            } catch {
+              return null;
+            }
+          })
+        );
+
+        // Process results with for...of instead of forEach
+        for (const result of pathResults) {
+          if (result && result.amounts) {
+            if (
+              bestMultiHopAmount.isZero() ||
+              result.amounts.lt(bestMultiHopAmount)
+            ) {
+              bestMultiHopAmount = result.amounts;
+              bestPath = result.path;
+            }
+          }
+        }
+
+        // Handle zero amount cases
+        if (singleHopAmount.isZero() && !bestMultiHopAmount.isZero()) {
+          // If only multi-hop route exists
+          const middleTokens = bestPath.slice(1, -1);
+          onChangeMultiHopUiState(middleTokens);
+          return bestMultiHopAmount;
+        }
+
+        if (!singleHopAmount.isZero() && bestMultiHopAmount.isZero()) {
+          // If only single hop route exists
+          onChangeMultiHopUiState([]);
+          return singleHopAmount;
+        }
+
+        // If both routes exist, compare them
+        if (!singleHopAmount.isZero() && !bestMultiHopAmount.isZero()) {
+          const isBetterThanSingleHop = bestMultiHopAmount.lt(singleHopAmount);
+
+          if (isBetterThanSingleHop) {
+            const middleTokens = bestPath.slice(1, -1);
+            onChangeMultiHopUiState(middleTokens);
+            return bestMultiHopAmount;
+          } else {
+            onChangeMultiHopUiState([]);
+            return singleHopAmount;
+          }
+        }
+
+        // If no valid routes found
+        return ethers.utils.parseEther('0');
+      } catch (error) {
+        invariant(error, 'bestTradeExactIn route check failed:');
+        if (!singleHopAmount.isZero()) {
+          return singleHopAmount;
+        }
+        return ethers.utils.parseEther('0');
+      }
+    },
+    [onChangeMultiHopUiState, setIsWarningToEnableMultihopActive]
+  );
+
+  const bestTradeExactOut = useCallback(
+    async (
+      amountToSell: string,
+      path: string[],
+      multihops: boolean
+    ): Promise<BigNumber> => {
+      let singleHopAmount: BigNumber = BigNumber.from('0');
+      let bestMultiHopAmount: BigNumber = BigNumber.from('0');
+      let bestPath: string[] = [];
+
+      // Try single hop first
+      try {
+        singleHopAmount = await amountOut(amountToSell, path);
+      } catch (error) {
+        if (!multihops) {
+          setIsWarningToEnableMultihopActive(true);
+          return ethers.utils.parseEther('0');
+        }
+      }
+
+      if (!multihops) return singleHopAmount || ethers.utils.parseEther('0');
+
+      const possiblePaths = generateAllPossibleRoutes(
+        path,
+        MAX_HOPS + 1
+      ).filter(
+        (route) => route[0] === path[0] && route[route.length - 1] === path[1]
+      );
+
+      try {
+        const bnAmountToSell = ethers.utils.parseEther(amountToSell);
+
+        // Parallelize all getAmountsOut calls
+        const pathResults = await Promise.all(
+          possiblePaths.map(async (currentPath) => {
+            try {
+              const amounts = await getAmountsOut({
+                path: currentPath,
+                amountToSell: bnAmountToSell
+              });
+              return { amounts, path: currentPath };
+            } catch {
+              return null;
+            }
+          })
+        );
+
+        // Process results with for...of instead of forEach
+        for (const result of pathResults) {
+          if (result) {
+            const amount = result.amounts[result.amounts.length - 1];
+            if (
+              amount &&
+              (bestMultiHopAmount.isZero() || amount.gt(bestMultiHopAmount))
+            ) {
+              bestMultiHopAmount = amount;
+              bestPath = result.path;
+            }
+          }
+        }
+
+        // Rest of the function remains the same
+        const isBetterThanSingleHop =
+          !singleHopAmount || bestMultiHopAmount.gt(singleHopAmount);
+
+        if (bestPath.length > 0 && isBetterThanSingleHop) {
+          const middleTokens = bestPath.slice(1, -1);
+          if (middleTokens.length > 0) {
+            onChangeMultiHopUiState(middleTokens);
+            return bestMultiHopAmount;
+          }
+        }
+      } catch (error) {
+        invariant(error, 'bestTradeExactOut route check failed:');
+      }
+
+      onChangeMultiHopUiState([]);
+      return singleHopAmount || ethers.utils.parseEther('0');
+    },
+    [amountOut, onChangeMultiHopUiState, setIsWarningToEnableMultihopActive]
+  );
+
+  const bestTradeCurrency = useCallback(
     async (amountToSell: string, path: string[]) => {
+      setIsWarningToEnableMultihopActive(false);
       resetMultiHopUiState();
+
       if (dexValidators.isEmptyAmount(amountToSell)) return BigNumber.from('0');
 
       const { multihops } = settings.current;
       const tradeIn = isExactInRef.current;
 
-      const isMultiHopRouteSupported = isMultiHopSwapAvailable(path);
-      const middleHopAddress = extractArrayOfMiddleMultiHopAddresses(path);
-
-      let singleHopAmount: BigNumber = BigNumber.from('0');
-      let multiHopAmount: BigNumber = BigNumber.from('0');
-
-      try {
-        if (tradeIn) {
-          singleHopAmount = await getTokenAmountOut(amountToSell, path);
-        } else {
-          singleHopAmount = await getTokenAmountIn(amountToSell, path);
-        }
-      } catch (error) {
-        console.error('Error fetching single-hop amount:', error);
-      }
-
-      if (!isMultiHopRouteSupported || !multihops) {
-        return singleHopAmount;
-      }
-
-      // Calculate multi-hop amount
-      try {
-        if (tradeIn) {
-          multiHopAmount = await getTokenAmountOutWithMultiRoute(
-            amountToSell,
-            path,
-            middleHopAddress.address
-          );
-        } else {
-          multiHopAmount = await getTokenAmountInWithMultiRoute(
-            amountToSell,
-            path,
-            middleHopAddress.address
-          );
-        }
-      } catch (error) {
-        resetMultiHopUiState();
-        if (tradeIn) {
-          return await getTokenAmountOut(amountToSell, path);
-        } else {
-          return await getTokenAmountIn(amountToSell, path);
-        }
-      }
-
-      if (tradeIn) {
-        if (multiHopAmount.gt(singleHopAmount)) {
-          onChangeMultiHopUiState(middleHopAddress.address);
-        } else {
-          resetMultiHopUiState();
-        }
-        return singleHopAmount.gt(multiHopAmount)
-          ? singleHopAmount
-          : multiHopAmount;
-      } else {
-        if (multiHopAmount.lt(singleHopAmount)) {
-          onChangeMultiHopUiState(middleHopAddress.address);
-        } else {
-          resetMultiHopUiState();
-        }
-        return singleHopAmount.lt(multiHopAmount)
-          ? singleHopAmount
-          : multiHopAmount;
-      }
+      return tradeIn
+        ? bestTradeExactOut(amountToSell, path, multihops)
+        : bestTradeExactIn(amountToSell, path, multihops);
     },
     [
-      getTokenAmountIn,
-      getTokenAmountInWithMultiRoute,
-      getTokenAmountOut,
-      getTokenAmountOutWithMultiRoute,
+      bestTradeExactIn,
+      bestTradeExactOut,
       isExactInRef,
-      onChangeMultiHopUiState,
       resetMultiHopUiState,
+      setIsWarningToEnableMultihopActive,
       settings
     ]
   );
 
-  const getOppositeReceivedTokenAmountForPlate = useCallback(
-    async (amountToSell: string, path: string[]) => {
-      if (dexValidators.isEmptyAmount(amountToSell)) return BigNumber.from('0');
-
-      const tradeIn = isExactInRef.current;
-      const { multihops } = settings.current;
-
-      const isMultiHopRouteSupported = isMultiHopSwapAvailable(path);
-
-      let singleHopAmount: BigNumber = BigNumber.from('0');
-      let multiHopAmount: BigNumber = BigNumber.from('0');
-
-      try {
-        singleHopAmount = await getTokenAmountIn(amountToSell, path);
-      } catch (error) {
-        console.error('Error fetching single-hop amount:', error);
-      }
-
-      if (!isMultiHopRouteSupported || !multihops) {
-        return singleHopAmount;
-      }
-
-      // Calculate multi-hop amount
-      try {
-        const middleHopAddress = extractArrayOfMiddleMultiHopAddresses(path);
-        if (tradeIn) {
-          multiHopAmount = await getTokenAmountInWithMultiRoute(
-            amountToSell,
-            path,
-            middleHopAddress.address
-          );
-        } else {
-          multiHopAmount = await getTokenAmountInWithMultiRoute(
-            amountToSell,
-            path,
-            middleHopAddress.address
-          );
-        }
-      } catch (error) {
-        return await getTokenAmountIn(amountToSell, path);
-      }
-
-      return singleHopAmount.lt(multiHopAmount)
-        ? singleHopAmount
-        : multiHopAmount;
-    },
-    [getTokenAmountIn, getTokenAmountInWithMultiRoute, isExactInRef, settings]
-  );
-
   return {
-    getOppositeReceivedTokenAmount,
-    getOppositeReceivedTokenAmountForPlate,
-    getTokenAmountIn,
-    getTokenAmountOut
+    bestTradeExactIn,
+    bestTradeExactOut,
+    bestTradeCurrency,
+    amountOut,
+    amountIn,
+    amountOutWithHop,
+    amountInWithHop
   };
 }

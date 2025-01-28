@@ -1,8 +1,8 @@
-import { BridgeSDK } from '@lib/bridgeSDK/sdk/sdk';
-import { Network, Token } from '@lib/bridgeSDK/models/types';
 import { CryptoCurrencyCode } from '@appTypes';
-import { bridgeTokensPairFilter } from '@lib/bridgeSDK/bridgeFunctions/bridgeTokensPairFilter';
 import Config from '@constants/config';
+import { bridgeTokensPairFilter } from '@lib/bridgeSDK/bridgeFunctions/bridgeTokensPairFilter';
+import { Network, Token } from '@lib/bridgeSDK/models/types';
+import { BridgeSDK } from '@lib/bridgeSDK/sdk/sdk';
 
 export class MySdk extends BridgeSDK {
   getPairs(

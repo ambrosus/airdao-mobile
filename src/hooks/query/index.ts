@@ -12,5 +12,4 @@ export * from './useSearchAccount';
 export * from './useTransactionsOfAddress';
 export * from './useTransactionDetails';
 export * from './useTokensAndTransactions';
-export * from './useBridgeHistory';
 export * from './useERC20Balance';

@@ -1,5 +1,5 @@
-import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
+import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {
@@ -16,5 +16,9 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'absolute'
+  },
+  header: {
+    paddingTop: 16,
+    paddingHorizontal: 16
   }
 });

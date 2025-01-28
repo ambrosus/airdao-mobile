@@ -1,6 +1,6 @@
 import React from 'react';
-import { IconProps } from '@components/svg/icons/Icon.types';
 import { ClipPath, Defs, G, Path, Svg } from 'react-native-svg';
+import { IconProps } from '@components/svg/icons/Icon.types';
 import { COLORS } from '@constants/colors';
 
 export function SendIcon(props: IconProps) {

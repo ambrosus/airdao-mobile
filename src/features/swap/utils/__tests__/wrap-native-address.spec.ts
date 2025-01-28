@@ -1,16 +1,15 @@
+import { ethers } from 'ethers';
+import { TOKEN_ADDRESSES } from '@features/swap/entities';
+import { environment } from '@utils/environment';
 import { isNativeWrapped, wrapNativeAddress } from '../wrap-native-address';
+
+const addresses = TOKEN_ADDRESSES[environment];
 
 describe('wrapNativeAddress utility | Unit Test', () => {
   it('should wrap AMB to SAMB correctly', () => {
-    const path = [
-      '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
-      '0x765e3e03f8dfca312efdab378e386e1ea60ee93f'
-    ] as [string, string];
+    const path = [ethers.constants.AddressZero, addresses.BOND];
 
-    const expectedPath = [
-      '0x2Cf845b49e1c4E5D657fbBF36E97B7B5B7B7b74b',
-      '0x765e3e03f8dfca312efdab378e386e1ea60ee93f'
-    ];
+    const expectedPath = [addresses.SAMB, addresses.BOND];
 
     const excludeNativeETH = wrapNativeAddress(path);
 
@@ -18,28 +17,17 @@ describe('wrapNativeAddress utility | Unit Test', () => {
   });
 
   it('should not wrap AMB to SAMB if the address is already wrapped', () => {
-    const path = [
-      '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
-      '0x765e3e03f8dfca312efdab378e386e1ea60ee93f'
-    ] as [string, string];
+    const path = [addresses.SAMB, addresses.BOND];
 
-    const expectedPath = [
-      '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
-      '0x765e3e03f8dfca312efdab378e386e1ea60ee93f'
-    ];
+    const expectedPath = [addresses.SAMB, addresses.BOND];
 
     const excludeNativeETH = wrapNativeAddress(path);
 
-    expect(excludeNativeETH).not.toStrictEqual(expectedPath);
+    expect(excludeNativeETH).toStrictEqual(expectedPath);
   });
-});
 
-describe('isNativeWrapped utility | Unit Test', () => {
   it('should return true when native address is wrapped', () => {
-    const path = [
-      '0xd78AB887A33EaC829B0DDE8714f79276E1255028',
-      '0x2Cf845b49e1c4E5D657fbBF36E97B7B5B7B7b74b'
-    ] as [string, string];
+    const path = [ethers.constants.AddressZero, addresses.SAMB];
 
     const excludeNativeETH = wrapNativeAddress(path);
     const isSelectedSameTokens = isNativeWrapped(excludeNativeETH);

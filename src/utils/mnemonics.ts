@@ -1,7 +1,7 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const bip39 = require('bip39');
 import { DEFAULT_WORDS } from '@constants/words';
 import { CryptoUtils } from './crypto';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const bip39 = require('bip39');
 
 const generateNewMnemonic = async (size = 256) => {
   const random = await CryptoUtils.getRandomBytes(size / 8);

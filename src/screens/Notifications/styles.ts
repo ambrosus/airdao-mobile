@@ -1,5 +1,5 @@
-import { scale, verticalScale } from '@utils/scaling';
 import { StyleSheet } from 'react-native';
+import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {
@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
   },
   list: {
     flexGrow: 1,
-    paddingTop: verticalScale(30),
+    paddingTop: verticalScale(16),
     paddingBottom: '20%',
     paddingHorizontal: scale(15.5)
   },

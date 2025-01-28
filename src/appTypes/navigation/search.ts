@@ -1,14 +1,14 @@
-import { CompositeNavigationProp } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { TabsParamsList } from './tabs';
 import { CommonStackParamsList } from './common';
+import { TabsParamsList } from './tabs';
 
 export type SearchTabParamsList = {
-  SearchScreen: { address?: string } | undefined;
+  Explore: Partial<{ address: string }>;
 } & CommonStackParamsList;
 
 export type SearchTabNavigationProp = CompositeNavigationProp<
-  BottomTabNavigationProp<TabsParamsList, 'Search'>,
+  BottomTabNavigationProp<TabsParamsList>,
   NativeStackNavigationProp<SearchTabParamsList>
 >;

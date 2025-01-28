@@ -1,26 +1,34 @@
-import React, { forwardRef } from 'react';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
+import React, { forwardRef, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Spacer, Text } from '@components/base';
-import { COLORS } from '@constants/colors';
-import { AddWalletToList, AddWalletToListProps } from '../AddWalletToList';
-import { verticalScale } from '@utils/scaling';
+import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { BottomSheetCreateRenameGroup } from '@components/templates/BottomSheetCreateRenameGroup';
-import { useLists } from '@contexts';
-import { useTranslation } from 'react-i18next';
+import { COLORS } from '@constants/colors';
 import { DEVICE_HEIGHT } from '@constants/variables';
+import { useListActions } from '@features/lists';
+import { verticalScale } from '@utils';
+import { AddWalletToList, AddWalletToListProps } from '../AddWalletToList';
 
 interface BottomSheetAddWalletToListProps extends AddWalletToListProps {
   title: string;
+  onClose: () => void;
 }
 
 export const BottomSheetAddWalletToList = forwardRef<
   BottomSheetRef,
   BottomSheetAddWalletToListProps
->((props, ref) => {
-  const { title, ...addWalletToListProps } = props;
-  const { handleOnCreate, createGroupRef } = useLists((v) => v);
+>(({ title, onClose, ...addWalletToListProps }, ref) => {
   const { t } = useTranslation();
+
+  const createGroupRef = useRef<BottomSheetRef>(null);
+
+  const onDismissBottomSheet = useCallback(
+    () => createGroupRef.current?.dismiss(),
+    [createGroupRef]
+  );
+
+  const { onCreateList } = useListActions(onDismissBottomSheet);
 
   const showCreateNewListModal = () => {
     createGroupRef.current?.show();
@@ -28,6 +36,7 @@ export const BottomSheetAddWalletToList = forwardRef<
 
   return (
     <BottomSheet
+      onClose={onClose}
       ref={ref}
       height={DEVICE_HEIGHT * 0.58}
       swiperIconVisible={true}
@@ -62,7 +71,7 @@ export const BottomSheetAddWalletToList = forwardRef<
       <BottomSheetCreateRenameGroup
         ref={createGroupRef}
         type="create"
-        handleOnCreateGroup={handleOnCreate}
+        handleOnCreateGroup={onCreateList}
       />
     </BottomSheet>
   );

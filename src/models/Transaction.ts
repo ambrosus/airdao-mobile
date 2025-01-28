@@ -1,6 +1,16 @@
+import { CryptoCurrencyCode } from '@appTypes';
 import { TransactionType } from '@appTypes/enums';
 import { TransactionDTO } from './dtos/TransactionDTO';
-import { CryptoCurrencyCode } from '@appTypes';
+
+export interface TransactionTokenInfo {
+  address: string;
+  name?: string;
+  symbol: string;
+  decimals: number;
+  totalSupply?: number;
+  cryptoAmount: string;
+  type?: 'ERC-20' | 'ERC-1155';
+}
 
 export class Transaction {
   _id: string;
