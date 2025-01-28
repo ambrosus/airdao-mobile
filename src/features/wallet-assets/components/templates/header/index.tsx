@@ -136,7 +136,7 @@ export const HomeHeader = React.memo(
 
     const renderContentLeft = useMemo(() => {
       return (
-        <View style={{ bottom: scale(3) }}>
+        <View style={styles.leftContainer}>
           <Button onPress={openScanner}>
             <BarcodeScannerIcon />
           </Button>

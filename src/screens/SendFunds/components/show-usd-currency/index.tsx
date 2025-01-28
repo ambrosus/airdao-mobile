@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
 import { SwapIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale, NumberUtils } from '@utils';
+import { scale, NumberUtils } from '@utils';
+import { styles } from './styles';
 
 interface ShowInUSDProps {
   usdAmount: number;
@@ -40,14 +41,3 @@ export const ShowInUSD = (props: ShowInUSDProps) => {
     </Row>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: COLORS.alphaBlack5,
-    paddingLeft: scale(12),
-    paddingRight: scale(8),
-    paddingVertical: verticalScale(2),
-    borderRadius: 1000,
-    alignSelf: 'center'
-  }
-});

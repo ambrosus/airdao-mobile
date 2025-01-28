@@ -37,6 +37,7 @@ export type HomeParamsList = {
   };
   Wallets: { screen: string };
   Harbor: undefined;
+  CreateWalletStep2: undefined;
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<

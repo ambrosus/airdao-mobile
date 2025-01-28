@@ -1,10 +1,10 @@
 import React, { useCallback, useRef } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { LineGraph, GraphPoint } from 'react-native-graph';
 import { Button, Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { scale } from '@utils';
 import { SelectionDot } from './SelectionDot';
+import { styles } from './styles';
 
 interface Interval {
   text: string;
@@ -80,10 +80,7 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
     <View>
       <LineGraph
         testID="Bezier_Chart"
-        style={{
-          width: '100%',
-          aspectRatio: 1.5
-        }}
+        style={styles.lineGraph}
         points={data}
         animated={true}
         color={strokeColor}
@@ -106,9 +103,3 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  interval: {
-    marginLeft: scale(32)
-  }
-});

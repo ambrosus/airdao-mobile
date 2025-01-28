@@ -3,6 +3,11 @@ import { COLORS } from '@constants/colors';
 import { scale } from '@utils';
 
 export const styles = StyleSheet.create({
+  wrapper: {
+    backgroundColor: COLORS.brand600,
+    borderRadius: 50,
+    padding: 5
+  },
   buttonWrapper: {
     width: '45%',
     padding: scale(14),
@@ -12,14 +17,6 @@ export const styles = StyleSheet.create({
   },
   buttonContainer: { paddingHorizontal: scale(16) },
   titleContainer: { flexDirection: 'row', justifyContent: 'space-between' },
-  closeButtonContainer: {
-    borderWidth: 1,
-    borderColor: COLORS.neutral300,
-    borderRadius: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: scale(3)
-  },
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between'

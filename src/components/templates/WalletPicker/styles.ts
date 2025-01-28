@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
+import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   circularAvatar: {
@@ -13,5 +14,7 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.success300,
     justifyContent: 'center',
     alignItems: 'center'
-  }
+  },
+  wrapper: { minHeight: verticalScale(260), maxHeight: '75%' },
+  container: { paddingHorizontal: scale(16) }
 });

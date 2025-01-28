@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Spacer, Text } from '@components/base';
 import { NoMatch } from '@components/svg/icons/NoMatch';
 import { COLORS } from '@constants/colors';
-import { moderateScale, verticalScale } from '@utils';
+import { verticalScale } from '@utils';
+import { styles } from './styles';
 
 export function SearchAddressNoResult(): JSX.Element {
   const { t } = useTranslation();
@@ -33,18 +34,3 @@ export function SearchAddressNoResult(): JSX.Element {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  error: {
-    flex: 1,
-    paddingTop: '50%',
-    alignItems: 'center',
-    paddingHorizontal: '15%'
-  },
-  circle: {
-    width: moderateScale(130),
-    height: moderateScale(130),
-    borderRadius: moderateScale(65),
-    backgroundColor: COLORS.lightSilver
-  }
-});

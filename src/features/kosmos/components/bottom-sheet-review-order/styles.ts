@@ -7,18 +7,11 @@ export const styles = StyleSheet.create({
     paddingHorizontal: scale(16),
     rowGap: 16
   },
-  heading: {
-    marginTop: verticalScale(16),
-    textAlign: 'center'
-  },
+
   innerContainer: {
     rowGap: 16
   },
   bondsRowGap: {
     columnGap: 4
-  },
-  button: {
-    paddingVertical: 12,
-    marginTop: 20
   }
 });

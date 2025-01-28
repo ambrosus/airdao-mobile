@@ -45,7 +45,7 @@ export const AppPreferencesScreen = () => {
       <Header
         bottomBorder
         title={t('settings.preferences')}
-        style={{ backgroundColor: 'transparent' }}
+        style={styles.header}
       />
       <Spacer value={verticalScale(8)} />
       <View style={styles.inner}>

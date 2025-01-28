@@ -230,18 +230,14 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
     };
 
     const searchStyle: ViewStyle = searchAddress
-      ? {
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexDirection: 'row'
-        }
+      ? styles.search
       : {
           flex: searchInputFocused && !account ? 1 : 0
         };
     const IconRight = () => (
-      <Row alignItems="center" style={{ right: 0 }}>
+      <Row alignItems="center" style={styles.iconRow}>
         {address.length > 0 || searchAddress ? (
-          <Button onPress={clearInput} style={{ zIndex: 1000 }}>
+          <Button onPress={clearInput} style={styles.button}>
             <CloseIcon color={COLORS.alphaBlack50} scale={0.83} />
           </Button>
         ) : scannerDisabled ? null : (
@@ -260,13 +256,13 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
             ...searchStyle
           }}
         >
-          <View style={{ width: '80%' }}>
+          <View style={styles.inputWrapper}>
             <InputWithIcon
               testID="search-input"
               ref={inputRef}
               maxLength={68}
               iconLeft={<SearchIcon color={COLORS.alphaBlack50} />}
-              style={searchAddress ? { width: '60%' } : {}}
+              style={searchAddress ? styles.searchAddress : {}}
               iconRight={<IconRight />}
               placeholder={t('explore.search.placeholder')}
               returnKeyType="search"
@@ -278,12 +274,7 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
           </View>
           {searchAddress ? (
             <Button onPress={closeInput}>
-              <Text
-                style={{
-                  color: COLORS.brand500,
-                  fontSize: 14
-                }}
-              >
+              <Text style={styles.searchAddressButtonTitle}>
                 {t('button.cancel')}
               </Text>
             </Button>
@@ -296,12 +287,12 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
         >
           <BarcodeScanner onScanned={onQRCodeScanned} onClose={hideScanner} />
         </BottomSheet>
-        {isLoading && <CenteredSpinner containerStyle={{ marginTop: 15 }} />}
+        {isLoading && <CenteredSpinner containerStyle={styles.centerSpinner} />}
         {(error && !!address && !finalAccount) || (hashError && !!address) ? (
           <SearchAddressNoResult />
         ) : null}
         {finalAccount && explorerInfo && searchSubmitted ? (
-          <KeyboardDismissingView style={{ flex: 1 }}>
+          <KeyboardDismissingView style={styles.keyboardDismiss}>
             <Spacer value={verticalScale(24)} />
             <KeyboardDismissingView>
               <ExplorerAccountView
@@ -331,9 +322,7 @@ export const SearchAddress = forwardRef<SearchAddressRef, SearchAdressProps>(
             <BottomSheetEditWallet ref={editModal} wallet={finalAccount} />
           </KeyboardDismissingView>
         ) : !!hashData ? (
-          <KeyboardDismissingView
-            style={{ flex: 1, paddingHorizontal: scale(16) }}
-          >
+          <KeyboardDismissingView style={styles.keyboardDismiss}>
             <Spacer value={verticalScale(24)} />
             <Text
               fontFamily="Inter_700Bold"

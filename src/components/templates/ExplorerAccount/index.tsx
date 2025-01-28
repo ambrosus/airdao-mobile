@@ -122,13 +122,10 @@ export const ExplorerAccountView = ({
           testID="Copy_To_Clipboard_Button"
           textToDisplay={StringUtils.formatAddress(account.address, 11, 5)}
           textToCopy={account.address}
-          textProps={{
-            fontSize: 14,
-            fontFamily: 'Inter_600SemiBold',
-            color: COLORS.neutral400
-          }}
+          // @ts-ignore
+          textProps={styles.copyText}
           showToast={true}
-          style={{ padding: 4 }}
+          style={styles.copyTextContainer}
         />
         {!nameVisible && renderListAndWalletInfo()}
       </Row>

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { staking } from '@api/staking/staking-service';
@@ -21,8 +21,9 @@ import {
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
 import { StakePending } from '@screens/StakingPool/components';
-import { NumberUtils, StringUtils, scale, verticalScale } from '@utils';
+import { NumberUtils, StringUtils, verticalScale } from '@utils';
 import { StakePreview } from './Stake.Preview';
+import { styles } from './styles';
 
 const WITHDRAW_PERCENTAGES = [25, 50, 75, 100];
 
@@ -138,7 +139,7 @@ export const StakeToken = ({
   }, [stakeAmount, ambBalance.ether]);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.containerStake}>
       <Text
         fontSize={16}
         fontFamily="Inter_500Medium"
@@ -254,21 +255,3 @@ export const StakeToken = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: scale(24)
-  },
-  currencyBadge: {
-    paddingHorizontal: scale(8),
-    borderWidth: 1,
-    borderColor: COLORS.alphaBlack10,
-    borderRadius: 1000
-  },
-  percentageBox: {
-    paddingVertical: verticalScale(6),
-    paddingHorizontal: scale(12),
-    backgroundColor: COLORS.alphaBlack5,
-    borderRadius: 1000
-  }
-});

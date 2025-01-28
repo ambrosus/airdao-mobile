@@ -10,6 +10,7 @@ import { useBridgeContextData } from '@features/bridge/context';
 import { amountCheckers } from '@features/bridge/templates/BottomSheetBridgePreview/helpers/amountChecker';
 import { scale, verticalScale } from '@utils';
 import { GeneralPreviewTemplate } from './components';
+import { styles } from './styles';
 
 interface BottomSheetChoseNetworksProps {
   ref: RefObject<BottomSheetRef>;
@@ -69,7 +70,7 @@ export const BottomSheetBridgePreview = forwardRef<
       ref={ref}
       swiperIconVisible={false}
     >
-      <View style={{ marginHorizontal: scale(24) }}>
+      <View style={styles.main}>
         {showHeader && (
           <>
             <Spacer value={20} />

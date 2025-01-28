@@ -9,6 +9,7 @@ import { DEVICE_HEIGHT } from '@constants/variables';
 import { useListActions } from '@features/lists';
 import { verticalScale } from '@utils';
 import { AddWalletToList, AddWalletToListProps } from '../AddWalletToList';
+import { styles } from './styles';
 
 interface BottomSheetAddWalletToListProps extends AddWalletToListProps {
   title: string;
@@ -57,7 +58,7 @@ export const BottomSheetAddWalletToList = forwardRef<
         onPress={() => {
           showCreateNewListModal();
         }}
-        style={{ width: '90%', alignSelf: 'center' }}
+        style={styles.button}
       >
         <Text
           fontFamily="Inter_600SemiBold"
