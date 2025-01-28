@@ -3,12 +3,12 @@ import { startCase, toLower } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { verticalScale } from '@utils';
 import {
   InfoKey,
   AMBMarketItem,
   AMBMarketItemsInfo
 } from '@screens/AMBMarket/AMBMarket.constants';
+import { verticalScale } from '@utils';
 
 type AMBDetailedInfoProps = {
   [key in InfoKey]: string;

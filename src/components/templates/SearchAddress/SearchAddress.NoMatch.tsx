@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Spacer, Text } from '@components/base';
 import { NoMatch } from '@components/svg/icons/NoMatch';
