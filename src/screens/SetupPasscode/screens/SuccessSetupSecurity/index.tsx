@@ -9,7 +9,7 @@ import { COLORS } from '@constants/colors';
 import { usePasscodeStore } from '@features/passcode';
 import { usePasscodeActions } from '@features/passcode/lib/hooks';
 import { useEffectOnce } from '@hooks';
-import { scale, verticalScale } from '@utils';
+import { verticalScale } from '@utils';
 import { styles } from './styles';
 
 export const SuccessSetupSecurity = () => {
