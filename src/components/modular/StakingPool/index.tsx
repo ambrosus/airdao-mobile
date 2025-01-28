@@ -13,10 +13,13 @@ interface StakingPoolItemProps {
   stakingPool: StakingPool;
 }
 
+const HPT_ADDRESS = '0x322269e52800e5094c008f3b01A3FD97BB3C8f5D';
 export const StakingPoolItem = (props: StakingPoolItemProps) => {
   const { stakingPool } = props;
   const poolStakingDetails = useStakingPoolDetails(stakingPool.token.name);
   const { t } = useTranslation();
+  const isHPTToken = stakingPool.token.address === HPT_ADDRESS;
+  const disabledPools = !stakingPool.isActive && !isHPTToken;
 
   return (
     <Row
