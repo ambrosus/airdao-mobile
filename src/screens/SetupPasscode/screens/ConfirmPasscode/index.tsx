@@ -11,7 +11,7 @@ import { COLORS } from '@constants/colors';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { usePasscodeStore } from '@features/passcode';
 import { scale, verticalScale, PasscodeUtils } from '@utils';
-import { styles } from '../SetupPasscode.styles';
+import { styles } from '../../SetupPasscode.styles';
 
 export const ConfirmPasscode = () => {
   const { top } = useSafeAreaInsets();
