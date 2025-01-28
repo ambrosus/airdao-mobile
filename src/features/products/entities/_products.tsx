@@ -6,6 +6,7 @@ import {
   ProductStake,
   ProductSwap
 } from '@components/svg/icons/v2';
+import { SwapAccountActionIcon } from '@components/svg/icons/v2/actions';
 import { CustomAppEvents } from '@lib/firebaseEventAnalytics';
 import { SectionizedProducts } from '../utils';
 
