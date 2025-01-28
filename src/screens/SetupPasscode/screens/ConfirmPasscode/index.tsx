@@ -10,7 +10,7 @@ import { Passcode } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { usePasscodeStore } from '@features/passcode';
-import { verticalScale, PasscodeUtils } from '@utils';
+import { scale, verticalScale, PasscodeUtils } from '@utils';
 import { styles } from './styles';
 
 export const ConfirmPasscode = () => {
@@ -78,7 +78,7 @@ export const ConfirmPasscode = () => {
               fontSize={16}
               fontFamily="Inter_600SemiBold"
               color={isButtonEnabled ? COLORS.neutral0 : COLORS.brand300}
-              style={styles.buttonText}
+              style={{ marginVertical: scale(12) }}
             >
               {t('button.confirm')}
             </Text>

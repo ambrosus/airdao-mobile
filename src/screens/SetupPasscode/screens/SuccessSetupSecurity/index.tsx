@@ -2,15 +2,14 @@ import { SafeAreaView, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { HomeNavigationProp } from '@appTypes';
-import { Spacer, Text } from '@components/base';
+import { Button, Spacer, Text } from '@components/base';
 import { BottomAwareSafeAreaView } from '@components/composite';
-import { PrimaryButton } from '@components/modular';
 import { SuccessIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
 import { usePasscodeStore } from '@features/passcode';
 import { usePasscodeActions } from '@features/passcode/lib/hooks';
 import { useEffectOnce } from '@hooks';
-import { scale, verticalScale } from '@utils';
+import { verticalScale } from '@utils';
 import { styles } from './styles';
 
 export const SuccessSetupSecurity = () => {
@@ -63,12 +62,7 @@ export const SuccessSetupSecurity = () => {
         </Text>
       </View>
       <BottomAwareSafeAreaView>
-        <PrimaryButton
-          onPress={navigateToHome}
-          style={{
-            paddingHorizontal: scale(16)
-          }}
-        >
+        <Button type="circular" onPress={navigateToHome} style={styles.button}>
           <Text
             align="center"
             fontSize={16}
@@ -77,7 +71,7 @@ export const SuccessSetupSecurity = () => {
           >
             {t('button.start.using.wallet')}
           </Text>
-        </PrimaryButton>
+        </Button>
       </BottomAwareSafeAreaView>
     </SafeAreaView>
   );
