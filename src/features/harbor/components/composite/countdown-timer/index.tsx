@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, memo, useEffect, useState } from 'react';
+import { PropsWithChildren, memo, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { startCase, toLower } from 'lodash';
 import moment from 'moment';

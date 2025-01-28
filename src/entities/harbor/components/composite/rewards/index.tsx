@@ -1,4 +1,3 @@
-import React from 'react';
 import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
