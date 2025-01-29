@@ -18,7 +18,13 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
   const navigation: HomeNavigationProp = useNavigation();
 
   const onRedirectToProductScreen = useCallback(() => {
-    navigation.navigate(product.route);
+    if (product.route === 'BrowserScreen' && product.uri) {
+      navigation.navigate('BrowserScreen', { uri: product.uri });
+    } else {
+      // TODO fix navigation types
+      // @ts-ignore
+      navigation.navigate(product.route);
+    }
     sendFirebaseEvent(product.firebaseEvent);
   }, [product, navigation]);
 

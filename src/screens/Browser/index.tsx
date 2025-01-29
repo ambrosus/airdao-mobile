@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { WebView, WebViewMessageEvent } from '@metamask/react-native-webview';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { CommonStackParamsList } from '@appTypes';
 import { Button, Row, Text } from '@components/base';
 import { useBrowserStore } from '@entities/browser/model';
 import { useWalletPrivateKey } from '@entities/wallet';
@@ -12,12 +14,15 @@ import {
   INJECTED_PROVIDER_JS
 } from '@features/browser/lib';
 
-const SOURCE = {
-  // uri: 'https://x3na.com/'
-  uri: 'https://metamask.github.io/test-dapp/'
-};
-
 export const BrowserScreen = () => {
+  const { params } =
+    useRoute<RouteProp<CommonStackParamsList, 'BrowserScreen'>>();
+
+  const { uri } = params;
+  const SOURCE = {
+    uri
+  };
+
   const webViewRef = useRef<WebView>(null);
   const { connectedAddress } = useBrowserStore();
   const { _extractPrivateKey } = useWalletPrivateKey();

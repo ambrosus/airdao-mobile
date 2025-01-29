@@ -20,6 +20,7 @@ export type Product = {
   color: string;
   route: AvailableProductsPath;
   firebaseEvent: CustomAppEvents;
+  uri?: string;
 };
 
 export type SectionizedProducts = {

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { RootNavigationProp } from '@appTypes';
 import { Spacer, Spinner, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { useBrowserStore } from '@entities/browser/model';
 import { usePasscodeStore } from '@features/passcode';
 import { useInitializeWalletKit } from '@features/wallet-connect/lib/hooks';
 import { useAllWallets } from '@hooks/database';
@@ -24,11 +25,13 @@ const AppInitialization = () => {
     loading: passcodeLoading
   } = usePasscodeStore();
 
+  const { setBrowserConfig } = useBrowserStore();
+
   const initApp = useCallback(async () => {
     try {
       // reset passcode state
       await Cache.setItem(CacheKey.isBiometricAuthenticationInProgress, false);
-
+      await setBrowserConfig();
       if (!loading && !passcodeLoading) {
         if (allWallets.length > 0) {
           if (!isPasscodeEnabled && !isFaceIDEnabled) {
@@ -47,6 +50,7 @@ const AppInitialization = () => {
       throw error;
     }
   }, [
+    setBrowserConfig,
     allWallets.length,
     isFaceIDEnabled,
     isPasscodeEnabled,
