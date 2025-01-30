@@ -23,7 +23,11 @@ import { useKeyboardHeight } from '@hooks/useKeyboardHeight';
 import { AirDAOEventDispatcher } from '@lib';
 import { BottomSheetBorderRadius } from './BottomSheet.constants';
 import { styles } from './BottomSheet.styles';
-import { BottomSheetProps, BottomSheetRef } from './BottomSheet.types';
+import {
+  BottomSheetOutsideDataProps,
+  BottomSheetProps,
+  BottomSheetRef
+} from './BottomSheet.types';
 import { Toast } from '../../modular/Toast';
 
 const DEFAULT_BACKDROP_OPACITY = 1;
@@ -45,7 +49,8 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
       closeOnBackPress = true,
       onCustomCrossPress,
       onBackdropPress,
-      title
+      title,
+      setOutsideModalData
     },
     ref
   ) => {
@@ -64,9 +69,15 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
       };
     }, []);
 
-    const show = useCallback(() => {
-      setIsVisible(true);
-    }, []);
+    const show = useCallback(
+      (data: BottomSheetOutsideDataProps | undefined) => {
+        if (setOutsideModalData && data) {
+          setOutsideModalData(data);
+        }
+        setIsVisible(true);
+      },
+      [setOutsideModalData]
+    );
 
     const dismiss = useCallback(() => {
       setIsVisible(false);

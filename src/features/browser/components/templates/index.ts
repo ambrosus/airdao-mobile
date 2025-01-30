@@ -1,1 +1,1 @@
-export * from './disclaimer-modal';
+export * from './browser-modal';
