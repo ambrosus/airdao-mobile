@@ -25,7 +25,6 @@
       "stake": "Bahis"
     }
   },
-
   "address.add.group": "Gruba ekleyin",
   "address.add.to.group": "Adresi gruba ekleyin",
   "address.add.to.selected.group": "Adresi {{selectedGroup}} grubuna ekleyin",
@@ -63,6 +62,7 @@
 
   "button.add": "Ekle",
   "button.add.wallet": "Cüzdan ekle",
+  "button.processed": "!!!Processed",
   "button.cancel": "İptal et",
   "button.continue": "Devam et",
   "button.create": "Oluştur",
@@ -593,7 +593,10 @@
     "approve.token": "Tokenı onayla",
     "spender": "Harcayan"
   },
+  "browser.disclaimer.header": "!!!Security warning",
+  "browser.disclaimer.description": "!!!You are about to visit an external website. This site is not maintained or verified by AirDAO.",
   "products": {
+    "header": "!!!Products",
     "title.trade": "Alım satım yapın",
     "title.earn": "Kazan",
     "swap.description": "Havuzlarla kazanın ve token takas edin",

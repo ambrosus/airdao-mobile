@@ -37,9 +37,7 @@ export const ProductsList = () => {
       ? [
           {
             title: 'WEB',
-            data: browserConfig.products.map((item) => {
-              return parseWebProduct(item, currentLanguage);
-            })
+            data: parseWebProduct(browserConfig.products, currentLanguage)
           }
         ]
       : [];
@@ -78,6 +76,8 @@ export const ProductsList = () => {
     <SectionList<Product, SectionizedProducts>
       bounces={false}
       keyExtractor={(item) => item.id.toString()}
+      // TODO type fix
+      // @ts-ignore
       sections={[...devSupportedProducts, ...WEB_PRODUCTS]}
       renderSectionHeader={renderSectionHeader}
       renderItem={renderProductItem}

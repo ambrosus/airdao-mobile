@@ -14,6 +14,7 @@ export const COLORS = {
   neutral900: '#0C0C0D',
   neutral900Alpha: {
     5: 'rgba(14, 14, 14, 0.05)',
+    20: 'rgba(14, 14, 14, 0.2)',
     60: 'rgba(14, 14, 14, 0.60)'
   },
   asphaltBlack: '#2E313A',

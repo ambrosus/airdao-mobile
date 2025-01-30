@@ -10,7 +10,9 @@ export interface BrowserItemModel {
   icon: string;
   description: { [key: string]: string };
   name: { [key: string]: string };
-  url: string;
+  background: string[];
+  color: string;
+  uri: string;
   isAirDaoApp: string;
 }
 
