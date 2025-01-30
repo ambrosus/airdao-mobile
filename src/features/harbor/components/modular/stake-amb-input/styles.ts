@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native';
-import { verticalScale } from '@utils';
+import { isSmallScreen, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {
-    marginTop: verticalScale(12)
+    marginTop: verticalScale(isSmallScreen ? 6 : 12)
   }
 });
