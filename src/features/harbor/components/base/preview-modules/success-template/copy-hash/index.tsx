@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Pressable } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { useTranslation } from 'react-i18next';
