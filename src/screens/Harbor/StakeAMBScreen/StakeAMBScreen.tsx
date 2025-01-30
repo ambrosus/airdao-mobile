@@ -38,7 +38,7 @@ type Props = NativeStackScreenProps<HarborTabParamsList, 'StakeAMBScreen'>;
 
 export const StakeAMBScreen = ({ route }: Props) => {
   const { t } = useTranslation();
-  const { stake, limitsConfig } = useStakeHBRStore();
+  const { stake, limitsConfig, maxUserStakeValue } = useStakeHBRStore();
   const { ambAmount, onChangeAMBAmountToStake } = useStakeHBRActionsStore();
   const { wallet } = useWalletStore();
   const footerStyle = useKeyboardContainerStyleWithSafeArea(styles.footer);
@@ -49,6 +49,11 @@ export const StakeAMBScreen = ({ route }: Props) => {
 
   const bottomSheetReviewTxRef = useRef<BottomSheetRef>(null);
 
+  const availableDepositLimit = useMemo(
+    () => maxUserStakeValue.sub(stake),
+    [maxUserStakeValue, stake]
+  );
+
   useFocusEffect(
     useCallback(() => {
       return () => {
@@ -58,21 +63,37 @@ export const StakeAMBScreen = ({ route }: Props) => {
   );
 
   useMemo(() => {
-    if (ambAmount) {
-      const greaterThenBalance = ethers.utils
-        .parseEther(ambAmount)
-        .gt(ambInstance.balance.wei);
-      if (greaterThenBalance) {
+    if (!ambAmount) return;
+
+    // Insufficient AMB balance
+    const greaterThenBalance = ethers.utils
+      .parseEther(ambAmount)
+      .gt(ambInstance.balance.wei);
+
+    // Insufficient Available to stake
+    const greaterThenAvailableDepositLimit = ethers.utils
+      .parseEther(ambAmount)
+      .gt(availableDepositLimit);
+
+    switch (true) {
+      case greaterThenBalance:
         setInputError(t('bridge.insufficient.funds'));
-      } else {
+        break;
+      case greaterThenAvailableDepositLimit:
+        setInputError('Insufficient Available to stake');
+        break;
+      default:
         setInputError('');
-      }
+        break;
     }
-  }, [ambAmount, ambInstance.balance.wei, t]);
+  }, [ambAmount, ambInstance.balance.wei, availableDepositLimit, t]);
 
   const disabled = useMemo(
-    () => !!inputError || !ambAmount,
-    [ambAmount, inputError]
+    () =>
+      !!inputError ||
+      !ambAmount ||
+      availableDepositLimit.lt(ethers.utils.parseEther(ambAmount)),
+    [ambAmount, availableDepositLimit, inputError]
   );
 
   const renderHeaderCenterNode = useMemo(() => {
