@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from 'react';
+import { RefObject, useCallback, useMemo } from 'react';
 import { Pressable, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 import { HomeNavigationProp } from '@appTypes';
 import { Row, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
-import { BottomSheetBrowserModal } from '@features/browser/components/templates';
 import { Product } from '@features/products/utils';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics';
 import { hasDigits } from '@utils';
@@ -16,12 +15,15 @@ import { styles } from './styles';
 
 interface ProductListItemProps {
   product: Product;
+  disclaimerModalRef: RefObject<BottomSheetRef>;
 }
 
-export const ProductListItem = ({ product }: ProductListItemProps) => {
+export const ProductListItem = ({
+  product,
+  disclaimerModalRef
+}: ProductListItemProps) => {
   const navigation: HomeNavigationProp = useNavigation();
   const { t } = useTranslation();
-  const disclaimerModalRef = useRef<BottomSheetRef>(null);
   const isBrowserProduct = product.route === 'BrowserScreen';
 
   const toggleBrowser = useCallback(
@@ -40,7 +42,7 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
         });
       }
     },
-    [navigation, product, t]
+    [disclaimerModalRef, navigation, product.isAirDaoApp, t]
   );
 
   const onRedirectToProductScreen = useCallback(() => {
@@ -98,9 +100,6 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
           </View>
           {product.icon}
         </Row>
-        {isBrowserProduct && (
-          <BottomSheetBrowserModal ref={disclaimerModalRef} />
-        )}
       </LinearGradient>
     </Pressable>
   );
