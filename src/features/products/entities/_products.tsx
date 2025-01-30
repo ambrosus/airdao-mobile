@@ -17,6 +17,7 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
       data: [
         {
           id: 5,
+          uri: 'https://metamask.github.io/test-dapp/',
           name: 'Browser',
           description: t('products.swap.description'),
           icon: (

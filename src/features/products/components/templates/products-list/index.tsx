@@ -7,8 +7,14 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import useLocalization from '@contexts/Localizations';
+import { useBrowserStore } from '@entities/browser/model';
 import { PRODUCTS } from '@features/products/entities';
-import { Product, SectionizedProducts } from '@features/products/utils';
+import {
+  parseWebProduct,
+  Product,
+  SectionizedProducts
+} from '@features/products/utils';
 import { verticalScale } from '@utils';
 import { styles } from './styles';
 import { ProductListItem } from '../../base';
@@ -22,6 +28,20 @@ export const ProductsList = () => {
     },
     []
   );
+
+  const { browserConfig } = useBrowserStore();
+  const { currentLanguage } = useLocalization();
+
+  const WEB_PRODUCTS = useMemo(() => {
+    return browserConfig && browserConfig?.products
+      ? [
+          {
+            title: 'WEB',
+            data: parseWebProduct(browserConfig.products, currentLanguage)
+          }
+        ]
+      : [];
+  }, [browserConfig, currentLanguage]);
 
   const renderSectionHeader = useCallback(
     (info: { section: SectionListData<Product, SectionizedProducts> }) => {
@@ -56,7 +76,9 @@ export const ProductsList = () => {
     <SectionList<Product, SectionizedProducts>
       bounces={false}
       keyExtractor={(item) => item.id.toString()}
-      sections={devSupportedProducts}
+      // TODO type fix
+      // @ts-ignore
+      sections={[...devSupportedProducts, ...WEB_PRODUCTS]}
       renderSectionHeader={renderSectionHeader}
       renderItem={renderProductItem}
       style={styles.container}

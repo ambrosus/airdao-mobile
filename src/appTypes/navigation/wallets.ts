@@ -37,7 +37,7 @@ export type HomeParamsList = {
   };
   Wallets: { screen: string };
   Harbor: undefined;
-  BrowserScreen: undefined;
+  BrowserScreen: { uri?: string };
   CreateWalletStep2: undefined;
 } & CommonStackParamsList;
 

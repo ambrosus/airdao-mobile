@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { Pressable, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -6,8 +6,11 @@ import { lowerCase } from 'lodash';
 import capitalize from 'lodash/capitalize';
 import { HomeNavigationProp } from '@appTypes';
 import { Row, Text } from '@components/base';
+import { BottomSheetRef } from '@components/composite';
+import { DisclaimerModal } from '@features/browser/components/templates';
 import { Product } from '@features/products/utils';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics';
+import { hasDigits } from '@utils';
 import { styles } from './styles';
 
 interface ProductListItemProps {
@@ -16,11 +19,57 @@ interface ProductListItemProps {
 
 export const ProductListItem = ({ product }: ProductListItemProps) => {
   const navigation: HomeNavigationProp = useNavigation();
+  const disclaimerModalRef = useRef<BottomSheetRef>(null);
+
+  const toggleBrowser = useCallback(
+    (uri: string) => {
+      if (!uri) {
+        return;
+      }
+      if (product.isAirDaoApp) {
+        navigation.navigate('BrowserScreen', { uri });
+      } else {
+        disclaimerModalRef?.current?.show();
+      }
+    },
+    [navigation, product.isAirDaoApp]
+  );
 
   const onRedirectToProductScreen = useCallback(() => {
-    navigation.navigate(product.route);
+    if (product.route === 'BrowserScreen') {
+      toggleBrowser(product.uri ?? '');
+    } else {
+      // TODO fix navigation types
+      // @ts-ignore
+      navigation.navigate(product.route);
+    }
     sendFirebaseEvent(product.firebaseEvent);
-  }, [product, navigation]);
+  }, [
+    product.route,
+    product.firebaseEvent,
+    product.uri,
+    toggleBrowser,
+    navigation
+  ]);
+
+  const onApprove = () => {
+    disclaimerModalRef?.current?.dismiss();
+    setTimeout(
+      () => navigation.navigate('BrowserScreen', { uri: product?.uri ?? '' }),
+      200
+    );
+  };
+
+  const onReject = () => {
+    disclaimerModalRef?.current?.dismiss();
+  };
+
+  const name = useMemo(() => {
+    const _name = hasDigits(product.name)
+      ? product.name
+      : lowerCase(product.name);
+    return capitalize(_name);
+  }, [product.name]);
 
   return (
     <Pressable
@@ -40,7 +89,7 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
               fontFamily="Inter_600SemiBold"
               color={product.color}
             >
-              {capitalize(lowerCase(product.name))}
+              {name}
             </Text>
             <Text
               fontSize={13}
@@ -52,6 +101,11 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
           </View>
           {product.icon}
         </Row>
+        <DisclaimerModal
+          ref={disclaimerModalRef}
+          onApprove={onApprove}
+          onReject={onReject}
+        />
       </LinearGradient>
     </Pressable>
   );

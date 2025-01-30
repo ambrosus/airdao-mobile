@@ -56,6 +56,7 @@
   "amb.market.total.supply.popup": "The amount of coins that have been already created, minus any coins that have been burned, providing a measure of the current supply of a cryptocurrency.",
   "button.add": "Add",
   "button.add.wallet": "Add wallet",
+  "button.processed": "Processed",
   "button.cancel": "Cancel",
   "button.continue": "Continue",
   "button.create": "Create",
@@ -534,7 +535,10 @@
     "approve.token": "Approve token",
     "spender": "Spender"
   },
+  "browser.disclaimer.header": "Security warning",
+  "browser.disclaimer.description": "You are about to visit an external website. This site is not maintained or verified by AirDAO.",
   "products": {
+    "header": "Products",
     "title.trade": "Trade",
     "title.earn": "Earn",
     "swap.description": "Earn with pools & swap tokens",
