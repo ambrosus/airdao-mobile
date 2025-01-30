@@ -8,13 +8,15 @@ import { COLORS } from '@constants/colors';
 import { useStakeHBRStore } from '@entities/harbor/model';
 import { StakeAMBInput } from '@features/harbor/components/modular';
 import { Token } from '@models';
-import { NumberUtils } from '@utils';
+import { NumberUtils, isExtraSmallScreen } from '@utils';
 import { styles } from './styles';
 
 interface AmbInputWithPoolDetailsProps {
   tokenInstance: Token;
   error?: string;
 }
+
+const BASE_FONT_SIZE = isExtraSmallScreen ? 12 : 14;
 
 export const AmbInputWithPoolDetails = ({
   tokenInstance,
@@ -56,14 +58,14 @@ export const AmbInputWithPoolDetails = ({
         {/*  First Row Item */}
         <Row alignItems="center" justifyContent="space-between">
           <Text
-            fontSize={14}
+            fontSize={BASE_FONT_SIZE}
             fontFamily="Inter_500Medium"
             color={COLORS.neutral600}
           >
             {t('kosmos.lock.period')}
           </Text>
           <Text
-            fontSize={14}
+            fontSize={BASE_FONT_SIZE}
             fontFamily="Inter_500Medium"
             color={COLORS.neutral900}
           >
@@ -73,20 +75,20 @@ export const AmbInputWithPoolDetails = ({
         {/*  Second Row Item */}
         <Row alignItems="center" justifyContent="space-between">
           <Text
-            fontSize={14}
+            fontSize={BASE_FONT_SIZE}
             fontFamily="Inter_500Medium"
             color={COLORS.neutral600}
           >
             {t('harbor.stake.limit.address')}
           </Text>
           <Text
-            fontSize={14}
+            fontSize={BASE_FONT_SIZE}
             fontFamily="Inter_500Medium"
             color={COLORS.neutral900}
           >
             {perAddressLimit}{' '}
             <Text
-              fontSize={14}
+              fontSize={BASE_FONT_SIZE}
               fontFamily="Inter_500Medium"
               color="rgba(88, 94, 119, 1)"
             >
@@ -97,7 +99,7 @@ export const AmbInputWithPoolDetails = ({
         {/*  Third Row Item */}
         <Row alignItems="center" justifyContent="space-between">
           <Text
-            fontSize={14}
+            fontSize={BASE_FONT_SIZE}
             fontFamily="Inter_500Medium"
             color={COLORS.neutral600}
           >
@@ -105,14 +107,14 @@ export const AmbInputWithPoolDetails = ({
           </Text>
           <Row alignItems="center">
             <Text
-              fontSize={14}
+              fontSize={BASE_FONT_SIZE}
               fontFamily="Inter_500Medium"
               color={COLORS.neutral800}
             >
               {availableLimit}
             </Text>
             <Spacer horizontal value={2} />
-            <Text fontSize={14} fontFamily="Inter_500Medium">
+            <Text fontSize={BASE_FONT_SIZE} fontFamily="Inter_500Medium">
               /{totalLimit}
             </Text>
           </Row>
