@@ -8,7 +8,7 @@ class TransferDispatcher {
 
   constructor() {
     this.web3 = new Web3(new Web3.providers.HttpProvider(Config.NETWORK_URL));
-    this.web3.eth.transactionPollingTimeout = 15;
+    this.web3.eth.transactionPollingTimeout = 17;
   }
 
   private async prepareTransactionConfig(
