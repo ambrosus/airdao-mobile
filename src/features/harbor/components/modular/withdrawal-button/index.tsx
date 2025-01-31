@@ -48,25 +48,32 @@ export const WithdrawalButton = ({
 
   const disabled = useMemo(() => {
     const isErrorLog = logs?.status === LogStatus.ERROR;
-
     const bnAmountToWithdraw = ethers.utils.parseEther(
       !amountToWithdraw ? '0' : amountToWithdraw
     );
 
     switch (token) {
       case CryptoCurrencyCode.HBR: {
+        const isInsufficientBalance = bnAmountToWithdraw.gt(deposit);
+        const isZeroAmount = bnAmountToWithdraw.isZero();
+        const isZeroDeposit = deposit.isZero();
+        const hasStake = !stake.isZero();
+
         return (
-          bnAmountToWithdraw.isZero() ||
-          deposit.isZero() ||
-          !stake.isZero() ||
-          (logs ? isErrorLog : false)
+          isInsufficientBalance ||
+          isZeroAmount ||
+          isZeroDeposit ||
+          hasStake ||
+          isErrorLog
         );
       }
       case CryptoCurrencyCode.AMB: {
+        const isInsufficientBalance = bnAmountToWithdraw.gt(stake);
+        const isZeroAmount = bnAmountToWithdraw.isZero();
+        const isZeroStake = stake.isZero();
+
         return (
-          bnAmountToWithdraw.isZero() ||
-          stake.isZero() ||
-          (logs ? isErrorLog : false)
+          isInsufficientBalance || isZeroAmount || isZeroStake || isErrorLog
         );
       }
     }
@@ -93,6 +100,22 @@ export const WithdrawalButton = ({
     }
   }, [dismiss, hbrYieldFetcher, navigation, wallet?.address]);
 
+  const label = useMemo(() => {
+    const bnAmountToWithdraw = ethers.utils.parseEther(
+      !amountToWithdraw ? '0' : amountToWithdraw
+    );
+
+    if (token === CryptoCurrencyCode.HBR && bnAmountToWithdraw.gt(deposit)) {
+      return t('bridge.insufficient.funds');
+    }
+
+    if (token === CryptoCurrencyCode.AMB && bnAmountToWithdraw.gt(stake)) {
+      return t('bridge.insufficient.funds');
+    }
+
+    return t('staking.pool.withdraw');
+  }, [amountToWithdraw, deposit, stake, t, token]);
+
   return (
     <>
       <SecondaryButton
@@ -101,7 +124,7 @@ export const WithdrawalButton = ({
         onPress={withdrawalCallback}
       >
         <TextOrSpinner
-          label={t('staking.pool.withdraw')}
+          label={label}
           loadingLabel={undefined}
           loading={loading}
           styles={{
