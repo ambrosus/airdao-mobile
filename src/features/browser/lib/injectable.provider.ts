@@ -16,6 +16,7 @@ export const INJECTED_PROVIDER_JS = `
       chainId: null,
       connected: false
     };
+    let isHandlingRequest = false;  // Add lock for request handling
 
     // EIP-6963
     const eip6963ProviderInfo = {
@@ -43,7 +44,16 @@ export const INJECTED_PROVIDER_JS = `
           const { method, params } = args;
           const id = requestCounter++;
 
-          // Special handling for eth_requestAccounts on page refresh
+          // Prevent duplicate eth_accounts requests
+          if (method === 'eth_accounts') {
+            if (isHandlingRequest) {
+              return resolve(this.selectedAddress ? [this.selectedAddress] : []);
+            }
+            isHandlingRequest = true;
+            setTimeout(() => { isHandlingRequest = false; }, 1000); // Reset lock after 1s
+          }
+
+          // Special handling for eth_requestAccounts
           if (method === 'eth_requestAccounts' && this.selectedAddress) {
             return resolve([this.selectedAddress]);
           }
@@ -65,8 +75,10 @@ export const INJECTED_PROVIDER_JS = `
         }
         this._events.get(eventName).add(callback);
 
-        // Only emit initial state if it's different from last emitted
-        if (this.selectedAddress && this.selectedAddress !== lastEmittedState.address) {
+        // Only emit initial state if there's an actual change
+        if (this.selectedAddress && 
+            this.selectedAddress !== lastEmittedState.address && 
+            !isHandlingRequest) {
           switch(eventName) {
             case 'connect':
               if (!lastEmittedState.connected) {
@@ -159,10 +171,12 @@ export const INJECTED_PROVIDER_JS = `
             pendingRequest.reject(new Error(error.message));
           } else {
             if (response.method === 'eth_requestAccounts' || response.method === 'eth_accounts') {
-              provider.selectedAddress = result[0];
-              const listeners = provider._events.get('accountsChanged');
-              if (listeners) {
-                listeners.forEach(listener => listener(result));
+              if (result && result[0] !== provider.selectedAddress) {
+                provider.selectedAddress = result[0];
+                const listeners = provider._events.get('accountsChanged');
+                if (listeners) {
+                  listeners.forEach(listener => listener(result));
+                }
               }
             }
             pendingRequest.resolve(result);
