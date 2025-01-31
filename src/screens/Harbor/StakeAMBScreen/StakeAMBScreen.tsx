@@ -136,10 +136,10 @@ export const StakeAMBScreen = ({ route }: Props) => {
       <Header contentCenter={renderHeaderCenterNode} />
       <KeyboardAvoidingView
         behavior="padding"
+        style={styles.justifyContent}
         keyboardVerticalOffset={keyboardAvoidingViewOffsetWithNotchSupportedValue(
           8
         )}
-        style={styles.justifyContent}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.innerContainer}>
