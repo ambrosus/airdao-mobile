@@ -82,6 +82,9 @@
   "button.importing.wallet": "Importing wallet",
   "button.sending": "Sending",
   "button.insufficient.funds": "Insufficient funds",
+  "button.refresh.action": "Refresh",
+  "button.copy.action": "Copy",
+
   "change.passcode.confirm.new.passcode": "Confirm new passcode",
   "change.passcode.enter.new.passcode": "Enter your passcode",
   "change.passcode.success": "Passcode changed!",
@@ -537,6 +540,8 @@
   },
   "browser.disclaimer.header": "Security warning",
   "browser.disclaimer.description": "You are about to visit an external website. This site is not maintained or verified by AirDAO.",
+  "browser.wallet.selector.header": "Switch wallet",
+
   "products": {
     "header": "Products",
     "title.trade": "Trade",

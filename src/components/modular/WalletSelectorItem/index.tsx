@@ -10,11 +10,17 @@ interface WalletItemProps {
   wallet: WalletDBModel;
   walletAddress: string;
   isSelectedWallet: boolean;
+  iconScale?: number;
   index: number;
 }
 
-export const WalletItem = (props: WalletItemProps) => {
-  const { wallet, isSelectedWallet, index, walletAddress } = props;
+export const WalletSelectorItem = ({
+  wallet,
+  isSelectedWallet,
+  index,
+  iconScale = 1,
+  walletAddress
+}: WalletItemProps) => {
   const bgIndex = index % CreditCardBg.length;
   return (
     <Row
@@ -23,7 +29,7 @@ export const WalletItem = (props: WalletItemProps) => {
       style={styles.container}
     >
       <Row alignItems="center" width={scale(224)}>
-        <WalletIcon color={CreditCardBg[bgIndex]} scale={1.1} />
+        <WalletIcon color={CreditCardBg[bgIndex]} scale={iconScale} />
         <Spacer value={scale(16)} horizontal />
         <Text
           fontSize={16}

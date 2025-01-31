@@ -1,6 +1,8 @@
 export interface BrowserStoreModel {
   connectedAddress: string;
+  selectedAddress: string;
   browserConfig: BrowserConfig;
+  setSelectedAddress: (address: string) => void;
   setConnectedAddress: (address: string) => void;
   setBrowserConfig: () => Promise<void>;
 }

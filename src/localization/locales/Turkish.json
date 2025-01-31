@@ -88,6 +88,8 @@
   "button.importing.wallet": "Importing wallet",
   "button.sending": "Gönderme",
   "button.insufficient.funds": "Yetersiz bakiye",
+  "button.refresh.action": "!!!Refresh",
+  "button.copy.action": "!!!Copy",
 
   "change.passcode.confirm.new.passcode": "Yeni şifreyi onaylayın",
   "change.passcode.enter.new.passcode": "Şifrenizi girin",
@@ -595,6 +597,8 @@
   },
   "browser.disclaimer.header": "!!!Security warning",
   "browser.disclaimer.description": "!!!You are about to visit an external website. This site is not maintained or verified by AirDAO.",
+  "browser.wallet.selector.header": "!!!Switch wallet",
+
   "products": {
     "header": "!!!Products",
     "title.trade": "Alım satım yapın",
