@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -23,6 +23,7 @@ import {
   AmbInputWithPoolDetails,
   StakedBalanceInfo
 } from '@entities/harbor/components/composite';
+import { useInputErrorStakeAMB } from '@entities/harbor/lib/hooks/use-input-error';
 import { useWalletStore } from '@entities/wallet';
 import { useStakeHBRActionsStore } from '@features/harbor';
 import { BottomSheetReviewAMBTransactionWithAction } from '@features/harbor/components/templates';
@@ -38,14 +39,12 @@ type Props = NativeStackScreenProps<HarborTabParamsList, 'StakeAMBScreen'>;
 
 export const StakeAMBScreen = ({ route }: Props) => {
   const { t } = useTranslation();
-  const { stake, limitsConfig, maxUserStakeValue } = useStakeHBRStore();
+  const { stake, maxUserStakeValue } = useStakeHBRStore();
   const { ambAmount, onChangeAMBAmountToStake } = useStakeHBRActionsStore();
   const { wallet } = useWalletStore();
   const footerStyle = useKeyboardContainerStyleWithSafeArea(styles.footer);
-
   const ambInstance = useAMBEntity(wallet?.address ?? '');
-
-  const [inputError, setInputError] = useState('');
+  const error = useInputErrorStakeAMB(ambInstance);
 
   const bottomSheetReviewTxRef = useRef<BottomSheetRef>(null);
 
@@ -62,38 +61,24 @@ export const StakeAMBScreen = ({ route }: Props) => {
     }, [onChangeAMBAmountToStake])
   );
 
-  useMemo(() => {
-    if (!ambAmount) return;
-
-    // Insufficient AMB balance
-    const greaterThenBalance = ethers.utils
-      .parseEther(ambAmount)
-      .gt(ambInstance.balance.wei);
-
-    // Insufficient Available to stake
-    const greaterThenAvailableDepositLimit = ethers.utils
-      .parseEther(ambAmount)
-      .gt(availableDepositLimit);
-
-    switch (true) {
-      case greaterThenBalance:
-        setInputError(t('bridge.insufficient.funds'));
-        break;
-      case greaterThenAvailableDepositLimit:
-        setInputError('Insufficient Available to stake');
-        break;
-      default:
-        setInputError('');
-        break;
+  const label = useMemo(() => {
+    if (ambAmount === '') {
+      return t('button.confirm');
     }
-  }, [ambAmount, ambInstance.balance.wei, availableDepositLimit, t]);
+
+    if (!!error) {
+      return error;
+    }
+
+    return t('button.confirm');
+  }, [ambAmount, error, t]);
 
   const disabled = useMemo(
     () =>
-      !!inputError ||
+      !!error ||
       !ambAmount ||
       availableDepositLimit.lt(ethers.utils.parseEther(ambAmount)),
-    [ambAmount, availableDepositLimit, inputError]
+    [ambAmount, availableDepositLimit, error]
   );
 
   const renderHeaderCenterNode = useMemo(() => {
@@ -117,19 +102,11 @@ export const StakeAMBScreen = ({ route }: Props) => {
   const onButtonPress = useCallback(() => {
     Keyboard.dismiss();
 
-    if (ethers.utils.parseEther(ambAmount).lt(limitsConfig.minStakeValue)) {
-      return setInputError(
-        `Min ${NumberUtils.formatNumber(
-          +ethers.utils.formatEther(limitsConfig.minStakeValue)
-        )} ${CryptoCurrencyCode.AMB}`
-      );
-    }
-
     setTimeout(
       () => bottomSheetReviewTxRef.current?.show(),
       KEYBOARD_OPENING_TIME
     );
-  }, [ambAmount, limitsConfig.minStakeValue]);
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -155,7 +132,7 @@ export const StakeAMBScreen = ({ route }: Props) => {
             />
 
             <AmbInputWithPoolDetails
-              error={inputError}
+              error={undefined}
               tokenInstance={ambInstance}
             />
           </View>
@@ -166,7 +143,7 @@ export const StakeAMBScreen = ({ route }: Props) => {
             <TextOrSpinner
               loading={false}
               loadingLabel={undefined}
-              label={t('button.confirm')}
+              label={label}
               styles={{
                 active: {
                   fontSize: 14,
