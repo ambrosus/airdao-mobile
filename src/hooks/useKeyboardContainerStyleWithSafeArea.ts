@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { hasNotch } from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { isExtraSmallScreen } from '@utils';
+import { isAndroidXsScreen } from '@utils';
 
 export function keyboardAvoidingViewOffsetWithNotchSupportedValue(
   value: number
@@ -74,8 +74,8 @@ export function useKeyboardContainerStyleWithSafeArea(
         !hasNotch() && bottomInset === 0
           ? keyboardOpen
             ? 8
-            : isExtraSmallScreen
-            ? 10
+            : isAndroidXsScreen
+            ? 8
             : 20
           : 0
     }),

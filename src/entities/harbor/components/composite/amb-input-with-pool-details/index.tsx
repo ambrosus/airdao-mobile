@@ -8,7 +8,7 @@ import { COLORS } from '@constants/colors';
 import { useStakeHBRStore } from '@entities/harbor/model';
 import { StakeAMBInput } from '@features/harbor/components/modular';
 import { Token } from '@models';
-import { NumberUtils, isExtraSmallScreen } from '@utils';
+import { NumberUtils, isAndroidXsScreen } from '@utils';
 import { styles } from './styles';
 
 interface AmbInputWithPoolDetailsProps {
@@ -16,7 +16,7 @@ interface AmbInputWithPoolDetailsProps {
   error?: string;
 }
 
-const BASE_FONT_SIZE = isExtraSmallScreen ? 12 : 14;
+const BASE_FONT_SIZE = isAndroidXsScreen ? 12 : 14;
 
 export const AmbInputWithPoolDetails = ({
   tokenInstance,
