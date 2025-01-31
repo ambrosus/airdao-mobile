@@ -1,13 +1,13 @@
-import { useCallback, useMemo, useRef } from 'react';
+import { RefObject, useCallback, useMemo } from 'react';
 import { Pressable, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { lowerCase } from 'lodash';
 import capitalize from 'lodash/capitalize';
+import { useTranslation } from 'react-i18next';
 import { HomeNavigationProp } from '@appTypes';
 import { Row, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
-import { DisclaimerModal } from '@features/browser/components/templates';
 import { Product } from '@features/products/utils';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics';
 import { hasDigits } from '@utils';
@@ -15,11 +15,16 @@ import { styles } from './styles';
 
 interface ProductListItemProps {
   product: Product;
+  disclaimerModalRef: RefObject<BottomSheetRef>;
 }
 
-export const ProductListItem = ({ product }: ProductListItemProps) => {
+export const ProductListItem = ({
+  product,
+  disclaimerModalRef
+}: ProductListItemProps) => {
   const navigation: HomeNavigationProp = useNavigation();
-  const disclaimerModalRef = useRef<BottomSheetRef>(null);
+  const { t } = useTranslation();
+  const isBrowserProduct = product.route === 'BrowserScreen';
 
   const toggleBrowser = useCallback(
     (uri: string) => {
@@ -29,14 +34,19 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
       if (product.isAirDaoApp) {
         navigation.navigate('BrowserScreen', { uri });
       } else {
-        disclaimerModalRef?.current?.show();
+        disclaimerModalRef?.current?.show({
+          title: t('browser.disclaimer.header'),
+          subTitle: t('browser.disclaimer.description'),
+          buttonsLabels: [t('button.processed')],
+          onApprove: () => navigation.navigate('BrowserScreen', { uri })
+        });
       }
     },
-    [navigation, product.isAirDaoApp]
+    [disclaimerModalRef, navigation, product.isAirDaoApp, t]
   );
 
   const onRedirectToProductScreen = useCallback(() => {
-    if (product.route === 'BrowserScreen') {
+    if (isBrowserProduct) {
       toggleBrowser(product.uri ?? '');
     } else {
       // TODO fix navigation types
@@ -45,24 +55,13 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
     }
     sendFirebaseEvent(product.firebaseEvent);
   }, [
-    product.route,
+    isBrowserProduct,
     product.firebaseEvent,
     product.uri,
+    product.route,
     toggleBrowser,
     navigation
   ]);
-
-  const onApprove = () => {
-    disclaimerModalRef?.current?.dismiss();
-    setTimeout(
-      () => navigation.navigate('BrowserScreen', { uri: product?.uri ?? '' }),
-      200
-    );
-  };
-
-  const onReject = () => {
-    disclaimerModalRef?.current?.dismiss();
-  };
 
   const name = useMemo(() => {
     const _name = hasDigits(product.name)
@@ -101,11 +100,6 @@ export const ProductListItem = ({ product }: ProductListItemProps) => {
           </View>
           {product.icon}
         </Row>
-        <DisclaimerModal
-          ref={disclaimerModalRef}
-          onApprove={onApprove}
-          onReject={onReject}
-        />
       </LinearGradient>
     </Pressable>
   );
