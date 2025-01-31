@@ -21,8 +21,7 @@ export const BottomSheetBrowserWalletSelector = forwardRef<
 >(({ onWalletSelect, selectedAddress }, ref) => {
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const allWalletsQueryInfo = useAllWallets();
-  const allWallets = allWalletsQueryInfo.data;
-
+  const { data: allWallets } = allWalletsQueryInfo;
   const { data: allAccounts } = useAllAccounts();
 
   const { t } = useTranslation();

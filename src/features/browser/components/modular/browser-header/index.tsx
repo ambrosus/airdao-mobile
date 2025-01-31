@@ -41,11 +41,20 @@ export const BrowserHeader = ({ uri, webViewRef }: BrowserHeaderProps) => {
     async () => await Clipboard.setStringAsync(uri),
     [uri]
   );
+  const selectWallet = useCallback(
+    () => async (address: string) => {
+      await setConnectedAddressTo(uri, address);
+      setSelectedAddress(address);
+      browserWalletSelectorRef?.current?.dismiss();
+    },
+    [setSelectedAddress, uri]
+  );
+  const openBrowserAction = () => {
+    browserActionsRef?.current?.show();
+  };
 
-  const selectWallet = async (address: string) => {
-    await setConnectedAddressTo(uri, address);
-    setSelectedAddress(address);
-    browserWalletSelectorRef?.current?.dismiss();
+  const openWalletSelector = () => {
+    browserWalletSelectorRef?.current?.show();
   };
 
   return (
@@ -53,7 +62,7 @@ export const BrowserHeader = ({ uri, webViewRef }: BrowserHeaderProps) => {
       <View style={styles.headerContainer}>
         <TouchableOpacity
           style={styles.walletButton}
-          onPress={() => browserWalletSelectorRef?.current?.show()}
+          onPress={openWalletSelector}
         >
           <WalletsActiveIcon color={COLORS.neutral800} />
           <View style={styles.backIconWrapper}>
@@ -71,7 +80,7 @@ export const BrowserHeader = ({ uri, webViewRef }: BrowserHeaderProps) => {
 
         <View style={styles.actionsContainer}>
           <TouchableOpacity
-            onPress={() => browserActionsRef?.current?.show()}
+            onPress={openBrowserAction}
             style={styles.actionButton}
           >
             <ThreeDots color={COLORS.neutral900} />
