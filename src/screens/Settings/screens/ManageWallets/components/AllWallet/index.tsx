@@ -3,12 +3,12 @@ import { FlatList, ListRenderItemInfo } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SettingsTabNavigationProp } from '@appTypes';
 import { Button } from '@components/base';
+import { WalletSelectorItem } from '@components/modular';
 import { WalletDBModel } from '@database';
 import { useAllAccounts, useAllWallets } from '@hooks/database';
-import { WalletItem } from '../Wallet';
 import { styles } from './styles';
 
-export const Index = () => {
+export const AllWallet = () => {
   const allWalletsQueryInfo = useAllWallets();
   const allWallets = allWalletsQueryInfo.data;
   const navigation = useNavigation<SettingsTabNavigationProp>();
@@ -35,7 +35,8 @@ export const Index = () => {
 
     return (
       <Button onPress={onPress}>
-        <WalletItem
+        <WalletSelectorItem
+          iconScale={1.1}
           walletAddress={walletAddress}
           index={args.index}
           wallet={args.item}

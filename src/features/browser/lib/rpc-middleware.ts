@@ -2,6 +2,7 @@
 // tslint:disable:no-console
 import { RefObject } from 'react';
 import { WebView, WebViewMessageEvent } from '@metamask/react-native-webview';
+import { BottomSheetRef } from '@components/composite';
 import { useBrowserStore } from '@entities/browser/model';
 import { AMB_CHAIN_ID_DEC } from '@features/browser/constants';
 import {
@@ -38,12 +39,16 @@ interface HandleWebViewMessageModel {
   event: WebViewMessageEvent;
   webViewRef: RefObject<WebView>;
   privateKey: string;
+  uri: string;
+  browserModalRef: RefObject<BottomSheetRef>;
 }
 
 export async function handleWebViewMessage({
   event,
   webViewRef,
-  privateKey
+  privateKey,
+  uri,
+  browserModalRef
 }: HandleWebViewMessageModel) {
   const { connectedAddress } = useBrowserStore.getState();
   const requestsInProgress = new Set();
@@ -101,11 +106,16 @@ export async function handleWebViewMessage({
 
         case 'wallet_requestPermissions': {
           const permissions = params[0];
-          await walletRequestPermissions({
-            permissions,
-            response,
-            privateKey,
-            webViewRef
+          browserModalRef.current?.show({
+            title: 'Do You want to give permissions to',
+            subTitle: `to:  ${uri}`,
+            onApprove: async () =>
+              await walletRequestPermissions({
+                permissions,
+                response,
+                privateKey,
+                webViewRef
+              })
           });
           break;
         }

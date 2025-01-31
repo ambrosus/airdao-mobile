@@ -60,7 +60,9 @@ describe('WalletItem', () => {
     expect(getByTestId('Wallet_Item_AMB').props.children.join('')).toBe(
       '100 AMB'
     );
-    expect(getByTestId('Wallet_Item_Name').props.children).toBe('Test Wallet');
+    expect(getByTestId('Wallet_Item_Name').props.children).toBe(
+      'Test WalletSelectorItem'
+    );
   });
 
   it.skip('renders address indicator when indicatorVisible is true', async () => {

@@ -6,7 +6,7 @@ import { BottomSheetRef, Header } from '@components/composite';
 import { AddIcon } from '@components/svg/icons';
 import { BottomSheetWalletCreateOrImport } from '@components/templates';
 import { COLORS } from '@constants/colors';
-import { Index } from './components';
+import { AllWallet } from './components';
 import { styles } from './ManageWallets.styles';
 
 export const ManageWalletsScreen = () => {
@@ -37,7 +37,7 @@ export const ManageWalletsScreen = () => {
         title={t('settings.manage.wallet')}
         style={{ shadowColor: COLORS.transparent }}
       />
-      <Index />
+      <AllWallet />
     </SafeAreaView>
   );
 };
