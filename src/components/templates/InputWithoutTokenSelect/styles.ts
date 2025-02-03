@@ -3,6 +3,10 @@ import { COLORS } from '@constants/colors';
 import { moderateScale, scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
+  customTokenStyle: {
+    fontSize: 14,
+    fontFamily: 'Inter_500Medium'
+  },
   wrapper: {
     backgroundColor: COLORS.neutral0,
     paddingHorizontal: scale(12),
@@ -17,7 +21,9 @@ export const styles = StyleSheet.create({
   },
   selectorWrapper: {
     backgroundColor: COLORS.neutral100,
-    padding: scale(5),
+    paddingVertical: scale(4),
+    paddingLeft: scale(6),
+    paddingRight: scale(8),
     borderRadius: 50
   },
   upperRow: {

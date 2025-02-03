@@ -1,4 +1,11 @@
-import { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
+import {
+  ReactNode,
+  forwardRef,
+  useCallback,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import {
   InteractionManager,
   Keyboard,
@@ -183,7 +190,7 @@ export const InputWithoutTokenSelect = forwardRef<
           <View style={styles.upperRow}>
             <View style={styles.selectorWrapper}>
               <TokenSelector
-                customTokenStyle={{ fontFamily: 'Inter_500Medium' }}
+                customTokenStyle={styles.customTokenStyle}
                 selectable={false}
                 token={token}
                 onShowBottomSheetTokensListHandle={
@@ -293,7 +300,7 @@ export const InputWithoutTokenSelect = forwardRef<
                   </Text>
                 </Row>
                 <Row alignItems="center">
-                  <TokenLogo scale={0.75} token={exchange.token} />
+                  <TokenLogo scale={0.8} token={exchange.token} />
                   <Spacer horizontal value={scale(4)} />
                   <Text
                     fontSize={scale(14)}
@@ -323,7 +330,7 @@ export const InputWithoutTokenSelect = forwardRef<
                 justifyContent="space-between"
               >
                 <Row alignItems="center">
-                  <TokenLogo token={exchange.token} />
+                  <TokenLogo scale={0.8} token={exchange.token} />
                   <Spacer horizontal value={scale(8)} />
                   <Text fontSize={scale(14)} color={COLORS.neutral900}>
                     {exchange.token}

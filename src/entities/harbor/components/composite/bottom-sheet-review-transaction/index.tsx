@@ -17,7 +17,12 @@ import { COLORS } from '@constants/colors';
 import { useStakeHBRStore } from '@entities/harbor/model';
 import { useWalletStore } from '@entities/wallet';
 import { useForwardedRef } from '@hooks';
-import { StringUtils, _delayNavigation, verticalScale } from '@utils';
+import {
+  NumberUtils,
+  StringUtils,
+  _delayNavigation,
+  verticalScale
+} from '@utils';
 import { styles } from './styles';
 import { SuccessTxView } from '../../base';
 
@@ -99,7 +104,8 @@ export const BottomSheetReviewTransaction = forwardRef<
                     fontFamily="Inter_500Medium"
                     color={COLORS.neutral900}
                   >
-                    {amount} {CryptoCurrencyCode.HBR}
+                    {NumberUtils.numberToTransformedLocale(amount)}{' '}
+                    {CryptoCurrencyCode.HBR}
                   </Text>
                 </Row>
               </Row>
