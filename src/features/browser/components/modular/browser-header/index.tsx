@@ -41,14 +41,11 @@ export const BrowserHeader = ({ uri, webViewRef }: BrowserHeaderProps) => {
     async () => await Clipboard.setStringAsync(uri),
     [uri]
   );
-  const selectWallet = useCallback(
-    () => async (address: string) => {
-      await setConnectedAddressTo(uri, address);
-      setSelectedAddress(address);
-      browserWalletSelectorRef?.current?.dismiss();
-    },
-    [setSelectedAddress, uri]
-  );
+  const selectWallet = async (address: string) => {
+    await setConnectedAddressTo(uri, address);
+    setSelectedAddress(address);
+    browserWalletSelectorRef?.current?.dismiss();
+  };
   const openBrowserAction = () => {
     browserActionsRef?.current?.show();
   };
