@@ -1,7 +1,6 @@
 import React, { useRef, useCallback } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { WebView } from '@metamask/react-native-webview';
-import { useNavigation } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
 import { Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
@@ -21,9 +20,15 @@ import { styles } from './styles';
 interface BrowserHeaderProps {
   uri: string;
   webViewRef: React.RefObject<WebView>;
+  reload: () => void;
+  closeWebView: () => void;
 }
 
-export const BrowserHeader = ({ uri, webViewRef }: BrowserHeaderProps) => {
+export const BrowserHeader = ({
+  uri,
+  reload,
+  closeWebView
+}: BrowserHeaderProps) => {
   const browserWalletSelectorRef = useRef<BottomSheetRef>(null);
   const browserActionsRef = useRef<BottomSheetRef>(null);
 
@@ -32,11 +37,6 @@ export const BrowserHeader = ({ uri, webViewRef }: BrowserHeaderProps) => {
   const formattedUrl =
     cleanUrl.length > 25 ? `${cleanUrl.slice(0, 22)}...` : cleanUrl;
 
-  const navigation = useNavigation();
-
-  const reload = useCallback(() => webViewRef.current?.reload(), [webViewRef]);
-  const back = useCallback(() => webViewRef.current?.goBack(), [webViewRef]);
-  const closeWebView = useCallback(() => navigation.goBack(), [navigation]);
   const copyUri = useCallback(
     async () => await Clipboard.setStringAsync(uri),
     [uri]
@@ -65,10 +65,6 @@ export const BrowserHeader = ({ uri, webViewRef }: BrowserHeaderProps) => {
           <View style={styles.backIconWrapper}>
             <BackIcon scale={0.7} color={COLORS.neutral800} />
           </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={back}>
-          <BackIcon scale={0.7} color={COLORS.brand500} />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={copyUri} style={styles.urlWrapper}>
