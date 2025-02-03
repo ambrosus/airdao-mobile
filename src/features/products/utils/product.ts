@@ -20,7 +20,7 @@ export type Product = {
   color: string;
   route: AvailableProductsPath;
   firebaseEvent: CustomAppEvents;
-  isAirDaoApp: boolean;
+  isAirDaoApp?: string;
   uri?: string;
 };
 

@@ -1,7 +1,18 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { WebView, WebViewMessageEvent } from '@metamask/react-native-webview';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import {
+  GestureEvent,
+  PanGestureHandler,
+  PanGestureHandlerEventPayload
+} from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CommonStackParamsList } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
@@ -17,6 +28,7 @@ import {
 } from '@features/browser/lib';
 import { useAllAccounts } from '@hooks/database';
 import { getConnectedAddressTo } from '@lib';
+import { styles } from './styles';
 
 export const BrowserScreen = () => {
   const { params } =
@@ -25,13 +37,24 @@ export const BrowserScreen = () => {
   const SOURCE = {
     uri
   };
+  const navigation = useNavigation();
 
   const browserModalRef = useRef<BottomSheetRef>(null);
   const webViewRef = useRef<WebView>(null);
 
+  const reload = useCallback(() => webViewRef.current?.reload(), [webViewRef]);
+  const goForward = useCallback(
+    () => webViewRef.current?.goForward(),
+    [webViewRef]
+  );
+  const goBack = useCallback(() => webViewRef.current?.goBack(), [webViewRef]);
+  const closeWebView = useCallback(() => navigation.goBack(), [navigation]);
+
   const { connectedAddress, setSelectedAddress } = useBrowserStore();
   const { _extractPrivateKey } = useWalletPrivateKey();
   const { data: allAccounts } = useAllAccounts();
+
+  const [hasSwiped, setHasSwiped] = useState(false);
 
   const containerStyle = useMemo<StyleProp<ViewStyle>>(
     () => ({
@@ -85,21 +108,51 @@ export const BrowserScreen = () => {
     [_extractPrivateKey, uri]
   );
 
+  const onGestureEvent = (
+    event: GestureEvent<PanGestureHandlerEventPayload>
+  ) => {
+    const { translationX } = event.nativeEvent;
+
+    const onLeftSwap = translationX < -100;
+    const onRightSwap = translationX > 100;
+
+    if (!hasSwiped) {
+      if (onLeftSwap) {
+        goForward();
+        setHasSwiped(true);
+        setTimeout(() => setHasSwiped(false), 300);
+      } else if (onRightSwap) {
+        goBack();
+        setHasSwiped(true);
+        setTimeout(() => setHasSwiped(false), 300);
+      }
+    }
+  };
+
   return (
     <SafeAreaView style={containerStyle}>
-      <BrowserHeader webViewRef={webViewRef} uri={uri} />
-      <WebView
-        ref={webViewRef}
-        source={SOURCE}
-        nativeConfig={{
-          props: { webContentsDebuggingEnabled: true }
-        }}
-        javaScriptEnabled={true}
-        injectedJavaScriptBeforeContentLoaded={INJECTED_PROVIDER_JS}
-        onMessage={onMessageEventHandler}
-        style={containerStyle}
-        webviewDebuggingEnabled={__DEV__}
+      <BrowserHeader
+        reload={reload}
+        closeWebView={closeWebView}
+        webViewRef={webViewRef}
+        uri={uri}
       />
+      <PanGestureHandler onGestureEvent={onGestureEvent}>
+        <View style={styles.webViewWrapper}>
+          <WebView
+            ref={webViewRef}
+            source={SOURCE}
+            nativeConfig={{
+              props: { webContentsDebuggingEnabled: true }
+            }}
+            javaScriptEnabled={true}
+            injectedJavaScriptBeforeContentLoaded={INJECTED_PROVIDER_JS}
+            onMessage={onMessageEventHandler}
+            style={containerStyle}
+            webviewDebuggingEnabled={__DEV__}
+          />
+        </View>
+      </PanGestureHandler>
       <BottomSheetBrowserModal ref={browserModalRef} />
     </SafeAreaView>
   );
