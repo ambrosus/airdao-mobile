@@ -48,7 +48,7 @@ export function useInputErrorStakeAMB(ambInstance: Token) {
     if (
       ethers.utils.parseEther(ambAmount).gt(maxStakePerUserValue.sub(stake))
     ) {
-      inputError = inputError ?? t('harbor.button.hbr.insufficient');
+      inputError = inputError ?? t('harbor.button.address.limit');
     }
 
     if (
