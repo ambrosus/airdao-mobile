@@ -18,8 +18,10 @@ export const StakeHarborScreen = () => {
   const { setActiveTabIndex } = useStakeUIStore();
 
   useEffect(() => {
-    updateAll(wallet?.address || '');
-    hbrYieldFetcher(wallet?.address || '');
+    Promise.all([
+      updateAll(wallet?.address || ''),
+      hbrYieldFetcher(wallet?.address || '')
+    ]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wallet?.address]);
