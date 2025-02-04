@@ -19,7 +19,8 @@ export function useTransactionsOfToken(
     error,
     isInitialLoading,
     isFetchingNextPage,
-    fetchNextPage
+    fetchNextPage,
+    refetch
   } = useInfiniteQuery<PaginatedResponseBody<TransactionDTO[]>>(
     ['transactions-of-token', address, tokenAddress, page, limit],
     {
@@ -56,6 +57,7 @@ export function useTransactionsOfToken(
     loading: isInitialLoading || isFetchingNextPage,
     error,
     hasNextPage: Boolean(hasNextPage),
-    fetchNextPage
+    fetchNextPage,
+    refetch
   };
 }
