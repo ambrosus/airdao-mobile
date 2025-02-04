@@ -1,7 +1,10 @@
 import { RefObject } from 'react';
 import WebView from '@metamask/react-native-webview';
 import { useBrowserStore } from '@entities/browser/model';
-import { AMB_CHAIN_ID_HEX } from '@features/browser/constants';
+import {
+  AMB_CHAIN_ID_HEX,
+  INITIAL_ACCOUNTS_PERMISSIONS
+} from '@features/browser/constants';
 import {
   rpcErrorHandler,
   requestUserApproval,
@@ -11,11 +14,13 @@ import {
   UPDATE_ETHEREUM_STATE_JS,
   updateWindowObject
 } from './injectable.provider';
-import {
-  INITIAL_ACCOUNTS_PERMISSIONS,
-  permissionsHandler
-} from './permissions-handler';
+import { permissionsHandler } from './permissions-handler';
 import { rpcMethods } from './rpc-methods';
+import {
+  RPCRequestWithTransactionParams,
+  SignMessageParams,
+  SignTypedDataParams
+} from '../types';
 
 const {
   getCurrentAddress,
@@ -122,17 +127,13 @@ export const walletRevokePermissions = async ({
   response,
   webViewRef
 }: any) => {
-  const { connectedAddress, setConnectedAddress } = useBrowserStore.getState();
+  const { connectedAddress } = useBrowserStore.getState();
   try {
-    response.result = permissionsHandler.unbind(
-      permissions,
-      connectedAddress,
-      setConnectedAddress,
-      () =>
-        updateWindowObject(
-          webViewRef,
-          UPDATE_ETHEREUM_STATE_JS(connectedAddress, AMB_CHAIN_ID_HEX)
-        )
+    response.result = permissionsHandler.unbind(permissions, () =>
+      updateWindowObject(
+        webViewRef,
+        UPDATE_ETHEREUM_STATE_JS(connectedAddress, AMB_CHAIN_ID_HEX)
+      )
     );
   } catch (error: unknown) {
     rpcErrorHandler('walletRevokePermissions', error);
@@ -149,13 +150,12 @@ export const walletGetPermissions = async ({ response }: any) => {
 };
 
 export const ethSendTransaction = async ({
-  params,
+  params: [txParams],
   response,
   privateKey
-}: any) => {
+}: RPCRequestWithTransactionParams) => {
   try {
-    const txParams = params[0];
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       requestUserApproval({
         header: 'Confirm Transaction',
         message:
@@ -163,7 +163,7 @@ export const ethSendTransaction = async ({
           `To: ${txParams.to}\n` +
           `Value: ${txParams.value || '0'} Wei\n` +
           `Data: ${txParams.data || 'None'}`,
-        resolve: () => resolve(true),
+        resolve: () => resolve(),
         reject: () => reject(new Error('User rejected transaction'))
       });
     });
@@ -203,7 +203,11 @@ export const ethSignTransaction = async ({
   }
 };
 
-export const personalSing = async ({ params, response, privateKey }: any) => {
+export const personalSing = async ({
+  params,
+  response,
+  privateKey
+}: SignMessageParams) => {
   const { connectedAddress } = useBrowserStore.getState();
   try {
     const [message, address] = params;
@@ -233,7 +237,7 @@ export const ethSignTypesData = async ({
   params,
   response,
   privateKey
-}: any) => {
+}: SignTypedDataParams) => {
   const { connectedAddress } = useBrowserStore.getState();
   try {
     const [address, typedData] = params;

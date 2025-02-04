@@ -1,15 +1,7 @@
+import { useBrowserStore } from '@entities/browser/model';
 import { AMB_CHAIN_ID_HEX } from '../constants';
+import { Permissions, PermissionType, BasePermissions } from '../types';
 import { rpcRejectHandler } from '../utils';
-
-enum Permissions {
-  ACCOUNTS = 'eth_accounts',
-  CHAINS = 'endowment:permitted-chains'
-}
-
-enum PermissionType {
-  RESTRICT_RETURNED_ACCOUNTS = 'restrictReturnedAccounts',
-  RESTRICT_CHAINS = 'restrictChains'
-}
 
 const BASE_PERMISSIONS = [
   {
@@ -23,12 +15,6 @@ const BASE_PERMISSIONS = [
     ]
   }
 ];
-
-type BasePermissions = Pick<typeof Permissions, 'CHAINS'>;
-
-export const INITIAL_ACCOUNTS_PERMISSIONS = {
-  [Permissions.ACCOUNTS]: []
-};
 
 export class PermissionsHandler {
   get(address: string | undefined) {
@@ -53,10 +39,11 @@ export class PermissionsHandler {
 
   unbind(
     permissions: BasePermissions & { [Permissions.ACCOUNTS]: string[] },
-    connectedAddress: string,
-    setConnectedAddress: (address: string) => void,
     updateWindowObject: () => void
   ) {
+    const { connectedAddress, setConnectedAddress } =
+      useBrowserStore.getState();
+
     if (permissions[Permissions.ACCOUNTS]) {
       if (connectedAddress) {
         setConnectedAddress('');
