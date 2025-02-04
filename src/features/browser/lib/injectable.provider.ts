@@ -1,8 +1,18 @@
+import WebView from '@metamask/react-native-webview';
 import { randomUUID } from 'expo-crypto';
 import { AMB_CHAIN_ID_DEC, AMB_CHAIN_ID_HEX } from '../constants';
 import { EIP6963_PROVIDER_INFO } from './eip6963';
 
 const uuid = randomUUID;
+
+export const updateWindowObject = (
+  webViewRef: React.RefObject<WebView>,
+  object: string
+) => {
+  setTimeout(() => {
+    webViewRef.current?.injectJavaScript(object);
+  }, 100);
+};
 
 export const INJECTED_PROVIDER_JS = `
   (function() {

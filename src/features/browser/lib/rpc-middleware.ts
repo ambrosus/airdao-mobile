@@ -47,8 +47,7 @@ export async function handleWebViewMessage({
   event,
   webViewRef,
   privateKey,
-  uri,
-  browserModalRef
+  uri
 }: HandleWebViewMessageModel) {
   const { connectedAddress } = useBrowserStore.getState();
   const requestsInProgress = new Set();
@@ -96,7 +95,11 @@ export async function handleWebViewMessage({
           break;
 
         case 'eth_requestAccounts':
-          await ethRequestAccounts({ response, privateKey, webViewRef });
+          response.result = await ethRequestAccounts({
+            privateKey,
+            webViewRef,
+            origin: uri
+          });
           break;
 
         case 'eth_accounts': {
@@ -106,16 +109,12 @@ export async function handleWebViewMessage({
 
         case 'wallet_requestPermissions': {
           const permissions = params[0];
-          browserModalRef.current?.show({
-            title: 'Do You want to give permissions to',
-            subTitle: `to:  ${uri}`,
-            onApprove: async () =>
-              await walletRequestPermissions({
-                permissions,
-                response,
-                privateKey,
-                webViewRef
-              })
+          await walletRequestPermissions({
+            permissions,
+            response,
+            privateKey,
+            webViewRef,
+            origin: uri
           });
           break;
         }
@@ -155,7 +154,7 @@ export async function handleWebViewMessage({
 
         case 'personal_sign':
         case 'eth_sign':
-          await personalSing({ params, response, privateKey });
+          await personalSing({ params, response, privateKey, webViewRef });
           break;
 
         case 'eth_getBalance':

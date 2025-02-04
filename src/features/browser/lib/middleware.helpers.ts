@@ -1,12 +1,20 @@
-/* eslint-disable no-console */
-// tslint:disable:no-console
+import { RefObject } from 'react';
+import WebView from '@metamask/react-native-webview';
 import { useBrowserStore } from '@entities/browser/model';
 import { AMB_CHAIN_ID_HEX } from '@features/browser/constants';
-import { rpcErrorHandler, requestUserApproval } from '@features/browser/utils';
 import {
-  REVOKE_PERMISSIONS_JS,
-  UPDATE_ETHEREUM_STATE_JS
+  rpcErrorHandler,
+  requestUserApproval,
+  rpcRejectHandler
+} from '@features/browser/utils';
+import {
+  UPDATE_ETHEREUM_STATE_JS,
+  updateWindowObject
 } from './injectable.provider';
+import {
+  INITIAL_ACCOUNTS_PERMISSIONS,
+  permissionsHandler
+} from './permissions-handler';
 import { rpcMethods } from './rpc-methods';
 
 const {
@@ -17,95 +25,96 @@ const {
   _signTypedData
 } = rpcMethods;
 
-export const ethRequestAccounts = async ({
-  response,
-  privateKey,
-  webViewRef
-}: any) => {
-  const { connectedAddress, setConnectedAddress } = useBrowserStore.getState();
-  console.log('eth_requestAccounts called');
-  const address = await getCurrentAddress(privateKey);
-  if (!address) {
-    throw new Error('No account available');
-  }
-  try {
-    if (address.toLowerCase() !== connectedAddress?.toLowerCase()) {
-      response.result = [address];
-      setConnectedAddress(address);
+type ConnectionRequest = {
+  privateKey: string;
+  webViewRef: RefObject<WebView>;
+  origin: string;
+  permissions?: unknown;
+};
 
-      // Delay the state update to prevent loops
-      setTimeout(() => {
-        if (webViewRef.current) {
-          webViewRef.current.injectJavaScript(
-            UPDATE_ETHEREUM_STATE_JS(address, AMB_CHAIN_ID_HEX)
-          );
-        }
-      }, 100);
-    } else {
-      response.result = [address];
+type WalletConnectionResult = {
+  accounts: string[];
+};
+
+const handleWalletConnection = async ({
+  privateKey,
+  webViewRef,
+  origin
+}: ConnectionRequest) => {
+  const { setConnectedAddress } = useBrowserStore.getState();
+  try {
+    const address = await getCurrentAddress(privateKey);
+    if (!address) {
+      throw new Error('No account available');
     }
-  } catch (e: unknown) {
-    rpcErrorHandler('eth_requestAccounts', e);
+
+    const displayAddress = `${address.slice(0, 6)}...${address.slice(-4)}`;
+
+    await new Promise((resolve, reject) => {
+      requestUserApproval({
+        header: 'Connect to Website',
+        message:
+          `${origin} would like to connect to your wallet:\n\n` +
+          `Account: ${displayAddress}\n\n` +
+          `Permissions requested:\n` +
+          `• View and connect to your wallet\n` +
+          `• Request transaction approvals\n` +
+          `• Request message signatures`,
+        resolve: () => resolve(true),
+        reject: () => reject(new Error('User rejected connection'))
+      });
+    });
+
+    setConnectedAddress(address);
+
+    updateWindowObject(
+      webViewRef,
+      UPDATE_ETHEREUM_STATE_JS(address, AMB_CHAIN_ID_HEX)
+    );
+
+    return permissionsHandler.bind(address);
+  } catch (error: unknown) {
+    setConnectedAddress('');
+    rpcErrorHandler('handleWalletConnection', error);
+    throw error;
   }
 };
+
+export const ethRequestAccounts = ({
+  ...params
+}: ConnectionRequest): Promise<string[]> =>
+  handleWalletConnection({
+    ...params,
+    permissions: INITIAL_ACCOUNTS_PERMISSIONS
+  }).then((result: WalletConnectionResult) => result.accounts);
 
 export const walletRequestPermissions = async ({
   permissions,
   response,
   privateKey,
-  webViewRef
-}: any) => {
-  const { connectedAddress, setConnectedAddress } = useBrowserStore.getState();
+  webViewRef,
+  origin
+}: ConnectionRequest & { response: any }) => {
   try {
-    if (permissions?.eth_accounts) {
-      const address = await getCurrentAddress(privateKey);
-      if (!address) {
-        throw new Error('No account available');
-      }
-
-      if (address.toLowerCase() !== connectedAddress?.toLowerCase()) {
-        setConnectedAddress(address);
-
-        setTimeout(() => {
-          if (webViewRef.current) {
-            webViewRef.current.injectJavaScript(
-              UPDATE_ETHEREUM_STATE_JS(address, AMB_CHAIN_ID_HEX)
-            );
-          }
-        }, 100);
-      }
-
-      response.result = [
-        {
-          parentCapability: 'eth_accounts',
-          date: Date.now(),
-          caveats: [
-            {
-              type: 'restrictReturnedAccounts',
-              value: [address]
-            }
-          ]
-        },
-        {
-          parentCapability: 'endowment:permitted-chains',
-          date: Date.now(),
-          caveats: [
-            {
-              type: 'restrictChains',
-              value: [AMB_CHAIN_ID_HEX]
-            }
-          ]
-        }
-      ];
-    } else {
-      response.error = {
-        code: 4200,
-        message: 'Requested permission is not available'
-      };
-    }
-  } catch (e) {
-    rpcErrorHandler('walletRequestPermissions', e);
+    const { permissions: _permissions } = await handleWalletConnection({
+      privateKey,
+      webViewRef,
+      origin,
+      permissions: permissions || INITIAL_ACCOUNTS_PERMISSIONS
+    });
+    response.result = _permissions;
+  } catch (error: unknown) {
+    rpcErrorHandler('walletRequestPermissions', error);
+    throw error;
   }
+};
+
+export const ethAccounts = async ({ privateKey }: { privateKey: string }) => {
+  const { connectedAddress } = useBrowserStore.getState();
+  if (!connectedAddress) return [];
+
+  const address = await getCurrentAddress(privateKey);
+  return address ? [address] : [];
 };
 
 export const walletRevokePermissions = async ({
@@ -115,80 +124,27 @@ export const walletRevokePermissions = async ({
 }: any) => {
   const { connectedAddress, setConnectedAddress } = useBrowserStore.getState();
   try {
-    if (permissions?.eth_accounts) {
-      if (connectedAddress) {
-        setConnectedAddress('');
-
-        setTimeout(() => {
-          if (webViewRef.current) {
-            webViewRef.current.injectJavaScript(REVOKE_PERMISSIONS_JS);
-          }
-        }, 100);
-      }
-
-      response.result = [
-        {
-          parentCapability: 'endowment:permitted-chains',
-          date: Date.now(),
-          caveats: [
-            {
-              type: 'restrictChains',
-              value: [AMB_CHAIN_ID_HEX]
-            }
-          ]
-        }
-      ];
-    } else if (permissions?.['endowment:permitted-chains']) {
-      response.error = {
-        code: 4200,
-        message: 'Chain permissions cannot be revoked'
-      };
-    } else {
-      response.error = {
-        code: 4200,
-        message: 'Permission to revoke is not recognized'
-      };
-    }
-  } catch (e) {
-    rpcErrorHandler('walletRevokePermissions', e);
+    response.result = permissionsHandler.unbind(
+      permissions,
+      connectedAddress,
+      setConnectedAddress,
+      () =>
+        updateWindowObject(
+          webViewRef,
+          UPDATE_ETHEREUM_STATE_JS(connectedAddress, AMB_CHAIN_ID_HEX)
+        )
+    );
+  } catch (error: unknown) {
+    rpcErrorHandler('walletRevokePermissions', error);
   }
 };
 
 export const walletGetPermissions = async ({ response }: any) => {
   const { connectedAddress } = useBrowserStore.getState();
   try {
-    const basePermissions = [
-      {
-        parentCapability: 'endowment:permitted-chains',
-        date: Date.now(),
-        caveats: [
-          {
-            type: 'restrictChains',
-            value: [AMB_CHAIN_ID_HEX]
-          }
-        ]
-      }
-    ];
-
-    if (connectedAddress) {
-      response.result = [
-        {
-          parentCapability: 'eth_accounts',
-          date: Date.now(),
-          caveats: [
-            {
-              type: 'restrictReturnedAccounts',
-              value: [connectedAddress]
-            }
-          ]
-        },
-        ...basePermissions
-      ];
-    } else {
-      response.result = basePermissions;
-    }
-  } catch (e) {
-    rpcErrorHandler('walletGetPermissions', e);
+    response.result = permissionsHandler.get(connectedAddress);
+  } catch (error: unknown) {
+    rpcErrorHandler('walletGetPermissions', error);
   }
 };
 
@@ -250,7 +206,6 @@ export const ethSignTransaction = async ({
 export const personalSing = async ({ params, response, privateKey }: any) => {
   const { connectedAddress } = useBrowserStore.getState();
   try {
-    console.log('Personal sign request:', params);
     const [message, address] = params;
 
     if (address.toLowerCase() !== connectedAddress?.toLowerCase()) {
@@ -268,13 +223,9 @@ export const personalSing = async ({ params, response, privateKey }: any) => {
 
     await userConfirmation;
 
-    const signature = await signMessage(message, privateKey);
-
-    console.log('Signature generated:', signature);
-    response.result = signature;
+    response.result = await signMessage(message, privateKey);
   } catch (error) {
-    console.error('Personal sign error:', error);
-    throw error;
+    response.error = rpcRejectHandler(4001, error);
   }
 };
 
@@ -285,7 +236,6 @@ export const ethSignTypesData = async ({
 }: any) => {
   const { connectedAddress } = useBrowserStore.getState();
   try {
-    console.log('Sign typed data request:', params);
     const [address, typedData] = params;
 
     if (address.toLowerCase() !== connectedAddress?.toLowerCase()) {
@@ -309,10 +259,7 @@ export const ethSignTypesData = async ({
     });
     await userConfirmation;
 
-    const signature = await _signTypedData(data, privateKey);
-
-    console.log('Signature generated:', signature);
-    response.result = signature;
+    response.result = await _signTypedData(data, privateKey);
   } catch (error) {
     console.error('Failed to sign typed data:', error);
     throw error;

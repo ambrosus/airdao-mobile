@@ -3,6 +3,7 @@ import { TouchableOpacity, View } from 'react-native';
 import { WebView } from '@metamask/react-native-webview';
 import { useNavigation } from '@react-navigation/native';
 import * as Clipboard from 'expo-clipboard';
+import { TabsNavigationProp } from '@appTypes';
 import { Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { BackIcon } from '@components/svg/icons';
@@ -24,23 +25,30 @@ interface BrowserHeaderProps {
 }
 
 export const BrowserHeader = ({ uri, webViewRef }: BrowserHeaderProps) => {
+  const navigation = useNavigation<TabsNavigationProp>();
+
+  const { selectedAddress, setSelectedAddress } = useBrowserStore();
+
   const browserWalletSelectorRef = useRef<BottomSheetRef>(null);
   const browserActionsRef = useRef<BottomSheetRef>(null);
 
-  const { selectedAddress, setSelectedAddress } = useBrowserStore();
   const cleanUrl = uri.replace(/^(https?:\/\/|hhtp:\/\/)/, '');
   const formattedUrl =
     cleanUrl.length > 25 ? `${cleanUrl.slice(0, 22)}...` : cleanUrl;
 
-  const navigation = useNavigation();
-
-  const reload = useCallback(() => webViewRef.current?.reload(), [webViewRef]);
   const back = useCallback(() => webViewRef.current?.goBack(), [webViewRef]);
   const closeWebView = useCallback(() => navigation.goBack(), [navigation]);
+
+  const reload = useCallback(() => {
+    webViewRef.current?.reload();
+    browserActionsRef.current?.dismiss();
+  }, [webViewRef]);
+
   const copyUri = useCallback(
     async () => await Clipboard.setStringAsync(uri),
     [uri]
   );
+
   const selectWallet = useCallback(
     () => async (address: string) => {
       await setConnectedAddressTo(uri, address);
