@@ -17,6 +17,7 @@ import {
 } from '@features/browser/lib/middleware.helpers';
 import { rpcErrorHandler } from '@features/browser/utils/rpc-error-handler';
 import { rpcMethods } from './rpc-methods';
+import { TransactionParams } from '../types';
 
 interface JsonRpcRequest {
   id: number;
@@ -136,7 +137,7 @@ export async function handleWebViewMessage({
 
         case 'eth_sendTransaction': {
           await ethSendTransaction({
-            params,
+            params: params as [TransactionParams],
             response,
             privateKey
           });
@@ -154,7 +155,11 @@ export async function handleWebViewMessage({
 
         case 'personal_sign':
         case 'eth_sign':
-          await personalSing({ params, response, privateKey, webViewRef });
+          await personalSing({
+            params: params as [string, string],
+            response,
+            privateKey
+          });
           break;
 
         case 'eth_getBalance':
@@ -164,7 +169,7 @@ export async function handleWebViewMessage({
         case 'eth_signTypedData_v4':
         case 'eth_signTypedData':
           await ethSignTypesData({
-            params,
+            params: params as [string, Record<string, unknown>],
             response,
             privateKey
           });

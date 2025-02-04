@@ -30,8 +30,9 @@ export interface RPCRequestWithAccountCredentials extends BaseRPCRequest {
 }
 
 export interface RPCRequestWithTransactionParams
-  extends RPCRequestWithAccountCredentials {
-  params: [TransactionParams]; // Using tuple type for single transaction
+  extends Pick<RPCRequestWithAccountCredentials, 'privateKey'> {
+  params: [TransactionParams];
+  response: RPCResponse;
 }
 
 export type SignMessageParams = {
