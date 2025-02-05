@@ -4,6 +4,10 @@ import Config from '@constants/config';
 import { IsNullableAccount } from '@entities/wallet/model/types';
 import { AmbErrorProvider } from '@lib';
 import { ERC20_ABI } from '@lib/erc20/abi/ERC20_ABI';
+import {
+  CustomAppEvents,
+  sendFirebaseEvent
+} from '@lib/firebaseEventAnalytics';
 import { HBR_POOL } from './abi';
 
 const createHBRLiquidityPoolContract = (
@@ -69,14 +73,30 @@ class HBRYieldService {
     wallet: IsNullableAccount | undefined,
     privateKey: string
   ) {
-    if (!wallet) throw Error('No wallet found!');
+    try {
+      if (!wallet) throw Error('No wallet found!');
 
-    const bnAmount = ethers.utils.parseEther(amount);
-    const signer = createSigner(privateKey);
-    const contract = createHBRLiquidityPoolContract(signer);
+      // Analytics initial point
+      sendFirebaseEvent(CustomAppEvents.harbor_hbr_stake_start);
+      const bnAmount = ethers.utils.parseEther(amount);
+      const signer = createSigner(privateKey);
+      const contract = createHBRLiquidityPoolContract(signer);
 
-    const tx = await contract.deposit(bnAmount);
-    return await tx.wait();
+      const tx = await contract.deposit(bnAmount);
+      const response = await tx.wait();
+
+      if (response) {
+        sendFirebaseEvent(CustomAppEvents.harbor_hbr_stake_finish);
+        return response;
+      }
+    } catch (error) {
+      const errorMessage =
+        (error as { message: string }).message || JSON.stringify(error);
+      sendFirebaseEvent(CustomAppEvents.harbor_hbr_stake_error, {
+        harborHBRStakeError: errorMessage
+      });
+      return error;
+    }
   }
 
   async _depositAmb(
@@ -84,34 +104,81 @@ class HBRYieldService {
     wallet: IsNullableAccount | undefined,
     privateKey: string
   ) {
-    if (!wallet) throw Error('No wallet found!');
+    try {
+      if (!wallet) throw Error('No wallet found!');
 
-    const bnAmount = ethers.utils.parseEther(amount);
-    const signer = createSigner(privateKey);
-    const contract = createHBRLiquidityPoolContract(signer);
+      // Analytics initial point
+      sendFirebaseEvent(CustomAppEvents.harbor_hbr_amb_stake_start);
+      const bnAmount = ethers.utils.parseEther(amount);
+      const signer = createSigner(privateKey);
+      const contract = createHBRLiquidityPoolContract(signer);
 
-    const tx = await contract.stake(bnAmount, { value: bnAmount });
-    return await tx.wait();
+      const tx = await contract.stake(bnAmount, { value: bnAmount });
+      const response = await tx.wait();
+
+      if (response) {
+        sendFirebaseEvent(CustomAppEvents.harbor_hbr_amb_stake_finish);
+        return response;
+      }
+    } catch (error) {
+      const errorMessage =
+        (error as { message: string }).message || JSON.stringify(error);
+      sendFirebaseEvent(CustomAppEvents.harbor_hbr_amb_stake_error, {
+        harborHbrAmbStakeError: errorMessage
+      });
+      return error;
+    }
   }
 
   async withdraw(deposit: ethers.BigNumber, privateKey: string) {
-    if (deposit.isZero()) throw Error('Deposit is too low');
+    try {
+      if (deposit.isZero()) throw Error('Deposit is too low');
 
-    const signer = createSigner(privateKey);
-    const contract = createHBRLiquidityPoolContract(signer);
+      sendFirebaseEvent(CustomAppEvents.harbor_hbr_withdraw_start);
+      const signer = createSigner(privateKey);
+      const contract = createHBRLiquidityPoolContract(signer);
 
-    const tx = await contract.withdraw(deposit);
-    return await tx.wait();
+      const tx = await contract.withdraw(deposit);
+      const response = await tx.wait();
+
+      if (response) {
+        sendFirebaseEvent(CustomAppEvents.harbor_hbr_withdraw_finish);
+        return response;
+      }
+    } catch (error) {
+      const errorMessage =
+        (error as { message: string }).message || JSON.stringify(error);
+      sendFirebaseEvent(CustomAppEvents.harbor_hbr_withdraw_error, {
+        harborHbrWithdrawError: errorMessage
+      });
+      return error;
+    }
   }
 
   async unstake(stake: ethers.BigNumber, privateKey: string) {
-    if (stake.isZero()) throw Error('Deposit is too low');
+    try {
+      if (stake.isZero()) throw Error('Deposit is too low');
 
-    const signer = createSigner(privateKey);
-    const contract = createHBRLiquidityPoolContract(signer);
+      // Analytics initial point
+      sendFirebaseEvent(CustomAppEvents.harbor_hbr_amb_withdraw_start);
+      const signer = createSigner(privateKey);
+      const contract = createHBRLiquidityPoolContract(signer);
 
-    const tx = await contract.unstake(stake);
-    return await tx.wait();
+      const tx = await contract.unstake(stake);
+      const response = await tx.wait();
+
+      if (response) {
+        sendFirebaseEvent(CustomAppEvents.harbor_hbr_amb_withdraw_finish);
+        return response;
+      }
+    } catch (error) {
+      const errorMessage =
+        (error as { message: string }).message || JSON.stringify(error);
+      sendFirebaseEvent(CustomAppEvents.harbor_hbr_amb_withdraw_error, {
+        harborHbrAmbWithdrawError: errorMessage
+      });
+      return error;
+    }
   }
 }
 
