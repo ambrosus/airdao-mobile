@@ -1,7 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import * as Updates from 'expo-updates';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HomeNavigationProp } from '@appTypes';
@@ -14,7 +13,7 @@ import { useStakingPoolsStore } from '@entities/staking';
 import { useWalletStore } from '@entities/wallet';
 import { useAmbrosusStakingPools } from '@hooks';
 import { StakingPool } from '@models';
-import { verticalScale } from '@utils';
+import { environment, verticalScale } from '@utils';
 import { styles } from './styles';
 
 export const StakingPoolsScreen = () => {
@@ -27,7 +26,7 @@ export const StakingPoolsScreen = () => {
     navigation.navigate('StakingPool', { pool });
   };
 
-  const { fetchPoolDetails, isInitialFetching } = useStakingPoolsStore();
+  const { pools, fetchPoolDetails, isInitialFetching } = useStakingPoolsStore();
 
   useEffect(() => {
     if (wallet?.address) {
@@ -38,12 +37,20 @@ export const StakingPoolsScreen = () => {
   }, [wallet, fetchPoolDetails]);
 
   const filterStakingPools = useMemo(() => {
-    return Updates.channel === 'testnet'
-      ? stakingPools.sort((a, b) => Number(b.isActive) - Number(a.isActive))
+    return environment === 'testnet'
+      ? (pools.map((pool) => ({
+          ...pool,
+          totalStake: pool.totalStakeInAMB,
+          apy: 0,
+          token: {
+            name: pool.contractName
+          },
+          isActive: true
+        })) as unknown as StakingPool[])
       : stakingPools
           .filter((pool) => pool.token.symbol !== 'GPT')
           .sort((a, b) => Number(b.isActive) - Number(a.isActive));
-  }, [stakingPools]);
+  }, [pools, stakingPools]);
 
   const spinnerContainerStyle: StyleProp<ViewStyle> = {
     flex: 1,

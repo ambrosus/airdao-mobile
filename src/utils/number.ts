@@ -26,6 +26,11 @@ const formatNumber = (amount: number, decimalPlaces = 2): string => {
     counter++;
   }
   const leftPart = (isNegative ? '-' : '') + formattedString;
+
+  if (decimalPlaces === 0) {
+    return leftPart;
+  }
+
   const rightPart = strAmount
     .substring(startingIdx + 1)
     .slice(0, decimalPlaces + 1);

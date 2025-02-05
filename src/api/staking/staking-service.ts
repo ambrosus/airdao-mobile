@@ -61,15 +61,21 @@ class Staking {
             providerOrSigner
           );
 
-          const [contractName, active, tokenPriceAMB, myStakeInTokens] =
-            await Promise.all([
-              poolContract.name(),
-              poolContract.active(),
-              poolContract.getTokenPrice(),
-              poolContract.viewStake({
-                from: address
-              })
-            ]);
+          const [
+            contractName,
+            active,
+            totalStakeInAMB,
+            tokenPriceAMB,
+            myStakeInTokens
+          ] = await Promise.all([
+            poolContract.name && poolContract.name(),
+            poolContract.active && poolContract.active(),
+            poolContract.totalStake && poolContract.totalStake(),
+            poolContract.getTokenPrice && poolContract.getTokenPrice(),
+            poolContract.viewStake({
+              from: address
+            })
+          ]);
 
           const myStakeInAMB = myStakeInTokens
             .mul(tokenPriceAMB)
@@ -78,6 +84,7 @@ class Staking {
           return {
             addressHash,
             contractName,
+            totalStakeInAMB: ethers.utils.formatEther(totalStakeInAMB),
             active,
             user: {
               raw: myStakeInAMB,
