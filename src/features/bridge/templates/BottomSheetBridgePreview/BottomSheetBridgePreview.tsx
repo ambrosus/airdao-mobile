@@ -42,11 +42,9 @@ export const BottomSheetBridgePreview = forwardRef<
   const errorBalance = useMemo(() => {
     const networkNativeTokenSymbol = networkNativeToken?.symbol ?? 'amb';
     if (selectedTokenFrom.symbol === networkNativeTokenSymbol) {
-      let withdrawSum = BigNumber.from(0);
-      dataToPreview
+      const withdrawSum = dataToPreview
         .filter((item) => item.symbol === selectedTokenFrom?.symbol)
-        .forEach((item) => (withdrawSum = withdrawSum.add(item.crypto.amount)));
-
+        .reduce((acc, cur) => acc.add(cur.crypto.amount), BigNumber.from(0));
       return amountCheckers.isAmountGraterThenBalance({
         balance: selectedTokenFrom.balance,
         amount: withdrawSum,
