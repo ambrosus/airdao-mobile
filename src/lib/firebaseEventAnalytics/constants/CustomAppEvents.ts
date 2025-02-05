@@ -61,8 +61,8 @@ export enum CustomAppEvents {
   harbor_amb_claim_reward_finish = 'harbor_amb_claim_reward_finish',
   harbor_amb_claim_reward_error = 'harbor_amb_claim_reward_error',
   // fireBase event variable => harborAMBClaimRewardError
-  // Harbor HBR
 
+  // Harbor HBR
   harbor_hbr_stake_start = 'harbor_hbr_stake_start',
   harbor_hbr_amb_stake_start = 'harbor_hbr_amb_stake_start',
   harbor_hbr_stake_finish = 'harbor_hbr_stake_finish',
