@@ -26,6 +26,7 @@ export const PRODUCTS = (t: TFunction<string>): SectionizedProducts[] => {
           background: ['rgba(132, 224, 255, 0.2)', 'rgba(160, 99, 221, 0.2)'],
           color: 'rgba(52, 27, 104, 1)',
           route: 'BrowserScreen',
+          isAirDaoApp: 'true',
           firebaseEvent: CustomAppEvents.products_swap
         },
         {
