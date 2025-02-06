@@ -31,8 +31,7 @@ export const BrowserHeader = ({
 }: BrowserHeaderProps) => {
   const browserWalletSelectorRef = useRef<BottomSheetRef>(null);
   const browserActionsRef = useRef<BottomSheetRef>(null);
-
-  const { selectedAddress, setSelectedAddress } = useBrowserStore();
+  const { setSelectedAddress, selectedAddress } = useBrowserStore();
   const cleanUrl = uri.replace(/^(https?:\/\/|hhtp:\/\/)/, '');
   const formattedUrl =
     cleanUrl.length > 25 ? `${cleanUrl.slice(0, 22)}...` : cleanUrl;
@@ -41,6 +40,7 @@ export const BrowserHeader = ({
     async () => await Clipboard.setStringAsync(uri),
     [uri]
   );
+
   const selectWallet = async (address: string) => {
     await setConnectedAddressTo(uri, address);
     setSelectedAddress(address);
