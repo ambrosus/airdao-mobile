@@ -2,7 +2,6 @@ import React, { useRef, useCallback } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { WebView } from '@metamask/react-native-webview';
 import * as Clipboard from 'expo-clipboard';
-import { TabsNavigationProp } from '@appTypes';
 import { Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { BackIcon } from '@components/svg/icons';
@@ -28,12 +27,11 @@ interface BrowserHeaderProps {
 export const BrowserHeader = ({
   uri,
   reload,
-  closeWebView,
-  webViewRef
+  closeWebView
 }: BrowserHeaderProps) => {
   const browserWalletSelectorRef = useRef<BottomSheetRef>(null);
   const browserActionsRef = useRef<BottomSheetRef>(null);
-
+  const { setSelectedAddress, selectedAddress } = useBrowserStore();
   const cleanUrl = uri.replace(/^(https?:\/\/|hhtp:\/\/)/, '');
   const formattedUrl =
     cleanUrl.length > 25 ? `${cleanUrl.slice(0, 22)}...` : cleanUrl;
