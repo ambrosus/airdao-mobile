@@ -126,6 +126,10 @@ const numberToTransformedLocale = (value: string | number) => {
     return '0';
   }
 
+  if (amount < 0.01) {
+    return '0.00';
+  }
+
   const [intPart, floatPart] = amount.toString().split('.');
 
   if (amount % 1 === 0) {
