@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Keyboard, View } from 'react-native';
 import { CommonActions, useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ethers } from 'ethers';
 import * as Clipboard from 'expo-clipboard';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -56,6 +57,7 @@ export const SendFunds = ({ navigation, route }: Props) => {
   const bottomSheetTokensListRef = useRef<BottomSheetRef>(null);
 
   const [isTextInputActive, setIsTextInputActive] = useState(false);
+  const [isInsufficientBalance, setIsInsufficientBalance] = useState(false);
 
   const {
     to: destinationAddress = '',
@@ -119,24 +121,61 @@ export const SendFunds = ({ navigation, route }: Props) => {
     onChangeState({ to: address });
   };
 
+  // Effect to check if the balance is insufficient
+  useEffect(() => {
+    if (+_AMBEntity.balance.formattedBalance < +estimatedFee)
+      setIsInsufficientBalance(true);
+  }, [_AMBEntity.balance.formattedBalance, estimatedFee]);
+
   const onPressMaxAmount = useCallback(
-    (maxBalanceString?: string, decimals = 3) => {
-      if (maxBalanceString) {
-        let maxSpendableBalance: number = +maxBalanceString;
+    async (maxBalanceString?: string, decimals = 3) => {
+      if (!maxBalanceString) return;
 
-        if (selectedToken.name === 'AirDAO') {
-          maxSpendableBalance -= 0.0005;
-        }
-
-        setAmountInCrypto(
-          NumberUtils.limitDecimalCount(
-            maxSpendableBalance.toString(),
-            decimals
-          )
+      try {
+        const parsedMaxBalance = ethers.utils.parseUnits(
+          maxBalanceString,
+          selectedToken.decimals
         );
+
+        if (!!selectedToken.isNativeCoin) {
+          const fee = await TransactionUtils.getEstimatedFee(
+            senderAddress,
+            destinationAddress || senderAddress,
+            +maxBalanceString,
+            selectedToken
+          );
+
+          const parsedFee = ethers.utils.parseEther(fee.toString());
+          const maxSpendableAmount = parsedMaxBalance.sub(parsedFee);
+
+          if (maxSpendableAmount.lt(0)) return setAmountInCrypto('0');
+
+          setAmountInCrypto(
+            NumberUtils.limitDecimalCount(
+              ethers.utils.formatUnits(
+                maxSpendableAmount,
+                selectedToken.decimals
+              ),
+              decimals
+            )
+          );
+        } else {
+          setAmountInCrypto(
+            NumberUtils.limitDecimalCount(
+              ethers.utils.formatUnits(
+                parsedMaxBalance,
+                selectedToken.decimals
+              ),
+              decimals
+            )
+          );
+        }
+      } catch (error) {
+        console.error('Error in onPressMaxAmount:', error);
+        setAmountInCrypto('0');
       }
     },
-    [selectedToken.name, setAmountInCrypto]
+    [destinationAddress, selectedToken, senderAddress, setAmountInCrypto]
   );
 
   const showReviewModal = () => {
@@ -342,6 +381,7 @@ export const SendFunds = ({ navigation, route }: Props) => {
               onSendPress={sendTx}
               onSuccessBottomSheetDismiss={onSuccessBottomSheetDismiss}
               dismissBottomSheet={hideReviewModal}
+              isInsufficientBalance={isInsufficientBalance}
             />
             <Spacer value={15} />
           </BottomSheet>

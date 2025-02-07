@@ -5,7 +5,7 @@ import { scale } from '@utils';
 
 interface TextOrSpinnerProps {
   loading: boolean;
-  loadingLabel: string | undefined;
+  loadingLabel?: string;
   label: string;
   spinnerColor?: string;
   spinnerCustomSize?: number;
