@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import { Wallet, ethers } from 'ethers';
 import { provider } from '@api/nft-contract-service';
 import Config from '@constants/config';
@@ -90,12 +91,16 @@ class HBRYieldService {
         return response;
       }
     } catch (error) {
+      Alert.alert(
+        CustomAppEvents.harbor_hbr_stake_error,
+        (error as { message: string }).message || JSON.stringify(error)
+      );
       const errorMessage =
         (error as { message: string }).message || JSON.stringify(error);
       sendFirebaseEvent(CustomAppEvents.harbor_hbr_stake_error, {
         harborHBRStakeError: errorMessage
       });
-      return error;
+      throw error;
     }
   }
 
@@ -121,12 +126,16 @@ class HBRYieldService {
         return response;
       }
     } catch (error) {
+      Alert.alert(
+        CustomAppEvents.harbor_hbr_amb_stake_error,
+        (error as { message: string }).message || JSON.stringify(error)
+      );
       const errorMessage =
         (error as { message: string }).message || JSON.stringify(error);
       sendFirebaseEvent(CustomAppEvents.harbor_hbr_amb_stake_error, {
         harborHbrAmbStakeError: errorMessage
       });
-      return error;
+      throw error;
     }
   }
 
@@ -146,12 +155,16 @@ class HBRYieldService {
         return response;
       }
     } catch (error) {
+      Alert.alert(
+        CustomAppEvents.harbor_hbr_withdraw_error,
+        (error as { message: string }).message || JSON.stringify(error)
+      );
       const errorMessage =
         (error as { message: string }).message || JSON.stringify(error);
       sendFirebaseEvent(CustomAppEvents.harbor_hbr_withdraw_error, {
         harborHbrWithdrawError: errorMessage
       });
-      return error;
+      throw error;
     }
   }
 
@@ -172,12 +185,16 @@ class HBRYieldService {
         return response;
       }
     } catch (error) {
+      Alert.alert(
+        CustomAppEvents.harbor_hbr_amb_withdraw_error,
+        (error as { message: string }).message || JSON.stringify(error)
+      );
       const errorMessage =
         (error as { message: string }).message || JSON.stringify(error);
       sendFirebaseEvent(CustomAppEvents.harbor_hbr_amb_withdraw_error, {
         harborHbrAmbWithdrawError: errorMessage
       });
-      return error;
+      throw error;
     }
   }
 }
