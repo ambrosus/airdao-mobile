@@ -184,6 +184,8 @@ export const SendFunds = ({ navigation, route }: Props) => {
           });
         }
       } catch (error: unknown) {
+        // TODO remove all debugErrorMessage code for prod
+        // start
         const debugErrorMessage =
           error instanceof Error
             ? JSON.stringify(
@@ -209,6 +211,7 @@ export const SendFunds = ({ navigation, route }: Props) => {
             }
           }
         ]);
+        // end
 
         const errorMessage =
           (error as { message: string })?.message ?? JSON.stringify(error);
