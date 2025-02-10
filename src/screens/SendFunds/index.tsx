@@ -55,17 +55,19 @@ export const SendFunds = ({ navigation, route }: Props) => {
 
   const tokenFromNavigationParams = route.params?.token;
   const bottomSheetTokensListRef = useRef<BottomSheetRef>(null);
+  const transactionIdRef = useRef('');
 
   const [isTextInputActive, setIsTextInputActive] = useState(false);
   const [isInsufficientBalance, setIsInsufficientBalance] = useState(false);
+
+  const onTextInputFocus = useCallback(() => setIsTextInputActive(true), []);
+  const onTextInputBlur = useCallback(() => setIsTextInputActive(false), []);
 
   const {
     to: destinationAddress = '',
     from: senderAddress = '',
     transactionId
   } = state;
-
-  const transactionIdRef = useRef('');
 
   const { wallet: account } = useWalletStore();
   const walletHash = account?.wallet.id ?? '';
@@ -121,11 +123,26 @@ export const SendFunds = ({ navigation, route }: Props) => {
     onChangeState({ to: address });
   };
 
-  // Effect to check if the balance is insufficient
-  useEffect(() => {
-    if (+_AMBEntity.balance.formattedBalance < +estimatedFee)
-      setIsInsufficientBalance(true);
-  }, [_AMBEntity.balance.formattedBalance, estimatedFee]);
+  const handleEstimatedFeeCalculation = useCallback(() => {
+    setIsInsufficientBalance(false);
+
+    const nativeTokenBalance = +_AMBEntity.balance.formattedBalance;
+    const amount = +amountInCrypto;
+    const fee = +estimatedFee;
+
+    const isNativeToken = !!selectedToken.isNativeCoin;
+
+    if (isNativeToken) {
+      setIsInsufficientBalance(nativeTokenBalance < amount + fee);
+    } else {
+      setIsInsufficientBalance(nativeTokenBalance < fee);
+    }
+  }, [
+    _AMBEntity.balance.formattedBalance,
+    amountInCrypto,
+    estimatedFee,
+    selectedToken.isNativeCoin
+  ]);
 
   const onPressMaxAmount = useCallback(
     async (maxBalanceString?: string, decimals = 3) => {
@@ -171,7 +188,6 @@ export const SendFunds = ({ navigation, route }: Props) => {
           );
         }
       } catch (error) {
-        console.error('Error in onPressMaxAmount:', error);
         setAmountInCrypto('0');
       }
     },
@@ -180,6 +196,7 @@ export const SendFunds = ({ navigation, route }: Props) => {
 
   const showReviewModal = () => {
     Keyboard.dismiss();
+    handleEstimatedFeeCalculation();
 
     return setTimeout(() => {
       confirmModalRef.current?.show();
@@ -273,9 +290,6 @@ export const SendFunds = ({ navigation, route }: Props) => {
     ),
     [isFetchingTokens, onSelectToken, selectedToken]
   );
-
-  const onTextInputFocus = useCallback(() => setIsTextInputActive(true), []);
-  const onTextInputBlur = useCallback(() => setIsTextInputActive(false), []);
 
   const onPercentItemPress = useCallback(
     (percent: number) => {
