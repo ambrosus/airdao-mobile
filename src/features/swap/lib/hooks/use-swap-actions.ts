@@ -178,8 +178,8 @@ export function useSwapActions() {
       }
 
       return await swapExactTokensForTokens(
-        tokenToSell.AMOUNT,
-        tokenToReceive.AMOUNT,
+        _amountIn,
+        _amountOut,
         wrappedPathWithoutMultihops,
         signer,
         _slippage,

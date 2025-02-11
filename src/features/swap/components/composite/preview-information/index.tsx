@@ -1,13 +1,14 @@
 import { ReactNode, useMemo } from 'react';
 import { View } from 'react-native';
+import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapTokens } from '@features/swap/lib/hooks';
-import { addresses } from '@features/swap/utils';
-import { getObjectKeyByValue } from '@utils';
+import { addresses, SwapStringUtils } from '@features/swap/utils';
+import { getObjectKeyByValue, NumberUtils } from '@utils';
 import { styles } from './styles';
 
 export const PreviewInformation = () => {
@@ -16,7 +17,8 @@ export const PreviewInformation = () => {
     latestSelectedTokens,
     uiBottomSheetInformation,
     _refExactGetter,
-    isMultiHopSwapBetterCurrency
+    isMultiHopSwapBetterCurrency,
+    estimatedGasValues
   } = useSwapContextSelector();
 
   const { tokenToSell, tokenToReceive } = useSwapTokens();
@@ -59,6 +61,16 @@ export const PreviewInformation = () => {
   const renderHopTokensRoute = useMemo(() => {
     return tokens.length > 0 ? tokens.join(' > ') : '';
   }, [tokens]);
+
+  const estimatedNetworkFee = useMemo(() => {
+    const { swap, approval } = estimatedGasValues;
+
+    const parsedEstimatedGas = ethers.utils.formatEther(swap.add(approval));
+
+    return SwapStringUtils.transformRealizedLPFee(
+      NumberUtils.limitDecimalCount(parsedEstimatedGas, 1)
+    );
+  }, [estimatedGasValues]);
 
   return (
     <View style={styles.container}>
@@ -104,7 +116,7 @@ export const PreviewInformation = () => {
         </Text>
 
         <RightSideRowItem>
-          {`${uiBottomSheetInformation.lpFee} ${CryptoCurrencyCode.AMB}`}
+          {`${estimatedNetworkFee} ${CryptoCurrencyCode.AMB}`}
         </RightSideRowItem>
       </Row>
 

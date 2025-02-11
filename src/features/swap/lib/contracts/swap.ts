@@ -124,12 +124,18 @@ export async function swapMultiHopExactTokensForTokens(
     // Determine the swap method based on path and trade direction
     const getSwapMethod = () => {
       if (isFromETH) {
-        return tradeIn ? 'swapExactAMBForTokens' : 'swapAMBForExactTokens';
+        return tradeIn
+          ? 'swapExactAMBForTokensSupportingFeeOnTransferTokens'
+          : 'swapAMBForExactTokens';
       }
       if (isToETH) {
-        return tradeIn ? 'swapExactTokensForAMB' : 'swapTokensForExactAMB';
+        return tradeIn
+          ? 'swapExactTokensForAMBSupportingFeeOnTransferTokens'
+          : 'swapTokensForExactAMB';
       }
-      return tradeIn ? 'swapExactTokensForTokens' : 'swapTokensForExactTokens';
+      return tradeIn
+        ? 'swapExactTokensForTokensSupportingFeeOnTransferTokens'
+        : 'swapTokensForExactTokens';
     };
 
     // Get arguments based on whether it's a payable transaction
@@ -189,14 +195,18 @@ export async function swapExactTokensForTokens(
 
       return await wrapEstimatedGas(
         routerContract,
-        tradeIn ? 'swapExactTokensForTokens' : 'swapTokensForExactTokens',
+        tradeIn
+          ? 'swapExactTokensForTokensSupportingFeeOnTransferTokens'
+          : 'swapTokensForExactTokens',
         args
       );
     }
 
     const callSwapMethod =
       routerContract[
-        tradeIn ? 'swapExactTokensForTokens' : 'swapTokensForExactTokens'
+        tradeIn
+          ? 'swapExactTokensForTokensSupportingFeeOnTransferTokens'
+          : 'swapTokensForExactTokens'
       ];
 
     const args = await swapArgsCallback(
@@ -244,7 +254,9 @@ export async function swapExactTokensForETH(
 
       return await wrapEstimatedGas(
         routerContract,
-        tradeIn ? 'swapExactTokensForAMB' : 'swapTokensForExactAMB',
+        tradeIn
+          ? 'swapExactTokensForAMBSupportingFeeOnTransferTokens'
+          : 'swapTokensForExactAMB',
         args
       );
     }
@@ -261,7 +273,9 @@ export async function swapExactTokensForETH(
 
     const callSwapMethod =
       routerContract[
-        tradeIn ? 'swapExactTokensForAMB' : 'swapTokensForExactAMB'
+        tradeIn
+          ? 'swapExactTokensForAMBSupportingFeeOnTransferTokens'
+          : 'swapTokensForExactAMB'
       ];
 
     const tx = await callSwapMethod(...args);
