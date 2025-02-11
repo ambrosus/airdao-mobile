@@ -35,6 +35,7 @@ export function useSwapInterface() {
   const { tokenToSell, tokenToReceive } = useSwapTokens();
   const { hasWrapNativeToken, isEmptyAmount } = useSwapHelpers();
   const { estimatedApprovalGas } = useEstimatedGas();
+
   const resolveBottomSheetData = useCallback(async () => {
     Keyboard.dismiss();
 
@@ -50,7 +51,6 @@ export function useSwapInterface() {
     }
 
     try {
-      const priceImpact = await uiPriceImpactGetter();
       const bnMinimumReceivedAmount = minimumAmountOut(
         `${settings.current.slippageTolerance}%`,
         ethers.utils.parseEther(
@@ -65,8 +65,8 @@ export function useSwapInterface() {
         )
       );
 
+      const priceImpact = await uiPriceImpactGetter();
       const networkFee = await swapCallback({ estimateGas: true });
-
       const allowance = await checkAllowance();
 
       if (!!allowance) {

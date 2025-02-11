@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Alert } from 'react-native';
 import { bnZERO } from '@constants/variables';
 import {
@@ -25,12 +25,13 @@ const SWAP_ERROR_DESCRIPTION =
 
 export const SubmitSwapActions = () => {
   const {
-    uiBottomSheetInformation,
+    uiBottomSheetInformation: { priceImpact, allowance },
     setIsProcessingSwap,
     isProcessingSwap,
     isIncreasingAllowance,
     setIsIncreasingAllowance,
-    setEstimatedGasValues
+    setEstimatedGasValues,
+    isInsufficientBalance
   } = useSwapContextSelector();
 
   const { setAllowance, swapCallback } = useSwapActions();
@@ -38,7 +39,7 @@ export const SubmitSwapActions = () => {
   const { estimatedSwapGas } = useEstimatedGas();
 
   const onCompleteMultiStepSwap = useCallback(async () => {
-    if (uiBottomSheetInformation.allowance === AllowanceStatus.INCREASE) {
+    if (allowance === AllowanceStatus.INCREASE) {
       try {
         setIsIncreasingAllowance(true);
         await setAllowance();
@@ -80,21 +81,22 @@ export const SubmitSwapActions = () => {
       }
     }
   }, [
+    allowance,
     estimatedSwapGas,
     onChangeBottomSheetSwapStatus,
     setAllowance,
     setEstimatedGasValues,
     setIsIncreasingAllowance,
     setIsProcessingSwap,
-    swapCallback,
-    uiBottomSheetInformation.allowance
+    swapCallback
   ]);
 
+  const hasApprovalRequired = useMemo(() => {
+    return allowance !== AllowanceStatus.SUITABLE;
+  }, [allowance]);
+
   // UI Button Elements
-  if (
-    uiBottomSheetInformation?.priceImpact &&
-    uiBottomSheetInformation?.priceImpact > 5
-  ) {
+  if (!hasApprovalRequired && priceImpact && priceImpact > 5) {
     return (
       <SwapErrorImpactButton
         isProcessingSwap={isProcessingSwap}
@@ -103,7 +105,7 @@ export const SubmitSwapActions = () => {
     );
   }
 
-  if (uiBottomSheetInformation.allowance !== AllowanceStatus.SUITABLE) {
+  if (hasApprovalRequired) {
     return (
       <ApprovalRequiredButton
         isProcessingSwap={isProcessingSwap}
@@ -113,7 +115,7 @@ export const SubmitSwapActions = () => {
     );
   }
 
-  if (uiBottomSheetInformation.allowance === AllowanceStatus.SUITABLE) {
+  if (isInsufficientBalance || allowance === AllowanceStatus.SUITABLE) {
     return (
       <SwapButton
         isProcessingSwap={isProcessingSwap}
