@@ -1,15 +1,18 @@
 import { useCallback } from 'react';
 import { ethers } from 'ethers';
-import { bnZERO } from '@constants/variables';
+import { formatUnits } from 'ethers/lib/utils';
+import { API } from '@api/api';
+import { CryptoCurrencyCode } from '@appTypes';
+import { AMB_DECIMALS, bnZERO } from '@constants/variables';
 import { useWalletPrivateKey, useWalletStore } from '@entities/wallet';
-import { useAMBEntity } from '@features/send-funds/lib/hooks';
 import { useSwapContextSelector } from '@features/swap/context';
-import { AllowanceStatus } from '@features/swap/types';
 import {
   calculateAllowanceWithProviderFee,
   calculateGasMargin
 } from '@features/swap/utils';
 import { createAMBProvider } from '@features/swap/utils/contracts/instances';
+import { Token } from '@models/Token';
+import { TokenUtils } from '@utils';
 import { useSwapActions } from './use-swap-actions';
 import { useSwapTokens } from './use-swap-tokens';
 import { checkIsApprovalRequired, increaseAllowance } from '../contracts';
@@ -19,18 +22,33 @@ type BaseEstimatedGasArgs = {
   amountOut?: string;
 };
 
+const createAMBInstance = async (address: string) => {
+  const tokenBalance = await API.cryptoService.getBalanceOfAddress(address);
+
+  return new Token(
+    {
+      name: 'AirDAO',
+      address: address ?? '',
+      isNativeCoin: true,
+      balance: {
+        wei: tokenBalance.wei,
+        ether: Number(tokenBalance.ether) || 0,
+        formattedBalance: formatUnits(tokenBalance.wei, AMB_DECIMALS)
+      },
+      symbol: CryptoCurrencyCode.AMB,
+      decimals: AMB_DECIMALS,
+      tokenNameFromDatabase: 'AirDAO'
+    },
+    TokenUtils
+  );
+};
+
 export function useEstimatedGas() {
   const { _extractPrivateKey } = useWalletPrivateKey();
   const { wallet } = useWalletStore();
   const { tokenToSell } = useSwapTokens();
   const { swapCallback } = useSwapActions();
-  const {
-    estimatedGasValues,
-    uiBottomSheetInformation: { allowance },
-    setIsInsufficientBalance
-  } = useSwapContextSelector();
-
-  const { balance } = useAMBEntity(wallet?.address ?? '');
+  const { setIsInsufficientBalance } = useSwapContextSelector();
 
   const baseProviderFee = useCallback(
     async (estimatedGas: ethers.BigNumber) => {
@@ -56,25 +74,20 @@ export function useEstimatedGas() {
     []
   );
 
-  const isEnoughBalanceToCoverGas = useCallback(() => {
-    setIsInsufficientBalance(false);
-    const parsedBalance = ethers.utils.parseEther(
-      balance.formattedBalance ?? '0'
-    );
+  const isEnoughBalanceToCoverGas = useCallback(
+    async (gasValue: ethers.BigNumber) => {
+      setIsInsufficientBalance(false);
 
-    const requiredGas =
-      allowance === AllowanceStatus.INCREASE
-        ? estimatedGasValues.approval
-        : estimatedGasValues.swap;
+      const { balance } = await createAMBInstance(wallet?.address ?? '');
 
-    setIsInsufficientBalance(parsedBalance.gte(requiredGas));
-  }, [
-    setIsInsufficientBalance,
-    balance.formattedBalance,
-    allowance,
-    estimatedGasValues.approval,
-    estimatedGasValues.swap
-  ]);
+      const parsedBalance = ethers.utils.parseEther(
+        balance.formattedBalance ?? '0'
+      );
+
+      setIsInsufficientBalance(parsedBalance.lt(gasValue));
+    },
+    [setIsInsufficientBalance, wallet?.address]
+  );
 
   const estimatedSwapGas = useCallback(
     async (args?: BaseEstimatedGasArgs) => {

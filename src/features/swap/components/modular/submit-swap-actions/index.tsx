@@ -36,7 +36,7 @@ export const SubmitSwapActions = () => {
 
   const { setAllowance, swapCallback } = useSwapActions();
   const { onChangeBottomSheetSwapStatus } = useSwapBottomSheetHandler();
-  const { estimatedSwapGas } = useEstimatedGas();
+  const { estimatedSwapGas, isEnoughBalanceToCoverGas } = useEstimatedGas();
 
   const onCompleteMultiStepSwap = useCallback(async () => {
     if (allowance === AllowanceStatus.INCREASE) {
@@ -50,6 +50,8 @@ export const SubmitSwapActions = () => {
           swap: estimatedGas,
           approval: bnZERO
         });
+
+        await isEnoughBalanceToCoverGas(estimatedGas);
       } finally {
         setIsIncreasingAllowance(false);
       }
@@ -83,6 +85,7 @@ export const SubmitSwapActions = () => {
   }, [
     allowance,
     estimatedSwapGas,
+    isEnoughBalanceToCoverGas,
     onChangeBottomSheetSwapStatus,
     setAllowance,
     setEstimatedGasValues,
@@ -92,8 +95,8 @@ export const SubmitSwapActions = () => {
   ]);
 
   const hasApprovalRequired = useMemo(() => {
-    return allowance !== AllowanceStatus.SUITABLE;
-  }, [allowance]);
+    return !isInsufficientBalance && allowance !== AllowanceStatus.SUITABLE;
+  }, [allowance, isInsufficientBalance]);
 
   // UI Button Elements
   if (!hasApprovalRequired && priceImpact && priceImpact > 5) {
