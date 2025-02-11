@@ -61,7 +61,7 @@ export function useSwapInterface() {
         )
       );
 
-      const liquidityProviderFee = await swapCallback({ estimateGas: true });
+      const networkFee = await swapCallback({ estimateGas: true });
       const allowance = await checkAllowance();
 
       const receivedAmountOut = SwapStringUtils.transformMinAmountValue(
@@ -80,10 +80,7 @@ export function useSwapInterface() {
         priceImpact: priceImpact ?? 0,
         minimumReceivedAmount,
         lpFee: SwapStringUtils.transformRealizedLPFee(
-          NumberUtils.limitDecimalCount(
-            ethers.utils.formatEther(liquidityProviderFee),
-            0
-          )
+          NumberUtils.limitDecimalCount(ethers.utils.formatEther(networkFee), 1)
         ),
         allowance: allowance
           ? AllowanceStatus.INCREASE

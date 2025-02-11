@@ -7,8 +7,16 @@ import { ShimmerLoader } from '@components/animations';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { WalletOutlineIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
+import { AMB_DECIMALS, bnZERO } from '@constants/variables';
+import { useWalletStore } from '@entities/wallet';
+import { useAMBEntity } from '@features/send-funds/lib/hooks';
 import { useSwapContextSelector } from '@features/swap/context';
-import { useSwapBalance, useSwapFieldsHandler } from '@features/swap/lib/hooks';
+import {
+  useSwapActions,
+  useSwapBalance,
+  useSwapBetterCurrency,
+  useSwapFieldsHandler
+} from '@features/swap/lib/hooks';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
 import { useUSDPrice } from '@hooks';
 import { NumberUtils, scale } from '@utils';
@@ -19,15 +27,21 @@ interface BalanceProps {
 
 export const Balance = ({ type }: BalanceProps) => {
   const { t } = useTranslation();
+  const { wallet } = useWalletStore();
   const {
     selectedTokens,
     selectedTokensAmount,
     setIsExactIn,
-    isExecutingPrice
+    isExecutingPrice,
+    setIsInsufficientBalance
   } = useSwapContextSelector();
   const { onSelectMaxTokensAmount, updateReceivedTokensOutput } =
     useSwapFieldsHandler();
 
+  const ambInstance = useAMBEntity(wallet?.address ?? '');
+
+  const { swapCallback } = useSwapActions();
+  const { bestTradeCurrency } = useSwapBetterCurrency();
   const { bnBalanceAmount, isFetchingBalance } = useSwapBalance(
     selectedTokens[type]
   );
@@ -48,24 +62,72 @@ export const Balance = ({ type }: BalanceProps) => {
     selectedTokens[type]?.symbol as CryptoCurrencyCode
   );
 
-  const onSelectMaxTokensAmountPress = useCallback(() => {
-    if (bnBalanceAmount) {
-      const fullAmount = NumberUtils.limitDecimalCount(
-        formatEther(bnBalanceAmount?._hex),
-        18
-      );
+  const onSelectMaxTokensAmountPress = useCallback(async () => {
+    setIsInsufficientBalance(false);
+    setIsExactIn(type === FIELD.TOKEN_A);
 
-      onSelectMaxTokensAmount(type, fullAmount);
-      setIsExactIn(type === FIELD.TOKEN_A);
+    if (!bnBalanceAmount) return;
 
-      setTimeout(async () => {
-        await updateReceivedTokensOutput();
-      });
+    // TODO: rewrite mathematics calculations of estimated gas
+    // TODO: estimate approve allowance gas
+    const bnAmountToReceive = await bestTradeCurrency(
+      ethers.utils.formatEther(bnBalanceAmount),
+      [selectedTokens.TOKEN_A.address, selectedTokens.TOKEN_B.address]
+    );
+
+    const estimatedGas = await swapCallback({
+      estimateGas: true,
+      amountIn: ethers.utils.formatEther(bnBalanceAmount),
+      amountOut: ethers.utils.formatEther(bnAmountToReceive)
+    });
+
+    const isNativeToken =
+      type === FIELD.TOKEN_A &&
+      selectedTokens.TOKEN_A.address === ethers.constants.AddressZero;
+
+    // TODO: wrong calculation for erc20 tokens gas
+    const amountWithGas = bnBalanceAmount.sub(estimatedGas);
+
+    if (amountWithGas.gt(bnZERO)) {
+      if (isNativeToken) {
+        const amount = amountWithGas.gt(bnZERO)
+          ? NumberUtils.limitDecimalCount(
+              formatEther(amountWithGas),
+              AMB_DECIMALS
+            )
+          : '0';
+        onSelectMaxTokensAmount(type, amount);
+      } else {
+        if (
+          ethers.utils
+            .parseEther(ambInstance.balance.formattedBalance)
+            .lt(amountWithGas)
+        ) {
+          setIsInsufficientBalance(true);
+        } else {
+          onSelectMaxTokensAmount(
+            type,
+            NumberUtils.limitDecimalCount(
+              formatEther(bnBalanceAmount),
+              AMB_DECIMALS
+            )
+          );
+        }
+      }
     }
+    setTimeout(() => {
+      updateReceivedTokensOutput();
+    });
   }, [
+    ambInstance.balance.formattedBalance,
+    bestTradeCurrency,
     bnBalanceAmount,
     onSelectMaxTokensAmount,
+    selectedTokens.TOKEN_A.address,
+    selectedTokens.TOKEN_B.address,
     setIsExactIn,
+    setIsInsufficientBalance,
+    swapCallback,
     type,
     updateReceivedTokensOutput
   ]);
