@@ -27,7 +27,8 @@ export const SubmitSwapActions = () => {
     setIsProcessingSwap,
     isProcessingSwap,
     isIncreasingAllowance,
-    setIsIncreasingAllowance
+    setIsIncreasingAllowance,
+    isInsufficientBalance
   } = useSwapContextSelector();
 
   const { setAllowance, swapCallback } = useSwapActions();
@@ -100,7 +101,10 @@ export const SubmitSwapActions = () => {
     );
   }
 
-  if (uiBottomSheetInformation.allowance === 'suitable') {
+  if (
+    isInsufficientBalance ||
+    uiBottomSheetInformation.allowance === 'suitable'
+  ) {
     return (
       <SwapButton
         isProcessingSwap={isProcessingSwap}
