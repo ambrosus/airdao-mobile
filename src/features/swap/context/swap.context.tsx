@@ -7,6 +7,7 @@ import {
   SelectedTokensKeys
 } from '@/features/swap/types';
 import { BottomSheetRef } from '@components/composite';
+import { bnZERO } from '@constants/variables';
 import { createContextSelector } from '@utils';
 import {
   INITIAL_UI_BOTTOM_SHEET_INFORMATION,
@@ -57,6 +58,11 @@ export const SwapContext = () => {
   const [balancesLoading, setBalancesLoading] = useState(false);
   const [balances, setBalances] =
     useState<Record<string, ethers.BigNumber>[]>(initialBalances);
+
+  const [estimatedGasValues, setEstimatedGasValues] = useState({
+    approval: bnZERO,
+    swap: bnZERO
+  });
 
   const [_refSettingsGetter, setSettings] = useState(INITIAL_SETTINGS);
   const [isProcessingSwap, setIsProcessingSwap] = useState(false);
@@ -138,7 +144,9 @@ export const SwapContext = () => {
     isExecutingPrice,
     setIsExecutingPrice,
     isInsufficientBalance,
-    setIsInsufficientBalance
+    setIsInsufficientBalance,
+    estimatedGasValues,
+    setEstimatedGasValues
   };
 };
 

@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { Alert } from 'react-native';
+import { bnZERO } from '@constants/variables';
 import {
   ApprovalRequiredButton,
   SwapButton,
@@ -7,6 +8,7 @@ import {
 } from '@features/swap/components/base/swap-buttons-list';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
+  useEstimatedGas,
   useSwapActions,
   useSwapBottomSheetHandler
 } from '@features/swap/lib/hooks';
@@ -28,17 +30,25 @@ export const SubmitSwapActions = () => {
     isProcessingSwap,
     isIncreasingAllowance,
     setIsIncreasingAllowance,
-    isInsufficientBalance
+    setEstimatedGasValues
   } = useSwapContextSelector();
 
   const { setAllowance, swapCallback } = useSwapActions();
   const { onChangeBottomSheetSwapStatus } = useSwapBottomSheetHandler();
+  const { estimatedSwapGas } = useEstimatedGas();
 
   const onCompleteMultiStepSwap = useCallback(async () => {
     if (uiBottomSheetInformation.allowance === AllowanceStatus.INCREASE) {
       try {
         setIsIncreasingAllowance(true);
         await setAllowance();
+
+        const estimatedGas = await estimatedSwapGas();
+
+        setEstimatedGasValues({
+          swap: estimatedGas,
+          approval: bnZERO
+        });
       } finally {
         setIsIncreasingAllowance(false);
       }
@@ -70,8 +80,10 @@ export const SubmitSwapActions = () => {
       }
     }
   }, [
+    estimatedSwapGas,
     onChangeBottomSheetSwapStatus,
     setAllowance,
+    setEstimatedGasValues,
     setIsIncreasingAllowance,
     setIsProcessingSwap,
     swapCallback,
@@ -91,7 +103,7 @@ export const SubmitSwapActions = () => {
     );
   }
 
-  if (uiBottomSheetInformation.allowance !== 'suitable') {
+  if (uiBottomSheetInformation.allowance !== AllowanceStatus.SUITABLE) {
     return (
       <ApprovalRequiredButton
         isProcessingSwap={isProcessingSwap}
@@ -101,10 +113,7 @@ export const SubmitSwapActions = () => {
     );
   }
 
-  if (
-    isInsufficientBalance ||
-    uiBottomSheetInformation.allowance === 'suitable'
-  ) {
+  if (uiBottomSheetInformation.allowance === AllowanceStatus.SUITABLE) {
     return (
       <SwapButton
         isProcessingSwap={isProcessingSwap}

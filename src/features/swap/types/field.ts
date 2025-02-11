@@ -30,7 +30,6 @@ export type NonNullableSelectedTokensState = Record<
 export type UIBottomSheetInformationState = {
   priceImpact: number | null;
   minimumReceivedAmount: string | null;
-  lpFee: string | null;
   allowance: UIAllowanceType | null;
 };
 

@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { Keyboard } from 'react-native';
 import { ethers } from 'ethers';
+import { bnZERO } from '@constants/variables';
 import { useSwapContextSelector } from '@features/swap/context';
 import { INITIAL_UI_BOTTOM_SHEET_INFORMATION } from '@features/swap/context/initials';
 import { AllowanceStatus } from '@features/swap/types';
@@ -11,7 +12,7 @@ import {
   maximumAmountIn,
   minimumAmountOut
 } from '@features/swap/utils';
-import { NumberUtils } from '@utils';
+import { useEstimatedGas } from './use-estimated-gas';
 import { useSwapActions } from './use-swap-actions';
 import { useSwapBottomSheetHandler } from './use-swap-bottom-sheet-handler';
 import { useSwapHelpers } from './use-swap-helpers';
@@ -20,8 +21,11 @@ import { useSwapSettings } from './use-swap-settings';
 import { useSwapTokens } from './use-swap-tokens';
 
 export function useSwapInterface() {
-  const { setUiBottomSheetInformation, _refExactGetter } =
-    useSwapContextSelector();
+  const {
+    setUiBottomSheetInformation,
+    _refExactGetter,
+    setEstimatedGasValues
+  } = useSwapContextSelector();
 
   const { onReviewSwapPreview, onReviewSwapDismiss } =
     useSwapBottomSheetHandler();
@@ -31,7 +35,7 @@ export function useSwapInterface() {
   const { settings } = useSwapSettings();
   const { tokenToSell, tokenToReceive } = useSwapTokens();
   const { hasWrapNativeToken, isEmptyAmount } = useSwapHelpers();
-
+  const { estimatedApprovalGas } = useEstimatedGas();
   const resolveBottomSheetData = useCallback(async () => {
     Keyboard.dismiss();
     setUiBottomSheetInformation(INITIAL_UI_BOTTOM_SHEET_INFORMATION);
@@ -64,7 +68,21 @@ export function useSwapInterface() {
       );
 
       const networkFee = await swapCallback({ estimateGas: true });
+
       const allowance = await checkAllowance();
+
+      if (!!allowance) {
+        const approvalEstimatedGas = await estimatedApprovalGas({
+          amountIn: tokenToSell.AMOUNT
+        });
+
+        setEstimatedGasValues({ swap: bnZERO, approval: approvalEstimatedGas });
+      } else {
+        setEstimatedGasValues({
+          swap: networkFee,
+          approval: bnZERO
+        });
+      }
 
       const receivedAmountOut = SwapStringUtils.transformMinAmountValue(
         bnMinimumReceivedAmount
@@ -81,9 +99,6 @@ export function useSwapInterface() {
       setUiBottomSheetInformation({
         priceImpact: priceImpact ?? 0,
         minimumReceivedAmount,
-        lpFee: SwapStringUtils.transformRealizedLPFee(
-          NumberUtils.limitDecimalCount(ethers.utils.formatEther(networkFee), 1)
-        ),
         allowance: allowance
           ? AllowanceStatus.INCREASE
           : AllowanceStatus.SUITABLE
@@ -107,6 +122,8 @@ export function useSwapInterface() {
     tokenToSell.AMOUNT,
     swapCallback,
     checkAllowance,
+    estimatedApprovalGas,
+    setEstimatedGasValues,
     onReviewSwapDismiss
   ]);
 
