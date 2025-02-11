@@ -14,6 +14,7 @@ import Animated from 'react-native-reanimated';
 import { Spacer, Text } from '@components/base';
 import { CenteredSpinner } from '@components/composite';
 import { COLORS } from '@constants/colors';
+import { useProgressViewOffset } from '@hooks/ui';
 import { Transaction } from '@models';
 import { scale, verticalScale } from '@utils';
 import { ExplorerAccountTransactionItem } from './components';
@@ -59,6 +60,8 @@ export const AccountTransactions = forwardRef<
     },
     ref
   ) => {
+    const progressViewOffset = useProgressViewOffset();
+
     const sectionizedTransactions: SectionedTransaction[] = useMemo(() => {
       const sectionMap = new Map<string, Transaction[]>();
       transactions.forEach((n) => {
@@ -133,6 +136,7 @@ export const AccountTransactions = forwardRef<
             <RefreshControl
               onRefresh={onRefresh}
               refreshing={Boolean(isRefreshing)}
+              progressViewOffset={progressViewOffset}
             />
           }
         />
