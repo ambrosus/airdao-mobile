@@ -1,7 +1,10 @@
 import { useCallback } from 'react';
 import { ethers } from 'ethers';
 import { bnZERO } from '@constants/variables';
-import { useWalletPrivateKey } from '@entities/wallet';
+import { useWalletPrivateKey, useWalletStore } from '@entities/wallet';
+import { useAMBEntity } from '@features/send-funds/lib/hooks';
+import { useSwapContextSelector } from '@features/swap/context';
+import { AllowanceStatus } from '@features/swap/types';
 import {
   calculateAllowanceWithProviderFee,
   calculateGasMargin
@@ -18,8 +21,16 @@ type BaseEstimatedGasArgs = {
 
 export function useEstimatedGas() {
   const { _extractPrivateKey } = useWalletPrivateKey();
+  const { wallet } = useWalletStore();
   const { tokenToSell } = useSwapTokens();
   const { swapCallback } = useSwapActions();
+  const {
+    estimatedGasValues,
+    uiBottomSheetInformation: { allowance },
+    setIsInsufficientBalance
+  } = useSwapContextSelector();
+
+  const { balance } = useAMBEntity(wallet?.address ?? '');
 
   const baseProviderFee = useCallback(
     async (estimatedGas: ethers.BigNumber) => {
@@ -45,9 +56,25 @@ export function useEstimatedGas() {
     []
   );
 
-  const isEnoughBalanceToCoverGas = useCallback(async () => {
-    return true;
-  }, []);
+  const isEnoughBalanceToCoverGas = useCallback(() => {
+    setIsInsufficientBalance(false);
+    const parsedBalance = ethers.utils.parseEther(
+      balance.formattedBalance ?? '0'
+    );
+
+    const requiredGas =
+      allowance === AllowanceStatus.INCREASE
+        ? estimatedGasValues.approval
+        : estimatedGasValues.swap;
+
+    setIsInsufficientBalance(parsedBalance.gte(requiredGas));
+  }, [
+    setIsInsufficientBalance,
+    balance.formattedBalance,
+    allowance,
+    estimatedGasValues.approval,
+    estimatedGasValues.swap
+  ]);
 
   const estimatedSwapGas = useCallback(
     async (args?: BaseEstimatedGasArgs) => {
