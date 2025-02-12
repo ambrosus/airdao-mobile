@@ -1,8 +1,11 @@
-import { BigNumber } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { CryptoCurrencyCode } from '@appTypes';
 import { TierRewardList } from '@entities/harbor/model/types';
 import { Token } from '@models';
 import { TokenUtils } from '@utils';
+
+// TODO: remove after merge
+export const bnZERO = ethers.BigNumber.from(0);
 
 export const EMPTY_TOKEN = new Token(
   {

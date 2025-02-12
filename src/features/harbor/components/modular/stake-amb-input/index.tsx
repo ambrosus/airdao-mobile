@@ -4,9 +4,10 @@ import { ethers } from 'ethers';
 import { CryptoCurrencyCode } from '@appTypes';
 import { InputWithoutTokenSelect } from '@components/templates';
 import { useStakeHBRStore } from '@entities/harbor';
+import { useDepositAMB } from '@features/harbor/lib/hooks';
 import { useStakeHBRActionsStore } from '@features/harbor/model';
 import { Token } from '@models';
-import { NumberUtils } from '@utils';
+import { estimatedNetworkProviderFee, NumberUtils } from '@utils';
 import { styles } from './styles';
 
 function min(...args: any[]) {
@@ -24,6 +25,7 @@ export const StakeAMBInput = ({ error, tokenInstance }: StakeAMBInputProps) => {
   const { maxUserStakeValue, stake, totalPoolLimit, limitsConfig } =
     useStakeHBRStore();
   const { ambAmount, onChangeAMBAmountToStake } = useStakeHBRActionsStore();
+  const { estimateTransactionGas } = useDepositAMB();
 
   const exchange = useMemo(() => {
     return {
@@ -37,7 +39,7 @@ export const StakeAMBInput = ({ error, tokenInstance }: StakeAMBInputProps) => {
     };
   }, [maxUserStakeValue, stake]);
 
-  const onPressMaxAmountHandle = useCallback(() => {
+  const onPressMaxAmountHandle = useCallback(async () => {
     const availableStake = ethers.BigNumber.from(maxUserStakeValue).sub(stake);
     const availableBalanceAMB = ethers.BigNumber.from(
       tokenInstance.balance.wei
@@ -50,20 +52,35 @@ export const StakeAMBInput = ({ error, tokenInstance }: StakeAMBInputProps) => {
     ).sub(totalPoolLimit);
 
     if (!availableBalanceAMB.isZero()) {
-      onChangeAMBAmountToStake(
-        ethers.utils.formatEther(
-          min(availableBalanceAMB, availableStake, addressLimit, poolLimit)
-        )
+      const maxAmountToStake = min(
+        availableBalanceAMB,
+        availableStake,
+        addressLimit,
+        poolLimit
       );
+
+      const txEstimateGas = await estimateTransactionGas(
+        ethers.utils.formatEther(maxAmountToStake)
+      );
+      const txGasFee = await estimatedNetworkProviderFee(txEstimateGas);
+
+      if (availableBalanceAMB.gt(maxAmountToStake.add(txGasFee))) {
+        onChangeAMBAmountToStake(ethers.utils.formatEther(maxAmountToStake));
+      } else {
+        onChangeAMBAmountToStake(
+          ethers.utils.formatEther(maxAmountToStake.sub(txGasFee))
+        );
+      }
     }
   }, [
-    stake,
-    totalPoolLimit,
     maxUserStakeValue,
-    onChangeAMBAmountToStake,
+    stake,
+    tokenInstance.balance.wei,
     limitsConfig?.maxStakePerUserValue,
     limitsConfig?.maxTotalStakeValue,
-    tokenInstance.balance.wei
+    totalPoolLimit,
+    estimateTransactionGas,
+    onChangeAMBAmountToStake
   ]);
 
   return (

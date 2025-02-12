@@ -126,6 +126,22 @@ export const BottomSheetReviewTransaction = forwardRef<
                   {StringUtils.formatAddress(wallet?.address ?? '', 10, 3)}
                 </Text>
               </Row>
+              <Row alignItems="center" justifyContent="space-between">
+                <Text
+                  fontSize={14}
+                  fontFamily="Inter_500Medium"
+                  color={COLORS.neutral600}
+                >
+                  {t('common.network.fee')}
+                </Text>
+                <Text
+                  fontSize={14}
+                  fontFamily="Inter_500Medium"
+                  color={COLORS.neutral900}
+                >
+                  {0} {CryptoCurrencyCode.AMB}
+                </Text>
+              </Row>
             </View>
 
             <View style={styles.footer}>{children}</View>

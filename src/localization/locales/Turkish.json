@@ -160,6 +160,7 @@
   "common.details": "Ayrıntılar",
   "common.day": "gün",
   "common.days": "günler",
+  "common.network.fee": "Ağ Ücreti",
 
   "create.wallet.backup": "Cüzdanınızı yedekleyin",
   "create.wallet.backup.header": "Yedekleme cüzdanı",
@@ -427,7 +428,7 @@
   "bridge.select.network": "Ağ Seç",
   "bridge.select.assets": "Varlıklarım Seç",
   "bridge.set.amount": "Miktar belirleyin",
-  "bridge.amount.network.fee": "Ağ Ücreti ",
+  "bridge.amount.network.fee": "Ağ Ücreti",
 
   "bridge.preview.title": "Önizleme",
   "bridge.preview.receive": "Alacağınız",
