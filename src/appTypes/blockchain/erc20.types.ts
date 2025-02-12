@@ -12,4 +12,6 @@ export interface GetAllowanceArgs {
   abi?: unknown[];
 }
 
-export type SetAllowanceArgs = GetAllowanceArgs;
+export type SetAllowanceArgs = GetAllowanceArgs & {
+  estimateGas?: boolean;
+};

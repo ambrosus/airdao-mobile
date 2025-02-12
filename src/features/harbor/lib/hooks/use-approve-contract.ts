@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { ethers } from 'ethers';
 import Config from '@constants/config';
 import { useStakeHBRStore } from '@entities/harbor';
 import { useWalletPrivateKey, useWalletStore } from '@entities/wallet';
@@ -13,32 +14,46 @@ export function useApproveContract() {
 
   const [approving, setApproving] = useState(false);
 
-  const approve = useCallback(async () => {
-    setApproving(true);
-    try {
-      const privateKey = await _extractPrivateKey();
+  const approve = useCallback(
+    async (args?: { estimateGas: boolean }) => {
+      const { estimateGas } = args ?? {};
 
-      const addresses = {
-        spenderAddress: Config.HBR_LIQUIDITY_POOL,
-        tokenAddress: Config.HBR_TOKEN_ADDRESS
-      } as const;
+      try {
+        const privateKey = await _extractPrivateKey();
 
-      const tx = await erc20Contracts.setAllowance({
-        ...addresses,
-        amount,
-        privateKey
-      });
+        const addresses = {
+          spenderAddress: Config.HBR_LIQUIDITY_POOL,
+          tokenAddress: Config.HBR_TOKEN_ADDRESS
+        } as const;
 
-      if (await tx.wait()) {
-        await fetchUserAllowance(wallet?.address ?? '');
+        if (estimateGas) {
+          return await erc20Contracts.setAllowance({
+            ...addresses,
+            amount,
+            privateKey,
+            estimateGas
+          });
+        }
+
+        setApproving(true);
+        const tx = await erc20Contracts.setAllowance({
+          ...addresses,
+          amount,
+          privateKey
+        });
+
+        if (!(tx instanceof ethers.BigNumber) && (await tx.wait())) {
+          await fetchUserAllowance(wallet?.address ?? '');
+        }
+      } catch (error) {
+        console.error('Error approving contract:', error);
+        throw error;
+      } finally {
+        setApproving(false);
       }
-    } catch (error) {
-      console.error('Error approving contract:', error);
-      throw error;
-    } finally {
-      setApproving(false);
-    }
-  }, [_extractPrivateKey, amount, fetchUserAllowance, wallet]);
+    },
+    [_extractPrivateKey, amount, fetchUserAllowance, wallet]
+  );
 
   return { approving, approve };
 }

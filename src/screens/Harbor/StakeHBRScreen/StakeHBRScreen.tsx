@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -20,27 +20,72 @@ import {
   useStakeHBRStore
 } from '@entities/harbor';
 import { StakedBalanceInfo } from '@entities/harbor/components/composite';
-import { useApproveContract, useStakeHBRActionsStore } from '@features/harbor';
+import { bnZERO } from '@entities/harbor/constants';
+import { useWalletStore } from '@entities/wallet';
+import {
+  useApproveContract,
+  useDepositHBR,
+  useStakeHBRActionsStore
+} from '@features/harbor';
 import { StakeInput } from '@features/harbor/components/modular';
 import { BottomSheetReviewTransactionWithAction } from '@features/harbor/components/templates';
+import { useAMBEntity } from '@features/send-funds/lib/hooks';
 import {
   keyboardAvoidingViewOffsetWithNotchSupportedValue,
+  useDebounce,
   useKeyboardContainerStyleWithSafeArea
 } from '@hooks';
-import { NumberUtils } from '@utils';
+import { estimatedNetworkProviderFee, NumberUtils } from '@utils';
 import { styles } from './styles';
 
 export const StakeHBRScreen = () => {
   const { t } = useTranslation();
+  const { wallet } = useWalletStore();
   const hbrInstance = useHBRInstance();
   const { approving, approve } = useApproveContract();
   const footerStyle = useKeyboardContainerStyleWithSafeArea(styles.footer);
   const error = useInputErrorStakeHBR(hbrInstance);
 
+  const ambInstance = useAMBEntity(wallet?.address ?? '');
+
   const { deposit, allowance } = useStakeHBRStore();
   const { amount, onChangeHBRAmountToStake } = useStakeHBRActionsStore();
+  const { estimateTransactionGas } = useDepositHBR();
 
   const bottomSheetReviewTxRef = useRef<BottomSheetRef>(null);
+
+  const [estimatedGas, setEstimatedGas] = useState(bnZERO);
+  const [isInsufficientBalance, setIsInsufficientBalance] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleEstimateFeeEffect = useCallback(async () => {
+    if (+amount >= 1000) {
+      setLoading(true);
+      setIsInsufficientBalance(false);
+      const bnAmount = ethers.utils.parseEther(amount);
+      const parsedAmbBalance = ethers.utils.parseEther(
+        ambInstance.balance.formattedBalance
+      );
+
+      if (allowance.lt(bnAmount)) {
+        const approveEstimatedGas = await approve({ estimateGas: true });
+        if (approveEstimatedGas instanceof ethers.BigNumber) {
+          const txGasFee = await estimatedNetworkProviderFee(
+            approveEstimatedGas
+          );
+          setEstimatedGas(txGasFee);
+
+          if (parsedAmbBalance.lt(txGasFee)) {
+            setIsInsufficientBalance(true);
+          }
+        }
+      }
+      setLoading(false);
+    }
+  }, [allowance, ambInstance.balance.formattedBalance, amount, approve]);
+
+  // Effect to check estimated gas fee from input
+  useDebounce(handleEstimateFeeEffect, 0);
 
   useFocusEffect(
     useCallback(() => {
@@ -57,6 +102,8 @@ export const StakeHBRScreen = () => {
 
     const bnAmount = ethers.utils.parseEther(amount);
 
+    if (isInsufficientBalance) return t('bridge.insufficient.funds');
+
     if (!!error) return error;
 
     if (allowance.lt(bnAmount)) {
@@ -66,11 +113,11 @@ export const StakeHBRScreen = () => {
     }
 
     return t('button.confirm');
-  }, [allowance, amount, error, t]);
+  }, [allowance, amount, error, isInsufficientBalance, t]);
 
   const disabled = useMemo(
-    () => !!error || !amount || approving,
-    [amount, approving, error]
+    () => !!error || !amount || approving || loading || isInsufficientBalance,
+    [amount, approving, error, isInsufficientBalance, loading]
   );
 
   const onButtonPress = useCallback(async () => {
@@ -86,11 +133,23 @@ export const StakeHBRScreen = () => {
       return await approve();
     }
 
+    setLoading(true);
+
+    try {
+      const txEstimateGas = await estimateTransactionGas();
+      const txGasFee = await estimatedNetworkProviderFee(txEstimateGas);
+      setEstimatedGas(txGasFee);
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+
     setTimeout(
       () => bottomSheetReviewTxRef.current?.show(),
       KEYBOARD_OPENING_TIME
     );
-  }, [approve, label, t]);
+  }, [approve, estimateTransactionGas, label, t]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -125,8 +184,7 @@ export const StakeHBRScreen = () => {
         <View style={footerStyle}>
           <PrimaryButton disabled={disabled} onPress={onButtonPress}>
             <TextOrSpinner
-              loading={approving}
-              loadingLabel={undefined}
+              loading={approving || loading}
               label={label}
               styles={{
                 active: {
@@ -140,7 +198,10 @@ export const StakeHBRScreen = () => {
         </View>
       </KeyboardAvoidingView>
 
-      <BottomSheetReviewTransactionWithAction ref={bottomSheetReviewTxRef} />
+      <BottomSheetReviewTransactionWithAction
+        ref={bottomSheetReviewTxRef}
+        estimatedGas={estimatedGas}
+      />
     </SafeAreaView>
   );
 };
