@@ -1,6 +1,7 @@
 import { BigNumber, BigNumberish, ethers } from 'ethers';
 import { CryptoCurrencyCode } from '@appTypes';
 import { AccountDBModel } from '@database';
+import { NetworksNames } from '@models/Bridge';
 
 export type BridgeDataState = {
   from: string;
@@ -98,15 +99,38 @@ export interface GetBalanceModel {
   ownerAddress: string;
 }
 
-export interface CalculateGasFee {
+export interface WithdrawDataModel {
+  tokenFrom: Token;
+  tokenTo: Token;
+  selectedAccount: AccountDBModel;
+  amountTokens: string;
+  feeData: FeeData;
+  gasFee?: boolean;
+}
+
+export interface CalculateGasFeeModel {
   bridgeConfig: Config;
   fromNetwork: string;
-  withdrawData: {
-    tokenFrom: Token;
-    tokenTo: Token;
-    selectedAccount: AccountDBModel;
-    amountTokens: string;
-    feeData: FeeData;
-    gasFee: boolean;
-  };
+  tokenFrom: Token;
+  tokenTo: Token;
+  isMax: boolean;
+  selectedAccount: AccountDBModel;
+  amountTokens: string;
+  feeData: FeeData;
+}
+
+export interface BridgeWithdrawModel {
+  bridgeConfig: Config;
+  fromNetwork: string;
+  withdrawData: WithdrawDataModel;
+}
+
+export interface GetAllBridgeFeesProps {
+  isMax: boolean;
+  bridgeConfig: Config;
+  fromNetwork: NetworksNames;
+  selectedTokenFrom: Token;
+  amountToBridge: string;
+  selectedTokenDestination: Token;
+  selectedWallet: AccountDBModel;
 }

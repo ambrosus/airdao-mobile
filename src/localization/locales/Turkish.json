@@ -432,8 +432,8 @@
   "bridge.preview.title": "Önizleme",
   "bridge.preview.receive": "Alacağınız",
   "bridge.preview.bridge.fee": "Köprü Ücreti",
-  "bridge.preview.network.fee": "Ağ Ücreti",
-  "bridge.preview.gas.fee": "Gaz Ücreti",
+  "bridge.preview.network.fee": "!!!Transfer fee",
+  "bridge.preview.gas.fee": "!!!Network fee",
   "bridge.preview.button": "Onaylayın",
   "bridge.preview.button.max": "Maksimum",
 

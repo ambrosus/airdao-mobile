@@ -6,6 +6,7 @@ export async function getBridgeFeeData({
   bridgeConfig,
   dataForFee
 }: GetFeeDataModel) {
+  // console.log('getBridgeFeeData');
   const { tokenFrom, tokenTo, amountTokens, isMax } = dataForFee;
 
   const sdk = new MySdk(bridgeConfig, Config.BRIDGE_RELAY_URLS);

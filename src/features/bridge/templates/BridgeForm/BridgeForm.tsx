@@ -9,6 +9,7 @@ import { BottomSheetRef } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { InputWithTokenSelect } from '@components/templates';
 import { COLORS } from '@constants/colors';
+import { AccountDBModel } from '@database';
 import { useWalletStore } from '@entities/wallet';
 import {
   DEFAULT_TRANSACTION,
@@ -17,9 +18,9 @@ import {
 import { useBridgeContextData } from '@features/bridge/context';
 import { BottomSheetBridgePreview } from '@features/bridge/templates/BottomSheetBridgePreview/BottomSheetBridgePreview';
 import { TokenSelectData } from '@features/bridge/templates/BridgeForm/components/TokenSelectData/TokenSelectData';
-import { getFeeData } from '@features/bridge/utils/getBridgeFee';
 import { getAllBridgeTokenBalance } from '@lib';
-import { FeeData } from '@lib/bridgeSDK/models/types';
+import { getAllBridgeFees } from '@lib/bridgeSDK/bridgeFunctions/getAllBridgeFees';
+import { Config, FeeData } from '@lib/bridgeSDK/models/types';
 
 import {
   CustomAppEvents,
@@ -28,16 +29,6 @@ import {
 import { PreviewDataWithFeeModel, Tokens } from '@models/Bridge';
 import { NumberUtils, verticalScale, isAndroid } from '@utils';
 import { styles } from './styles';
-
-/*
-GAS_FEE_BUFFER -->
- JavaScript has floating-point precision issues
- sometimes getFeeData return (amount + allFees) > accountBalance
- so we apply a small fix to avoid rounding errors
- Adds a small buffer to account for potential gas fee changes
- before the exact amount is known
- */
-const GAS_FEE_BUFFER = 0.00000000001;
 
 export const BridgeForm = () => {
   const { wallet: selectedWallet } = useWalletStore();
@@ -66,8 +57,7 @@ export const BridgeForm = () => {
     fromData,
     destinationData,
     selectedBridgeData,
-    processBridge,
-    bridgeErrorHandler
+    processBridge
   } = variables;
   const {
     setBridgePreviewData,
@@ -75,7 +65,8 @@ export const BridgeForm = () => {
     setAmountToBridge,
     setSelectedTokenPairs,
     setProcessingTransaction,
-    setSelectedBridgeData
+    setSelectedBridgeData,
+    bridgeErrorHandler
   } = methods;
 
   const error = useMemo(() => {
@@ -162,7 +153,6 @@ export const BridgeForm = () => {
       setProcessingTransaction(null);
     }, 200);
   }, [setProcessingTransaction]);
-
   const goToPreview = useCallback(async () => {
     Keyboard.dismiss();
     setDefaultOptions();
@@ -179,34 +169,29 @@ export const BridgeForm = () => {
         ) && selectedTokenPairs[0]?.isNativeCoin;
     try {
       setTemplateDataLoader(true);
-
-      const processedAmount = String(+amountToBridge - GAS_FEE_BUFFER);
-
-      const feeData = await getFeeData({
-        bridgeConfig,
-        amountTokens: processedAmount,
+      const { gasFee, feeData } = await getAllBridgeFees({
+        isMax,
+        bridgeConfig: bridgeConfig as Config,
+        fromNetwork: fromData.value.id,
         selectedTokenFrom,
+        amountToBridge,
         selectedTokenDestination,
-        setTemplateDataLoader,
-        isMaxOptions: isMax
+        selectedWallet: selectedWallet as AccountDBModel
       });
-      if (feeData) {
+
+      if (feeData && gasFee) {
         // @ts-ignore
-        const gasFee = await processBridge(true, feeData);
-        if (gasFee) {
-          // @ts-ignore
-          const dataToPreview = parseBridgePreviewData(feeData, gasFee);
-          const data = {
-            value: {
-              feeData,
-              gasFee
-            },
-            dataToPreview
-          };
-          // @ts-ignore
-          setBridgePreviewData(data);
-          previewRef?.current?.show();
-        }
+        const dataToPreview = parseBridgePreviewData(feeData, gasFee);
+        const data = {
+          value: {
+            feeData,
+            gasFee
+          },
+          dataToPreview
+        };
+        // @ts-ignore
+        setBridgePreviewData(data);
+        previewRef?.current?.show();
       }
     } catch (e) {
       bridgeErrorHandler(e);
@@ -217,11 +202,12 @@ export const BridgeForm = () => {
     amountToBridge,
     bridgeConfig,
     bridgeErrorHandler,
+    fromData.value.id,
     parseBridgePreviewData,
-    processBridge,
     selectedTokenDestination,
     selectedTokenFrom,
     selectedTokenPairs,
+    selectedWallet,
     setBridgePreviewData,
     setDefaultOptions,
     setTemplateDataLoader
@@ -266,31 +252,35 @@ export const BridgeForm = () => {
   const onAcceptPress = useCallback(() => {
     if (!bridgePreviewDataRef.current?.value) return;
     setPreviewLoader(true);
-    processBridge(false, bridgePreviewDataRef.current.value.feeData)
+    processBridge(bridgePreviewDataRef.current.value.feeData)
       .then((transaction) => {
         sendFirebaseEvent(CustomAppEvents.bridge_finish);
-        const transactionWaitingInfo = {
-          ...DEFAULT_TRANSACTION,
-          networkFrom: fromData.value.name,
-          networkTo: destinationData.value.name,
-          tokenFrom: selectedTokenFrom,
-          tokenTo: selectedTokenDestination,
-          amount: +ethers.utils.formatUnits(
-            bridgePreviewDataRef.current?.value.feeData.transferFee,
-            selectedTokenFrom.decimals
-          ),
-          decimalAmount: amountToBridge,
-          denominatedAmount: amountToBridge,
-          fee: ethers.utils.formatUnits(
-            bridgePreviewDataRef.current?.value.feeData.transferFee,
-            selectedTokenFrom.decimals
-          ),
-          wait: transaction.wait
-        };
-        setProcessingTransaction(transactionWaitingInfo);
+        if (transaction) {
+          const transactionWaitingInfo = {
+            ...DEFAULT_TRANSACTION,
+            networkFrom: fromData.value.name,
+            networkTo: destinationData.value.name,
+            tokenFrom: selectedTokenFrom,
+            tokenTo: selectedTokenDestination,
+            amount: +ethers.utils.formatUnits(
+              bridgePreviewDataRef.current?.value.feeData.transferFee,
+              selectedTokenFrom.decimals
+            ),
+            decimalAmount: amountToBridge,
+            denominatedAmount: amountToBridge,
+            fee: ethers.utils.formatUnits(
+              bridgePreviewDataRef.current?.value.feeData.transferFee,
+              selectedTokenFrom.decimals
+            ),
+            wait: transaction?.wait
+          };
+          setProcessingTransaction(transactionWaitingInfo);
+        } else {
+          throw new Error('unknown bridge response');
+        }
       })
       .catch((e) => {
-        onClose();
+        onClose().then();
         bridgeErrorHandler(e);
       })
       .finally(() => {

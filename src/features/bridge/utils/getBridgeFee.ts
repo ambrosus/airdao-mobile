@@ -7,7 +7,6 @@ interface GetFeeDataModel {
   isMaxOptions: boolean;
   selectedTokenFrom: Token;
   selectedTokenDestination: Token;
-  setTemplateDataLoader: (value: boolean) => void;
   bridgeConfig: Config | null;
 }
 export const getFeeData = async ({
@@ -36,7 +35,7 @@ export const getFeeData = async ({
   };
   try {
     if (isAmountToFeeLessThenZero) {
-      throw Error('amount to small');
+      throw Error('amount is too small');
     }
 
     if (bridgeConfig) {
