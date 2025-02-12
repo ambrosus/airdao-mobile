@@ -102,17 +102,24 @@ class HBRYieldService {
   async _depositAmb(
     amount: string,
     wallet: IsNullableAccount | undefined,
-    privateKey: string
+    privateKey: string,
+    { estimateGas = false }: { estimateGas?: boolean } = {}
   ) {
     try {
       if (!wallet) throw Error('No wallet found!');
 
-      // Analytics initial point
-      sendFirebaseEvent(CustomAppEvents.harbor_hbr_amb_stake_start);
       const bnAmount = ethers.utils.parseEther(amount);
       const signer = createSigner(privateKey);
       const contract = createHBRLiquidityPoolContract(signer);
 
+      if (estimateGas) {
+        return await contract.estimateGas.stake(bnAmount, {
+          value: bnAmount
+        });
+      }
+
+      // Analytics initial point
+      sendFirebaseEvent(CustomAppEvents.harbor_hbr_amb_stake_start);
       const tx = await contract.stake(bnAmount, { value: bnAmount });
       const response = await tx.wait();
 

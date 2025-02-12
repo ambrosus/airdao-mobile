@@ -1,4 +1,5 @@
 import { forwardRef, useMemo } from 'react';
+import { ethers } from 'ethers';
 import { BottomSheetRef, TextOrSpinner } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
@@ -14,10 +15,15 @@ const buttonNodeStyles = {
   }
 } as const;
 
+interface BottomSheetReviewAMBTransactionWithActionProps {
+  apy: number;
+  estimatedGas: ethers.BigNumber;
+}
+
 export const BottomSheetReviewAMBTransactionWithAction = forwardRef<
   BottomSheetRef,
-  { apy: number }
->(({ apy }, ref) => {
+  BottomSheetReviewAMBTransactionWithActionProps
+>(({ apy, estimatedGas }, ref) => {
   const { ambAmount } = useStakeHBRActionsStore();
   const { _depositAmb, loading, success, transaction, timestamp } =
     useDepositAMB();
@@ -32,6 +38,7 @@ export const BottomSheetReviewAMBTransactionWithAction = forwardRef<
     <BottomSheetReviewAMBTransaction
       ref={ref}
       amount={ambAmount}
+      estimatedGas={estimatedGas}
       apy={apy}
       success={success}
       timestamp={timestamp}

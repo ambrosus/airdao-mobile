@@ -1,14 +1,8 @@
-import React, {
-  PropsWithChildren,
-  forwardRef,
-  useCallback,
-  useMemo
-} from 'react';
+import { PropsWithChildren, forwardRef, useCallback, useMemo } from 'react';
 import { View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
-import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { Row, Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { TokenLogo } from '@components/modular';
@@ -16,7 +10,7 @@ import { COLORS } from '@constants/colors';
 import { useStakeHBRStore } from '@entities/harbor/model';
 import { useWalletStore } from '@entities/wallet';
 import { useForwardedRef, useContainerStyleWithSafeArea } from '@hooks';
-import { NumberUtils, StringUtils, _delayNavigation } from '@utils';
+import { NumberUtils, StringUtils } from '@utils';
 import { styles } from './styles';
 import { SuccessTxView } from '../../base';
 
@@ -27,40 +21,61 @@ interface BottomSheetReviewAMBTransactionProps extends PropsWithChildren {
   timestamp?: number;
   txHash?: string;
   loading: boolean;
+  estimatedGas: ethers.BigNumber;
 }
 
 export const BottomSheetReviewAMBTransaction = forwardRef<
   BottomSheetRef,
   BottomSheetReviewAMBTransactionProps
->(({ amount, apy, success, timestamp, txHash, loading, children }, ref) => {
-  const { t } = useTranslation();
-  const navigation = useNavigation<HarborNavigationProp>();
+>(
+  (
+    {
+      amount,
+      apy,
+      success,
+      timestamp,
+      txHash,
+      loading,
+      estimatedGas,
+      children
+    },
+    ref
+  ) => {
+    const { t } = useTranslation();
 
-  const { wallet } = useWalletStore();
-  const { limitsConfig, hbrYieldFetcher } = useStakeHBRStore();
-  const containerStyle = useContainerStyleWithSafeArea(styles.container);
+    const { wallet } = useWalletStore();
+    const { limitsConfig, hbrYieldFetcher } = useStakeHBRStore();
+    const containerStyle = useContainerStyleWithSafeArea(styles.container);
 
-  const bottomSheetRef = useForwardedRef(ref);
+    const bottomSheetRef = useForwardedRef(ref);
 
-  const dismiss = useCallback(() => {
-    if (bottomSheetRef.current) {
-      bottomSheetRef.current.dismiss();
-    }
-  }, [bottomSheetRef]);
+    const dismiss = useCallback(() => {
+      if (bottomSheetRef.current) {
+        bottomSheetRef.current.dismiss();
+      }
+    }, [bottomSheetRef]);
 
-  const stakeLockPeriod = useMemo(
-    () => (Number(limitsConfig?.stakeLockPeriod) / 86400).toFixed(0) || '0',
-    [limitsConfig?.stakeLockPeriod]
-  );
+    const stakeLockPeriod = useMemo(
+      () => (Number(limitsConfig?.stakeLockPeriod) / 86400).toFixed(0) || '0',
+      [limitsConfig?.stakeLockPeriod]
+    );
 
-  const onDismissBottomSheet = useCallback(async () => {
-    try {
-      await hbrYieldFetcher(wallet?.address ?? '');
-      _delayNavigation(dismiss, () => navigation.goBack());
-    } catch (error) {
-      throw error;
-    }
-  }, [dismiss, hbrYieldFetcher, navigation, wallet?.address]);
+    const onDismissBottomSheet = useCallback(async () => {
+      try {
+        await hbrYieldFetcher(wallet?.address ?? '');
+      } catch (error) {
+        throw error;
+      }
+    }, [hbrYieldFetcher, wallet?.address]);
+
+    const transformedEstimatedGas = useMemo(() => {
+      const parsedGas = NumberUtils.limitDecimalCount(
+        ethers.utils.formatEther(estimatedGas),
+        1
+      );
+
+      return `${parsedGas} ${CryptoCurrencyCode.AMB}`;
+    }, [estimatedGas]);
 
   return (
     <BottomSheet
@@ -162,10 +177,11 @@ export const BottomSheetReviewAMBTransaction = forwardRef<
               </Row>
             </View>
 
-            <View style={styles.footer}>{children}</View>
-          </>
-        )}
-      </View>
-    </BottomSheet>
-  );
-});
+              <View style={styles.footer}>{children}</View>
+            </>
+          )}
+        </View>
+      </BottomSheet>
+    );
+  }
+);
