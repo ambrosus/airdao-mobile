@@ -1,6 +1,13 @@
 import { ethers } from 'ethers';
+import { createAMBProvider } from './contracts/instances';
 
 const LIQUIDITY_PROVIDER_FEE = 0.003;
+
+export function calculateGasMargin(value: ethers.BigNumber): ethers.BigNumber {
+  return value
+    .mul(ethers.BigNumber.from(10000).add(ethers.BigNumber.from(1000)))
+    .div(ethers.BigNumber.from(10000));
+}
 
 export function realizedLPFee(amountToSell: string): string {
   const bnAmountToSell = ethers.utils.parseEther(amountToSell);
@@ -41,8 +48,20 @@ export async function wrapEstimatedGas(
   methodName: string,
   args: any[]
 ) {
+  const provider = createAMBProvider();
   try {
-    return await routerContract.estimateGas[methodName](...args);
+    const { gasPrice } = await provider.getFeeData();
+    const estimatedGas = await routerContract.estimateGas[methodName](...args);
+
+    const gasWithMargin = calculateGasMargin(estimatedGas);
+
+    const gasPriceNumber = gasPrice ? gasPrice.toNumber() : 0;
+    const estimatedGasNumber = gasWithMargin.toNumber();
+
+    const totalWei = Math.floor(estimatedGasNumber * gasPriceNumber).toString();
+    const result = ethers.utils.parseUnits(totalWei, 'wei');
+
+    return result;
   } catch (error) {
     return ethers.BigNumber.from(0);
   }

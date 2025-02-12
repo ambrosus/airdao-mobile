@@ -36,7 +36,8 @@ export const ReviewSwapButton = () => {
     isExecutingPrice,
     selectedTokens,
     selectedTokensAmount,
-    isWarningToEnableMultihopActive
+    isWarningToEnableMultihopActive,
+    isExtractingMaxPrice
   } = useSwapContextSelector();
 
   const [isProcessingBottomSheet, setIsProcessingBottomSheet] = useState(false);
@@ -75,9 +76,16 @@ export const ReviewSwapButton = () => {
     return (
       swapButtonString !== t('common.review') ||
       isProcessingBottomSheet ||
-      isExecutingPrice
+      isExecutingPrice ||
+      isExtractingMaxPrice
     );
-  }, [swapButtonString, t, isProcessingBottomSheet, isExecutingPrice]);
+  }, [
+    t,
+    swapButtonString,
+    isProcessingBottomSheet,
+    isExecutingPrice,
+    isExtractingMaxPrice
+  ]);
 
   const buttonColors = useMemo(() => {
     return disabled

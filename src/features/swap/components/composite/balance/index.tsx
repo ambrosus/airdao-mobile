@@ -7,8 +7,14 @@ import { ShimmerLoader } from '@components/animations';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { WalletOutlineIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
+import { AMB_DECIMALS } from '@constants/variables';
 import { useSwapContextSelector } from '@features/swap/context';
-import { useSwapBalance, useSwapFieldsHandler } from '@features/swap/lib/hooks';
+import {
+  useSwapActions,
+  useSwapBalance,
+  useSwapBetterCurrency,
+  useSwapFieldsHandler
+} from '@features/swap/lib/hooks';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
 import { useUSDPrice } from '@hooks';
 import { NumberUtils, scale } from '@utils';
@@ -19,15 +25,23 @@ interface BalanceProps {
 
 export const Balance = ({ type }: BalanceProps) => {
   const { t } = useTranslation();
+
   const {
     selectedTokens,
     selectedTokensAmount,
+    setSelectedTokensAmount,
     setIsExactIn,
-    isExecutingPrice
+    isExecutingPrice,
+    setIsInsufficientBalance,
+    isExtractingMaxPrice,
+    setIsExtractingMaxPrice
   } = useSwapContextSelector();
   const { onSelectMaxTokensAmount, updateReceivedTokensOutput } =
     useSwapFieldsHandler();
 
+  const { swapCallback } = useSwapActions();
+
+  const { bestTradeCurrency } = useSwapBetterCurrency();
   const { bnBalanceAmount, isFetchingBalance } = useSwapBalance(
     selectedTokens[type]
   );
@@ -48,24 +62,76 @@ export const Balance = ({ type }: BalanceProps) => {
     selectedTokens[type]?.symbol as CryptoCurrencyCode
   );
 
-  const onSelectMaxTokensAmountPress = useCallback(() => {
-    if (bnBalanceAmount) {
-      const fullAmount = NumberUtils.limitDecimalCount(
-        formatEther(bnBalanceAmount?._hex),
-        18
-      );
+  const onSelectMaxTokensAmountPress = useCallback(async () => {
+    setIsExtractingMaxPrice(true);
+    setIsExactIn(type === FIELD.TOKEN_A);
 
-      onSelectMaxTokensAmount(type, fullAmount);
-      setIsExactIn(type === FIELD.TOKEN_A);
+    if (!bnBalanceAmount) return;
 
-      setTimeout(async () => {
-        await updateReceivedTokensOutput();
+    try {
+      const parsedBalance = ethers.utils.formatEther(bnBalanceAmount);
+
+      const isNative =
+        type === FIELD.TOKEN_A &&
+        selectedTokens.TOKEN_A.address === ethers.constants.AddressZero;
+
+      if (isNative) {
+        const bnAmountToReceive = await bestTradeCurrency(parsedBalance, [
+          selectedTokens.TOKEN_A.address,
+          selectedTokens.TOKEN_B.address
+        ]);
+
+        const estimatedGas = await swapCallback({
+          amountIn: parsedBalance,
+          amountOut: ethers.utils.formatEther(bnAmountToReceive),
+          estimateGas: true
+        });
+
+        const maxSpendableAmount = bnBalanceAmount.sub(estimatedGas);
+
+        if (maxSpendableAmount.lt(0)) {
+          setIsInsufficientBalance(true);
+          setSelectedTokensAmount({
+            [FIELD.TOKEN_A]: '0',
+            [FIELD.TOKEN_B]: ''
+          });
+          return;
+        }
+
+        const amount = NumberUtils.limitDecimalCount(
+          formatEther(maxSpendableAmount),
+          AMB_DECIMALS
+        );
+
+        onSelectMaxTokensAmount(type, amount);
+      } else {
+        const amount = NumberUtils.limitDecimalCount(
+          formatEther(bnBalanceAmount),
+          AMB_DECIMALS
+        );
+
+        onSelectMaxTokensAmount(type, amount);
+      }
+
+      setTimeout(() => {
+        updateReceivedTokensOutput();
       });
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsExtractingMaxPrice(false);
     }
   }, [
+    bestTradeCurrency,
     bnBalanceAmount,
     onSelectMaxTokensAmount,
+    selectedTokens.TOKEN_A.address,
+    selectedTokens.TOKEN_B.address,
     setIsExactIn,
+    setIsExtractingMaxPrice,
+    setIsInsufficientBalance,
+    setSelectedTokensAmount,
+    swapCallback,
     type,
     updateReceivedTokensOutput
   ]);
@@ -127,7 +193,7 @@ export const Balance = ({ type }: BalanceProps) => {
           <>
             <Spacer horizontal value={scale(4)} />
             <Button
-              disabled={isExecutingPrice}
+              disabled={isExecutingPrice || isExtractingMaxPrice}
               onPress={onSelectMaxTokensAmountPress}
             >
               <Text
