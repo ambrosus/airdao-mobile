@@ -5,12 +5,18 @@ import { resultHandler } from '@features/harbor/hooks/processHelpers/resultHandl
 
 export const processWithdrawReward = async (
   wallet: IsNullableAccount,
-  desiredCoeff: number
+  desiredCoeff: number,
+  { estimateGas = false }: { estimateGas?: boolean } = {}
 ): Promise<ProcessModel | null> => {
   const result = await harborService.processClaimReward(
     wallet?._raw,
-    desiredCoeff
+    desiredCoeff,
+    { estimateGas }
   );
+
+  if (estimateGas) {
+    return result;
+  }
 
   if (result) {
     return await resultHandler(result);

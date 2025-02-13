@@ -15,6 +15,10 @@ export const parseWithdrawReward = (previewData: WithdrawPreviewDataModel) => {
         name: 'harbor.withdraw.preview.bond.reward',
         value: NumberUtils.limitDecimalCount(previewData.rewardBond, 2),
         symbol: CryptoCurrencyCode.BOND
+      },
+      {
+        name: 'common.network.fee',
+        value: `${previewData.estimatedGas} ${CryptoCurrencyCode.AMB}`
       }
     ],
     success: [

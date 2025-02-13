@@ -11,15 +11,13 @@ export const processFunctions = async (
   modalType: ModalTypes,
   wallet: IsNullableAccount,
   previewData: HarborPreView,
-  activeAmbTier: { value: number },
-  { estimateGas = false }: { estimateGas?: boolean } = {}
+  activeAmbTier: { value: number }
 ) => {
   switch (modalType) {
     case 'stake': {
       return await processStake(
         wallet,
-        'amount' in previewData ? previewData?.amount : '',
-        { estimateGas }
+        'amount' in previewData ? previewData?.amount : ''
       );
     }
     case 'withdraw-stake': {
