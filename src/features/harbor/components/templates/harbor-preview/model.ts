@@ -35,6 +35,7 @@ export interface FormTemplateProps {
   onAcceptPress: () => void;
   loading: boolean;
   estimatedGas?: string;
+  type: ModalTypes;
 }
 
 export interface SuccessTemplateDataProps {

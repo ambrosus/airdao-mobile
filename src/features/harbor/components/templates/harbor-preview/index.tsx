@@ -131,6 +131,7 @@ export const BottomSheetHarborPreview = forwardRef<
             buttonTitle={buttonTitle}
             data={dataParseFunction(modalType, previewData)?.form}
             estimatedGas={previewData.estimatedGas}
+            type={modalType}
           />
         );
     }

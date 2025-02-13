@@ -132,7 +132,7 @@ export const ProcessStake = () => {
         receiveToken: CryptoCurrencyCode.stAMB,
         fromAddress: wallet?.address || '',
         apy: harborAPR,
-        estimatedGas: ''
+        estimatedGas: '0'
       };
 
       const txEstimateGas = await processStake(

@@ -20,7 +20,8 @@ export const FormTemplate = ({
   buttonTitle,
   onAcceptPress,
   loading,
-  estimatedGas
+  estimatedGas,
+  type
 }: FormTemplateProps) => {
   const { t } = useTranslation();
   const { wallet } = useWalletStore();
@@ -88,22 +89,26 @@ export const FormTemplate = ({
     const parsedGas = ethers.utils.parseEther(estimatedGas ?? '0');
     const parsedBalance = ethers.utils.parseEther(formattedBalance);
 
-    const amountToTransfer = data?.find(
-      (item) => item.name === 'harbor.staked.amount'
-    )?.value;
+    if (type === 'stake') {
+      const amountToTransfer = data?.find(
+        (item) => item.name === 'harbor.staked.amount'
+      )?.value;
 
-    if (amountToTransfer) {
-      const amountWithGas = ethers.utils
-        .parseEther(amountToTransfer)
-        .add(parsedGas);
-
+      const bnAmountToTransfer = ethers.utils.parseEther(
+        amountToTransfer ?? '0'
+      );
+      const amountWithGas = bnAmountToTransfer.add(parsedGas);
       if (parsedBalance.lt(amountWithGas)) {
+        return t('bridge.insufficient.funds');
+      }
+    } else {
+      if (parsedGas.gt(parsedBalance)) {
         return t('bridge.insufficient.funds');
       }
     }
 
     return buttonTitle;
-  }, [estimatedGas, formattedBalance, data, buttonTitle, t]);
+  }, [estimatedGas, formattedBalance, data, buttonTitle, type, t]);
 
   const disabled = useMemo(() => {
     return buttonLabel === t('bridge.insufficient.funds');

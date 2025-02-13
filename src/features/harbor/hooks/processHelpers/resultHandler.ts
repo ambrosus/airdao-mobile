@@ -1,7 +1,8 @@
-export const resultHandler = async (result: any) => {
-  if (result?.error || !result?.transactionHash) {
-    return { error: result?.error.message || 'unknown' };
-  } else {
-    return { transactionHash: result?.transactionHash };
-  }
-};
+type BaseResult = { transactionHash?: string; error?: { message: string } };
+
+export async function resultHandler<T extends BaseResult>(result: T) {
+  if (result?.error || !result?.transactionHash)
+    return { error: result?.error?.message || 'unknown' };
+
+  return { transactionHash: result?.transactionHash };
+}
