@@ -2,10 +2,9 @@ import { RawRecord } from '@nozbe/watermelondb';
 import { BigNumber, ethers } from 'ethers';
 import { parseEther } from 'ethers/lib/utils';
 import moment from 'moment/moment';
-import { HARBOR_ABI } from '@api/harbor/abi/harbor';
-import { UNSTAKE_LOG_ABI } from '@api/harbor/abi/harbor-unstake-log-abi';
+import { UNSTAKE_LOG_ABI, HARBOR_ABI } from '@api/harbor/abi';
 import Config from '@constants/config';
-import { ILogs } from '@entities/harbor/model/types';
+import { ILogs } from '@entities/harbor/model';
 import { Cache, CacheKey } from '@lib/cache';
 import {
   CustomAppEvents,
@@ -82,7 +81,7 @@ const getStakeLimit = async () => {
   }
 };
 
-const getUnStakeLockTime = async () => {
+const getUnstakeLockTime = async () => {
   try {
     const contract = createHarborLiquidStakedContract();
     const data = await contract.unstakeLockTime();
@@ -200,6 +199,7 @@ const processStake = async (
 
       sendFirebaseEvent(CustomAppEvents.harbor_amb_stake_start);
       const tx = await contract.stake({ value });
+
       if (tx) {
         const res = await tx.wait();
         if (res) {
@@ -242,6 +242,7 @@ const processWithdraw = async (
 
     sendFirebaseEvent(CustomAppEvents.harbor_amb_withdraw_start);
     const tx = await contract.unstake(parseEther(amount), desiredCoeff);
+
     if (tx) {
       const res = await tx.wait();
       if (res) {
@@ -280,6 +281,7 @@ const processClaimReward = async (
 
     sendFirebaseEvent(CustomAppEvents.harbor_amb_claim_reward_start);
     const tx = await contract.claimRewards(desiredCoeff);
+
     if (tx) {
       const res = await tx.wait();
       if (res) {
@@ -303,7 +305,7 @@ export const harborService = {
   getStakeAPR,
   getUserStaked,
   getStakeLimit,
-  getUnStakeLockTime,
+  getUnstakeLockTime,
   getTier,
   getClaimAmount,
   getWithdrawalRequests,

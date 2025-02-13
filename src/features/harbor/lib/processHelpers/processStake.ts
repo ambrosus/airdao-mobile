@@ -1,18 +1,17 @@
+import { parseEther } from 'ethers/lib/utils';
 import { harborService } from '@api/harbor/harbor-service';
 import { IsNullableAccount } from '@entities/wallet/model/types';
-import { ProcessModel } from '@features/harbor/hooks/parseDataHelpers/models';
-import { resultHandler } from '@features/harbor/hooks/processHelpers/resultHandler';
+import { ProcessModel } from '@features/harbor/lib/parseDataHelpers/models';
+import { resultHandler } from '@features/harbor/lib/processHelpers/resultHandler';
 
-export const processWithdraw = async (
+export const processStake = async (
   wallet: IsNullableAccount,
   amount: string,
-  desiredCoeff: number,
   { estimateGas = false }: { estimateGas?: boolean } = {}
 ): Promise<ProcessModel | null> => {
-  const result = await harborService.processWithdraw(
+  const result = await harborService.processStake(
     wallet?._raw,
-    amount,
-    desiredCoeff,
+    parseEther(amount || '0'),
     { estimateGas }
   );
 

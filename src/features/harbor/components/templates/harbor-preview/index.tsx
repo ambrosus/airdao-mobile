@@ -11,7 +11,7 @@ import {
   FormTemplate,
   SuccessTemplate
 } from '@features/harbor/components/base';
-import { dataParseFunction, processFunctions } from '@features/harbor/hooks';
+import { dataParseFunction, processFunctions } from '@features/harbor/lib';
 import { useBalanceOfAddress, useForwardedRef } from '@hooks';
 import { isAndroid, scale } from '@utils';
 import { ModalTypes, HarborPreView } from './model';

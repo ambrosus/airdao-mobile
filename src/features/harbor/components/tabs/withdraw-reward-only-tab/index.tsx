@@ -10,7 +10,7 @@ import { DEFAULT_WITHDRAW_PREVIEW } from '@entities/harbor/constants';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { useWalletStore } from '@entities/wallet/model/wallet-store';
 import { BottomSheetHarborPreview } from '@features/harbor/components/templates';
-import { processWithdrawReward } from '@features/harbor/hooks/processHelpers/processWithdrawReward';
+import { processWithdrawReward } from '@features/harbor/lib';
 import { NumberUtils, estimatedNetworkProviderFee, scale } from '@utils';
 import { styles } from './styles';
 import { TiersSelector } from '../../base/tiers-selector';

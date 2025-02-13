@@ -11,12 +11,11 @@ import { COLORS } from '@constants/colors';
 import { DEFAULT_WITHDRAW_PREVIEW } from '@entities/harbor/constants';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { useWalletStore } from '@entities/wallet';
-import { WithdrawInfo } from '@features/harbor/components/base';
+import { WithdrawInfo, TiersSelector } from '@features/harbor/components/base';
 import { BottomSheetHarborPreview } from '@features/harbor/components/templates';
-import { processWithdraw } from '@features/harbor/hooks/processHelpers/processWithdraw';
+import { processWithdraw } from '@features/harbor/lib';
 import { NumberUtils, estimatedNetworkProviderFee, scale } from '@utils';
 import { styles } from './styles';
-import { TiersSelector } from '../../base/tiers-selector';
 
 export const WithdrawStakeRewardTab = () => {
   const { t } = useTranslation();
