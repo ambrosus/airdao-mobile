@@ -21,4 +21,5 @@ export interface StakeArgs {
   pool: ReturnedPoolDetails;
   value: string;
   walletHash: string;
+  estimateGas?: boolean;
 }
