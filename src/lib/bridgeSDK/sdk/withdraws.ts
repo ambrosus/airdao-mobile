@@ -78,7 +78,7 @@ export async function withdraw({
           { value: fee.add(amountBridge) }
         );
       } else {
-        return bridge.wrapWithdraw(
+        return await bridge.wrapWithdraw(
           toAddress,
           feeData.signature,
           feeData.transferFee,

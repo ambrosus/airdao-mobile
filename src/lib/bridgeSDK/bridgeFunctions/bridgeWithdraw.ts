@@ -28,7 +28,7 @@ export async function bridgeWithdraw({
   const signer = new ethers.Wallet(privateKey, provider);
   sendFirebaseEvent(CustomAppEvents.bridge_start);
 
-  const testing = await sdk.withdraw(
+  return await sdk.withdraw(
     tokenFrom,
     tokenTo,
     selectedAccount.address,
@@ -37,5 +37,4 @@ export async function bridgeWithdraw({
     signer,
     gasFee
   );
-  return testing;
 }

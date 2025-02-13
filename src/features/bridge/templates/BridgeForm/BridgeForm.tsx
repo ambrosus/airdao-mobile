@@ -12,6 +12,7 @@ import { COLORS } from '@constants/colors';
 import { AccountDBModel } from '@database';
 import { useWalletStore } from '@entities/wallet';
 import {
+  BRIDGE_ERROR_CODES,
   DEFAULT_TRANSACTION,
   EMPTY_FEE_DATA
 } from '@features/bridge/constants';
@@ -27,7 +28,7 @@ import {
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
 import { PreviewDataWithFeeModel, Tokens } from '@models/Bridge';
-import { NumberUtils, verticalScale, isAndroid } from '@utils';
+import { isAndroid, NumberUtils, verticalScale } from '@utils';
 import { styles } from './styles';
 
 export const BridgeForm = () => {
@@ -57,7 +58,8 @@ export const BridgeForm = () => {
     fromData,
     destinationData,
     selectedBridgeData,
-    processBridge
+    processBridge,
+    transactionsOnLoop
   } = variables;
   const {
     setBridgePreviewData,
@@ -66,6 +68,7 @@ export const BridgeForm = () => {
     setSelectedTokenPairs,
     setProcessingTransaction,
     setSelectedBridgeData,
+    setTransactionsOnLoop,
     bridgeErrorHandler
   } = methods;
 
@@ -147,15 +150,20 @@ export const BridgeForm = () => {
     ]
   );
 
+  const defaultSetter = useCallback(() => {
+    setPreviewLoader(false);
+    setProcessingTransaction(null);
+  }, [setProcessingTransaction]);
   const setDefaultOptions = useCallback(() => {
     setTimeout(() => {
-      setPreviewLoader(false);
-      setProcessingTransaction(null);
+      defaultSetter();
     }, 200);
-  }, [setProcessingTransaction]);
+  }, [defaultSetter]);
+
   const goToPreview = useCallback(async () => {
     Keyboard.dismiss();
     setDefaultOptions();
+
     const isMax =
       amountToBridge ===
         NumberUtils.limitDecimalCount(
@@ -169,6 +177,15 @@ export const BridgeForm = () => {
         ) && selectedTokenPairs[0]?.isNativeCoin;
     try {
       setTemplateDataLoader(true);
+
+      if (
+        transactionsOnLoop.some(
+          (transaction) => transaction.address === selectedWallet?.address
+        )
+      ) {
+        throw new Error(BRIDGE_ERROR_CODES.TRANSACTION_ON_PROCESS);
+      }
+
       const { gasFee, feeData } = await getAllBridgeFees({
         isMax,
         bridgeConfig: bridgeConfig as Config,
@@ -210,7 +227,8 @@ export const BridgeForm = () => {
     selectedWallet,
     setBridgePreviewData,
     setDefaultOptions,
-    setTemplateDataLoader
+    setTemplateDataLoader,
+    transactionsOnLoop
   ]);
 
   const onClose = useCallback(async () => {
@@ -249,44 +267,60 @@ export const BridgeForm = () => {
     }
   }, [bridgePreviewData]);
 
-  const onAcceptPress = useCallback(() => {
+  const onAcceptPress = useCallback(async () => {
     if (!bridgePreviewDataRef.current?.value) return;
     setPreviewLoader(true);
-    processBridge(bridgePreviewDataRef.current.value.feeData)
-      .then((transaction) => {
-        sendFirebaseEvent(CustomAppEvents.bridge_finish);
-        if (transaction) {
-          const transactionWaitingInfo = {
-            ...DEFAULT_TRANSACTION,
-            networkFrom: fromData.value.name,
-            networkTo: destinationData.value.name,
-            tokenFrom: selectedTokenFrom,
-            tokenTo: selectedTokenDestination,
-            amount: +ethers.utils.formatUnits(
-              bridgePreviewDataRef.current?.value.feeData.transferFee,
-              selectedTokenFrom.decimals
-            ),
-            decimalAmount: amountToBridge,
-            denominatedAmount: amountToBridge,
-            fee: ethers.utils.formatUnits(
-              bridgePreviewDataRef.current?.value.feeData.transferFee,
-              selectedTokenFrom.decimals
-            ),
-            wait: transaction?.wait
-          };
-          setProcessingTransaction(transactionWaitingInfo);
-        } else {
-          throw new Error('unknown bridge response');
+    if (
+      !transactionsOnLoop.some(
+        (item) => item.address === selectedWallet?.address
+      )
+    ) {
+      setTransactionsOnLoop((prevState) => [
+        ...prevState,
+        {
+          address: selectedWallet?.address as string,
+          timestamp: Date.now(),
+          feeData: bridgePreviewDataRef.current?.value.feeData
         }
-      })
-      .catch((e) => {
-        onClose().then();
-        bridgeErrorHandler(e);
-      })
-      .finally(() => {
-        setPreviewLoader(false);
-        setAmountToBridge('');
-      });
+      ]);
+      processBridge(bridgePreviewDataRef.current.value.feeData)
+        .then((transaction) => {
+          if (transaction) {
+            sendFirebaseEvent(CustomAppEvents.bridge_finish);
+            const transactionWaitingInfo = {
+              ...DEFAULT_TRANSACTION,
+              networkFrom: fromData.value.name,
+              networkTo: destinationData.value.name,
+              tokenFrom: selectedTokenFrom,
+              tokenTo: selectedTokenDestination,
+              amount: +ethers.utils.formatUnits(
+                bridgePreviewDataRef.current?.value.feeData.transferFee,
+                selectedTokenFrom.decimals
+              ),
+              decimalAmount: amountToBridge,
+              denominatedAmount: amountToBridge,
+              fee: ethers.utils.formatUnits(
+                bridgePreviewDataRef.current?.value.feeData.transferFee,
+                selectedTokenFrom.decimals
+              ),
+              wait: transaction?.wait
+            };
+            if (transaction.from === selectedWallet?.address) {
+              setProcessingTransaction(transactionWaitingInfo);
+            }
+          } else {
+            throw new Error('unknown bridge response');
+          }
+        })
+        .catch((e) => {
+          onClose().then();
+          bridgeErrorHandler(e);
+        })
+        .finally(() => {
+          setPreviewLoader(false);
+          setAmountToBridge('');
+        });
+    }
   }, [
     amountToBridge,
     bridgeErrorHandler,
@@ -296,8 +330,11 @@ export const BridgeForm = () => {
     processBridge,
     selectedTokenDestination,
     selectedTokenFrom,
+    selectedWallet?.address,
     setAmountToBridge,
-    setProcessingTransaction
+    setProcessingTransaction,
+    setTransactionsOnLoop,
+    transactionsOnLoop
   ]);
 
   const onInputWrapperLayout = (event: LayoutChangeEvent) => {
