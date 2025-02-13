@@ -16,7 +16,7 @@ import { DEFAULT_STAKE_PREVIEW } from '@entities/harbor/constants';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { useWalletStore } from '@entities/wallet';
 import { BottomSheetHarborPreview } from '@features/harbor/components/templates';
-import { processStake } from '@features/harbor/hooks/processHelpers/processStake';
+import { processStake } from '@features/harbor/lib/processHelpers/processStake';
 import { useBalanceOfAddress } from '@hooks';
 import { ExplorerAccount, Token } from '@models';
 import {

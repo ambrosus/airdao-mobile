@@ -1,7 +1,7 @@
 import { harborService } from '@api/harbor/harbor-service';
 import { IsNullableAccount } from '@entities/wallet/model/types';
-import { ProcessModel } from '@features/harbor/hooks/parseDataHelpers/models';
-import { resultHandler } from '@features/harbor/hooks/processHelpers/resultHandler';
+import { ProcessModel } from '@features/harbor/lib/parseDataHelpers/models';
+import { resultHandler } from '@features/harbor/lib/processHelpers/resultHandler';
 
 export const processWithdrawReward = async (
   wallet: IsNullableAccount,
