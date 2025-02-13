@@ -313,6 +313,12 @@ export const BridgeForm = () => {
           }
         })
         .catch((e) => {
+          setTransactionsOnLoop((prevState) =>
+            prevState.filter(
+              (transaction) => transaction.address !== selectedWallet?.address
+            )
+          );
+
           onClose().then();
           bridgeErrorHandler(e);
         })
