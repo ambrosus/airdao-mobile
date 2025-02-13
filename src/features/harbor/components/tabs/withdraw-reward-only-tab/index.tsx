@@ -7,7 +7,7 @@ import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { DEFAULT_WITHDRAW_PREVIEW } from '@entities/harbor/constants';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
-import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-preview';
+import { BottomSheetHarborPreview } from '@features/harbor/components/templates';
 import { scale } from '@utils';
 import { styles } from './styles';
 import { TiersSelector } from '../../base/tiers-selector';
@@ -59,7 +59,7 @@ export const WithdrawRewardOnlyTab = () => {
           {t('harbor.withdrawal.button')}
         </Text>
       </PrimaryButton>
-      <BottomSheetHarborPreView
+      <BottomSheetHarborPreview
         modalType="withdraw-reward"
         previewData={previewData}
         ref={bottomSheetRef}

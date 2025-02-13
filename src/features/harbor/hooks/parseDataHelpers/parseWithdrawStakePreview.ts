@@ -1,5 +1,5 @@
 import { CryptoCurrencyCode } from '@appTypes';
-import { WithdrawPreviewDataModel } from '@features/harbor/components/harbor-preview/model';
+import { WithdrawPreviewDataModel } from '@features/harbor/components/templates/harbor-preview/model';
 import { NumberUtils } from '@utils';
 
 export const parseWithdrawStakePreview = (

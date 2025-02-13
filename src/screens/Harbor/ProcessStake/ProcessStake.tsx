@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CryptoCurrencyCode } from '@appTypes';
 import { Spacer, Text } from '@components/base';
-import { BottomSheetRef, Header } from '@components/composite';
+import { BottomSheetRef, Header, TextOrSpinner } from '@components/composite';
 import { AutoScrollBox, PrimaryButton } from '@components/modular';
 import { InputWithoutTokenSelect } from '@components/templates';
 import { COLORS } from '@constants/colors';
@@ -15,10 +15,16 @@ import { StakedBalanceInfo } from '@entities/harbor/components/composite';
 import { DEFAULT_STAKE_PREVIEW } from '@entities/harbor/constants';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { useWalletStore } from '@entities/wallet';
-import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-preview';
+import { BottomSheetHarborPreview } from '@features/harbor/components/templates';
+import { processStake } from '@features/harbor/hooks/processHelpers/processStake';
 import { useBalanceOfAddress } from '@hooks';
 import { ExplorerAccount, Token } from '@models';
-import { scale, NumberUtils, TokenUtils } from '@utils';
+import {
+  scale,
+  NumberUtils,
+  TokenUtils,
+  estimatedNetworkProviderFee
+} from '@utils';
 import { HarborTitle, RateInfo } from './components';
 import { styles } from './styles';
 
@@ -28,9 +34,9 @@ export const ProcessStake = () => {
   const { t } = useTranslation();
 
   const [previewData, setPreviewData] = useState(DEFAULT_STAKE_PREVIEW);
-
   const [amountToStake, setAmountToStake] = useState('');
   const [inputError, setInputError] = useState('');
+  const [isEstimatingGas, setIsEstimatingGas] = useState(false);
 
   const { data: harborData, updateAll, loading } = useHarborStore();
   const { wallet } = useWalletStore();
@@ -87,8 +93,8 @@ export const ProcessStake = () => {
   }, [loading, accountDataLoading]);
 
   const buttonDisabled = useMemo(() => {
-    return !amountToStake || !!inputError || isLoading;
-  }, [amountToStake, inputError, isLoading]);
+    return !amountToStake || !!inputError || isLoading || isEstimatingGas;
+  }, [amountToStake, inputError, isLoading, isEstimatingGas]);
 
   const onChangeText = (value: string) => {
     if (value) {
@@ -104,26 +110,51 @@ export const ProcessStake = () => {
     setAmountToStake(value);
   };
 
-  const onReviewStake = useCallback(() => {
-    if (parseEther(amountToStake).lt(stakeLimit)) {
-      setInputError(
-        `Min ${NumberUtils.formatNumber(+formatEther(stakeLimit))} ${
-          CryptoCurrencyCode.AMB
-        }`
+  const onReviewStake = useCallback(async () => {
+    try {
+      setIsEstimatingGas(true);
+      if (parseEther(amountToStake).lt(stakeLimit)) {
+        setInputError(
+          `Min ${NumberUtils.formatNumber(+formatEther(stakeLimit))} ${
+            CryptoCurrencyCode.AMB
+          }`
+        );
+        return;
+      }
+
+      const data = {
+        amount: amountToStake,
+        token: CryptoCurrencyCode.AMB,
+        receiveAmount: amountToStake,
+        receiveToken: CryptoCurrencyCode.stAMB,
+        fromAddress: wallet?.address || '',
+        apy: harborAPR,
+        estimatedGas: ''
+      };
+
+      const txEstimateGas = await processStake(
+        wallet,
+        'amount' in data ? data?.amount : '',
+        { estimateGas: true }
       );
-      return;
+
+      if (txEstimateGas instanceof ethers.BigNumber) {
+        const txGasFee = await estimatedNetworkProviderFee(txEstimateGas);
+
+        data.estimatedGas = NumberUtils.limitDecimalCount(
+          ethers.utils.formatEther(txGasFee),
+          2
+        );
+      }
+
+      setPreviewData(data);
+      bottomSheetRef.current?.show();
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsEstimatingGas(false);
     }
-    const data = {
-      amount: amountToStake,
-      token: CryptoCurrencyCode.AMB,
-      receiveAmount: amountToStake,
-      receiveToken: CryptoCurrencyCode.stAMB,
-      fromAddress: wallet?.address || '',
-      apy: harborAPR
-    };
-    setPreviewData(data);
-    bottomSheetRef.current?.show();
-  }, [amountToStake, harborAPR, stakeLimit, wallet?.address]);
+  }, [amountToStake, harborAPR, stakeLimit, wallet]);
 
   return (
     <View style={{ paddingTop: top }}>
@@ -173,15 +204,20 @@ export const ProcessStake = () => {
           />
           <Spacer value={scale(16)} />
           <PrimaryButton disabled={buttonDisabled} onPress={onReviewStake}>
-            <Text
-              fontFamily="Inter_500Medium"
-              fontSize={scale(14)}
-              color={buttonDisabled ? COLORS.neutral500 : COLORS.neutral0}
-            >
-              {t('button.confirm')}
-            </Text>
+            <TextOrSpinner
+              loading={isEstimatingGas}
+              spinnerColor={COLORS.brand500}
+              label={t('button.confirm')}
+              styles={{
+                active: {
+                  fontSize: scale(14),
+                  fontFamily: 'Inter_500Medium',
+                  color: buttonDisabled ? COLORS.neutral500 : COLORS.neutral0
+                }
+              }}
+            />
           </PrimaryButton>
-          <BottomSheetHarborPreView
+          <BottomSheetHarborPreview
             amountSetter={setAmountToStake}
             modalType="stake"
             previewData={previewData}

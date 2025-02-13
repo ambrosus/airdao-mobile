@@ -10,7 +10,7 @@ import { COLORS } from '@constants/colors';
 import { DEFAULT_WITHDRAW_PREVIEW } from '@entities/harbor/constants';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { WithdrawInfo } from '@features/harbor/components/base';
-import { BottomSheetHarborPreView } from '@features/harbor/components/harbor-preview';
+import { BottomSheetHarborPreview } from '@features/harbor/components/templates';
 import { scale } from '@utils';
 import { styles } from './styles';
 import { TiersSelector } from '../../base/tiers-selector';
@@ -86,7 +86,7 @@ export const WithdrawStakeRewardTab = () => {
           {t(isNullInput ? 'button.enter.amount' : 'harbor.withdrawal.button')}
         </Text>
       </PrimaryButton>
-      <BottomSheetHarborPreView
+      <BottomSheetHarborPreview
         amountSetter={setAmountToWithdraw}
         modalType="withdraw-stake"
         previewData={previewData}
