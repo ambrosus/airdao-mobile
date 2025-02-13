@@ -88,11 +88,22 @@ export const FormTemplate = ({
     const parsedGas = ethers.utils.parseEther(estimatedGas ?? '0');
     const parsedBalance = ethers.utils.parseEther(formattedBalance);
 
-    if (parsedBalance.lt(parsedGas)) {
-      return t('bridge.insufficient.funds');
+    const amountToTransfer = data?.find(
+      (item) => item.name === 'harbor.staked.amount'
+    )?.value;
+
+    if (amountToTransfer) {
+      const amountWithGas = ethers.utils
+        .parseEther(amountToTransfer)
+        .add(parsedGas);
+
+      if (parsedBalance.lt(amountWithGas)) {
+        return t('bridge.insufficient.funds');
+      }
     }
+
     return buttonTitle;
-  }, [buttonTitle, formattedBalance, estimatedGas, t]);
+  }, [estimatedGas, formattedBalance, data, buttonTitle, t]);
 
   const disabled = useMemo(() => {
     return buttonLabel === t('bridge.insufficient.funds');

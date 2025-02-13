@@ -96,19 +96,22 @@ export const ProcessStake = () => {
     return !amountToStake || !!inputError || isLoading || isEstimatingGas;
   }, [amountToStake, inputError, isLoading, isEstimatingGas]);
 
-  const onChangeText = (value: string) => {
-    if (value) {
-      const greaterThenBalance = parseEther(value).gt(
-        selectedAccountBalance.wei
-      );
-      if (greaterThenBalance) {
-        setInputError(t('bridge.insufficient.funds'));
-      } else {
-        setInputError('');
+  const onChangeText = useCallback(
+    (value: string) => {
+      if (value) {
+        const greaterThenBalance = parseEther(value).gt(
+          selectedAccountBalance.wei
+        );
+        if (greaterThenBalance) {
+          setInputError(t('bridge.insufficient.funds'));
+        } else {
+          setInputError('');
+        }
       }
-    }
-    setAmountToStake(value);
-  };
+      setAmountToStake(value);
+    },
+    [selectedAccountBalance.wei, t]
+  );
 
   const onReviewStake = useCallback(async () => {
     try {
@@ -156,6 +159,28 @@ export const ProcessStake = () => {
     }
   }, [amountToStake, harborAPR, stakeLimit, wallet]);
 
+  const onPressMaxAmount = useCallback(async () => {
+    const parsedBalance = ethers.utils.formatEther(
+      ambTokenData.balance.wei ?? '0'
+    );
+    const bnBalance = ethers.utils.parseEther(parsedBalance);
+
+    const txEstimateGas = await processStake(wallet, parsedBalance, {
+      estimateGas: true
+    });
+
+    if (txEstimateGas instanceof ethers.BigNumber) {
+      const txGasFee = await estimatedNetworkProviderFee(txEstimateGas);
+
+      const maxSpendableBalance = ethers.utils.formatUnits(
+        bnBalance.sub(txGasFee),
+        AMB_DECIMALS
+      );
+
+      onChangeText(maxSpendableBalance);
+    }
+  }, [ambTokenData.balance.wei, onChangeText, wallet]);
+
   return (
     <View style={{ paddingTop: top }}>
       <AutoScrollBox
@@ -188,9 +213,7 @@ export const ProcessStake = () => {
             }}
             token={ambTokenData}
             onChangeText={onChangeText}
-            onPressMaxAmount={() => {
-              onChangeText(formatEther(ambTokenData.balance.wei));
-            }}
+            onPressMaxAmount={onPressMaxAmount}
           />
           <Text
             fontSize={scale(12)}
