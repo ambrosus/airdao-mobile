@@ -1,13 +1,17 @@
+import { useMemo } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
+import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { TextOrSpinner } from '@components/composite';
 import { PrimaryButton, TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
+import { useWalletStore } from '@entities/wallet';
 import {
   FormTemplateProps,
   HarborPreViewData
-} from '@features/harbor/components/harbor-preview/model';
+} from '@features/harbor/components/templates/harbor-preview/model';
+import { useAMBEntity } from '@features/send-funds/lib/hooks';
 import { scale } from '@utils';
 import { styles } from './styles';
 
@@ -15,9 +19,14 @@ export const FormTemplate = ({
   data,
   buttonTitle,
   onAcceptPress,
-  loading
+  loading,
+  estimatedGas
 }: FormTemplateProps) => {
   const { t } = useTranslation();
+  const { wallet } = useWalletStore();
+  const {
+    balance: { formattedBalance }
+  } = useAMBEntity(wallet?.address ?? '');
 
   const onPress = () => {
     if (loading) return;
@@ -34,7 +43,7 @@ export const FormTemplate = ({
 
     return (
       <Row
-        justifyContent={'space-between'}
+        justifyContent="space-between"
         style={{ paddingVertical: scale(10) }}
       >
         {!!item?.name && (
@@ -75,6 +84,20 @@ export const FormTemplate = ({
     );
   };
 
+  const buttonLabel = useMemo(() => {
+    const parsedGas = ethers.utils.parseEther(estimatedGas ?? '0');
+    const parsedBalance = ethers.utils.parseEther(formattedBalance);
+
+    if (parsedBalance.lt(parsedGas)) {
+      return t('bridge.insufficient.funds');
+    }
+    return buttonTitle;
+  }, [buttonTitle, formattedBalance, estimatedGas, t]);
+
+  const disabled = useMemo(() => {
+    return buttonLabel === t('bridge.insufficient.funds');
+  }, [buttonLabel, t]);
+
   return (
     <View>
       <FlatList
@@ -83,19 +106,20 @@ export const FormTemplate = ({
         renderItem={RenderPreviewFormData}
       />
       <Spacer value={scale(20)} />
-      <PrimaryButton disabled={loading} onPress={onPress}>
+      <PrimaryButton disabled={disabled} onPress={onPress}>
         <TextOrSpinner
+          loading={loading}
+          label={buttonLabel}
+          spinnerColor={COLORS.neutral0}
+          loadingLabel={t('harbor.button.processing')}
           styles={{
             loading: {
               color: COLORS.brand600
             },
             active: {
-              color: COLORS.neutral0
+              color: disabled ? COLORS.neutral500 : COLORS.neutral0
             }
           }}
-          loading={loading}
-          loadingLabel={t('harbor.button.processing')}
-          label={buttonTitle}
         />
       </PrimaryButton>
       <Spacer value={scale(12)} />

@@ -6,12 +6,19 @@ import { resultHandler } from '@features/harbor/hooks/processHelpers/resultHandl
 
 export const processStake = async (
   wallet: IsNullableAccount,
-  amount: string
+  amount: string,
+  { estimateGas = false }: { estimateGas?: boolean } = {}
 ): Promise<ProcessModel | null> => {
   const result = await harborService.processStake(
     wallet?._raw,
-    parseEther(amount || '0')
+    parseEther(amount || '0'),
+    { estimateGas }
   );
+
+  if (estimateGas) {
+    return result;
+  }
+
   if (result) {
     return await resultHandler(result);
   } else return null;

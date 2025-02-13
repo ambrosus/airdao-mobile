@@ -28,7 +28,7 @@ const createSigner = (privateKey: string) => {
 };
 
 export const createHarborLiquidStakedContract = (
-  providerOrSigner = provider
+  providerOrSigner: ethers.providers.JsonRpcProvider | ethers.Wallet = provider
 ) => {
   return new ethers.Contract(
     Config.LIQUID_STAKING_ADDRESS,
@@ -181,18 +181,24 @@ const getWithdrawalRequests = async (address: string) => {
 
 const processStake = async (
   wallet: RawRecord | undefined,
-  value: BigNumber
+  value: BigNumber,
+  { estimateGas = false }: { estimateGas?: boolean } = {}
 ) => {
   try {
     if (wallet) {
-      sendFirebaseEvent(CustomAppEvents.harbor_amb_stake_start);
       const privateKey = (await Cache.getItem(
         // @ts-ignore
         `${CacheKey.WalletPrivateKey}-${wallet.hash}`
       )) as string;
       const signer = createSigner(privateKey);
-      // @ts-ignore
+
       const contract = createHarborLiquidStakedContract(signer);
+
+      if (estimateGas) {
+        return await contract.estimateGas.stake({ value });
+      }
+
+      sendFirebaseEvent(CustomAppEvents.harbor_amb_stake_start);
       const tx = await contract.stake({ value });
       if (tx) {
         const res = await tx.wait();

@@ -1,6 +1,6 @@
 import { CryptoCurrencyCode } from '@appTypes';
 import { COLORS } from '@constants/colors';
-import { StakePreviewDataModel } from '@features/harbor/components/harbor-preview/model';
+import { StakePreviewDataModel } from '@features/harbor/components/templates/harbor-preview/model';
 import { NumberUtils, StringUtils } from '@utils';
 
 export const parseStakeData = (previewData: StakePreviewDataModel) => {
@@ -24,6 +24,10 @@ export const parseStakeData = (previewData: StakePreviewDataModel) => {
         name: 'harbor.stake.apy',
         value: `${previewData.apy} %`,
         textStyle: { color: COLORS.success300 }
+      },
+      {
+        name: 'common.network.fee',
+        value: `${previewData.estimatedGas} ${CryptoCurrencyCode.AMB}`
       }
     ],
     success: [

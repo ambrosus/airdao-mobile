@@ -11,15 +11,21 @@ import {
   FormTemplate,
   SuccessTemplate
 } from '@features/harbor/components/base';
-import { BottomSheetHarborPreViewProps } from '@features/harbor/components/harbor-preview/model';
 import { dataParseFunction, processFunctions } from '@features/harbor/hooks';
 import { useBalanceOfAddress, useForwardedRef } from '@hooks';
 import { isAndroid, scale } from '@utils';
+import { ModalTypes, HarborPreView } from './model';
 import { styles } from './styles';
 
-export const BottomSheetHarborPreView = forwardRef<
+export interface BottomSheetHarborPreviewProps {
+  modalType: ModalTypes;
+  previewData: HarborPreView;
+  amountSetter?: (payload: string) => void;
+}
+
+export const BottomSheetHarborPreview = forwardRef<
   BottomSheetRef,
-  BottomSheetHarborPreViewProps
+  BottomSheetHarborPreviewProps
 >(({ previewData, modalType, amountSetter }, ref) => {
   const bottomSheetRef = useForwardedRef(ref);
   const { wallet } = useWalletStore();
@@ -83,11 +89,13 @@ export const BottomSheetHarborPreView = forwardRef<
         previewData,
         activeAmbTier
       );
-      if (data?.error) {
-        setIsError(true);
-      } else {
-        if (data?.transactionHash) {
-          setResultTx(data?.transactionHash);
+      if (data && 'error' in data) {
+        if (data?.error) {
+          setIsError(true);
+        } else {
+          if (data?.transactionHash) {
+            setResultTx(data?.transactionHash);
+          }
         }
       }
     } catch (e) {
@@ -122,6 +130,7 @@ export const BottomSheetHarborPreView = forwardRef<
             loading={loading}
             buttonTitle={buttonTitle}
             data={dataParseFunction(modalType, previewData)?.form}
+            estimatedGas={previewData.estimatedGas}
           />
         );
     }
@@ -135,7 +144,8 @@ export const BottomSheetHarborPreView = forwardRef<
     previewData,
     resultTx
   ]);
-  const previewTitle = useMemo(() => {
+
+  const title = useMemo(() => {
     if (isError || !!resultTx) {
       return '';
     }
@@ -144,11 +154,11 @@ export const BottomSheetHarborPreView = forwardRef<
 
   return (
     <BottomSheet
-      closeOnBackPress={!loading}
-      onBackdropPress={onPreviewClose}
-      title={previewTitle}
+      title={title}
       ref={bottomSheetRef}
       swipingEnabled={false}
+      closeOnBackPress={!loading}
+      onBackdropPress={onPreviewClose}
     >
       <View style={[styles.container, { paddingBottom: bottomInset }]}>
         {content}

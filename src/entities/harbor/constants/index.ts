@@ -45,7 +45,8 @@ export const DEFAULT_STAKE_PREVIEW = {
   receiveAmount: '',
   receiveToken: CryptoCurrencyCode.stAMB,
   fromAddress: '',
-  apy: ''
+  apy: '',
+  estimatedGas: ''
 };
 export const DEFAULT_WITHDRAW_PREVIEW = {
   withdrawAmount: '0',
