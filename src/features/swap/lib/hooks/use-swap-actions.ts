@@ -117,10 +117,10 @@ export function useSwapActions() {
 
       // Handle ETH wrapping/unwrapping
       if (isETHtoWrapped(tokensRoute)) {
-        return await wrapETH(_amountIn, signer);
+        return await wrapETH(_amountIn, signer, { estimateGas });
       }
       if (isWrappedToETH(tokensRoute)) {
-        return await unwrapETH(_amountIn, signer);
+        return await unwrapETH(_amountIn, signer, { estimateGas });
       }
 
       sendFirebaseEvent(CustomAppEvents.swap_start);

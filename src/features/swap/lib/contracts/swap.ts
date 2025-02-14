@@ -286,22 +286,42 @@ export async function swapExactTokensForETH(
   }
 }
 
-export async function wrapETH(amountToSell: string, signer: Wallet) {
+export async function wrapETH(
+  amountToSell: string,
+  signer: Wallet,
+  { estimateGas }: { estimateGas?: boolean }
+) {
   const bnAmountToSell = ethers.utils.parseEther(amountToSell);
   const contract = new ethers.Contract(addresses.SAMB, ERC20);
 
   const signedContract = contract.connect(signer);
-  const tx = await signedContract.deposit({ value: bnAmountToSell });
 
-  return await tx.wait();
+  if (estimateGas) {
+    return await wrapEstimatedGas(signedContract, 'deposit', [
+      { value: bnAmountToSell }
+    ]);
+  }
+
+  const { wait } = await signedContract.deposit({ value: bnAmountToSell });
+
+  return await wait();
 }
 
-export async function unwrapETH(amountToSell: string, signer: Wallet) {
+export async function unwrapETH(
+  amountToSell: string,
+  signer: Wallet,
+  { estimateGas }: { estimateGas?: boolean }
+) {
   const bnAmountToSell = ethers.utils.parseEther(amountToSell);
   const contract = new ethers.Contract(addresses.SAMB, ERC20);
 
   const signedContract = contract.connect(signer);
-  const tx = await signedContract.withdraw(bnAmountToSell);
 
-  return await tx.wait();
+  if (estimateGas) {
+    return await wrapEstimatedGas(signedContract, 'withdraw', [bnAmountToSell]);
+  }
+
+  const { wait } = await signedContract.withdraw(bnAmountToSell);
+
+  return await wait();
 }

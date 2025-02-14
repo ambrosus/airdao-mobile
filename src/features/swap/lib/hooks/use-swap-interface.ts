@@ -41,7 +41,16 @@ export function useSwapInterface() {
     Keyboard.dismiss();
     setUiBottomSheetInformation(INITIAL_UI_BOTTOM_SHEET_INFORMATION);
 
+    const networkFee = await swapCallback({ estimateGas: true });
+
     if (hasWrapNativeToken) {
+      setEstimatedGasValues({
+        swap: networkFee,
+        approval: bnZERO
+      });
+
+      await isEnoughBalanceToCoverGas(networkFee);
+
       setUiBottomSheetInformation((prevState) => ({
         ...prevState,
         allowance: 'suitable'
@@ -68,7 +77,7 @@ export function useSwapInterface() {
       );
 
       const priceImpact = await uiPriceImpactGetter();
-      const networkFee = await swapCallback({ estimateGas: true });
+
       const allowance = await checkAllowance();
 
       if (!!allowance) {
