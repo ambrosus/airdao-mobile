@@ -78,7 +78,7 @@ export async function withdraw({
           { value: fee.add(amountBridge) }
         );
       } else {
-        return bridge.wrapWithdraw(
+        return await bridge.wrapWithdraw(
           toAddress,
           feeData.signature,
           feeData.transferFee,
@@ -87,14 +87,12 @@ export async function withdraw({
         );
       }
     }
-
     const needUnwrap = tokenTo.isNativeCoin;
     const amountBridge = getAmountInForeignDecimals(
       tokenFrom,
       tokenTo,
       amountTokens
     );
-
     const amountAllowance = ethers.utils.parseUnits(
       amountTokens,
       tokenFrom.decimals
@@ -120,7 +118,7 @@ export async function withdraw({
           { value: fee }
         );
       } else {
-        return bridge.withdraw(
+        return await bridge.withdraw(
           tokenFrom.address,
           toAddress,
           amountBridge,
@@ -133,7 +131,7 @@ export async function withdraw({
       }
     }
   } catch (e) {
-    return e;
+    throw e;
   }
 }
 

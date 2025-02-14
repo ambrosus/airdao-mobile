@@ -16,7 +16,7 @@ import {
 } from '@features/bridge/constants';
 import { parsedBridges } from '@features/bridge/utils/parseBridges';
 import { getBridgePairs } from '@lib';
-import { bridgeWithdraw } from '@lib/bridgeSDK/bridgeFunctions/calculateGazFee';
+import { bridgeWithdraw } from '@lib/bridgeSDK/bridgeFunctions/bridgeWithdraw';
 import {
   BridgeDataState,
   Config as BridgeConfigModel,
@@ -28,10 +28,12 @@ import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
+import { TransactionDTO } from '@models';
 import {
   BridgeSelectorTypes,
   ParsedBridge,
-  PreviewDataWithFeeModel
+  PreviewDataWithFeeModel,
+  TransactionOnLoopModel
 } from '@models/Bridge';
 import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { createContextSelector } from '@utils';
@@ -66,28 +68,42 @@ export const BridgeContext = () => {
 
   const [processingTransaction, setProcessingTransaction] =
     useState<BridgeTransactionHistoryDTO | null>(null);
+  const [transactionsOnLoop, setTransactionsOnLoop] = useState<
+    TransactionOnLoopModel[]
+  >([]);
 
   const bridgeErrorHandler = useCallback(
     (_error: unknown) => {
-      const errorCode = (_error as { code: string }).code;
-      const errorMethods = (_error as { method?: string }).method;
+      const errorCode = (_error as { code?: string | number }).code;
       const errorMessage =
         (_error as { message?: string }).message || JSON.stringify(_error);
+      const errorMethods = (_error as { method?: string }).method;
       const type = ToastType.Failed;
 
-      const insufficientFundsToPayFees =
-        errorCode === BRIDGE_ERROR_CODES.INSUFFICIENT_FUNDS &&
-        errorMethods === METHODS_FROM_ERRORS.ESTIMATE_GAS;
+      const errors = {
+        insufficientFundsToPayFees:
+          errorCode === BRIDGE_ERROR_CODES.INSUFFICIENT_FUNDS &&
+          errorMethods === METHODS_FROM_ERRORS.ESTIMATE_GAS,
 
-      const amountToSmall = errorMessage.includes(
-        BRIDGE_ERROR_CODES.AMOUNT_TO_SMALL
-      );
+        isAmountTooSmall: errorMessage.includes(
+          BRIDGE_ERROR_CODES.AMOUNT_TO_SMALL
+        ),
+
+        isInsufficientFunds:
+          errorMessage.includes(BRIDGE_ERROR_CODES.INSUFFICIENT_FUNDS_3) ||
+          errorCode === -32010,
+
+        isTransactionPending: errorMessage.includes(
+          BRIDGE_ERROR_CODES.TRANSACTION_ON_PROCESS
+        )
+      };
+
       sendFirebaseEvent(CustomAppEvents.bridge_error, {
         bridgeError: errorMessage
       });
 
       switch (true) {
-        case insufficientFundsToPayFees:
+        case errors.insufficientFundsToPayFees:
           return Toast.show({
             type,
             text: t('bridge.insufficient.funds.to.pay.fee.header').replace(
@@ -98,11 +114,18 @@ export const BridgeContext = () => {
               'bridge.insufficient.funds.to.pay.fee.subHeader'
             ).replace('{{symbol}}', networkNativeToken.symbol || '')
           });
-        case amountToSmall:
+        case errors.isInsufficientFunds:
+        case errors.isAmountTooSmall:
           return Toast.show({
             type,
             text: t('bridge.insufficient.funds'),
             subtext: t('bridge.insufficient.funds.description')
+          });
+        case errors.isTransactionPending:
+          return Toast.show({
+            type: ToastType.Information,
+            text: t('bridge.some.transaction.on.progress.text'),
+            subtext: t('bridge.some.transaction.on.progress.message')
           });
 
         default:
@@ -248,7 +271,7 @@ export const BridgeContext = () => {
   );
 
   const processBridge = useCallback(
-    async (getOnlyGasFee: boolean, bridgeFee: FeeData) => {
+    async (bridgeFee: FeeData) => {
       try {
         if (bridgeFee && wallet?.address) {
           const withdrawData = {
@@ -256,13 +279,9 @@ export const BridgeContext = () => {
             tokenTo: selectedTokenDestination,
             selectedAccount: wallet,
             amountTokens: formatUnits(bridgeFee.amount, decimals),
-            feeData: bridgeFee,
-            gasFee: getOnlyGasFee
+            feeData: bridgeFee
           };
           if (bridgeConfig) {
-            if (!getOnlyGasFee) {
-              sendFirebaseEvent(CustomAppEvents.bridge_start);
-            }
             return await bridgeWithdraw({
               bridgeConfig,
               fromNetwork: fromData.value.id,
@@ -271,13 +290,12 @@ export const BridgeContext = () => {
           }
         }
       } catch (e) {
+        throw e;
         // ignore
-        bridgeErrorHandler(e);
       }
     },
     [
       bridgeConfig,
-      bridgeErrorHandler,
       decimals,
       fromData.value.id,
       selectedTokenDestination,
@@ -285,6 +303,19 @@ export const BridgeContext = () => {
       wallet
     ]
   );
+
+  const getTransactionTransaction = async (
+    _transaction: BridgeTransactionHistoryDTO
+  ) => {
+    const doneTransaction: TransactionDTO = await _transaction.wait();
+    setTransactionsOnLoop((prevState) =>
+      prevState.filter(
+        (transaction) => transaction.address !== doneTransaction.from
+      )
+    );
+
+    return doneTransaction;
+  };
 
   const variables = {
     bridgeLoader,
@@ -302,8 +333,7 @@ export const BridgeContext = () => {
     bridgePreviewData,
     processingTransaction,
     processBridge,
-
-    bridgeErrorHandler
+    transactionsOnLoop
   };
 
   const methods = {
@@ -315,7 +345,10 @@ export const BridgeContext = () => {
     setBridgePreviewData,
     setProcessingTransaction,
     setSelectedBridgeData,
-    setFrom
+    setFrom,
+    getTransactionTransaction,
+    setTransactionsOnLoop,
+    bridgeErrorHandler
   };
 
   return {
