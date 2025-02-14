@@ -45,13 +45,15 @@ export const DEFAULT_STAKE_PREVIEW = {
   receiveAmount: '',
   receiveToken: CryptoCurrencyCode.stAMB,
   fromAddress: '',
-  apy: ''
+  apy: '',
+  estimatedGas: '0'
 };
 export const DEFAULT_WITHDRAW_PREVIEW = {
   withdrawAmount: '0',
   rewardAmb: '0',
   rewardBond: '0',
-  delay: '0'
+  delay: '0',
+  estimatedGas: '0'
 };
 
 export const EMPTY_SELECTED_TIER = { id: 'empty', value: 0, availableOn: 0 };

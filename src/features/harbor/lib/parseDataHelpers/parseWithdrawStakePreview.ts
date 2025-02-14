@@ -1,5 +1,5 @@
 import { CryptoCurrencyCode } from '@appTypes';
-import { WithdrawPreviewDataModel } from '@features/harbor/components/harbor-preview/model';
+import { WithdrawPreviewDataModel } from '@features/harbor/components/templates/harbor-preview/model';
 import { NumberUtils } from '@utils';
 
 export const parseWithdrawStakePreview = (
@@ -21,6 +21,10 @@ export const parseWithdrawStakePreview = (
         name: 'harbor.withdraw.preview.bond.reward',
         value: previewData.rewardBond,
         symbol: CryptoCurrencyCode.BOND
+      },
+      {
+        name: 'common.network.fee',
+        value: `${previewData.estimatedGas} ${CryptoCurrencyCode.AMB}`
       }
     ],
     success: [
