@@ -2,6 +2,7 @@ import Web3 from 'web3';
 import { TransactionConfig } from 'web3-core';
 import Config from '@constants/config';
 import erc20 from './erc20';
+const MAX_RETRIES = 3;
 
 class TransferDispatcher {
   private web3: Web3;
@@ -110,8 +111,7 @@ class TransferDispatcher {
       // @ts-ignore
       return txReceipt.transactionHash;
     } catch (error) {
-      console.error('ERROR:', error);
-      //@ts-ignore
+      // @ts-ignore
       if (error.message.includes('Returned error: Insufficient funds.')) {
         throw Error('INSUFFICIENT_FUNDS');
       }
@@ -121,7 +121,7 @@ class TransferDispatcher {
 
         let attempt = 0;
         let receipt;
-        while (attempt < 3) {
+        while (attempt < MAX_RETRIES) {
           receipt = await this.web3.eth.getTransactionReceipt(txHash);
           if (receipt) break;
           attempt++;

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Keyboard, View } from 'react-native';
+import { Alert, Keyboard, View } from 'react-native';
 import { CommonActions, useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as Clipboard from 'expo-clipboard';
@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AirDAOEventType, CryptoCurrencyCode, HomeParamsList } from '@appTypes';
 import { KeyboardDismissingView, Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
-import { PrimaryButton } from '@components/modular';
+import { PrimaryButton, Toast, ToastType } from '@components/modular';
 import { InputWithTokenSelect } from '@components/templates';
 import { COLORS } from '@constants/colors';
 import { ethereumAddressRegex } from '@constants/regex';
@@ -29,10 +29,10 @@ import {
 } from '@lib/firebaseEventAnalytics';
 import { Token } from '@models';
 import {
+  _delayNavigation,
   NumberUtils,
   TransactionUtils,
-  verticalScale,
-  _delayNavigation
+  verticalScale
 } from '@utils';
 import { AddressInput, ConfirmTransaction } from './components';
 import { styles } from './styles';
@@ -184,10 +184,38 @@ export const SendFunds = ({ navigation, route }: Props) => {
           });
         }
       } catch (error: unknown) {
-        await Clipboard.setStringAsync(JSON.stringify(error));
+        // TODO remove all debugErrorMessage code for prod
+        // start
+        const debugErrorMessage =
+          error instanceof Error
+            ? JSON.stringify(
+                {
+                  message: error.message,
+                  stack: error.stack,
+                  name: error.name
+                },
+                null,
+                2
+              )
+            : JSON.stringify(error, null, 2);
+
+        Alert.alert('Error', error?.message || debugErrorMessage, [
+          {
+            text: 'OK',
+            onPress: async () => {
+              await Clipboard.setStringAsync(debugErrorMessage);
+              Toast.show({
+                type: ToastType.Failed,
+                text: 'Error copied'
+              });
+            }
+          }
+        ]);
+        // end
 
         const errorMessage =
           (error as { message: string })?.message ?? JSON.stringify(error);
+
         sendFirebaseEvent(CustomAppEvents.send_error, {
           sendError: errorMessage
         });
