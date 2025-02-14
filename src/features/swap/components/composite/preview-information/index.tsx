@@ -7,7 +7,12 @@ import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapTokens } from '@features/swap/lib/hooks';
-import { addresses, SwapStringUtils } from '@features/swap/utils';
+import {
+  addresses,
+  isETHtoWrapped,
+  isWrappedToETH,
+  SwapStringUtils
+} from '@features/swap/utils';
 import { getObjectKeyByValue, NumberUtils } from '@utils';
 import { styles } from './styles';
 
@@ -21,7 +26,7 @@ export const PreviewInformation = () => {
     estimatedGasValues
   } = useSwapContextSelector();
 
-  const { tokenToSell, tokenToReceive } = useSwapTokens();
+  const { tokensRoute, tokenToSell, tokenToReceive } = useSwapTokens();
 
   const uiPriceImpact = useMemo(() => {
     const { priceImpact } = uiBottomSheetInformation;
@@ -72,39 +77,47 @@ export const PreviewInformation = () => {
     );
   }, [estimatedGasValues]);
 
+  const isWrapOrUnwrapETH = useMemo(() => {
+    return isETHtoWrapped(tokensRoute) || isWrappedToETH(tokensRoute);
+  }, [tokensRoute]);
+
   return (
     <View style={styles.container}>
-      <Row alignItems="center" justifyContent="space-between">
-        <Text
-          fontSize={15}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral500}
-        >
-          {t(
-            !_refExactGetter
-              ? 'swap.bottom.sheet.max.sold'
-              : 'swap.bottom.sheet.min.received'
-          )}
-        </Text>
+      {!isWrapOrUnwrapETH && (
+        <>
+          <Row alignItems="center" justifyContent="space-between">
+            <Text
+              fontSize={15}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral500}
+            >
+              {t(
+                !_refExactGetter
+                  ? 'swap.bottom.sheet.max.sold'
+                  : 'swap.bottom.sheet.min.received'
+              )}
+            </Text>
 
-        <RightSideRowItem>
-          {`${uiBottomSheetInformation.minimumReceivedAmount} ${symbol}`}
-        </RightSideRowItem>
-      </Row>
+            <RightSideRowItem>
+              {`${uiBottomSheetInformation.minimumReceivedAmount} ${symbol}`}
+            </RightSideRowItem>
+          </Row>
 
-      <Row alignItems="center" justifyContent="space-between">
-        <Text
-          fontSize={15}
-          fontFamily="Inter_500Medium"
-          color={COLORS.neutral500}
-        >
-          {t('swap.bottom.sheet.impact')}
-        </Text>
+          <Row alignItems="center" justifyContent="space-between">
+            <Text
+              fontSize={15}
+              fontFamily="Inter_500Medium"
+              color={COLORS.neutral500}
+            >
+              {t('swap.bottom.sheet.impact')}
+            </Text>
 
-        <RightSideRowItem color={priceImpactHighlight}>
-          {uiPriceImpact}%
-        </RightSideRowItem>
-      </Row>
+            <RightSideRowItem color={priceImpactHighlight}>
+              {uiPriceImpact}%
+            </RightSideRowItem>
+          </Row>
+        </>
+      )}
 
       <Row alignItems="center" justifyContent="space-between">
         <Text
