@@ -2,7 +2,13 @@ import { Dispatch, ReactNode, SetStateAction } from 'react';
 import { ViewProps, ViewStyle } from 'react-native';
 import { ModalProps } from 'react-native-modal';
 
+export enum ModalActionTypes {
+  permissions = 'permissions',
+  disconnect = 'disconnect'
+}
+
 export interface BottomSheetOutsideDataProps {
+  modalType?: ModalActionTypes;
   title?: string;
   subTitle?: string;
   buttonsLabels?: string[];

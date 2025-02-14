@@ -17,17 +17,22 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CommonStackParamsList } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
 import { useBrowserStore } from '@entities/browser/model';
-import { useWalletPrivateKey } from '@entities/wallet';
+import { useWalletPrivateKey, useWalletStore } from '@entities/wallet';
 
 import { BrowserHeader } from '@features/browser/components/modular/browser-header';
-import { BottomSheetBrowserModal } from '@features/browser/components/templates';
+import {
+  BottomSheetApproveBrowserAction,
+  BottomSheetBrowserModal,
+  BottomSheetBrowserWalletSelector
+} from '@features/browser/components/templates';
 import { AMB_CHAIN_ID_HEX } from '@features/browser/constants';
 import {
   handleWebViewMessage,
   INJECTED_PROVIDER_JS
 } from '@features/browser/lib';
 import { useAllAccounts } from '@hooks/database';
-import { getConnectedAddressTo } from '@lib';
+import { getConnectedAddressTo, setConnectedAddressTo } from '@lib';
+import { StringUtils } from '@utils';
 import { styles } from './styles';
 
 export const BrowserScreen = () => {
@@ -37,9 +42,12 @@ export const BrowserScreen = () => {
   const SOURCE = {
     uri
   };
+  const formattedUrl = StringUtils.formatUri({ uri });
   const navigation = useNavigation();
+  const { wallet } = useWalletStore();
 
   const browserModalRef = useRef<BottomSheetRef>(null);
+  const browserApproveRef = useRef<BottomSheetRef>(null);
   const webViewRef = useRef<WebView>(null);
 
   const reload = useCallback(() => webViewRef.current?.reload(), [webViewRef]);
@@ -50,7 +58,8 @@ export const BrowserScreen = () => {
   const goBack = useCallback(() => webViewRef.current?.goBack(), [webViewRef]);
   const closeWebView = useCallback(() => navigation.goBack(), [navigation]);
 
-  const { connectedAddress, setSelectedAddress } = useBrowserStore();
+  const { connectedAddress, setSelectedAddress, selectedAddress } =
+    useBrowserStore();
   const { _extractPrivateKey } = useWalletPrivateKey();
   const { data: allAccounts } = useAllAccounts();
 
@@ -66,9 +75,11 @@ export const BrowserScreen = () => {
   useEffect(() => {
     const getSelectedWallet = async () => {
       const _selectedAddress = await getConnectedAddressTo(uri);
-      setSelectedAddress(_selectedAddress || allAccounts[0].address || '');
+      setSelectedAddress(
+        _selectedAddress || wallet?.address || allAccounts[0].address
+      );
     };
-    getSelectedWallet();
+    getSelectedWallet().then();
 
     if (webViewRef.current && connectedAddress) {
       const updateScript = `
@@ -98,7 +109,7 @@ export const BrowserScreen = () => {
           event,
           webViewRef,
           privateKey,
-          browserModalRef,
+          browserApproveRef,
           uri
         });
       } catch (error) {
@@ -129,9 +140,18 @@ export const BrowserScreen = () => {
     }
   };
 
+  const browserWalletSelectorRef = useRef<BottomSheetRef>(null);
+
+  const selectWallet = async (address: string) => {
+    await setConnectedAddressTo(uri, address);
+    setSelectedAddress(address);
+    browserWalletSelectorRef?.current?.dismiss();
+  };
+
   return (
     <SafeAreaView style={containerStyle}>
       <BrowserHeader
+        openWalletSelector={browserWalletSelectorRef?.current?.show}
         reload={reload}
         closeWebView={closeWebView}
         webViewRef={webViewRef}
@@ -153,7 +173,14 @@ export const BrowserScreen = () => {
           />
         </View>
       </PanGestureHandler>
+      <BottomSheetBrowserWalletSelector
+        uri={formattedUrl}
+        selectedAddress={selectedAddress}
+        ref={browserWalletSelectorRef}
+        onWalletSelect={selectWallet}
+      />
       <BottomSheetBrowserModal ref={browserModalRef} />
+      <BottomSheetApproveBrowserAction ref={browserApproveRef} uri={uri} />
     </SafeAreaView>
   );
 };

@@ -1,5 +1,6 @@
 import { RefObject } from 'react';
 import WebView from '@metamask/react-native-webview';
+import { BottomSheetRef, ModalActionTypes } from '@components/composite';
 import { useBrowserStore } from '@entities/browser/model';
 import {
   AMB_CHAIN_ID_HEX,
@@ -33,6 +34,7 @@ const {
 type ConnectionRequest = {
   privateKey: string;
   webViewRef: RefObject<WebView>;
+  browserApproveRef: RefObject<BottomSheetRef>;
   origin: string;
   permissions?: unknown;
 };
@@ -41,10 +43,11 @@ type WalletConnectionResult = {
   accounts: string[];
 };
 
-const handleWalletConnection = async ({
+export const handleWalletConnection = async ({
   privateKey,
   webViewRef,
-  origin
+  origin,
+  browserApproveRef
 }: ConnectionRequest) => {
   const { setConnectedAddress } = useBrowserStore.getState();
   try {
@@ -57,20 +60,25 @@ const handleWalletConnection = async ({
 
     await new Promise((resolve, reject) => {
       requestUserApproval({
-        header: 'Connect to Website',
-        message:
-          `${origin} would like to connect to your wallet:\n\n` +
-          `Account: ${displayAddress}\n\n` +
-          `Permissions requested:\n` +
-          `• View and connect to your wallet\n` +
-          `• Request transaction approvals\n` +
-          `• Request message signatures`,
+        browserApproveRef,
+        modalType: ModalActionTypes.permissions,
         resolve: () => resolve(true),
         reject: () => reject(new Error('User rejected connection'))
-      });
-    });
 
-    setConnectedAddress(address);
+        //   header: 'Connect to Website',
+        //   message:
+        //     `${origin} would like to connect to your wallet:\n\n` +
+        //     `Account: ${displayAddress}\n\n` +
+        //     `Permissions requested:\n` +
+        //     `• View and connect to your wallet\n` +
+        //     `• Request transaction approvals\n` +
+        //     `• Request message signatures`,
+        //   resolve: () => resolve(true),
+        //   reject: () => reject(new Error('User rejected connection'))
+        // });
+      });
+      setConnectedAddress(address);
+    });
 
     updateWindowObject(
       webViewRef,
@@ -98,10 +106,12 @@ export const walletRequestPermissions = async ({
   response,
   privateKey,
   webViewRef,
-  origin
+  origin,
+  browserApproveRef
 }: ConnectionRequest & { response: any }) => {
   try {
     const { permissions: _permissions } = await handleWalletConnection({
+      browserApproveRef,
       privateKey,
       webViewRef,
       origin,
