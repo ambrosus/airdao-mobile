@@ -107,10 +107,9 @@ export function useSwapBetterCurrency() {
       const bnAmountToSell = ethers.utils.parseEther(amountToSell);
 
       if (isETHtoWrapped(path) || isWrappedToETH(path)) {
-        if (isETHtoWrapped(path))
-          return (
-            await getAmountsIn({ path, amountToReceive: bnAmountToSell })
-          )[0];
+        return (
+          await getAmountsIn({ path, amountToReceive: bnAmountToSell })
+        )[0];
       }
 
       // Try single hop first
