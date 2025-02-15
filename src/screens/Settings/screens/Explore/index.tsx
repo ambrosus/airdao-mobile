@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
-  InteractionManager,
   ListRenderItemInfo,
   RefreshControl,
   StyleProp,
@@ -182,9 +181,7 @@ export const Explore = () => {
   }, [userPerformedRefresh, accountsLoading, watchlist]);
 
   const onSearchFocusHandle = useCallback(() => {
-    InteractionManager.runAfterInteractions(() => {
-      searchAddressRef?.current?.focus();
-    });
+    searchAddressRef?.current?.focus();
   }, []);
 
   const headerContentRightNode = useMemo(
