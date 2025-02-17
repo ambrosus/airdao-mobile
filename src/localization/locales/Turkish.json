@@ -567,9 +567,9 @@
   "harbor.stake.period.complete": "Kilitleme süresi tamamlandı",
   "harbor.stake.unlock.date": "Şu tarihte müsait {{date}}",
   "harbor.button.insufficient.stake": "Stake için yetersiz",
-  "harbor.button.address.limit": "Insufficient Per Address Limit",
-  "harbor.button.hbr.insufficient": "Insufficient HBR balance",
-  "harbor.button.total.limit": "Insufficient Total pool Limit",
+  "harbor.button.address.limit": "Adres Başına Yetersiz Limit",
+  "harbor.button.insufficient": "Yetersiz {{symbol}} bakiyesi",
+  "harbor.button.total.limit": "Yetersiz Toplam havuz Limiti",
   "wallet.connect": {
     "proposal": "{{origin}} adresine bağlanınf",
     "warning": "Cüzdanınızı {{origin}} adresine bağlamak istediğinizden emin misiniz?",
