@@ -89,13 +89,11 @@ export const BottomSheetHarborPreview = forwardRef<
         previewData,
         activeAmbTier
       );
-      if (data && 'error' in data) {
-        if (data?.error) {
-          setIsError(true);
-        } else {
-          if (data?.transactionHash) {
-            setResultTx(data?.transactionHash);
-          }
+      if (data?.error) {
+        setIsError(true);
+      } else {
+        if (data?.transactionHash) {
+          setResultTx(data?.transactionHash);
         }
       }
     } catch (e) {
