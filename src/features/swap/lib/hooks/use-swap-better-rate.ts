@@ -6,10 +6,10 @@ import { useSwapTokens } from './use-swap-tokens';
 const BASE_RATE_AMOUNT_TO_SELL = '1';
 
 export function useSwapBetterRate() {
-  const { settings } = useSwapSettings();
   const { bestTradeExactIn, bestTradeExactOut } = useSwapBetterCurrency();
   const { tokenToSell, tokenToReceive } = useSwapTokens();
   const [isTradeIn, setIsTradeIn] = useState(false);
+  const { _refSettingsGetter } = useSwapSettings();
 
   const [isExecutingRate, setIsExecutingRate] = useState(false);
 
@@ -26,22 +26,20 @@ export function useSwapBetterRate() {
   const bestSwapRate = useCallback(
     async (path: string[]) => {
       setIsExecutingRate(true);
+      const singleHopOnly = _refSettingsGetter.multihops;
       try {
         const reversedPath = path;
-        const {
-          current: { multihops }
-        } = settings;
 
         const amount = isTradeIn
           ? await bestTradeExactOut(
               BASE_RATE_AMOUNT_TO_SELL,
               reversedPath,
-              multihops
+              singleHopOnly
             )
           : await bestTradeExactIn(
               BASE_RATE_AMOUNT_TO_SELL,
               reversedPath,
-              multihops
+              singleHopOnly
             );
 
         if (amount) {
@@ -62,10 +60,10 @@ export function useSwapBetterRate() {
       }
     },
     [
+      _refSettingsGetter.multihops,
       bestTradeExactIn,
       bestTradeExactOut,
       isTradeIn,
-      settings,
       tokenToReceive.TOKEN?.symbol,
       tokenToSell.TOKEN.symbol
     ]
