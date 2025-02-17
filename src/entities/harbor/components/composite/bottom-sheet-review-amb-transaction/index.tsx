@@ -79,7 +79,7 @@ export const BottomSheetReviewAMBTransaction = forwardRef<
             dismiss={dismiss}
             timestamp={timestamp}
             stakeLockPeriod={stakeLockPeriod}
-            token={CryptoCurrencyCode.stAMB}
+            token={CryptoCurrencyCode.AMB}
           />
         ) : (
           <>
