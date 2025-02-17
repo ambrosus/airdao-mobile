@@ -68,7 +68,7 @@ export const WithdrawalButton = ({
 
   const buttonStyle = useMemo<StyleProp<ViewStyle>>(
     () => ({
-      backgroundColor: COLORS[disabled ? 'alphaBlack5' : 'brand600']
+      backgroundColor: COLORS[disabled ? 'primary50' : 'brand600']
     }),
     [disabled]
   );
