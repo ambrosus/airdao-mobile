@@ -511,7 +511,7 @@
   "harbor.stake.unlock.date": "Available on {{date}}",
   "harbor.button.insufficient.stake": "Insufficient Available to stake",
   "harbor.button.address.limit": "Insufficient Per Address Limit",
-  "harbor.button.hbr.insufficient": "Insufficient HBR balance",
+  "harbor.button.insufficient": "Insufficient {{symbol}} balance",
   "harbor.button.total.limit": "Insufficient Total pool Limit",
   "wallet.connect": {
     "proposal": "Connect to {{origin}}",

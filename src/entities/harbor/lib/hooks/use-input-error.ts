@@ -26,7 +26,9 @@ export function useInputErrorStakeAMB(ambInstance: Token) {
     if (ambAmount === '') return;
 
     if (deposit.isZero()) {
-      inputError = 'Insufficient HBR balance';
+      inputError = t('harbor.button.insufficient', {
+        symbol: CryptoCurrencyCode.HBR
+      });
     }
 
     if (ethers.utils.parseEther(ambAmount).lt(minStakeValue)) {
