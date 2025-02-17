@@ -61,7 +61,7 @@ export const handleWalletConnection = async ({
     await new Promise((resolve, reject) => {
       requestUserApproval({
         browserApproveRef,
-        modalType: ModalActionTypes.permissions,
+        modalType: ModalActionTypes.PERMISSIONS,
         resolve: () => resolve(true),
         reject: () => reject(new Error('User rejected connection'))
 

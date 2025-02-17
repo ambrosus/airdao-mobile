@@ -25,7 +25,7 @@ export const BottomSheetApproveBrowserAction = forwardRef<
   const modalType = outsideModalData?.modalType || type;
   const content = useMemo(() => {
     switch (modalType) {
-      case ModalActionTypes.permissions:
+      case ModalActionTypes.PERMISSIONS:
         return (
           <PermissionsType
             localRef={localRef}

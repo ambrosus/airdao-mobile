@@ -3,8 +3,8 @@ import { ViewProps, ViewStyle } from 'react-native';
 import { ModalProps } from 'react-native-modal';
 
 export enum ModalActionTypes {
-  permissions = 'permissions',
-  disconnect = 'disconnect'
+  PERMISSIONS = 'permissions',
+  DISCONNECT = 'disconnect'
 }
 
 export interface BottomSheetOutsideDataProps {
