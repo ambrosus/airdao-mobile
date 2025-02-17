@@ -44,8 +44,9 @@ export const BottomSheetReviewTransactionWithAction = forwardRef<
     const parsedBalance = ethers.utils.parseEther(
       ambInstance.balance.formattedBalance
     );
-    return parsedBalance.lt(estimatedGas);
-  }, [ambInstance.balance.formattedBalance, estimatedGas]);
+
+    return parsedBalance.lt(estimatedGas) || loading;
+  }, [ambInstance.balance.formattedBalance, estimatedGas, loading]);
 
   const label = useMemo(() => {
     if (disabled) {

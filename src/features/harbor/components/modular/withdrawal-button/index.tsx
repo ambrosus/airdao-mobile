@@ -60,6 +60,7 @@ export const WithdrawalButton = ({
         const hasStake = !stake.isZero();
 
         return (
+          loading ||
           isInsufficientBalance ||
           isZeroAmount ||
           isZeroDeposit ||
@@ -73,15 +74,19 @@ export const WithdrawalButton = ({
         const isZeroStake = stake.isZero();
 
         return (
-          isInsufficientBalance || isZeroAmount || isZeroStake || isErrorLog
+          loading ||
+          isInsufficientBalance ||
+          isZeroAmount ||
+          isZeroStake ||
+          isErrorLog
         );
       }
     }
-  }, [amountToWithdraw, deposit, logs, stake, token]);
+  }, [amountToWithdraw, deposit, loading, logs?.status, stake, token]);
 
   const buttonStyle = useMemo<StyleProp<ViewStyle>>(
     () => ({
-      backgroundColor: COLORS[disabled ? 'alphaBlack5' : 'brand600']
+      backgroundColor: COLORS[disabled ? 'primary50' : 'brand600']
     }),
     [disabled]
   );
@@ -139,7 +144,6 @@ export const WithdrawalButton = ({
               color: COLORS.neutral0
             }
           }}
-          spinnerColor={COLORS.neutral0}
         />
       </SecondaryButton>
 
