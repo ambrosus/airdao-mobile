@@ -8,13 +8,9 @@ import { BackIcon } from '@components/svg/icons';
 import { CloseCircleIcon, ThreeDots } from '@components/svg/icons/v2';
 import { WalletsActiveIcon } from '@components/svg/icons/v2/bottom-tabs-navigation';
 import { COLORS } from '@constants/colors';
-import { useBrowserStore } from '@entities/browser/model';
 
-import {
-  BottomSheetBrowserActions,
-  BottomSheetBrowserWalletSelector
-} from '@features/browser/components/templates';
-import { setConnectedAddressTo } from '@lib';
+import { BottomSheetBrowserActions } from '@features/browser/components/templates';
+import { StringUtils } from '@utils';
 import { styles } from './styles';
 
 interface BrowserHeaderProps {
@@ -22,36 +18,24 @@ interface BrowserHeaderProps {
   webViewRef: React.RefObject<WebView>;
   reload: () => void;
   closeWebView: () => void;
+  openWalletSelector?: () => void;
 }
 
 export const BrowserHeader = ({
   uri,
   reload,
-  closeWebView
+  closeWebView,
+  openWalletSelector
 }: BrowserHeaderProps) => {
-  const browserWalletSelectorRef = useRef<BottomSheetRef>(null);
   const browserActionsRef = useRef<BottomSheetRef>(null);
-  const { setSelectedAddress, selectedAddress } = useBrowserStore();
-  const cleanUrl = uri.replace(/^(https?:\/\/|hhtp:\/\/)/, '');
-  const formattedUrl =
-    cleanUrl.length > 25 ? `${cleanUrl.slice(0, 22)}...` : cleanUrl;
 
   const copyUri = useCallback(
     async () => await Clipboard.setStringAsync(uri),
     [uri]
   );
 
-  const selectWallet = async (address: string) => {
-    await setConnectedAddressTo(uri, address);
-    setSelectedAddress(address);
-    browserWalletSelectorRef?.current?.dismiss();
-  };
   const openBrowserAction = () => {
     browserActionsRef?.current?.show();
-  };
-
-  const openWalletSelector = () => {
-    browserWalletSelectorRef?.current?.show();
   };
 
   return (
@@ -68,7 +52,7 @@ export const BrowserHeader = ({
         </TouchableOpacity>
 
         <TouchableOpacity onPress={copyUri} style={styles.urlWrapper}>
-          <Text color={COLORS.neutral900}>{formattedUrl}</Text>
+          <Text color={COLORS.neutral900}>{StringUtils.formatUri({ uri })}</Text>
         </TouchableOpacity>
 
         <View style={styles.actionsContainer}>
@@ -85,14 +69,10 @@ export const BrowserHeader = ({
         </View>
       </View>
 
-      <BottomSheetBrowserWalletSelector
-        selectedAddress={selectedAddress}
-        ref={browserWalletSelectorRef}
-        onWalletSelect={selectWallet}
-      />
       <BottomSheetBrowserActions
         ref={browserActionsRef}
         uri={uri}
+        // TODO dynamic change browser product name
         title="HARBOR"
         onCopy={copyUri}
         onRefresh={reload}

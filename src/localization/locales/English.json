@@ -103,6 +103,8 @@
   "collection.search.input": "Search groups",
   "collection.search.public.address.placeholder": "Search public address",
   "collection.total.balance": "TOTAL VALUE",
+  "common.reject": "Reject",
+  "common.approve": "Approve",
   "common.address": "Address",
   "common.address_plural": "Addresses",
   "common.address.with.count": "{{count}} address",
@@ -540,7 +542,13 @@
   },
   "browser.disclaimer.header": "Security warning",
   "browser.disclaimer.description": "You are about to visit an external website. This site is not maintained or verified by AirDAO.",
-  "browser.wallet.selector.header": "Switch wallet",
+  "browser.wallet.selector.header": "Connected accounts:",
+  "browser.wallet.selector.account": "Account",
+  "browser.approve.permissions.header": "{{uri}} wants to:",
+  "browser.approve":{
+    "permission": "See your account and suggest transactions",
+    "address": "Requesting for:"
+  },
 
   "products": {
     "header": "Products",

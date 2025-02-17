@@ -1,35 +1,22 @@
-import { Alert } from 'react-native';
+import { RefObject } from 'react';
+import { BottomSheetRef, ModalActionTypes } from '@components/composite';
 
 interface ShowConfirmationModel {
-  header?: string;
-  message?: string;
   reject: () => void;
   resolve: () => void;
-  cancelable?: boolean;
+  browserApproveRef: RefObject<BottomSheetRef>;
+  modalType: ModalActionTypes;
 }
 
 export const requestUserApproval = async ({
-  header = 'Confirmation',
-  message = '',
   reject,
   resolve,
-  cancelable = false
+  browserApproveRef,
+  modalType
 }: ShowConfirmationModel) => {
-  return Alert.alert(
-    header,
-    message,
-    [
-      {
-        text: 'Cancel',
-        onPress: reject,
-        style: 'cancel'
-      },
-      {
-        text: 'Sign',
-        onPress: resolve,
-        style: 'default'
-      }
-    ],
-    { cancelable }
-  );
+  browserApproveRef?.current?.show({
+    modalType,
+    onApprove: resolve,
+    onReject: reject
+  });
 };

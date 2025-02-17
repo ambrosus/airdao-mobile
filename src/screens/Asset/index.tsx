@@ -187,7 +187,6 @@ export const AssetScreen = () => {
             loading={isTransactionsLoading}
             onEndReached={() => hasNextPage && fetchNextPage()}
           />
-          <Text>asdf</Text>
         </View>
       </View>
     </SafeAreaView>

@@ -41,13 +41,14 @@ interface HandleWebViewMessageModel {
   webViewRef: RefObject<WebView>;
   privateKey: string;
   uri: string;
-  browserModalRef: RefObject<BottomSheetRef>;
+  browserApproveRef: RefObject<BottomSheetRef>;
 }
 
 export async function handleWebViewMessage({
   event,
   webViewRef,
   privateKey,
+  browserApproveRef,
   uri
 }: HandleWebViewMessageModel) {
   const { connectedAddress } = useBrowserStore.getState();
@@ -97,6 +98,7 @@ export async function handleWebViewMessage({
 
         case 'eth_requestAccounts':
           response.result = await ethRequestAccounts({
+            browserApproveRef,
             privateKey,
             webViewRef,
             origin: uri
@@ -111,6 +113,7 @@ export async function handleWebViewMessage({
         case 'wallet_requestPermissions': {
           const permissions = params[0];
           await walletRequestPermissions({
+            browserApproveRef,
             permissions,
             response,
             privateKey,
