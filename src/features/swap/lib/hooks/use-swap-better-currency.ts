@@ -4,7 +4,9 @@ import { useSwapContextSelector } from '@features/swap/context';
 import {
   MAX_HOPS,
   dexValidators,
-  generateAllPossibleRoutes
+  generateAllPossibleRoutes,
+  isETHtoWrapped,
+  isWrappedToETH
 } from '@features/swap/utils';
 import { getAmountsOut, getAmountsIn } from '../contracts';
 import { useSwapSettings } from './use-swap-settings';
@@ -103,6 +105,12 @@ export function useSwapBetterCurrency() {
       let bestPath: string[] = [];
 
       const bnAmountToSell = ethers.utils.parseEther(amountToSell);
+
+      if (isETHtoWrapped(path) || isWrappedToETH(path)) {
+        return (
+          await getAmountsIn({ path, amountToReceive: bnAmountToSell })
+        )[0];
+      }
 
       // Try single hop first
       try {
@@ -203,6 +211,10 @@ export function useSwapBetterCurrency() {
       let singleHopAmount: BigNumber = BigNumber.from('0');
       let bestMultiHopAmount: BigNumber = BigNumber.from('0');
       let bestPath: string[] = [];
+
+      if (isETHtoWrapped(path) || isWrappedToETH(path)) {
+        return await amountOut(amountToSell, path);
+      }
 
       // Try single hop first
       try {
