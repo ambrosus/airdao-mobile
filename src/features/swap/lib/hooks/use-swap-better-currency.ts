@@ -15,10 +15,6 @@ function invariant(reason: unknown, key: string) {
   throw Error(`${reason} - ${key}`);
 }
 
-export const BETTER_TRADE_LESS_HOPS_THRESHOLD = BigNumber.from(50)
-  .mul(BigNumber.from(100))
-  .div(BigNumber.from(10000)); // 0.5%
-
 export function useSwapBetterCurrency() {
   const {
     setIsMultiHopSwapCurrencyBetter,
