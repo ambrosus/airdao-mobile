@@ -21,6 +21,11 @@ export const parseWithdrawStakePreview = (
         name: 'harbor.withdraw.preview.bond.reward',
         value: previewData.rewardBond,
         symbol: CryptoCurrencyCode.BOND
+      },
+      {
+        // TODO: Update translation key after implementing network fee support
+        name: 'swap.bottom.sheet.lpfee',
+        value: `${0} ${CryptoCurrencyCode.AMB}`
       }
     ],
     success: [
