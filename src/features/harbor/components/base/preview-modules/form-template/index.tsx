@@ -83,17 +83,16 @@ export const FormTemplate = ({
         renderItem={RenderPreviewFormData}
       />
       <Spacer value={scale(20)} />
-      <PrimaryButton onPress={onPress}>
+      <PrimaryButton disabled={loading} onPress={onPress}>
         <TextOrSpinner
           styles={{
             loading: {
-              color: COLORS.neutral0
+              color: COLORS.brand600
             },
             active: {
               color: COLORS.neutral0
             }
           }}
-          spinnerColor={COLORS.neutral0}
           loading={loading}
           loadingLabel={t('harbor.button.processing')}
           label={buttonTitle}
