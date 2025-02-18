@@ -15,6 +15,11 @@ export const parseWithdrawReward = (previewData: WithdrawPreviewDataModel) => {
         name: 'harbor.withdraw.preview.bond.reward',
         value: NumberUtils.limitDecimalCount(previewData.rewardBond, 2),
         symbol: CryptoCurrencyCode.BOND
+      },
+      {
+        // TODO: Update translation key after implementing network fee support
+        name: 'swap.bottom.sheet.lpfee',
+        value: `${0} ${CryptoCurrencyCode.AMB}`
       }
     ],
     success: [
