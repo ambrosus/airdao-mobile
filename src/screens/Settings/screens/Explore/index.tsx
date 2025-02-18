@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
+  InteractionManager,
   ListRenderItemInfo,
   RefreshControl,
   StyleProp,
@@ -181,7 +182,13 @@ export const Explore = () => {
   }, [userPerformedRefresh, accountsLoading, watchlist]);
 
   const onSearchFocusHandle = useCallback(() => {
-    searchAddressRef?.current?.focus();
+    InteractionManager.runAfterInteractions(searchAddressRef?.current?.focus);
+  }, []);
+
+  const onShowScanner = useCallback(() => {
+    InteractionManager.runAfterInteractions(
+      searchAddressRef?.current?.showScanner
+    );
   }, []);
 
   const headerContentRightNode = useMemo(
@@ -191,21 +198,21 @@ export const Explore = () => {
           <SearchLargeIcon color={COLORS.alphaBlack50} />
         </Button>
         <Spacer horizontal value={scale(19)} />
-        <Button onPress={searchAddressRef.current?.showScanner}>
+        <Button onPress={onShowScanner}>
           <ScannerIcon color={COLORS.neutral600} />
         </Button>
       </>
     ),
-    [onSearchFocusHandle]
+    [onSearchFocusHandle, onShowScanner]
   );
 
   return (
     <SafeAreaView style={styles.main}>
       {!searchAddressContentVisible && (
         <Header
-          onBackPress={navigation.goBack}
-          title={t('tab.explore')}
           bottomBorder
+          title={t('tab.explore')}
+          onBackPress={navigation.goBack}
           contentRight={headerContentRightNode}
         />
       )}
@@ -218,8 +225,8 @@ export const Explore = () => {
         >
           <SearchAddress
             searchAddress
-            scannerDisabled={true}
             ref={searchAddressRef}
+            scannerDisabled={true}
             onContentVisibilityChanged={renderSearch}
           />
         </Animated.View>
