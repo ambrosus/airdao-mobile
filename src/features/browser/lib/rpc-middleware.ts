@@ -17,7 +17,7 @@ import {
   personalSign,
   walletGetPermissions,
   walletRevokePermissions
-} from 'src/features/browser/lib/middelware-helpers';
+} from 'src/features/browser/lib/middleware-helpers';
 import { rpcMethods } from './rpc-methods';
 import { TransactionParams } from '../types';
 type WalletConnectionResult = {
