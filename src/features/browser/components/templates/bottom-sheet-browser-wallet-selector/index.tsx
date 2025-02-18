@@ -1,9 +1,13 @@
-import { ForwardedRef, forwardRef, useCallback } from 'react';
+import { ForwardedRef, forwardRef, useCallback, useState } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { Button, Text } from '@components/base';
-import { BottomSheet, BottomSheetRef } from '@components/composite';
+import {
+  BottomSheet,
+  BottomSheetOutsideDataProps,
+  BottomSheetRef
+} from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { WalletDBModel } from '@database';
 import { BrowserWalletItem } from '@features/browser/components/templates/bottom-sheet-browser-wallet-selector/components';
@@ -13,7 +17,6 @@ import { scale } from '@utils';
 import { styles } from './styles';
 
 type Props = {
-  onWalletSelect: (props: string) => void;
   selectedAddress: string;
   uri: string;
 };
@@ -21,9 +24,13 @@ type Props = {
 export const BottomSheetBrowserWalletSelector = forwardRef<
   BottomSheetRef,
   Props
->(({ onWalletSelect, selectedAddress, uri }, ref) => {
+>(({ selectedAddress, uri }, ref) => {
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
   const allWalletsQueryInfo = useAllWallets();
+  const [outsideModalData, setOutsideModalData] = useState(
+    {} as BottomSheetOutsideDataProps
+  );
+
   const { data: allWallets } = allWalletsQueryInfo;
   const { data: allAccounts } = useAllAccounts();
 
@@ -39,7 +46,13 @@ export const BottomSheetBrowserWalletSelector = forwardRef<
   const renderWallet = (args: ListRenderItemInfo<WalletDBModel>) => {
     const walletAddress = allAccounts[args.index].address;
     return (
-      <Button onPress={() => onWalletSelect(walletAddress)}>
+      <Button
+        onPress={() => {
+          if (outsideModalData?.onWalletSelect) {
+            outsideModalData?.onWalletSelect(walletAddress);
+          }
+        }}
+      >
         <BrowserWalletItem
           walletAddress={walletAddress}
           itemIndex={args.index}
@@ -56,6 +69,7 @@ export const BottomSheetBrowserWalletSelector = forwardRef<
       containerStyle={styles.main}
       swiperIconVisible
       title={uri}
+      setOutsideModalData={setOutsideModalData}
       testID="BottomSheet_Remove_Address_From_Watchlists"
     >
       <View style={styles.text}>

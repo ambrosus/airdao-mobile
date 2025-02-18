@@ -1,2 +1,2 @@
 export * from './permissions';
-export * from './rpc-methods';
+export * from './rpc-methods.types';

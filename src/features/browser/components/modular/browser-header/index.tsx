@@ -52,9 +52,10 @@ export const BrowserHeader = ({
         </TouchableOpacity>
 
         <TouchableOpacity onPress={copyUri} style={styles.urlWrapper}>
-          <Text color={COLORS.neutral900}>{StringUtils.formatUri({ uri })}</Text>
+          <Text color={COLORS.neutral900}>
+            {StringUtils.formatUri({ uri })}
+          </Text>
         </TouchableOpacity>
-
         <View style={styles.actionsContainer}>
           <TouchableOpacity
             onPress={openBrowserAction}

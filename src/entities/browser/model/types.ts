@@ -1,8 +1,10 @@
+import { IsNullableAccount } from '@entities/wallet/model/types';
+
 export interface BrowserStoreModel {
   connectedAddress: string;
-  selectedAddress: string;
+  connectedAccount: IsNullableAccount;
   browserConfig: BrowserConfig;
-  setSelectedAddress: (address: string) => void;
+  setConnectedAccount: (account: IsNullableAccount) => void;
   setConnectedAddress: (address: string) => void;
   setBrowserConfig: () => Promise<void>;
 }

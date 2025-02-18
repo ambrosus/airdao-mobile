@@ -29,6 +29,7 @@ export const BottomSheetApproveBrowserAction = forwardRef<
         return (
           <PermissionsType
             localRef={localRef}
+            address={outsideModalData?.selectedAddress ?? ''}
             uri={uri}
             outsideModalData={outsideModalData}
           />
