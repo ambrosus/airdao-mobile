@@ -111,8 +111,8 @@ export const FormTemplate = ({
   }, [estimatedGas, formattedBalance, data, buttonTitle, type, t]);
 
   const disabled = useMemo(() => {
-    return buttonLabel === t('bridge.insufficient.funds');
-  }, [buttonLabel, t]);
+    return loading || buttonLabel === t('bridge.insufficient.funds');
+  }, [buttonLabel, loading, t]);
 
   return (
     <View>
@@ -126,11 +126,10 @@ export const FormTemplate = ({
         <TextOrSpinner
           loading={loading}
           label={buttonLabel}
-          spinnerColor={COLORS.neutral0}
           loadingLabel={t('harbor.button.processing')}
           styles={{
             loading: {
-              color: COLORS.neutral0
+              color: COLORS.brand600
             },
             active: {
               color: disabled ? COLORS.neutral500 : COLORS.neutral0
