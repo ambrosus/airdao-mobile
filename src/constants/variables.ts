@@ -1,4 +1,5 @@
 import { Dimensions } from 'react-native';
+import { ethers } from 'ethers';
 import { NotificationSettings } from '@appTypes/notification';
 
 export const DEVICE_WIDTH = Dimensions.get('window').width;
@@ -7,6 +8,7 @@ export const DEVICE_HEIGHT = Dimensions.get('window').height;
 export const KEYBOARD_OPENING_TIME = 500;
 
 export const AMB_DECIMALS = 18;
+export const bnZERO = ethers.BigNumber.from(0);
 
 export const DECIMAL_LIMIT = {
   CRYPTO: 5,

@@ -1,11 +1,12 @@
 import { useCallback } from 'react';
 import { ethers, BigNumber } from 'ethers';
+import { bnZERO } from '@constants/variables';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
-  MAX_HOPS,
   dexValidators,
   generateAllPossibleRoutes,
   isETHtoWrapped,
+  isTradeBetter,
   isWrappedToETH
 } from '@features/swap/utils';
 import { getAmountsOut, getAmountsIn } from '../contracts';
@@ -100,8 +101,8 @@ export function useSwapBetterCurrency() {
       path: string[],
       multihops: boolean
     ): Promise<BigNumber> => {
-      let singleHopAmount: BigNumber = BigNumber.from('0');
-      let bestMultiHopAmount: BigNumber = BigNumber.from('0');
+      let singleHopAmount: BigNumber = bnZERO;
+      let bestMultiHopAmount: BigNumber = bnZERO;
       let bestPath: string[] = [];
 
       const bnAmountToSell = ethers.utils.parseEther(amountToSell);
@@ -122,17 +123,19 @@ export function useSwapBetterCurrency() {
       } catch (error) {
         if (!multihops) {
           setIsWarningToEnableMultihopActive(true);
-          return ethers.utils.parseEther('0');
+          return bnZERO;
         }
       }
 
-      if (!multihops) return singleHopAmount || ethers.utils.parseEther('0');
+      if (!multihops) return singleHopAmount || bnZERO;
 
+      // Generate possible routes with maximum 3 hops
       const possiblePaths = generateAllPossibleRoutes(path, 3).filter(
         (route) => route[0] === path[0] && route[route.length - 1] === path[1]
       );
 
       try {
+        let currentTrade = bnZERO;
         // Parallelize all getAmountsIn calls
         const pathResults = await Promise.all(
           possiblePaths.map(async (currentPath) => {
@@ -141,19 +144,23 @@ export function useSwapBetterCurrency() {
                 path: currentPath,
                 amountToReceive: bnAmountToSell
               });
-              return { amounts, path: currentPath };
+
+              if (isTradeBetter(amounts, currentTrade)) {
+                currentTrade = amounts;
+                return { amounts, path: currentPath };
+              }
             } catch {
               return null;
             }
           })
         );
 
-        // Process results with for...of instead of forEach
+        // Find the best multi-hop route
         for (const result of pathResults) {
           if (result && result.amounts) {
             if (
               bestMultiHopAmount.isZero() ||
-              result.amounts.lt(bestMultiHopAmount)
+              isTradeBetter(result.amounts, bestMultiHopAmount)
             ) {
               bestMultiHopAmount = result.amounts;
               bestPath = result.path;
@@ -161,42 +168,22 @@ export function useSwapBetterCurrency() {
           }
         }
 
-        // Handle zero amount cases
-        if (singleHopAmount.isZero() && !bestMultiHopAmount.isZero()) {
-          // If only multi-hop route exists
+        // Compare single-hop vs multi-hop
+        if (
+          bestPath.length > 0 &&
+          isTradeBetter(bestMultiHopAmount, singleHopAmount)
+        ) {
           const middleTokens = bestPath.slice(1, -1);
           onChangeMultiHopUiState(middleTokens);
           return bestMultiHopAmount;
         }
 
-        if (!singleHopAmount.isZero() && bestMultiHopAmount.isZero()) {
-          // If only single hop route exists
-          onChangeMultiHopUiState([]);
-          return singleHopAmount;
-        }
-
-        // If both routes exist, compare them
-        if (!singleHopAmount.isZero() && !bestMultiHopAmount.isZero()) {
-          const isBetterThanSingleHop = bestMultiHopAmount.lt(singleHopAmount);
-
-          if (isBetterThanSingleHop) {
-            const middleTokens = bestPath.slice(1, -1);
-            onChangeMultiHopUiState(middleTokens);
-            return bestMultiHopAmount;
-          } else {
-            onChangeMultiHopUiState([]);
-            return singleHopAmount;
-          }
-        }
-
-        // If no valid routes found
-        return ethers.utils.parseEther('0');
+        // Return single-hop if multi-hop isn't better
+        onChangeMultiHopUiState([]);
+        return singleHopAmount || bnZERO;
       } catch (error) {
         invariant(error, 'bestTradeExactIn route check failed:');
-        if (!singleHopAmount.isZero()) {
-          return singleHopAmount;
-        }
-        return ethers.utils.parseEther('0');
+        return singleHopAmount || bnZERO;
       }
     },
     [onChangeMultiHopUiState, setIsWarningToEnableMultihopActive]
@@ -208,8 +195,8 @@ export function useSwapBetterCurrency() {
       path: string[],
       multihops: boolean
     ): Promise<BigNumber> => {
-      let singleHopAmount: BigNumber = BigNumber.from('0');
-      let bestMultiHopAmount: BigNumber = BigNumber.from('0');
+      let singleHopAmount: BigNumber = bnZERO;
+      let bestMultiHopAmount: BigNumber = bnZERO;
       let bestPath: string[] = [];
 
       if (isETHtoWrapped(path) || isWrappedToETH(path)) {
@@ -222,22 +209,21 @@ export function useSwapBetterCurrency() {
       } catch (error) {
         if (!multihops) {
           setIsWarningToEnableMultihopActive(true);
-          return ethers.utils.parseEther('0');
+          return bnZERO;
         }
       }
 
-      if (!multihops) return singleHopAmount || ethers.utils.parseEther('0');
+      if (!multihops) return singleHopAmount || bnZERO;
 
-      const possiblePaths = generateAllPossibleRoutes(
-        path,
-        MAX_HOPS + 1
-      ).filter(
+      // Generate possible routes with maximum 3 hops (2 intermediate tokens)
+      const possiblePaths = generateAllPossibleRoutes(path, 3).filter(
         (route) => route[0] === path[0] && route[route.length - 1] === path[1]
       );
 
       try {
         const bnAmountToSell = ethers.utils.parseEther(amountToSell);
 
+        let currentTrade = bnZERO;
         // Parallelize all getAmountsOut calls
         const pathResults = await Promise.all(
           possiblePaths.map(async (currentPath) => {
@@ -246,20 +232,25 @@ export function useSwapBetterCurrency() {
                 path: currentPath,
                 amountToSell: bnAmountToSell
               });
-              return { amounts, path: currentPath };
+
+              if (isTradeBetter(amounts[amounts.length - 1], currentTrade)) {
+                currentTrade = amounts[amounts.length - 1];
+                return { amounts, path: currentPath };
+              }
             } catch {
               return null;
             }
           })
         );
 
-        // Process results with for...of instead of forEach
+        // Find the best multi-hop route
         for (const result of pathResults) {
           if (result) {
             const amount = result.amounts[result.amounts.length - 1];
             if (
               amount &&
-              (bestMultiHopAmount.isZero() || amount.gt(bestMultiHopAmount))
+              (bestMultiHopAmount.isZero() ||
+                isTradeBetter(amount, bestMultiHopAmount))
             ) {
               bestMultiHopAmount = amount;
               bestPath = result.path;
@@ -267,23 +258,23 @@ export function useSwapBetterCurrency() {
           }
         }
 
-        // Rest of the function remains the same
-        const isBetterThanSingleHop =
-          !singleHopAmount || bestMultiHopAmount.gt(singleHopAmount);
-
-        if (bestPath.length > 0 && isBetterThanSingleHop) {
+        // Compare single-hop vs multi-hop
+        if (
+          bestPath.length > 0 &&
+          isTradeBetter(bestMultiHopAmount, singleHopAmount)
+        ) {
           const middleTokens = bestPath.slice(1, -1);
-          if (middleTokens.length > 0) {
-            onChangeMultiHopUiState(middleTokens);
-            return bestMultiHopAmount;
-          }
+          onChangeMultiHopUiState(middleTokens);
+          return bestMultiHopAmount;
         }
+
+        // Return single-hop if multi-hop isn't better
+        onChangeMultiHopUiState([]);
+        return singleHopAmount || bnZERO;
       } catch (error) {
         invariant(error, 'bestTradeExactOut route check failed:');
+        return singleHopAmount || bnZERO;
       }
-
-      onChangeMultiHopUiState([]);
-      return singleHopAmount || ethers.utils.parseEther('0');
     },
     [amountOut, onChangeMultiHopUiState, setIsWarningToEnableMultihopActive]
   );
@@ -293,7 +284,7 @@ export function useSwapBetterCurrency() {
       setIsWarningToEnableMultihopActive(false);
       resetMultiHopUiState();
 
-      if (dexValidators.isEmptyAmount(amountToSell)) return BigNumber.from('0');
+      if (dexValidators.isEmptyAmount(amountToSell)) return bnZERO;
 
       const { multihops } = settings.current;
       const tradeIn = isExactInRef.current;
