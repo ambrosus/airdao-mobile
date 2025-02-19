@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Keyboard, View } from 'react-native';
+import { Alert, Keyboard, View } from 'react-native';
 import { CommonActions, useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import * as Clipboard from 'expo-clipboard';
@@ -184,7 +184,15 @@ export const SendFunds = ({ navigation, route }: Props) => {
           });
         }
       } catch (error: unknown) {
-        await Clipboard.setStringAsync(JSON.stringify(error));
+        // TODOO remove it for prod
+        const errorToCopy =
+          error instanceof Error
+            ? { message: error.message, stack: error.stack, name: error.name }
+            : error;
+
+        Alert.alert(errorToCopy?.message || JSON.stringify(error, null, 2));
+
+        await Clipboard.setStringAsync(JSON.stringify(errorToCopy, null, 2));
 
         const errorMessage =
           (error as { message: string })?.message ?? JSON.stringify(error);
