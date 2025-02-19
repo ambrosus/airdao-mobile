@@ -4,20 +4,26 @@ import { RefObject } from 'react';
 import { WebView, WebViewMessageEvent } from '@metamask/react-native-webview';
 import { BottomSheetRef } from '@components/composite';
 import { useBrowserStore } from '@entities/browser/model';
-import { AMB_CHAIN_ID_DEC } from '@features/browser/constants';
 import {
-  ethRequestAccounts,
+  AMB_CHAIN_ID_DEC,
+  INITIAL_ACCOUNTS_PERMISSIONS
+} from '@features/browser/constants';
+import { rpcErrorHandler } from '@features/browser/utils/rpc-error-handler';
+import {
   ethSendTransaction,
   ethSignTransaction,
   ethSignTypesData,
-  personalSing,
+  handleWalletConnection,
+  personalSign,
   walletGetPermissions,
-  walletRequestPermissions,
   walletRevokePermissions
-} from '@features/browser/lib/middleware.helpers';
-import { rpcErrorHandler } from '@features/browser/utils/rpc-error-handler';
+} from 'src/features/browser/lib/middleware-helpers';
 import { rpcMethods } from './rpc-methods';
 import { TransactionParams } from '../types';
+
+type WalletConnectionResult = {
+  accounts: string[];
+};
 
 interface JsonRpcRequest {
   id: number;
@@ -39,9 +45,10 @@ interface JsonRpcResponse {
 interface HandleWebViewMessageModel {
   event: WebViewMessageEvent;
   webViewRef: RefObject<WebView>;
-  privateKey: string;
   uri: string;
+  privateKey: string;
   browserApproveRef: RefObject<BottomSheetRef>;
+  browserWalletSelectorRef: RefObject<BottomSheetRef>;
 }
 
 export async function handleWebViewMessage({
@@ -49,6 +56,7 @@ export async function handleWebViewMessage({
   webViewRef,
   privateKey,
   browserApproveRef,
+  browserWalletSelectorRef,
   uri
 }: HandleWebViewMessageModel) {
   const { connectedAddress } = useBrowserStore.getState();
@@ -97,11 +105,45 @@ export async function handleWebViewMessage({
           break;
 
         case 'eth_requestAccounts':
-          response.result = await ethRequestAccounts({
-            browserApproveRef,
-            privateKey,
+          response.result = await handleWalletConnection({
+            uri,
+            browserWalletSelectorRef,
             webViewRef,
-            origin: uri
+            browserApproveRef,
+            permissions: INITIAL_ACCOUNTS_PERMISSIONS
+          })
+            .then((result: WalletConnectionResult) => result.accounts)
+            .catch((error) => {
+              rpcErrorHandler('walletRequestPermissions', error);
+            });
+
+          break;
+
+        case 'wallet_requestPermissions': {
+          const permissions = params[0];
+          await handleWalletConnection({
+            uri,
+            browserApproveRef,
+            browserWalletSelectorRef,
+            response,
+            webViewRef,
+            permissions: permissions || INITIAL_ACCOUNTS_PERMISSIONS
+          })
+            .then((res) => (response.result = res.permissions))
+            .catch((error: unknown) => {
+              rpcErrorHandler('walletRequestPermissions', error);
+              throw error;
+            });
+          break;
+        }
+
+        case 'personal_sign':
+        case 'eth_sign':
+          await personalSign({
+            params: params as [string, string],
+            response,
+            privateKey,
+            browserApproveRef
           });
           break;
 
@@ -110,22 +152,14 @@ export async function handleWebViewMessage({
           break;
         }
 
-        case 'wallet_requestPermissions': {
-          const permissions = params[0];
-          await walletRequestPermissions({
-            browserApproveRef,
-            permissions,
-            response,
-            privateKey,
-            webViewRef,
-            origin: uri
-          });
-          break;
-        }
-
         case 'wallet_revokePermissions': {
           const permissions = params[0];
-          await walletRevokePermissions({ permissions, response, webViewRef });
+          await walletRevokePermissions({
+            permissions,
+            response,
+            webViewRef,
+            uri
+          });
           break;
         }
 
@@ -155,15 +189,6 @@ export async function handleWebViewMessage({
           });
           break;
         }
-
-        case 'personal_sign':
-        case 'eth_sign':
-          await personalSing({
-            params: params as [string, string],
-            response,
-            privateKey
-          });
-          break;
 
         case 'eth_getBalance':
           response.result = await handleGetBalance(params[0], params[1]);

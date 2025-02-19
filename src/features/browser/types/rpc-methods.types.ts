@@ -1,5 +1,6 @@
 import { RefObject } from 'react';
 import { WebView } from '@metamask/react-native-webview';
+import { BottomSheetRef } from '@components/composite';
 import { Permissions, BasePermissions } from './permissions';
 import { rpcRejectHandler } from '../utils';
 
@@ -39,6 +40,7 @@ export type SignMessageParams = {
   params: [string, string]; // [message, address]
   response: RPCResponse;
   privateKey: string;
+  browserApproveRef: RefObject<BottomSheetRef>;
 };
 
 export type SignTypedDataParams = {

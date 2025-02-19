@@ -1,4 +1,4 @@
-import { ForwardedRef, MutableRefObject } from 'react';
+import { MutableRefObject } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -9,22 +9,22 @@ import {
 } from '@components/composite';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { useBrowserStore } from '@entities/browser/model';
 import { scale, StringUtils } from '@utils';
 import { styles } from './styles';
 
 interface PermissionsTypeProps {
   uri: string;
   localRef: MutableRefObject<BottomSheetRef | null>;
+  address: string;
   outsideModalData?: BottomSheetOutsideDataProps;
 }
 
 export const PermissionsType = ({
   uri,
   localRef,
-  outsideModalData
+  outsideModalData,
+  address
 }: PermissionsTypeProps) => {
-  const { selectedAddress } = useBrowserStore();
   const { t } = useTranslation();
   const { bottom } = useSafeAreaInsets();
 
@@ -57,7 +57,7 @@ export const PermissionsType = ({
         <Text fontSize={scale(15)}>{t('browser.approve.address')} </Text>
         <View style={styles.addressWrapper}>
           <Text color={COLORS.neutral900} fontSize={scale(15)}>
-            {StringUtils.formatAddress(selectedAddress, 5, 5)}
+            {StringUtils.formatAddress(address, 5, 5)}
           </Text>
         </View>
       </Row>

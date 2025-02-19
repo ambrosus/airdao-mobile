@@ -14,6 +14,8 @@ export interface BottomSheetOutsideDataProps {
   buttonsLabels?: string[];
   onReject?: () => void;
   onApprove?: () => void;
+  selectedAddress?: string;
+  onWalletSelect?: (address: string) => Promise<string>;
 }
 
 export interface BottomSheetProps {

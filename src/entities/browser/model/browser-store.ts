@@ -4,15 +4,15 @@ import { BrowserStoreModel } from '@entities/browser/model/types';
 
 export const useBrowserStore = create<BrowserStoreModel>((set) => ({
   connectedAddress: '',
-  selectedAddress: '',
   browserConfig: {
     products: []
   },
-  setSelectedAddress: async (address: string) => {
-    set({ selectedAddress: address });
+  connectedAccount: null,
+  setConnectedAccount: async (connectedAccount) => {
+    set({ connectedAccount });
   },
-  setConnectedAddress: async (address: string) => {
-    set({ connectedAddress: address });
+  setConnectedAddress: async (connectedAddress) => {
+    set({ connectedAddress });
   },
   setBrowserConfig: async () => {
     set({ browserConfig: await browserService.getBrowserConfig() });
