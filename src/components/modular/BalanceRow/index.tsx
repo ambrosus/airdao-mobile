@@ -79,13 +79,13 @@ export const BalanceRow = ({
   );
 
   const error = useMemo(() => {
-    if (!bnBalance || !token || value.trim() === '') return false;
+    if (!bnBalance || !token || value.trim() === '' || isFetching) return false;
 
     const bnInputBalance = bnBalance?._hex;
     const bnSelectedAmount = ethers.utils.parseEther(value);
 
     return bnSelectedAmount.gt(bnInputBalance);
-  }, [bnBalance, token, value]);
+  }, [bnBalance, isFetching, token, value]);
 
   const onSelectMaxTokensAmountPress = useCallback(() => {
     if (bnBalance) {

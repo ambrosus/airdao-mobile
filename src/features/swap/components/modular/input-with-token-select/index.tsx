@@ -27,6 +27,7 @@ export const InputWithTokenSelect = ({
 
   const textInputRef = useRef<InputRef>(null);
 
+  const [isBalanceLoading, setIsBalanceLoading] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [inputContainerWidth, setInputContainerWidth] = useState(0);
 
@@ -68,10 +69,9 @@ export const InputWithTokenSelect = ({
     });
   }, []);
 
-  const onInputContainerPress = useCallback(
-    () => textInputRef.current?.focus(),
-    []
-  );
+  const onInputContainerPress = useCallback(() => {
+    if (!isBalanceLoading) textInputRef.current?.focus();
+  }, [isBalanceLoading]);
 
   const onLayoutEventHandle = useCallback(
     (event: LayoutChangeEvent) =>
@@ -96,6 +96,8 @@ export const InputWithTokenSelect = ({
           style={styles.inputContainer}
         >
           <TextInput
+            focusable={!isBalanceLoading}
+            editable={!isBalanceLoading}
             value={value}
             placeholder="0"
             type="number"
@@ -111,7 +113,7 @@ export const InputWithTokenSelect = ({
         </Pressable>
       </View>
 
-      <Balance type={type} />
+      <Balance type={type} setIsBalanceLoading={setIsBalanceLoading} />
     </View>
   );
 };
