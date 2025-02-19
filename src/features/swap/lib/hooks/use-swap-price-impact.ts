@@ -65,67 +65,75 @@ export function useSwapPriceImpact() {
     ]
   );
 
-  const multiHopImpactGetter = useCallback(async () => {
-    if (!isMultiHopSwapAvailable(tokensRoute) || !isExactInRef.current) {
-      return 0;
-    }
-
-    const path = withMultiHopPath([
-      tokenToSell.TOKEN?.address ?? '',
-      tokenToReceive.TOKEN?.address ?? ''
-    ]);
-
-    try {
-      const amountIn = ethers.utils.parseEther(tokenToSell.AMOUNT);
-      const amounts = await getAmountsOut({
-        path,
-        amountToSell: amountIn
-      });
-
-      // Calculate impact only for the current path
-      let totalImpact = 0;
-      for (let i = 0; i < path.length - 1; i++) {
-        const pairAddress = getPairAddress({
-          TOKEN_A: { address: path[i] } as SwapToken,
-          TOKEN_B: { address: path[i + 1] } as SwapToken
-        })?.pairAddress;
-
-        if (!pairAddress) continue;
-
-        const { reserveIn, reserveOut } = await getReserves(pairAddress, {
-          TOKEN_A: { address: path[i] } as SwapToken,
-          TOKEN_B: { address: path[i + 1] } as SwapToken
-        });
-
-        if (!reserveIn || !reserveOut) continue;
-
-        const amountInWithFee = subtractRealizedLPFeeFromInput(
-          ethers.utils.formatEther(i === 0 ? amountIn : amounts[i])
-        );
-
-        const impact = singleHopImpact(
-          amountInWithFee,
-          amounts[i + 1],
-          reserveIn,
-          reserveOut
-        );
-
-        totalImpact = multiHopCumulativeImpact(totalImpact.toString(), impact);
+  const multiHopImpactGetter = useCallback(
+    async (_path?: string[]) => {
+      if (!isMultiHopSwapAvailable(tokensRoute) || !isExactInRef.current) {
+        return 0;
       }
 
-      return Math.abs(totalImpact);
-    } catch (error) {
-      return 0;
-    }
-  }, [
-    getPairAddress,
-    getReserves,
-    isExactInRef,
-    tokenToReceive.TOKEN,
-    tokenToSell.AMOUNT,
-    tokenToSell.TOKEN,
-    tokensRoute
-  ]);
+      const path =
+        _path ??
+        withMultiHopPath([
+          tokenToSell.TOKEN?.address ?? '',
+          tokenToReceive.TOKEN?.address ?? ''
+        ]);
+
+      try {
+        const amountIn = ethers.utils.parseEther(tokenToSell.AMOUNT);
+        const amounts = await getAmountsOut({
+          path,
+          amountToSell: amountIn
+        });
+
+        // Calculate impact only for the current path
+        let totalImpact = 0;
+        for (let i = 0; i < path.length - 1; i++) {
+          const pairAddress = getPairAddress({
+            TOKEN_A: { address: path[i] } as SwapToken,
+            TOKEN_B: { address: path[i + 1] } as SwapToken
+          })?.pairAddress;
+
+          if (!pairAddress) continue;
+
+          const { reserveIn, reserveOut } = await getReserves(pairAddress, {
+            TOKEN_A: { address: path[i] } as SwapToken,
+            TOKEN_B: { address: path[i + 1] } as SwapToken
+          });
+
+          if (!reserveIn || !reserveOut) continue;
+
+          const amountInWithFee = subtractRealizedLPFeeFromInput(
+            ethers.utils.formatEther(i === 0 ? amountIn : amounts[i])
+          );
+
+          const impact = singleHopImpact(
+            amountInWithFee,
+            amounts[i + 1],
+            reserveIn,
+            reserveOut
+          );
+
+          totalImpact = multiHopCumulativeImpact(
+            totalImpact.toString(),
+            impact
+          );
+        }
+
+        return Math.abs(totalImpact);
+      } catch (error) {
+        return 0;
+      }
+    },
+    [
+      getPairAddress,
+      getReserves,
+      isExactInRef,
+      tokenToReceive.TOKEN,
+      tokenToSell.AMOUNT,
+      tokenToSell.TOKEN,
+      tokensRoute
+    ]
+  );
 
   const uiPriceImpactGetter = useCallback(async () => {
     const isMultiHopPathAvailable = isMultiHopSwapAvailable(tokensRoute);
@@ -148,6 +156,7 @@ export function useSwapPriceImpact() {
 
   return {
     multiHopImpactGetter,
+    singleHopImpactGetter,
     singleHopImpact,
     uiPriceImpactGetter
   };
