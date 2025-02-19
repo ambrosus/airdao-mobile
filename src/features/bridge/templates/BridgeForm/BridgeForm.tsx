@@ -344,6 +344,7 @@ export const BridgeForm = () => {
           label={t('bridge.set.amount')}
           // @ts-ignore
           token={selectedTokenFrom}
+          tokenDecimal={selectedTokenFrom.decimals}
           bottomSheetNode={<TokenSelectData onPressItem={onTokenSelect} />}
           onChangeText={onChangeText}
           onPressMaxAmount={() => {

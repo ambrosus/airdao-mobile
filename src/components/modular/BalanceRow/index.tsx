@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { BigNumber, ethers } from 'ethers';
+import { formatUnits } from 'ethers/lib/utils';
 import { t } from 'i18next';
 import { CryptoCurrencyCode } from '@appTypes';
 import { ShimmerLoader } from '@components/animations';
@@ -18,6 +19,7 @@ interface BalanceRowProps {
   readonly dispatch: boolean;
   readonly onChangeText?: (text: string) => void;
   readonly onPressMaxAmount: (amount: string) => void;
+  tokenDecimal?: number;
   isRequiredRefetchBalance?: boolean;
 }
 
@@ -27,6 +29,7 @@ export const BalanceRow = ({
   onPressMaxAmount,
   dispatch,
   onChangeText,
+  tokenDecimal,
   isRequiredRefetchBalance
 }: BalanceRowProps): JSX.Element => {
   const { wallet } = useWalletStore();
@@ -50,7 +53,6 @@ export const BalanceRow = ({
   } = useERC20Balance(address, undefined, !tokenBalanceIsBigNumber);
 
   const bnBalance = tokenBalanceIsBigNumber ? token.balance : _balance;
-
   useEffect(() => {
     if (isRequiredRefetchBalance) refetch();
   }, [isRequiredRefetchBalance, refetch]);
@@ -58,12 +60,14 @@ export const BalanceRow = ({
   const normalizedTokenBalance = useMemo(() => {
     if (bnBalance) {
       return NumberUtils.numberToTransformedLocale(
-        ethers.utils.formatEther(bnBalance?._hex)
+        tokenDecimal
+          ? formatUnits(bnBalance?._hex, tokenDecimal)
+          : ethers.utils.formatEther(bnBalance?._hex)
       );
     }
 
     return '0';
-  }, [bnBalance]);
+  }, [bnBalance, tokenDecimal]);
 
   const disabled = useMemo(() => {
     return bnBalance?.isZero() || !token;
@@ -82,10 +86,12 @@ export const BalanceRow = ({
     if (!bnBalance || !token || value.trim() === '' || isFetching) return false;
 
     const bnInputBalance = bnBalance?._hex;
-    const bnSelectedAmount = ethers.utils.parseEther(value);
+    const bnSelectedAmount = tokenDecimal
+      ? ethers.utils.parseUnits(value, tokenDecimal)
+      : ethers.utils.parseEther(value);
 
     return bnSelectedAmount.gt(bnInputBalance);
-  }, [bnBalance, isFetching, token, value]);
+  }, [bnBalance, isFetching, token, tokenDecimal, value]);
 
   const onSelectMaxTokensAmountPress = useCallback(() => {
     if (bnBalance) {
