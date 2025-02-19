@@ -5,6 +5,7 @@ import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { DataToPreviewModel } from '@models/Bridge';
 import { NumberUtils, scale } from '@utils';
+import { styles } from './styles';
 
 interface PreviewDataItemProps {
   item: {
@@ -33,15 +34,14 @@ export const PreviewDataItem = ({ item }: PreviewDataItemProps) => {
 
   return (
     <>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between'
-        }}
-      >
+      <View style={styles.container}>
         <Text>{name}</Text>
         <Row>
-          {isFirst && <TokenLogo token={symbol} scale={0.5} />}
+          {isFirst && (
+            <View style={styles.logoWrapper}>
+              <TokenLogo token={symbol} scale={0.5} />
+            </View>
+          )}
           <Spacer horizontal value={10} />
           <Text
             color={COLORS.neutral800}
