@@ -1,3 +1,4 @@
+import * as Clipboard from 'expo-clipboard';
 import Web3 from 'web3';
 import { TransactionConfig } from 'web3-core';
 import Config from '@constants/config';
@@ -113,6 +114,7 @@ class TransferDispatcher {
       // @ts-ignore
       return txReceipt.transactionHash;
     } catch (error) {
+      await Clipboard.setStringAsync(JSON.stringify(error));
       // @ts-ignore
       if (error.message.includes('Returned error: Insufficient funds.')) {
         throw Error('INSUFFICIENT_FUNDS');
