@@ -1,4 +1,10 @@
-import { useCallback, useMemo } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo
+} from 'react';
 import { ethers } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
@@ -15,9 +21,10 @@ import { NumberUtils, scale } from '@utils';
 
 interface BalanceProps {
   type: SelectedTokensKeys;
+  setIsBalanceLoading: Dispatch<SetStateAction<boolean>>;
 }
 
-export const Balance = ({ type }: BalanceProps) => {
+export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
   const { t } = useTranslation();
   const {
     selectedTokens,
@@ -31,6 +38,10 @@ export const Balance = ({ type }: BalanceProps) => {
   const { bnBalanceAmount, isFetchingBalance } = useSwapBalance(
     selectedTokens[type]
   );
+
+  useEffect(() => {
+    setIsBalanceLoading(isFetchingBalance);
+  }, [isFetchingBalance, setIsBalanceLoading]);
 
   const normalizedTokenBalance = useMemo(() => {
     if (bnBalanceAmount) {
