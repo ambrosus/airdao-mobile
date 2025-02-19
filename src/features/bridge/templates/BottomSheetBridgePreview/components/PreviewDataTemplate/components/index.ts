@@ -1,1 +1,1 @@
-export * from './PreViewDataItem';
+export * from './PreviewDataItem';
