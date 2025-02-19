@@ -4,8 +4,8 @@ export interface BrowserStoreModel {
   connectedAddress: string;
   connectedAccount: IsNullableAccount;
   browserConfig: BrowserConfig;
-  setConnectedAccount: (account: IsNullableAccount) => void;
-  setConnectedAddress: (address: string) => void;
+  setConnectedAccount: (payload: IsNullableAccount) => void;
+  setConnectedAddress: (payload: string) => void;
   setBrowserConfig: () => Promise<void>;
 }
 
