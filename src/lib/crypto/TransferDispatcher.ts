@@ -3,14 +3,15 @@ import { TransactionConfig } from 'web3-core';
 import Config from '@constants/config';
 import { delay } from '@utils';
 import erc20 from './erc20';
-const MAX_RETRIES = 5;
+
+const MAX_RETRIES = 7;
 
 class TransferDispatcher {
   private web3: Web3;
 
   constructor() {
     this.web3 = new Web3(new Web3.providers.HttpProvider(Config.NETWORK_URL));
-    this.web3.eth.transactionPollingTimeout = 17;
+    this.web3.eth.transactionPollingTimeout = 15;
   }
 
   private async prepareTransactionConfig(
@@ -120,13 +121,12 @@ class TransferDispatcher {
       try {
         if (!txHash) throw error;
 
-        await delay(1000);
-
         let attempt = 0;
         let receipt;
         while (attempt < MAX_RETRIES) {
           receipt = await this.web3.eth.getTransactionReceipt(txHash);
           if (receipt) break;
+          await delay(2000);
           attempt++;
         }
 
