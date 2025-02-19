@@ -37,7 +37,7 @@ GAS_FEE_BUFFER -->
  Adds a small buffer to account for potential gas fee changes
  before the exact amount is known
  */
-const GAS_FEE_BUFFER = 0.00000000001;
+const GAS_FEE_BUFFER = 0.000001;
 
 export const BridgeForm = () => {
   const { wallet: selectedWallet } = useWalletStore();
