@@ -20,6 +20,7 @@ export const styles = StyleSheet.create({
   errorFooter: {
     width: '100%',
     justifyContent: 'center',
+    alignItems: 'center',
     marginTop: verticalScale(16),
     rowGap: verticalScale(16)
   },
