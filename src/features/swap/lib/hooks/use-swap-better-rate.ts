@@ -13,22 +13,25 @@ export function useSwapBetterRate() {
 
   const [isExecutingRate, setIsExecutingRate] = useState(false);
 
+  const [oppositeAmountPerOneToken, setOppositeAmountPerOneToken] =
+    useState('0');
+
   const [tokens, setTokens] = useState({
     symbolInput: tokenToReceive.TOKEN.symbol,
     symbolOutput: tokenToSell.TOKEN.symbol
   });
 
-  const onToggleTokensOrder = useCallback(
-    () => setIsTradeIn((prevState) => !prevState),
-    []
-  );
+  const onToggleTokensOrder = useCallback(() => {
+    setIsExecutingRate(true);
+    setOppositeAmountPerOneToken('0');
+    setIsTradeIn((prevState) => !prevState);
+  }, []);
 
   const bestSwapRate = useCallback(
     async (path: string[]) => {
-      setIsExecutingRate(true);
-      const singleHopOnly = _refSettingsGetter.multihops;
       try {
         const reversedPath = path;
+        const singleHopOnly = _refSettingsGetter.multihops;
 
         const amount = isTradeIn
           ? await bestTradeExactOut(
@@ -52,11 +55,11 @@ export function useSwapBetterRate() {
           });
         }
 
+        setIsExecutingRate(false); // Set loading to false after calculation
         return amount;
       } catch (error) {
+        setIsExecutingRate(false); // Set loading to false on error
         throw error;
-      } finally {
-        setIsExecutingRate(false);
       }
     },
     [
@@ -74,6 +77,8 @@ export function useSwapBetterRate() {
     onToggleTokensOrder,
     isTradeIn,
     tokens,
-    isExecutingRate
+    isExecutingRate,
+    oppositeAmountPerOneToken,
+    setOppositeAmountPerOneToken
   };
 }
