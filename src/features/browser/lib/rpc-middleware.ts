@@ -8,7 +8,10 @@ import {
   AMB_CHAIN_ID_DEC,
   INITIAL_ACCOUNTS_PERMISSIONS
 } from '@features/browser/constants';
-import { rpcErrorHandler } from '@features/browser/utils/rpc-error-handler';
+import {
+  rpcErrorHandler,
+  rpcRejectHandler
+} from '@features/browser/utils/rpc-error-handler';
 import {
   ethSendTransaction,
   ethSignTransaction,
@@ -19,11 +22,19 @@ import {
   walletRevokePermissions
 } from 'src/features/browser/lib/middleware-helpers';
 import { rpcMethods } from './rpc-methods';
-import { TransactionParams } from '../types';
+import { PermissionType, TransactionParams } from '../types';
 
-type WalletConnectionResult = {
-  accounts: string[];
-};
+type WalletConnectionResult =
+  | {
+      accounts: string[];
+      permissions: {
+        parentCapability: Permissions;
+        date: number;
+        caveats: { type: PermissionType; value: string[] }[];
+      }[];
+    }
+  | undefined
+  | any;
 
 interface JsonRpcRequest {
   id: number;
@@ -110,7 +121,8 @@ export async function handleWebViewMessage({
             browserWalletSelectorRef,
             webViewRef,
             browserApproveRef,
-            permissions: INITIAL_ACCOUNTS_PERMISSIONS
+            permissions: INITIAL_ACCOUNTS_PERMISSIONS,
+            response
           })
             .then((result: WalletConnectionResult) => result.accounts)
             .catch((error) => {
@@ -129,10 +141,10 @@ export async function handleWebViewMessage({
             webViewRef,
             permissions: permissions || INITIAL_ACCOUNTS_PERMISSIONS
           })
-            .then((res) => (response.result = res.permissions))
+            .then((res) => (response.result = res?.permissions))
             .catch((error: unknown) => {
+              response.error = rpcRejectHandler(4001, error);
               rpcErrorHandler('walletRequestPermissions', error);
-              throw error;
             });
           break;
         }

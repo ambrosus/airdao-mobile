@@ -23,7 +23,7 @@ export const personalSign = async ({
     const userConfirmation = new Promise((resolve, reject) => {
       requestUserApproval({
         browserApproveRef,
-        modalType: ModalActionTypes.PERMISSIONS,
+        modalType: ModalActionTypes.PERSONAL_SIGN,
         selectedAddress: connectedAddress,
         resolve: () => resolve(true),
         reject: () => reject(new Error('User rejected signing'))

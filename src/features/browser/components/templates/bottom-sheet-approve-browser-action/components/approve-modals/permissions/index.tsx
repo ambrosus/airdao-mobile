@@ -1,30 +1,20 @@
-import { MutableRefObject } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Spacer, Text, Row } from '@components/base';
-import {
-  BottomSheetOutsideDataProps,
-  BottomSheetRef
-} from '@components/composite';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
+import { PermissionsModalProps } from '@features/browser/components/templates/bottom-sheet-approve-browser-action/components/approve-modals/types';
 import { scale, StringUtils } from '@utils';
 import { styles } from './styles';
 
-interface PermissionsTypeProps {
-  uri: string;
-  localRef: MutableRefObject<BottomSheetRef | null>;
-  address: string;
-  outsideModalData?: BottomSheetOutsideDataProps;
-}
-
-export const PermissionsType = ({
+export const PermissionsModal = ({
   uri,
   localRef,
   outsideModalData,
   address
-}: PermissionsTypeProps) => {
+}: PermissionsModalProps) => {
+  // TODO make universal modal component for PermissionsModal & PersonalSignModal
   const { t } = useTranslation();
   const { bottom } = useSafeAreaInsets();
 

@@ -4,6 +4,7 @@ import { ModalProps } from 'react-native-modal';
 
 export enum ModalActionTypes {
   PERMISSIONS = 'permissions',
+  PERSONAL_SIGN = 'personalSign',
   DISCONNECT = 'disconnect'
 }
 

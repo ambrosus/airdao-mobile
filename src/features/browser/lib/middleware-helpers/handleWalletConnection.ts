@@ -3,7 +3,11 @@ import WebView from '@metamask/react-native-webview';
 import { BottomSheetRef, ModalActionTypes } from '@components/composite';
 import { useBrowserStore } from '@entities/browser/model';
 import { AMB_CHAIN_ID_HEX } from '@features/browser/constants';
-import { requestUserApproval, rpcErrorHandler } from '@features/browser/utils';
+import {
+  requestUserApproval,
+  rpcErrorHandler,
+  rpcRejectHandler
+} from '@features/browser/utils';
 import { setConnectedAddressTo } from '@lib';
 import {
   updateWindowObject,
@@ -24,7 +28,8 @@ export const handleWalletConnection = async ({
   webViewRef,
   browserApproveRef,
   browserWalletSelectorRef,
-  uri
+  uri,
+  response
 }: ConnectionRequest) => {
   const { setConnectedAddress } = useBrowserStore.getState();
   try {
@@ -66,6 +71,6 @@ export const handleWalletConnection = async ({
   } catch (error: unknown) {
     setConnectedAddress('');
     rpcErrorHandler('handleWalletConnection', error);
-    throw error;
+    response.error = rpcRejectHandler(4001, error);
   }
 };

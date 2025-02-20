@@ -5,7 +5,8 @@ import {
   BottomSheetRef,
   ModalActionTypes
 } from '@components/composite';
-import { PermissionsType } from '@features/browser/components/templates/bottom-sheet-approve-browser-action/components';
+import { PermissionsModal } from '@features/browser/components/templates/bottom-sheet-approve-browser-action/components';
+import { PersonalSignModal } from '@features/browser/components/templates/bottom-sheet-approve-browser-action/components/approve-modals';
 import { useForwardedRef } from '@hooks';
 
 type Props = {
@@ -27,7 +28,16 @@ export const BottomSheetApproveBrowserAction = forwardRef<
     switch (modalType) {
       case ModalActionTypes.PERMISSIONS:
         return (
-          <PermissionsType
+          <PermissionsModal
+            localRef={localRef}
+            address={outsideModalData?.selectedAddress ?? ''}
+            uri={uri}
+            outsideModalData={outsideModalData}
+          />
+        );
+      case ModalActionTypes.PERSONAL_SIGN:
+        return (
+          <PersonalSignModal
             localRef={localRef}
             address={outsideModalData?.selectedAddress ?? ''}
             uri={uri}
@@ -38,9 +48,16 @@ export const BottomSheetApproveBrowserAction = forwardRef<
         return null;
     }
   }, [localRef, modalType, outsideModalData, uri]);
+  const onReject = () => {
+    if (outsideModalData.onReject) {
+      outsideModalData.onReject();
+    }
+    localRef?.current?.dismiss();
+  };
 
   return (
     <BottomSheet
+      onBackdropPress={onReject}
       ref={localRef}
       swiperIconVisible
       setOutsideModalData={setOutsideModalData}
