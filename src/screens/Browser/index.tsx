@@ -24,11 +24,11 @@ import {
   BottomSheetBrowserModal,
   BottomSheetBrowserWalletSelector
 } from '@features/browser/components/templates';
-import { AMB_CHAIN_ID_HEX } from '@features/browser/constants';
 import {
   handleWebViewMessage,
   INJECTED_PROVIDER_JS
 } from '@features/browser/lib';
+import { connectWallet } from '@features/browser/utils';
 import { useAllAccounts } from '@hooks/database';
 import { getConnectedAddressTo } from '@lib';
 import { Cache, CacheKey } from '@lib/cache';
@@ -75,7 +75,9 @@ export const BrowserScreen = () => {
     }),
     []
   );
+
   useEffect(() => {
+    console.log(100, 'EFFETT');
     const getSelectedWallet = async () => {
       const _selectedAddress = await getConnectedAddressTo(uri);
       const account = accounts.find(
@@ -87,21 +89,7 @@ export const BrowserScreen = () => {
     getSelectedWallet().then();
 
     if (webViewRef.current && connectedAddress) {
-      const updateScript = `
-        (function() {
-          try {
-            if (window.ethereum) {
-              window.ethereum.selectedAddress = '${connectedAddress}';
-              window.ethereum.emit('accountsChanged', ['${connectedAddress}']);
-              window.ethereum.emit('connect', { chainId: '${AMB_CHAIN_ID_HEX}' });
-            }
-          } catch(e) {
-            console.error('Connection update error:', e);
-          }
-          return true;
-        })();
-      `;
-      webViewRef.current.injectJavaScript(updateScript);
+      connectWallet(connectedAddress, webViewRef);
     }
   }, [
     accounts,
@@ -122,19 +110,19 @@ export const BrowserScreen = () => {
         )) as string;
 
         await handleWebViewMessage({
+          uri,
           event,
           webViewRef,
           privateKey,
           browserApproveRef,
-          browserWalletSelectorRef,
-          uri
+          browserWalletSelectorRef
         });
       } catch (error) {
         throw error;
       }
     },
     // @ts-ignore
-    [connectedAccount?._raw?.hash, uri]
+    [connectedAccount?._raw.hash, uri]
   );
 
   const onGestureEvent = (
@@ -160,10 +148,13 @@ export const BrowserScreen = () => {
 
   const browserWalletSelectorRef = useRef<BottomSheetRef>(null);
 
+  const openWalletSelector = () => {
+    browserWalletSelectorRef?.current?.show();
+  };
   return (
     <SafeAreaView style={containerStyle}>
       <BrowserHeader
-        openWalletSelector={browserWalletSelectorRef?.current?.show}
+        openWalletSelector={openWalletSelector}
         reload={reload}
         closeWebView={closeWebView}
         webViewRef={webViewRef}

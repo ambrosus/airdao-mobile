@@ -1,8 +1,6 @@
 /* eslint-disable no-console */
 // tslint:disable:no-console
-import { RefObject } from 'react';
-import { WebView, WebViewMessageEvent } from '@metamask/react-native-webview';
-import { BottomSheetRef } from '@components/composite';
+import { WebViewMessageEvent } from '@metamask/react-native-webview';
 import { useBrowserStore } from '@entities/browser/model';
 import {
   AMB_CHAIN_ID_DEC,
@@ -22,53 +20,22 @@ import {
   walletRevokePermissions
 } from 'src/features/browser/lib/middleware-helpers';
 import { rpcMethods } from './rpc-methods';
-import { PermissionType, TransactionParams } from '../types';
-
-type WalletConnectionResult =
-  | {
-      accounts: string[];
-      permissions: {
-        parentCapability: Permissions;
-        date: number;
-        caveats: { type: PermissionType; value: string[] }[];
-      }[];
-    }
-  | undefined
-  | any;
-
-interface JsonRpcRequest {
-  id: number;
-  jsonrpc: string;
-  method: string;
-  params: any[];
-}
-
-interface JsonRpcResponse {
-  id: number;
-  jsonrpc: string;
-  result?: any;
-  error?: {
-    code: number;
-    message: string;
-  };
-}
-
-interface HandleWebViewMessageModel {
-  event: WebViewMessageEvent;
-  webViewRef: RefObject<WebView>;
-  uri: string;
-  privateKey: string;
-  browserApproveRef: RefObject<BottomSheetRef>;
-  browserWalletSelectorRef: RefObject<BottomSheetRef>;
-}
+import {
+  TransactionParams,
+  RPCMethods,
+  HandleWebViewMessageModel,
+  JsonRpcRequest,
+  JsonRpcResponse,
+  WalletConnectionResult
+} from '../types';
 
 export async function handleWebViewMessage({
+  uri,
   event,
   webViewRef,
   privateKey,
   browserApproveRef,
-  browserWalletSelectorRef,
-  uri
+  browserWalletSelectorRef
 }: HandleWebViewMessageModel) {
   const { connectedAddress } = useBrowserStore.getState();
   const requestsInProgress = new Set();
@@ -100,8 +67,6 @@ export async function handleWebViewMessage({
     }
     requestsInProgress.add(id);
 
-    // console.log('Incoming request:', { id, method, params });
-
     const response: JsonRpcResponse = {
       id,
       jsonrpc: '2.0',
@@ -111,46 +76,44 @@ export async function handleWebViewMessage({
 
     try {
       switch (method) {
-        case 'net_version':
+        // net_version
+        case RPCMethods.NetVersion:
           response.result = AMB_CHAIN_ID_DEC;
           break;
 
-        case 'eth_requestAccounts':
+        // eth_requestAccounts
+        case RPCMethods.EthRequestAccounts: {
           response.result = await handleWalletConnection({
             uri,
-            browserWalletSelectorRef,
-            webViewRef,
-            browserApproveRef,
-            permissions: INITIAL_ACCOUNTS_PERMISSIONS,
-            response
-          })
-            .then((result: WalletConnectionResult) => result.accounts)
-            .catch((error) => {
-              rpcErrorHandler('walletRequestPermissions', error);
-            });
-
-          break;
-
-        case 'wallet_requestPermissions': {
-          const permissions = params[0];
-          await handleWalletConnection({
-            uri,
-            browserApproveRef,
-            browserWalletSelectorRef,
             response,
+            browserWalletSelectorRef,
             webViewRef,
-            permissions: permissions || INITIAL_ACCOUNTS_PERMISSIONS
-          })
-            .then((res) => (response.result = res?.permissions))
-            .catch((error: unknown) => {
-              response.error = rpcRejectHandler(4001, error);
-              rpcErrorHandler('walletRequestPermissions', error);
-            });
+            browserApproveRef,
+            permissions: INITIAL_ACCOUNTS_PERMISSIONS
+          }).then((result: WalletConnectionResult) => result.accounts);
+
           break;
         }
 
-        case 'personal_sign':
-        case 'eth_sign':
+        // wallet_requestPermissions
+        case RPCMethods.WalletRequestPermissions: {
+          const permissions = params[0];
+          await handleWalletConnection({
+            uri,
+            response,
+            browserApproveRef,
+            browserWalletSelectorRef,
+            webViewRef,
+            permissions: permissions || INITIAL_ACCOUNTS_PERMISSIONS
+          }).then((res) => (response.result = res?.permissions));
+
+          break;
+        }
+
+        // personal_sign
+        case RPCMethods.PersonalSign:
+        // eth_sign
+        case RPCMethods.EthSign:
           await personalSign({
             params: params as [string, string],
             response,
@@ -159,61 +122,65 @@ export async function handleWebViewMessage({
           });
           break;
 
-        case 'eth_accounts': {
+        // eth_accounts
+        case RPCMethods.EthAccounts:
           response.result = connectedAddress ? [connectedAddress] : [];
           break;
-        }
 
-        case 'wallet_revokePermissions': {
-          const permissions = params[0];
+        // wallet_revokePermissions
+        case RPCMethods.WalletRevokePermissions:
           await walletRevokePermissions({
-            permissions,
+            permissions: params[0],
             response,
             webViewRef,
             uri
           });
           break;
-        }
 
-        case 'wallet_getPermissions': {
+        // wallet_getPermissions
+        case RPCMethods.WalletGetPermissions:
           await walletGetPermissions({ response });
           break;
-        }
 
-        case 'eth_chainId':
+        // eth_chainId
+        case RPCMethods.EthChainId:
           response.result = await handleChainIdRequest();
           break;
 
-        case 'eth_sendTransaction': {
+        // eth_sendTransaction
+        case RPCMethods.EthSendTransaction:
           await ethSendTransaction({
             params: params as [TransactionParams],
             response,
             privateKey
           });
           break;
-        }
 
-        case 'eth_signTransaction': {
+        // eth_signTransaction
+        case RPCMethods.EthSignTransaction:
           await ethSignTransaction({
             params,
             response,
             privateKey
           });
           break;
-        }
 
-        case 'eth_getBalance':
+        // eth_getBalance
+        case RPCMethods.EthGetBalance:
           response.result = await handleGetBalance(params[0], params[1]);
           break;
 
-        case 'eth_signTypedData_v4':
-        case 'eth_signTypedData':
+        // eth_signTypedData_v4
+        case RPCMethods.EthSignTypedDataV4:
+        // eth_signTypedData
+        case RPCMethods.EthSignTypedData:
           await ethSignTypesData({
             params: params as [string, Record<string, unknown>],
             response,
             privateKey
           });
           break;
+
         default:
           response.error = {
             code: 4200,
