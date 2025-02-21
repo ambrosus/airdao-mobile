@@ -18,7 +18,8 @@ export enum RPCMethods {
   EthSignTransaction = 'eth_signTransaction',
   EthGetBalance = 'eth_getBalance',
   EthSignTypedDataV4 = 'eth_signTypedData_v4',
-  EthSignTypedData = 'eth_signTypedData'
+  EthSignTypedData = 'eth_signTypedData',
+  EthCall = 'eth_call'
 }
 
 export type TransactionParams = {

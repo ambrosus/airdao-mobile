@@ -1,15 +1,14 @@
 /* eslint-disable no-console */
 // tslint:disable:no-console
 import { WebViewMessageEvent } from '@metamask/react-native-webview';
+import { ethers } from 'ethers';
+import Config from '@constants/config';
 import { useBrowserStore } from '@entities/browser/model';
 import {
   AMB_CHAIN_ID_DEC,
   INITIAL_ACCOUNTS_PERMISSIONS
 } from '@features/browser/constants';
-import {
-  rpcErrorHandler,
-  rpcRejectHandler
-} from '@features/browser/utils/rpc-error-handler';
+import { rpcErrorHandler } from '@features/browser/utils/rpc-error-handler';
 import {
   ethSendTransaction,
   ethSignTransaction,
@@ -91,7 +90,6 @@ export async function handleWebViewMessage({
             browserApproveRef,
             permissions: INITIAL_ACCOUNTS_PERMISSIONS
           }).then((result: WalletConnectionResult) => result.accounts);
-
           break;
         }
 
@@ -105,8 +103,7 @@ export async function handleWebViewMessage({
             browserWalletSelectorRef,
             webViewRef,
             permissions: permissions || INITIAL_ACCOUNTS_PERMISSIONS
-          }).then((res) => (response.result = res?.permissions));
-
+          }).then((result) => (response.result = result?.permissions));
           break;
         }
 
@@ -121,6 +118,34 @@ export async function handleWebViewMessage({
             browserApproveRef
           });
           break;
+
+        // eth_call
+        case RPCMethods.EthCall: {
+          try {
+            console.log('Handling eth_call:', params);
+
+            const provider = new ethers.providers.JsonRpcProvider(
+              Config.NETWORK_URL
+            );
+
+            const tx = {
+              to: params[0].to,
+              data: params[0].data
+            };
+
+            const result = await provider.call(tx);
+            console.log('eth_call result:', result);
+
+            response.result = result;
+          } catch (error) {
+            console.error('eth_call error:', error);
+            response.error = {
+              code: 32000,
+              message: error.message || 'eth_call execution failed'
+            };
+          }
+          break;
+        }
 
         // eth_accounts
         case RPCMethods.EthAccounts:

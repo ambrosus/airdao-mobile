@@ -54,7 +54,7 @@ export const handleWalletConnection = async ({
         resolve: () => {
           resolve(true);
         },
-        reject: () => reject(new Error('User rejected connection'))
+        reject: () => reject(new Error('User rejected the request.'))
       });
     });
 

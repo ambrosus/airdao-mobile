@@ -16,3 +16,7 @@ export const getConnectedAddressTo = async (uri: string) => {
     `${AsyncStorageKey.connectedAddressTo}:${uri}`
   );
 };
+
+export const clearStorage = async () => {
+  await AsyncStorage.clear();
+};
