@@ -1,6 +1,5 @@
 import { memo, useEffect, useMemo } from 'react';
 import { StyleProp, TouchableOpacity, ViewStyle } from 'react-native';
-import { formatEther } from 'ethers/lib/utils';
 import { Text, Row, Spinner } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { useSwapBetterRate } from '@features/swap/lib/hooks';
@@ -32,11 +31,12 @@ const _SwapCurrencyRate = ({
       if (tokenToSell && tokenToReceive) {
         const bnAmount = await bestSwapRate(tokensRoute);
 
-        const normalizedAmount = SwapStringUtils.transformAmountValue(
-          formatEther(bnAmount?._hex)
-        );
+        if (bnAmount) {
+          const normalizedAmount =
+            SwapStringUtils.transformAmountValue(bnAmount);
 
-        setOppositeAmountPerOneToken(normalizedAmount);
+          setOppositeAmountPerOneToken(normalizedAmount);
+        }
       }
     })();
   }, [
