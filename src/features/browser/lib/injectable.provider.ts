@@ -78,7 +78,7 @@ export const INJECTED_PROVIDER_JS = `
           }));
         });
       },
-
+   
       on: function(eventName, callback) {
         if (!this._events.has(eventName)) {
           this._events.set(eventName, new Set());
@@ -178,7 +178,7 @@ export const INJECTED_PROVIDER_JS = `
           pendingRequests.delete(id);
 
           if (error) {
-            pendingRequest.reject(new Error(error.message));
+            pendingRequest.reject(error);
           } else {
             if (response.method === 'eth_requestAccounts' || response.method === 'eth_accounts') {
               if (result && result[0] !== provider.selectedAddress) {

@@ -547,6 +547,7 @@
   "browser.approve.permissions.header": "{{uri}} wants to:",
   "browser.approve":{
     "permission": "See your account and suggest transactions",
+    "personal.sign": "The message is used to sign message on wallet",
     "address": "Requesting for:"
   },
 
