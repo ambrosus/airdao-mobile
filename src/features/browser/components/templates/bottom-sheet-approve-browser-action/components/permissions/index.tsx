@@ -1,19 +1,19 @@
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Row, Spacer, Text } from '@components/base';
+import { Spacer, Text, Row } from '@components/base';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { styles } from '@features/browser/components/templates/bottom-sheet-approve-browser-action/components/approve-modals/permissions/styles';
-import { PersonalSignModalProps } from '@features/browser/components/templates/bottom-sheet-approve-browser-action/components/approve-modals/types';
 import { scale, StringUtils } from '@utils';
+import { PermissionsModalProps } from '../types';
+import { styles } from './styles';
 
-export const PersonalSignModal = ({
+export const PermissionsModal = ({
   uri,
   localRef,
   outsideModalData,
   address
-}: PersonalSignModalProps) => {
+}: PermissionsModalProps) => {
   // TODO make universal modal component for PermissionsModal & PersonalSignModal
   const { t } = useTranslation();
   const { bottom } = useSafeAreaInsets();
@@ -40,7 +40,7 @@ export const PersonalSignModal = ({
       </Text>
       <Spacer value={scale(20)} />
       <Text color={COLORS.neutral900} fontSize={scale(15)}>
-        {t('browser.approve.personal.sign')}
+        {t('browser.approve.permission')}
       </Text>
       <Spacer value={scale(5)} />
       <Row alignItems="center">

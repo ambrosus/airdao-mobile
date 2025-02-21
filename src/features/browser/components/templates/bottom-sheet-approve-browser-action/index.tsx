@@ -5,9 +5,8 @@ import {
   BottomSheetRef,
   ModalActionTypes
 } from '@components/composite';
-import { PermissionsModal } from '@features/browser/components/templates/bottom-sheet-approve-browser-action/components';
-import { PersonalSignModal } from '@features/browser/components/templates/bottom-sheet-approve-browser-action/components/approve-modals';
 import { useForwardedRef } from '@hooks';
+import { PermissionsModal, PersonalSignModal } from './components';
 
 type Props = {
   uri: string;
