@@ -8,6 +8,7 @@ import {
 import Animated, { SlideInDown, SlideOutRight } from 'react-native-reanimated';
 import { WatchlistEmptyIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
+import { useProgressViewOffset } from '@hooks/ui';
 import { ExplorerAccount } from '@models/Explorer';
 import { verticalScale } from '@utils';
 import { LocalizedRenderEmpty } from '../LocalizedRenderEmpty';
@@ -15,7 +16,6 @@ import {
   SwipeableWalletItem,
   SwipeableWalletItemProps
 } from './components/SwipeableWalletItem';
-
 interface EmptyAddressListProps {
   emptyText: string;
 }
@@ -41,6 +41,8 @@ export function AddressList(props: AddressListProps): JSX.Element {
     renderItem,
     onRefresh
   } = props;
+
+  const progressViewOffset = useProgressViewOffset();
 
   const renderWallet = useCallback(
     (args: ListRenderItemInfo<ExplorerAccount>) => {
@@ -82,9 +84,10 @@ export function AddressList(props: AddressListProps): JSX.Element {
           />
         </View>
       }
-      showsVerticalScrollIndicator={false}
       onRefresh={onRefresh}
       refreshing={false} // TODO
+      showsVerticalScrollIndicator={false}
+      progressViewOffset={progressViewOffset}
     />
   );
 }

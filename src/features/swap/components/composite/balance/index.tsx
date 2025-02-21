@@ -1,4 +1,10 @@
-import { useCallback, useMemo } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo
+} from 'react';
 import { ethers } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
@@ -21,9 +27,10 @@ import { NumberUtils, scale } from '@utils';
 
 interface BalanceProps {
   type: SelectedTokensKeys;
+  setIsBalanceLoading: Dispatch<SetStateAction<boolean>>;
 }
 
-export const Balance = ({ type }: BalanceProps) => {
+export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
   const { t } = useTranslation();
 
   const {
@@ -45,6 +52,10 @@ export const Balance = ({ type }: BalanceProps) => {
   const { bnBalanceAmount, isFetchingBalance } = useSwapBalance(
     selectedTokens[type]
   );
+
+  useEffect(() => {
+    setIsBalanceLoading(isFetchingBalance);
+  }, [isFetchingBalance, setIsBalanceLoading]);
 
   const normalizedTokenBalance = useMemo(() => {
     if (bnBalanceAmount) {
@@ -156,7 +167,8 @@ export const Balance = ({ type }: BalanceProps) => {
     if (
       type === FIELD.TOKEN_B ||
       !bnBalanceAmount ||
-      !selectedTokensAmount[FIELD.TOKEN_A]
+      !selectedTokensAmount[FIELD.TOKEN_A] ||
+      !isFetchingBalance
     )
       return false;
 
@@ -166,7 +178,7 @@ export const Balance = ({ type }: BalanceProps) => {
     );
 
     return bnSelectedAmount.gt(bnInputBalance);
-  }, [bnBalanceAmount, selectedTokensAmount, type]);
+  }, [bnBalanceAmount, isFetchingBalance, selectedTokensAmount, type]);
 
   return (
     <Row alignItems="center" justifyContent={containerJustifyContent}>

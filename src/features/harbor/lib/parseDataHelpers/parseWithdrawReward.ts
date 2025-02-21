@@ -18,7 +18,7 @@ export const parseWithdrawReward = (previewData: WithdrawPreviewDataModel) => {
       },
       {
         name: 'common.network.fee',
-        value: `${previewData.estimatedGas} ${CryptoCurrencyCode.AMB}`
+        value: `${previewData.estimatedGas ?? 0} ${CryptoCurrencyCode.AMB}`
       }
     ],
     success: [

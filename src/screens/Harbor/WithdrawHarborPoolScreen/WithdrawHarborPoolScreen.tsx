@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -11,12 +11,13 @@ import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CryptoCurrencyCode } from '@appTypes';
 import { HarborTabParamsList } from '@appTypes/navigation/harbor';
-import { Header } from '@components/composite';
+import { BottomSheetRef, Header } from '@components/composite';
 import { useAvailableWithdrawLogs, useStakeHBRStore } from '@entities/harbor';
 import { WithdrawalHbrYieldInput } from '@entities/harbor/components/modular';
 import { LogStatus } from '@entities/harbor/types';
 import { CountdownTimer } from '@features/harbor/components/composite';
 import { WithdrawalButton } from '@features/harbor/components/modular';
+import { BottomSheetWithdrawTransactionWithAction } from '@features/harbor/components/templates';
 import {
   keyboardAvoidingViewOffsetWithNotchSupportedValue,
   useKeyboardContainerStyleWithSafeArea
@@ -34,6 +35,8 @@ export const WithdrawHarborPoolScreen = ({ route, navigation }: Props) => {
   const {
     params: { token, logs }
   } = route;
+
+  const withdrawalBottomSheetRef = useRef<BottomSheetRef>(null);
 
   const { stake, limitsConfig } = useStakeHBRStore();
 
@@ -96,12 +99,20 @@ export const WithdrawHarborPoolScreen = ({ route, navigation }: Props) => {
                   logs={logs}
                   token={token}
                   amountToWithdraw={amountToWithdraw}
+                  onButtonPress={withdrawalBottomSheetRef.current?.show}
                 />
               </View>
             </View>
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
+
+      <BottomSheetWithdrawTransactionWithAction
+        logs={logs}
+        token={token}
+        amount={amountToWithdraw}
+        ref={withdrawalBottomSheetRef}
+      />
     </SafeAreaView>
   );
 };

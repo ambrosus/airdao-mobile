@@ -1,6 +1,5 @@
-import { memo, useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo } from 'react';
 import { StyleProp, TouchableOpacity, ViewStyle } from 'react-native';
-import { formatEther } from 'ethers/lib/utils';
 import { Text, Row, Spinner } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { useSwapBetterRate } from '@features/swap/lib/hooks';
@@ -18,25 +17,35 @@ const _SwapCurrencyRate = ({
   tokenToReceive,
   tokensRoute
 }: SwapCurrencyRateProps) => {
-  const { bestSwapRate, onToggleTokensOrder, tokens, isExecutingRate } =
-    useSwapBetterRate();
-
-  const [oppositeAmountPerOneToken, setOppositeAmountPerOneToken] =
-    useState('0');
+  const {
+    bestSwapRate,
+    onToggleTokensOrder,
+    tokens,
+    isExecutingRate,
+    oppositeAmountPerOneToken,
+    setOppositeAmountPerOneToken
+  } = useSwapBetterRate();
 
   useEffect(() => {
     (async () => {
       if (tokenToSell && tokenToReceive) {
         const bnAmount = await bestSwapRate(tokensRoute);
 
-        const normalizedAmount = SwapStringUtils.transformAmountValue(
-          formatEther(bnAmount?._hex)
-        );
+        if (bnAmount) {
+          const normalizedAmount =
+            SwapStringUtils.transformAmountValue(bnAmount);
 
-        setOppositeAmountPerOneToken(normalizedAmount);
+          setOppositeAmountPerOneToken(normalizedAmount);
+        }
       }
     })();
-  }, [bestSwapRate, tokenToReceive, tokenToSell, tokensRoute]);
+  }, [
+    bestSwapRate,
+    setOppositeAmountPerOneToken,
+    tokenToReceive,
+    tokenToSell,
+    tokensRoute
+  ]);
 
   const containerStyle: StyleProp<ViewStyle> = useMemo(() => {
     return {
@@ -47,7 +56,7 @@ const _SwapCurrencyRate = ({
 
   return (
     <Row style={containerStyle} justifyContent="center" alignItems="center">
-      {isExecutingRate ? (
+      {isExecutingRate || oppositeAmountPerOneToken === '0' ? (
         <Spinner customSize={17.5} />
       ) : (
         <TouchableOpacity onPress={onToggleTokensOrder}>

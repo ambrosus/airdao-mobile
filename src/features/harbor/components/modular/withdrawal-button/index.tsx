@@ -1,50 +1,32 @@
-import { useCallback, useMemo } from 'react';
-import { StyleProp, View, ViewStyle } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useMemo } from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
 import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
-import { HarborNavigationProp } from '@appTypes/navigation/harbor';
-import { BottomSheet, TextOrSpinner } from '@components/composite';
+import { TextOrSpinner } from '@components/composite';
 import { SecondaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useStakeHBRStore } from '@entities/harbor';
-import { SuccessTxView } from '@entities/harbor/components/base';
 import { IAvailableWithdrawLogs, LogStatus } from '@entities/harbor/types';
-import { useWalletStore } from '@entities/wallet';
-import { useWithdrawalActions } from '@features/harbor/lib/hooks';
-import { useContainerStyleWithSafeArea } from '@hooks';
-import { _delayNavigation } from '@utils';
-import { styles } from './styles';
 
 interface WithdrawalButtonProps {
+  loading?: boolean;
   token: CryptoCurrencyCode.AMB | CryptoCurrencyCode.HBR;
   logs: IAvailableWithdrawLogs | null;
   amountToWithdraw: string;
+  onButtonPress?: () => void;
 }
 
 export const WithdrawalButton = ({
+  loading,
   token,
   logs,
-  amountToWithdraw
+  amountToWithdraw,
+  onButtonPress
 }: WithdrawalButtonProps) => {
   const { t } = useTranslation();
-  const navigation = useNavigation<HarborNavigationProp>();
-  const { wallet } = useWalletStore();
-  const { hbrYieldFetcher } = useStakeHBRStore();
-
-  const bottomSheetContainerStyle = useContainerStyleWithSafeArea(
-    styles.bottomSheetContainer
-  );
 
   const { deposit, stake } = useStakeHBRStore();
-  const {
-    loading,
-    timestamp,
-    transaction,
-    bottomSheetRef,
-    withdrawalCallback
-  } = useWithdrawalActions(token, amountToWithdraw);
 
   const disabled = useMemo(() => {
     const isErrorLog = logs?.status === LogStatus.ERROR;
@@ -91,20 +73,6 @@ export const WithdrawalButton = ({
     [disabled]
   );
 
-  const dismiss = useCallback(
-    () => bottomSheetRef.current?.dismiss(),
-    [bottomSheetRef]
-  );
-
-  const onDismissBottomSheet = useCallback(async () => {
-    try {
-      await hbrYieldFetcher(wallet?.address ?? '');
-      _delayNavigation(dismiss, () => navigation.goBack());
-    } catch (error) {
-      throw error;
-    }
-  }, [dismiss, hbrYieldFetcher, navigation, wallet?.address]);
-
   const label = useMemo(() => {
     const bnAmountToWithdraw = ethers.utils.parseEther(
       !amountToWithdraw ? '0' : amountToWithdraw
@@ -126,12 +94,12 @@ export const WithdrawalButton = ({
       <SecondaryButton
         style={buttonStyle}
         disabled={disabled || loading}
-        onPress={withdrawalCallback}
+        onPress={onButtonPress}
       >
         <TextOrSpinner
           label={label}
           loadingLabel={undefined}
-          loading={loading}
+          loading={!!loading}
           styles={{
             active: {
               fontSize: 14,
@@ -146,26 +114,6 @@ export const WithdrawalButton = ({
           }}
         />
       </SecondaryButton>
-
-      <BottomSheet
-        ref={bottomSheetRef}
-        swiperIconVisible={false}
-        closeOnBackPress={!loading}
-        swipingEnabled={!loading}
-        onBackdropPress={onDismissBottomSheet}
-      >
-        <View style={bottomSheetContainerStyle}>
-          <SuccessTxView
-            withdraw
-            token={token}
-            sender={false}
-            timestamp={timestamp}
-            amount={amountToWithdraw}
-            txHash={transaction?.transactionHash}
-            dismiss={dismiss}
-          />
-        </View>
-      </BottomSheet>
     </>
   );
 };

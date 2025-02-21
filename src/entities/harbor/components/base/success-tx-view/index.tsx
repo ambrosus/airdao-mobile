@@ -10,6 +10,7 @@ import { TextOrSpinner } from '@components/composite';
 import { PrimaryButton, TokenLogo } from '@components/modular';
 import { SuccessIcon } from '@components/svg/icons/v2/harbor';
 import { COLORS } from '@constants/colors';
+import Config from '@constants/config';
 import { useStakeHBRStore } from '@entities/harbor/model';
 import { useWalletStore } from '@entities/wallet';
 import { CopyHash } from '@features/harbor/components/base/preview-modules/success-template/copy-hash';
@@ -114,7 +115,11 @@ export const SuccessTxView = ({
               fontFamily="Inter_500Medium"
               color={COLORS.neutral900}
             >
-              {StringUtils.formatAddress(wallet?.address ?? '', 10, 3)}
+              {StringUtils.formatAddress(
+                withdraw ? Config.HBR_LIQUIDITY_POOL : wallet?.address ?? '',
+                10,
+                3
+              )}
             </Text>
           </Row>
         )}

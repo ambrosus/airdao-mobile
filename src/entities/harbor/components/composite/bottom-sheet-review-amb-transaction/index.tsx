@@ -183,6 +183,7 @@ export const BottomSheetReviewAMBTransaction = forwardRef<
                   >
                     {t('common.network.fee')}
                   </Text>
+                  <Spacer horizontal value={4} />
                   <Text
                     fontSize={14}
                     fontFamily="Inter_500Medium"

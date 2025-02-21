@@ -3,6 +3,7 @@ import { Keyboard } from 'react-native';
 import { ethers } from 'ethers';
 import { bnZERO } from '@constants/variables';
 import { useSwapContextSelector } from '@features/swap/context';
+import { INITIAL_UI_BOTTOM_SHEET_INFORMATION } from '@features/swap/context/initials';
 import { AllowanceStatus } from '@features/swap/types';
 import {
   SwapStringUtils,
@@ -38,6 +39,9 @@ export function useSwapInterface() {
 
   const resolveBottomSheetData = useCallback(async () => {
     Keyboard.dismiss();
+    setUiBottomSheetInformation(INITIAL_UI_BOTTOM_SHEET_INFORMATION);
+
+    const networkFee = await swapCallback({ estimateGas: true });
 
     const networkFee = await swapCallback({ estimateGas: true });
 
