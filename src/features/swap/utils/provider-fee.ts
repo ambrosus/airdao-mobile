@@ -48,6 +48,7 @@ export async function wrapEstimatedGas(
   methodName: string,
   args: any[]
 ) {
+  const isERC20Method = ['deposit', 'withdraw'].includes(methodName);
   const provider = createAMBProvider();
   try {
     const { gasPrice } = await provider.getFeeData();
@@ -58,10 +59,24 @@ export async function wrapEstimatedGas(
     const gasPriceNumber = gasPrice ? gasPrice.toNumber() : 0;
     const estimatedGasNumber = gasWithMargin.toNumber();
 
-    const totalWei = Math.floor(estimatedGasNumber * gasPriceNumber).toString();
-    const result = ethers.utils.parseUnits(totalWei, 'wei');
+    if (!isERC20Method) {
+      const totalWei = Math.floor(
+        estimatedGasNumber * gasPriceNumber
+      ).toString();
+      const result = ethers.utils.parseUnits(totalWei, 'wei');
 
-    return result;
+      return result;
+    }
+
+    const gasPriceInGwei = ethers.utils.formatUnits(gasPrice || 0, 'gwei');
+    const targetGasPrice = Math.floor(Number(gasPriceInGwei) * 0.925);
+
+    const adjustedGasPrice = ethers.utils.parseUnits(
+      targetGasPrice.toString(),
+      'gwei'
+    );
+
+    return gasWithMargin.mul(adjustedGasPrice);
   } catch (error) {
     return ethers.BigNumber.from(0);
   }
