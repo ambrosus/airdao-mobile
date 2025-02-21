@@ -101,7 +101,8 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
     if (
       type === FIELD.TOKEN_B ||
       !bnBalanceAmount ||
-      !selectedTokensAmount[FIELD.TOKEN_A]
+      !selectedTokensAmount[FIELD.TOKEN_A] ||
+      !isFetchingBalance
     )
       return false;
 
@@ -111,7 +112,7 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
     );
 
     return bnSelectedAmount.gt(bnInputBalance);
-  }, [bnBalanceAmount, selectedTokensAmount, type]);
+  }, [bnBalanceAmount, isFetchingBalance, selectedTokensAmount, type]);
 
   return (
     <Row alignItems="center" justifyContent={containerJustifyContent}>
