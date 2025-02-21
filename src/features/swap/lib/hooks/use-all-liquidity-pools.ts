@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
 import { PAIR } from '@features/swap/lib/abi';
@@ -13,28 +13,43 @@ export function useAllLiquidityPools() {
   const { setPairs, allPairsRef } = useSwapContextSelector();
 
   const getAllPoolsCount = useCallback(async () => {
-    const pairs = [];
-    const contract = createFactoryContract();
-    const pairCount = await contract.allPairsLength();
+    try {
+      const contract = createFactoryContract();
+      const pairCount = await contract.allPairsLength();
 
-    for (let i = 0; i < pairCount; i++) {
-      const pairAddress = await contract.allPairs(i);
-      const pairContract = new ethers.Contract(
-        pairAddress,
-        PAIR,
-        createAMBProvider()
+      const pairPromises = Array.from(
+        { length: Number(pairCount) },
+        async (_, i) => {
+          const pairAddress = await contract.allPairs(i);
+          const pairContract = new ethers.Contract(
+            pairAddress,
+            PAIR,
+            createAMBProvider()
+          );
+
+          const [token0, token1] = await Promise.all([
+            pairContract.token0(),
+            pairContract.token1()
+          ]);
+
+          return {
+            pairAddress,
+            token0,
+            token1
+          };
+        }
       );
 
-      const token0 = await pairContract.token0();
-      const token1 = await pairContract.token1();
+      const results = await Promise.all(pairPromises);
 
-      pairs.push({
-        pairAddress,
-        token0,
-        token1
-      });
+      setPairs(results);
+
+      return results;
+    } catch (error) {
+      console.error('Error fetching liquidity pools:', error);
+      setPairs([]);
+      return [];
     }
-    if (pairs.length > 0) setPairs(pairs);
   }, [setPairs]);
 
   const getPairAddress = useCallback(
@@ -73,7 +88,6 @@ export function useAllLiquidityPools() {
         TOKEN_B?.address ?? ''
       ]);
 
-      // Determine if the token order in the pair matches TOKEN_A and TOKEN_B
       const isTokenAFirst =
         mapper?.token0 === addressFrom && mapper?.token1 === addressTo;
 
@@ -85,11 +99,8 @@ export function useAllLiquidityPools() {
     [getPairAddress]
   );
 
-  useEffect(() => {
-    getAllPoolsCount();
-  }, [getAllPoolsCount]);
-
   return {
+    getAllPoolsCount,
     getPairAddress,
     getReserves
   };
