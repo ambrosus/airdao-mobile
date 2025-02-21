@@ -10,6 +10,7 @@ import {
 } from '@features/browser/constants';
 import { rpcErrorHandler } from '@features/browser/utils/rpc-error-handler';
 import {
+  ethCall,
   ethSendTransaction,
   ethSignTransaction,
   ethSignTypesData,
@@ -121,29 +122,7 @@ export async function handleWebViewMessage({
 
         // eth_call
         case RPCMethods.EthCall: {
-          try {
-            console.log('Handling eth_call:', params);
-
-            const provider = new ethers.providers.JsonRpcProvider(
-              Config.NETWORK_URL
-            );
-
-            const tx = {
-              to: params[0].to,
-              data: params[0].data
-            };
-
-            const result = await provider.call(tx);
-            console.log('eth_call result:', result);
-
-            response.result = result;
-          } catch (error) {
-            console.error('eth_call error:', error);
-            response.error = {
-              code: 32000,
-              message: error.message || 'eth_call execution failed'
-            };
-          }
+          await ethCall({ data: params[0], response });
           break;
         }
 
