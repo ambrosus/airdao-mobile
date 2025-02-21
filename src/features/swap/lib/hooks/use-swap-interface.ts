@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { Keyboard } from 'react-native';
 import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
+import { INITIAL_UI_BOTTOM_SHEET_INFORMATION } from '@features/swap/context/initials';
 import { AllowanceStatus } from '@features/swap/types';
 import {
   SwapStringUtils,
@@ -33,6 +34,7 @@ export function useSwapInterface() {
 
   const resolveBottomSheetData = useCallback(async () => {
     Keyboard.dismiss();
+    setUiBottomSheetInformation(INITIAL_UI_BOTTOM_SHEET_INFORMATION);
 
     if (hasWrapNativeToken) {
       setUiBottomSheetInformation((prevState) => ({
