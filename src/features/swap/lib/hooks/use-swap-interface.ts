@@ -43,8 +43,6 @@ export function useSwapInterface() {
 
     const networkFee = await swapCallback({ estimateGas: true });
 
-    const networkFee = await swapCallback({ estimateGas: true });
-
     if (hasWrapNativeToken) {
       setEstimatedGasValues({
         swap: networkFee,
@@ -125,19 +123,19 @@ export function useSwapInterface() {
       throw error;
     }
   }, [
-    hasWrapNativeToken,
     setUiBottomSheetInformation,
+    swapCallback,
+    hasWrapNativeToken,
+    setEstimatedGasValues,
+    isEnoughBalanceToCoverGas,
     onReviewSwapPreview,
     settings,
     _refExactGetter,
     tokenToReceive.AMOUNT,
     tokenToSell.AMOUNT,
     uiPriceImpactGetter,
-    swapCallback,
     checkAllowance,
     estimatedApprovalGas,
-    setEstimatedGasValues,
-    isEnoughBalanceToCoverGas,
     onReviewSwapDismiss
   ]);
 

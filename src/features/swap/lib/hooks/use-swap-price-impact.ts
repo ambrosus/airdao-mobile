@@ -16,7 +16,8 @@ import { useSwapSettings } from './use-swap-settings';
 import { useSwapTokens } from './use-swap-tokens';
 
 export function useSwapPriceImpact() {
-  const { isExactInRef } = useSwapContextSelector();
+  const { isExactInRef, isMultiHopSwapBetterCurrency } =
+    useSwapContextSelector();
   const { getPairAddress, getReserves } = useAllLiquidityPools();
   const { hasWrapNativeToken } = useSwapHelpers();
   const { settings } = useSwapSettings();
@@ -136,7 +137,9 @@ export function useSwapPriceImpact() {
   );
 
   const uiPriceImpactGetter = useCallback(async () => {
-    const isMultiHopPathAvailable = isMultiHopSwapAvailable(tokensRoute);
+    const isMultiHopPathAvailable =
+      isMultiHopSwapBetterCurrency.tokens.length > 0;
+
     if (settings.current.multihops && isMultiHopPathAvailable) {
       return await multiHopImpactGetter();
     } else {
@@ -146,7 +149,7 @@ export function useSwapPriceImpact() {
       );
     }
   }, [
-    tokensRoute,
+    isMultiHopSwapBetterCurrency.tokens.length,
     settings,
     multiHopImpactGetter,
     singleHopImpactGetter,

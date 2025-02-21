@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
 import { PAIR } from '@features/swap/lib/abi';
@@ -99,11 +99,8 @@ export function useAllLiquidityPools() {
     [getPairAddress]
   );
 
-  useEffect(() => {
-    getAllPoolsCount();
-  }, [getAllPoolsCount]);
-
   return {
+    getAllPoolsCount,
     getPairAddress,
     getReserves
   };
