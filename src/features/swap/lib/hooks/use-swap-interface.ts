@@ -43,6 +43,8 @@ export function useSwapInterface() {
 
     const networkFee = await swapCallback({ estimateGas: true });
 
+    const networkFee = await swapCallback({ estimateGas: true });
+
     if (hasWrapNativeToken) {
       setEstimatedGasValues({
         swap: networkFee,

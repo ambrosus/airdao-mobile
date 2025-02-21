@@ -77,105 +77,122 @@ export const BottomSheetReviewAMBTransaction = forwardRef<
       return `${parsedGas} ${CryptoCurrencyCode.AMB}`;
     }, [estimatedGas]);
 
-  return (
-    <BottomSheet
-      ref={bottomSheetRef}
-      title={success ? undefined : t('common.review')}
-      closeOnBackPress={!loading}
-      swipingEnabled={!loading}
-      onBackdropPress={onDismissBottomSheet}
-    >
-      <View style={containerStyle}>
-        {success ? (
-          <SuccessTxView
-            apy={apy}
-            amount={amount}
-            txHash={txHash}
-            dismiss={dismiss}
-            timestamp={timestamp}
-            stakeLockPeriod={stakeLockPeriod}
-            token={CryptoCurrencyCode.AMB}
-          />
-        ) : (
-          <>
-            <View style={styles.details}>
-              {/*  First Row Item */}
-              <Row alignItems="center" justifyContent="space-between">
-                <Text
-                  fontSize={14}
-                  fontFamily="Inter_500Medium"
-                  color={COLORS.neutral600}
-                >
-                  {t('staking.pool.stake.amount')}
-                </Text>
-                <Row alignItems="center">
-                  <TokenLogo scale={0.75} token={CryptoCurrencyCode.AMB} />
+    return (
+      <BottomSheet
+        ref={bottomSheetRef}
+        title={success ? undefined : t('common.review')}
+        closeOnBackPress={!loading}
+        swipingEnabled={!loading}
+        onClose={onDismissBottomSheet}
+      >
+        <View style={containerStyle}>
+          {success ? (
+            <SuccessTxView
+              apy={apy}
+              amount={amount}
+              txHash={txHash}
+              dismiss={dismiss}
+              timestamp={timestamp}
+              stakeLockPeriod={stakeLockPeriod}
+              token={CryptoCurrencyCode.stAMB}
+            />
+          ) : (
+            <>
+              <View style={styles.details}>
+                {/*  First Row Item */}
+                <Row alignItems="center" justifyContent="space-between">
+                  <Text
+                    fontSize={14}
+                    fontFamily="Inter_500Medium"
+                    color={COLORS.neutral600}
+                  >
+                    {t('staking.pool.stake.amount')}
+                  </Text>
+                  <Row alignItems="center">
+                    <TokenLogo scale={0.75} token={CryptoCurrencyCode.AMB} />
+                    <Spacer horizontal value={4} />
+                    <Text
+                      fontSize={14}
+                      fontFamily="Inter_500Medium"
+                      color={COLORS.neutral900}
+                    >
+                      {NumberUtils.limitDecimalCount(
+                        NumberUtils.numberToTransformedLocale(amount),
+                        3
+                      )}{' '}
+                      {CryptoCurrencyCode.AMB}
+                    </Text>
+                  </Row>
+                </Row>
+                {/*  Second Row Item */}
+                <Row alignItems="center" justifyContent="space-between">
+                  <Text
+                    fontSize={14}
+                    fontFamily="Inter_500Medium"
+                    color={COLORS.neutral600}
+                  >
+                    {t('kosmos.lock.period')}
+                  </Text>
+                  <Text
+                    fontSize={14}
+                    fontFamily="Inter_500Medium"
+                    color={COLORS.neutral900}
+                  >
+                    {stakeLockPeriod} {t('common.days')}
+                  </Text>
+                </Row>
+                {/*  Third Row Item */}
+                <Row alignItems="center" justifyContent="space-between">
+                  <Text
+                    fontSize={14}
+                    fontFamily="Inter_500Medium"
+                    color={COLORS.neutral600}
+                  >
+                    {t('common.transaction.from')}
+                  </Text>
+                  <Text
+                    fontSize={14}
+                    fontFamily="Inter_500Medium"
+                    color={COLORS.neutral900}
+                  >
+                    {StringUtils.formatAddress(wallet?.address ?? '', 10, 3)}
+                  </Text>
+                </Row>
+                {/*  Fourth Row Item */}
+                <Row alignItems="center" justifyContent="space-between">
+                  <Text
+                    fontSize={14}
+                    fontFamily="Inter_500Medium"
+                    color={COLORS.neutral600}
+                  >
+                    {t('staking.apy')}
+                  </Text>
+                  <Text
+                    fontSize={14}
+                    fontFamily="Inter_500Medium"
+                    color={COLORS.success300}
+                  >
+                    {apy}%
+                  </Text>
+                </Row>
+                <Row alignItems="center" justifyContent="space-between">
+                  <Text
+                    fontSize={14}
+                    fontFamily="Inter_500Medium"
+                    color={COLORS.neutral600}
+                  >
+                    {t('common.network.fee')}
+                  </Text>
                   <Spacer horizontal value={4} />
                   <Text
                     fontSize={14}
                     fontFamily="Inter_500Medium"
                     color={COLORS.neutral900}
                   >
-                    {NumberUtils.limitDecimalCount(
-                      NumberUtils.numberToTransformedLocale(amount),
-                      3
-                    )}{' '}
-                    {CryptoCurrencyCode.AMB}
+                    {transformedEstimatedGas}
                   </Text>
                 </Row>
-              </Row>
-              {/*  Second Row Item */}
-              <Row alignItems="center" justifyContent="space-between">
-                <Text
-                  fontSize={14}
-                  fontFamily="Inter_500Medium"
-                  color={COLORS.neutral600}
-                >
-                  {t('kosmos.lock.period')}
-                </Text>
-                <Text
-                  fontSize={14}
-                  fontFamily="Inter_500Medium"
-                  color={COLORS.neutral900}
-                >
-                  {stakeLockPeriod} {t('common.days')}
-                </Text>
-              </Row>
-              {/*  Third Row Item */}
-              <Row alignItems="center" justifyContent="space-between">
-                <Text
-                  fontSize={14}
-                  fontFamily="Inter_500Medium"
-                  color={COLORS.neutral600}
-                >
-                  {t('common.transaction.from')}
-                </Text>
-                <Text
-                  fontSize={14}
-                  fontFamily="Inter_500Medium"
-                  color={COLORS.neutral900}
-                >
-                  {StringUtils.formatAddress(wallet?.address ?? '', 10, 3)}
-                </Text>
-              </Row>
-              {/*  Fourth Row Item */}
-              <Row alignItems="center" justifyContent="space-between">
-                <Text
-                  fontSize={14}
-                  fontFamily="Inter_500Medium"
-                  color={COLORS.neutral600}
-                >
-                  {t('staking.apy')}
-                </Text>
-                <Text
-                  fontSize={14}
-                  fontFamily="Inter_500Medium"
-                  color={COLORS.success300}
-                >
-                  {apy}%
-                </Text>
-              </Row>
-            </View>
+              </View>
 
               <View style={styles.footer}>{children}</View>
             </>
