@@ -1,14 +1,8 @@
 import { ethers } from 'ethers';
 import Config from '@constants/config';
+import { EthCallProps } from '@features/browser/types';
 import { rpcRejectHandler } from '@features/browser/utils';
 
-interface EthCallProps {
-  data: {
-    to: string;
-    data: string;
-  };
-  response: any;
-}
 export const ethCall = async ({ data, response }: EthCallProps) => {
   try {
     const provider = new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
@@ -17,8 +11,6 @@ export const ethCall = async ({ data, response }: EthCallProps) => {
       to: data.to,
       data: data.data
     };
-
-    console.log('tx', tx);
 
     response.result = await provider.call(tx);
   } catch (error) {

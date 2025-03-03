@@ -1,13 +1,12 @@
 /* eslint-disable no-console */
 // tslint:disable:no-console
 import { WebViewMessageEvent } from '@metamask/react-native-webview';
-import { ethers } from 'ethers';
-import Config from '@constants/config';
 import { useBrowserStore } from '@entities/browser/model';
 import {
   AMB_CHAIN_ID_DEC,
   INITIAL_ACCOUNTS_PERMISSIONS
 } from '@features/browser/constants';
+import { ethEstimateGas } from '@features/browser/lib/middleware-helpers/ethEstimateGas';
 import { rpcErrorHandler } from '@features/browser/utils/rpc-error-handler';
 import {
   ethCall,
@@ -21,11 +20,11 @@ import {
 } from 'src/features/browser/lib/middleware-helpers';
 import { rpcMethods } from './rpc-methods';
 import {
-  TransactionParams,
-  RPCMethods,
   HandleWebViewMessageModel,
   JsonRpcRequest,
   JsonRpcResponse,
+  RPCMethods,
+  TransactionParams,
   WalletConnectionResult
 } from '../types';
 
@@ -45,11 +44,13 @@ export async function handleWebViewMessage({
   const logger = (event: WebViewMessageEvent) => {
     try {
       const data = JSON.parse(event.nativeEvent.data);
-      console.log('WebView message:', {
-        method: data.method,
-        params: data.params,
-        id: data.id
-      });
+      if (data.method !== RPCMethods.EthCall) {
+        console.log('WebView message:', {
+          method: data.method,
+          params: data.params,
+          id: data.id
+        });
+      }
     } catch (e) {
       console.log('Raw WebView message:', event.nativeEvent.data);
     }
@@ -59,7 +60,9 @@ export async function handleWebViewMessage({
     logger(event);
     const request: JsonRpcRequest = JSON.parse(event.nativeEvent.data);
     const { id, method, params } = request;
-    console.log('method->>', method);
+    if (method !== RPCMethods.EthCall) {
+      console.log('method->>', method);
+    }
 
     // Skip duplicate requests
     if (requestsInProgress.has(id)) {
@@ -126,6 +129,22 @@ export async function handleWebViewMessage({
           break;
         }
 
+        // eth_estimateGas
+        case RPCMethods.EthEstimateGas: {
+          await ethEstimateGas({ data: params[0], response });
+          break;
+        }
+        // eth_sendTransaction
+        case RPCMethods.EthSendTransaction:
+          console.log('params', params);
+          await ethSendTransaction({
+            params: params as [TransactionParams],
+            response,
+            privateKey,
+            browserApproveRef
+          });
+          break;
+
         // eth_accounts
         case RPCMethods.EthAccounts:
           response.result = connectedAddress ? [connectedAddress] : [];
@@ -151,21 +170,13 @@ export async function handleWebViewMessage({
           response.result = await handleChainIdRequest();
           break;
 
-        // eth_sendTransaction
-        case RPCMethods.EthSendTransaction:
-          await ethSendTransaction({
-            params: params as [TransactionParams],
-            response,
-            privateKey
-          });
-          break;
-
         // eth_signTransaction
         case RPCMethods.EthSignTransaction:
           await ethSignTransaction({
             params,
             response,
-            privateKey
+            privateKey,
+            browserApproveRef
           });
           break;
 

@@ -1,7 +1,6 @@
-import { RefObject } from 'react';
-import { WebView } from '@metamask/react-native-webview';
 import { useBrowserStore } from '@entities/browser/model';
 import { AMB_CHAIN_ID_HEX } from '@features/browser/constants';
+import { WalletRevokePermissionsProps } from '@features/browser/types';
 import { rpcErrorHandler } from '@features/browser/utils';
 import { setConnectedAddressTo } from '@lib';
 import {
@@ -9,13 +8,6 @@ import {
   UPDATE_ETHEREUM_STATE_JS
 } from '../injectable.provider';
 import { permissionsHandler } from '../permissions-handler';
-
-interface WalletRevokePermissionsProps {
-  permissions: any;
-  response: any;
-  webViewRef: RefObject<WebView>;
-  uri: string;
-}
 
 export const walletRevokePermissions = async ({
   permissions,

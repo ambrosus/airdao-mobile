@@ -1,3 +1,7 @@
+import { ethers } from 'ethers';
+import { ModalActionTypes } from '@components/composite';
+import Config from '@constants/config';
+import { useBrowserStore } from '@entities/browser/model';
 import { RPCRequestWithTransactionParams } from '@features/browser/types';
 import { requestUserApproval, rpcErrorHandler } from '@features/browser/utils';
 import { rpcMethods } from '../rpc-methods';
@@ -5,27 +9,40 @@ import { rpcMethods } from '../rpc-methods';
 export const ethSendTransaction = async ({
   params: [txParams],
   response,
-  privateKey
+  privateKey,
+  browserApproveRef
 }: RPCRequestWithTransactionParams) => {
   const { handleSendTransaction } = rpcMethods;
+  const { connectedAddress } = useBrowserStore.getState();
 
   try {
-    await new Promise<void>((resolve, reject) => {
+    const userConfirmation = new Promise((resolve, reject) => {
       requestUserApproval({
-        header: 'Confirm Transaction',
-        message:
-          `Do you want to send this transaction? From: ${txParams.from}\n` +
-          `To: ${txParams.to}\n` +
-          `Value: ${txParams.value || '0'} Wei\n` +
-          `Data: ${txParams.data || 'None'}`,
-        resolve: () => resolve(),
-        reject: () => reject(new Error('User rejected transaction'))
+        browserApproveRef,
+        modalType: ModalActionTypes.SEND_TRANSACTION,
+        selectedAddress: connectedAddress,
+        resolve: () => resolve(true),
+        reject: () => reject(new Error('User rejected sending'))
       });
     });
 
-    response.result = await handleSendTransaction(txParams, privateKey);
+    await userConfirmation;
+
+    const provider = new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
+    const gasPrice = await provider.getGasPrice();
+
+    response.result = await handleSendTransaction(
+      { ...txParams, gasPrice },
+      privateKey
+    );
   } catch (error) {
     rpcErrorHandler('eth_sendTransaction', error);
-    throw error;
+    const err = error as { code?: number; message?: string; data?: unknown };
+
+    response.error = {
+      code: err.code ?? -32000,
+      message: err.message ?? 'Transaction failed',
+      ...(err.data ? { data: err.data } : {})
+    };
   }
 };

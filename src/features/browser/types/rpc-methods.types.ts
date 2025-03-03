@@ -1,5 +1,6 @@
 import { RefObject } from 'react';
 import { WebView, WebViewMessageEvent } from '@metamask/react-native-webview';
+import { BigNumber } from 'ethers';
 import { BottomSheetRef } from '@components/composite';
 import { Permissions, BasePermissions, PermissionType } from './permissions';
 import { rpcRejectHandler } from '../utils';
@@ -19,7 +20,8 @@ export enum RPCMethods {
   EthGetBalance = 'eth_getBalance',
   EthSignTypedDataV4 = 'eth_signTypedData_v4',
   EthSignTypedData = 'eth_signTypedData',
-  EthCall = 'eth_call'
+  EthCall = 'eth_call',
+  EthEstimateGas = 'eth_estimateGas'
 }
 
 export type TransactionParams = {
@@ -28,7 +30,8 @@ export type TransactionParams = {
   value: string;
   data: string;
   gas?: string;
-  gasPrice?: string;
+  gasLimit?: BigNumber | string;
+  gasPrice?: BigNumber;
   nonce?: string;
 };
 
@@ -52,6 +55,7 @@ export interface RPCRequestWithTransactionParams
   extends Pick<RPCRequestWithAccountCredentials, 'privateKey'> {
   params: [TransactionParams];
   response: RPCResponse;
+  browserApproveRef: RefObject<BottomSheetRef>;
 }
 
 export type SignMessageParams = {
@@ -103,4 +107,47 @@ export interface HandleWebViewMessageModel {
   privateKey: string;
   browserApproveRef: RefObject<BottomSheetRef>;
   browserWalletSelectorRef: RefObject<BottomSheetRef>;
+}
+
+export interface EthCallProps {
+  data: {
+    to: string;
+    data: string;
+  };
+  response: any;
+}
+
+export interface EthEstimateGas {
+  data: string;
+  from: string;
+  to: string;
+  value: string;
+}
+
+export interface EthEstimateGasProps {
+  response: any;
+  data: EthEstimateGas;
+}
+
+export interface EthSignTransactionParams {
+  params: any;
+  response: any;
+  privateKey: string;
+  browserApproveRef: RefObject<BottomSheetRef>;
+}
+
+export type ConnectionRequest = {
+  webViewRef: RefObject<WebView>;
+  browserApproveRef: RefObject<BottomSheetRef>;
+  browserWalletSelectorRef: RefObject<BottomSheetRef>;
+  permissions?: unknown;
+  response: any;
+  uri: string;
+};
+
+export interface WalletRevokePermissionsProps {
+  permissions: any;
+  response: any;
+  webViewRef: RefObject<WebView>;
+  uri: string;
 }
