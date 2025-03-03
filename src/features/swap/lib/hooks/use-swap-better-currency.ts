@@ -106,8 +106,8 @@ export function useSwapBetterCurrency() {
       let singleHopAmount: BigNumber = BigNumber.from('0');
       let bestMultiHopAmount: BigNumber = BigNumber.from('0');
       let bestPath: string[] = [];
-      let singleHopImpact = 0.01;
-      let lowestMultiHopImpact = 0.01;
+      let singleHopImpact = 0;
+      let lowestMultiHopImpact = 0;
       let singleHopFailed = false;
 
       const bnAmountToSell = ethers.utils.parseEther(amountToSell);
@@ -128,7 +128,7 @@ export function useSwapBetterCurrency() {
           (await singleHopImpactGetter(
             ethers.utils.formatEther(amounts),
             amountToSell
-          )) || 0.01;
+          )) || 0;
       } catch (error) {
         singleHopFailed = true;
         if (!multihops) {
@@ -248,8 +248,8 @@ export function useSwapBetterCurrency() {
       let singleHopAmount: BigNumber = BigNumber.from('0');
       let bestMultiHopAmount: BigNumber = BigNumber.from('0');
       let bestPath: string[] = [];
-      let singleHopImpact = 0.01;
-      let lowestMultiHopImpact = 0.01;
+      let singleHopImpact = 0;
+      let lowestMultiHopImpact = 0;
       let singleHopFailed = false;
 
       if (isETHtoWrapped(path) || isWrappedToETH(path)) {
@@ -262,7 +262,7 @@ export function useSwapBetterCurrency() {
           (await singleHopImpactGetter(
             amountToSell,
             ethers.utils.formatEther(singleHopAmount)
-          )) || 0.01;
+          )) || 0;
       } catch (error) {
         singleHopFailed = true;
         if (!multihops) {
