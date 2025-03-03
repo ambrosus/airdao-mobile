@@ -35,7 +35,11 @@ export function useSwapFieldsHandler() {
 
     if (isEmptyAmount(amountToSell)) return;
     try {
-      const bnAmountToReceive = await bestTradeCurrency(amountToSell, path);
+      const bnAmountToReceive = await bestTradeCurrency(
+        amountToSell,
+        path,
+        true
+      );
 
       const normalizedAmount = SwapStringUtils.transformAmountValue(
         formatEther(bnAmountToReceive?._hex)
