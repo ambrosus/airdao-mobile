@@ -1,10 +1,7 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
+/* eslint-disable no-console */
+// tslint:disable:no-console
+
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { WebView, WebViewMessageEvent } from '@metamask/react-native-webview';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -181,6 +178,7 @@ export const BrowserScreen = () => {
         selectedAddress={connectedAddress}
         ref={browserWalletSelectorRef}
       />
+
       <BottomSheetBrowserModal ref={browserModalRef} />
       <BottomSheetApproveBrowserAction ref={browserApproveRef} uri={uri} />
     </SafeAreaView>

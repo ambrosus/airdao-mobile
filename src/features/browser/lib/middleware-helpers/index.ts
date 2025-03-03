@@ -6,3 +6,4 @@ export * from './ethSignTypesData';
 export * from './ethSignTransaction';
 export * from './ethSendTransaction';
 export * from './ethAccounts';
+export * from './ethCall';

@@ -4,7 +4,6 @@ export const rpcErrorHandler = (point: string | any, err: unknown) => {
 };
 
 export const rpcRejectHandler = (code: number, error: unknown) => {
-  console.log('CATCH ERROR', error);
   return {
     code,
     message: error instanceof Error ? error.message : 'User rejected request'

@@ -5,6 +5,7 @@ import { WebView } from '@metamask/react-native-webview';
 import { JsonRpcResponse } from '@walletconnect/jsonrpc-types';
 import { ethers } from 'ethers';
 import Config from '@constants/config';
+import { TransactionParams } from '@features/browser/types';
 import { AMB_CHAIN_ID_DEC } from '../constants';
 import { rpcErrorHandler } from '../utils';
 
@@ -29,9 +30,17 @@ const handleChainIdRequest = async () => {
   return `0x${Number(AMB_CHAIN_ID_DEC).toString(16)}`;
 };
 
-const handleSendTransaction = async (txParams: any, privateKey: string) => {
+const handleSendTransaction = async (
+  txParams: TransactionParams,
+  privateKey: string
+) => {
   const wallet = await extractWallet(privateKey);
-  const tx = await wallet.sendTransaction(txParams);
+  const { gas, ...rest } = txParams;
+  const modifiedTxParams = {
+    ...rest,
+    gasLimit: gas
+  };
+  const tx = await wallet.sendTransaction(modifiedTxParams);
   return tx.hash;
 };
 

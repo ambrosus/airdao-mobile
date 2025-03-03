@@ -1,8 +1,9 @@
-import { RefObject } from 'react';
-import WebView from '@metamask/react-native-webview';
-import { BottomSheetRef, ModalActionTypes } from '@components/composite';
+/* eslint-disable no-console */
+// tslint:disable:no-console
+import { ModalActionTypes } from '@components/composite';
 import { useBrowserStore } from '@entities/browser/model';
 import { AMB_CHAIN_ID_HEX } from '@features/browser/constants';
+import { ConnectionRequest } from '@features/browser/types';
 import {
   requestUserApproval,
   rpcErrorHandler,
@@ -15,15 +16,6 @@ import {
   UPDATE_ETHEREUM_STATE_JS
 } from '../injectable.provider';
 import { permissionsHandler } from '../permissions-handler';
-
-type ConnectionRequest = {
-  webViewRef: RefObject<WebView>;
-  browserApproveRef: RefObject<BottomSheetRef>;
-  browserWalletSelectorRef: RefObject<BottomSheetRef>;
-  permissions?: unknown;
-  response: any;
-  uri: string;
-};
 
 export const handleWalletConnection = async ({
   webViewRef,

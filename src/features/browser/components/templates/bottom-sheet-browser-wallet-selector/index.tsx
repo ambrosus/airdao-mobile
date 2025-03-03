@@ -1,7 +1,6 @@
 import { ForwardedRef, forwardRef, useCallback, useState } from 'react';
 import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { number } from 'bitcoinjs-lib/types/script';
 import { useTranslation } from 'react-i18next';
 import { Button, Text } from '@components/base';
 import {

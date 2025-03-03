@@ -547,7 +547,8 @@
   "browser.approve": {
     "permission": "!!!See your account and suggest transactions",
     "personal.sign": "!!!The message is used to sign message on wallet",
-    "address": "!!!@Requesting for:"
+    "address": "!!!Requesting for:",
+    "send.transaction": "!!!Send transaction"
   },
   "products": {
     "header": "!!!Products",
