@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
+import { SwapStringUtils } from '@features/swap/utils/transformers';
 import { useSwapBetterCurrency } from './use-swap-better-currency';
 import { useSwapSettings } from './use-swap-settings';
 import { useSwapTokens } from './use-swap-tokens';
@@ -32,19 +33,20 @@ export function useSwapBetterRate() {
     async (path: string[]) => {
       const { TOKEN_A: amountA, TOKEN_B: amountB } = selectedTokensAmount;
       try {
-        const reversedPath = path;
         const singleHopOnly = _refSettingsGetter.multihops;
 
-        const amount = isTradeIn
-          ? await bestTradeExactOut(amountA, reversedPath, singleHopOnly)
-          : await bestTradeExactIn(amountB, reversedPath, singleHopOnly);
+        const amount = !isTradeIn
+          ? await bestTradeExactOut(amountA, path, singleHopOnly)
+          : await bestTradeExactIn(amountB, path, singleHopOnly);
 
         if (amount) {
-          const inputAmountNum = +(isTradeIn ? amountA : amountB);
+          const inputAmountNum = +(!isTradeIn ? amountA : amountB);
           const outputAmountNum = +ethers.utils.formatEther(amount);
-          const ratePerToken = (outputAmountNum / inputAmountNum).toFixed(5);
+          const ratePerToken = inputAmountNum / outputAmountNum;
 
-          setOppositeAmountPerOneToken(ratePerToken);
+          setOppositeAmountPerOneToken(
+            SwapStringUtils.transformCurrencyRate(ratePerToken)
+          );
 
           const tokenA = tokenToSell.TOKEN.symbol;
           const tokenB = tokenToReceive.TOKEN?.symbol;

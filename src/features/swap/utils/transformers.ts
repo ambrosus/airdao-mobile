@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import { toString, split } from 'lodash';
 
 const AMOUNT_FLOAT_DIGITS_LENGTH: { [key: number]: number } = {
   1: 5,
@@ -85,6 +86,13 @@ const transformSlippageOnBlur = (value: string | undefined) => {
   }
 };
 
+const transformCurrencyRate = (payload: number) => {
+  const [integerPart] = split(toString(payload), '.');
+  const integerLength = integerPart.length;
+
+  return toString(payload.toFixed(AMOUNT_FLOAT_DIGITS_LENGTH[integerLength]));
+};
+
 const transformSlippageValue = (value: string) => {
   return +value * 100;
 };
@@ -98,5 +106,6 @@ export const SwapStringUtils = {
   transformMinAmountValue,
   transformRealizedLPFee,
   transformSlippageValue,
-  transformSlippageOnBlur
+  transformSlippageOnBlur,
+  transformCurrencyRate
 };
