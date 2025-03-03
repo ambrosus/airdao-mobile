@@ -12,6 +12,8 @@ import { getAmountsOut, getAmountsIn } from '../contracts';
 import { useSwapPriceImpact } from './use-swap-price-impact';
 import { useSwapSettings } from './use-swap-settings';
 
+const PRICE_IMPACT_THRESHOLD = 10;
+
 export function useSwapBetterCurrency() {
   const {
     setIsMultiHopSwapCurrencyBetter,
@@ -198,7 +200,7 @@ export function useSwapBetterCurrency() {
           );
           let useMultiHop = false;
 
-          if (impactDifference > 0.3) {
+          if (impactDifference > PRICE_IMPACT_THRESHOLD) {
             useMultiHop = lowestMultiHopImpact < singleHopImpact;
           } else {
             useMultiHop = isExactInRef.current
@@ -337,7 +339,7 @@ export function useSwapBetterCurrency() {
           );
           let useMultiHop = false;
 
-          if (impactDifference > 0.3) {
+          if (impactDifference > PRICE_IMPACT_THRESHOLD) {
             useMultiHop = lowestMultiHopImpact < singleHopImpact;
           } else {
             useMultiHop = isExactInRef.current
