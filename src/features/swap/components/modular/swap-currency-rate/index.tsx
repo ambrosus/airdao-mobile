@@ -29,11 +29,11 @@ const _SwapCurrencyRate = ({
   useEffect(() => {
     (async () => {
       if (tokenToSell && tokenToReceive) {
-        const bnAmount = await bestSwapRate(tokensRoute);
+        const ratePerToken = await bestSwapRate(tokensRoute);
 
-        if (bnAmount) {
+        if (ratePerToken) {
           const normalizedAmount =
-            SwapStringUtils.transformAmountValue(bnAmount);
+            SwapStringUtils.transformCurrencyRate(ratePerToken);
 
           setOppositeAmountPerOneToken(normalizedAmount);
         }
