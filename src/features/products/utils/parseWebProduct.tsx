@@ -1,4 +1,4 @@
-import { Image } from 'react-native';
+import { SvgXml } from 'react-native-svg';
 import { ProductSwap } from '@components/svg/icons/v2';
 import { BrowserItemModel } from '@entities/browser/model';
 
@@ -17,14 +17,7 @@ export const parseWebProduct = (
     .filter((product) => product.uri && product.name)
     .map((product: BrowserItemModel) => {
       const icon = product.icon ? (
-        <Image
-          style={{
-            width: 47,
-            height: 47,
-            resizeMode: 'contain'
-          }}
-          source={{ uri: product.icon }}
-        />
+        <SvgXml xml={product.icon} width={56} height={56} />
       ) : (
         <ProductSwap />
       );
