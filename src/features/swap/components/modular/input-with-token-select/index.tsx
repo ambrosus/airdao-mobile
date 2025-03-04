@@ -83,6 +83,11 @@ export const InputWithTokenSelect = ({
     return isPoolsLoading || isBalanceLoading;
   }, [isPoolsLoading, isBalanceLoading]);
 
+  const transformedValue = useMemo(
+    () => NumberUtils.toSignificantDigits(value, 6),
+    [value]
+  );
+
   return (
     <View style={styles.wrapper}>
       <Text
@@ -102,7 +107,7 @@ export const InputWithTokenSelect = ({
           <TextInput
             focusable={!disabled}
             editable={!disabled}
-            value={value}
+            value={transformedValue}
             placeholder="0"
             type="number"
             numberOfLines={1}

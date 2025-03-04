@@ -104,13 +104,16 @@ export function useSwapBetterCurrency() {
     ): Promise<BigNumber> => {
       onChangeMultiHopUiState([], changeUiHopArray);
 
-      const tradeIn = isExactInRef.current;
       let singleHopAmount: BigNumber = BigNumber.from('0');
       let bestMultiHopAmount: BigNumber = BigNumber.from('0');
       let bestPath: string[] = [];
       let singleHopImpact = Infinity;
       let lowestMultiHopImpact = Infinity;
       let singleHopFailed = false;
+
+      const isNativeTokenInvolved =
+        path[0] === ethers.constants.AddressZero ||
+        path[path.length - 1] === ethers.constants.AddressZero;
 
       const bnAmountToSell = ethers.utils.parseEther(amountToSell);
 
@@ -120,7 +123,6 @@ export function useSwapBetterCurrency() {
         )[0];
       }
 
-      // Try single hop first
       try {
         const [amounts] = await getAmountsIn({
           path,
@@ -144,7 +146,10 @@ export function useSwapBetterCurrency() {
         return singleHopAmount;
       }
 
-      // Try multi-hop paths
+      if (isNativeTokenInvolved && !singleHopFailed) {
+        return singleHopAmount;
+      }
+
       const possiblePaths = generateAllPossibleRoutes(
         path,
         MAX_HOPS + 1
@@ -155,7 +160,6 @@ export function useSwapBetterCurrency() {
       try {
         const pathResults = await Promise.all(
           possiblePaths.map(async (currentPath) => {
-            // Include direct path if single hop failed
             if (!singleHopFailed && currentPath.length <= 2) return null;
 
             try {
@@ -166,8 +170,7 @@ export function useSwapBetterCurrency() {
 
               const priceImpact = await multiHopImpactGetter(
                 currentPath,
-                amountToSell,
-                tradeIn
+                amountToSell
               );
 
               return {
@@ -195,34 +198,45 @@ export function useSwapBetterCurrency() {
           lowestMultiHopImpact = bestResult.priceImpact;
         }
 
-        // Use multi-hop if single hop failed and we found a valid multi-hop path
         if (singleHopFailed && bestMultiHopAmount.gt(BigNumber.from('0'))) {
           const middleTokens = bestPath.slice(1, -1);
           onChangeMultiHopUiState(middleTokens, changeUiHopArray);
           return bestMultiHopAmount;
         }
 
-        // Compare paths if single hop didn't fail
         if (!singleHopFailed) {
-          const useMultiHop =
-            lowestMultiHopImpact < singleHopImpact && isExactInRef.current
-              ? bestMultiHopAmount.gt(singleHopAmount)
-              : bestMultiHopAmount.lt(singleHopAmount);
+          if (isNativeTokenInvolved) {
+            const impactDifferencePercent =
+              ((singleHopImpact - lowestMultiHopImpact) /
+                lowestMultiHopImpact) *
+              100;
 
-          if (
-            useMultiHop &&
-            bestPath.length > 2 &&
-            bestMultiHopAmount.gt(BigNumber.from('0'))
-          ) {
-            onChangeMultiHopUiState(bestPath.slice(1, -1), changeUiHopArray);
-            return bestMultiHopAmount;
+            if (
+              impactDifferencePercent > 100 &&
+              bestPath.length > 2 &&
+              bestMultiHopAmount.gt(BigNumber.from('0'))
+            ) {
+              onChangeMultiHopUiState(bestPath.slice(1, -1), changeUiHopArray);
+              return bestMultiHopAmount;
+            }
+
+            onChangeMultiHopUiState([], changeUiHopArray);
+            return singleHopAmount;
+          } else {
+            if (
+              lowestMultiHopImpact < singleHopImpact &&
+              bestPath.length > 2 &&
+              bestMultiHopAmount.gt(BigNumber.from('0'))
+            ) {
+              onChangeMultiHopUiState(bestPath.slice(1, -1), changeUiHopArray);
+              return bestMultiHopAmount;
+            }
+
+            onChangeMultiHopUiState([], changeUiHopArray);
+            return singleHopAmount;
           }
-
-          onChangeMultiHopUiState([], changeUiHopArray);
-          return singleHopAmount;
         }
 
-        // If we get here and have no valid paths, return zero
         return bnZERO;
       } catch (error) {
         console.error('Trade calculation error:', error);
@@ -231,7 +245,6 @@ export function useSwapBetterCurrency() {
       }
     },
     [
-      isExactInRef,
       multiHopImpactGetter,
       onChangeMultiHopUiState,
       setIsWarningToEnableMultihopActive,
@@ -248,13 +261,16 @@ export function useSwapBetterCurrency() {
     ): Promise<BigNumber> => {
       onChangeMultiHopUiState([], changeUiHopArray);
 
-      const tradeIn = isExactInRef.current;
       let singleHopAmount = BigNumber.from('0');
       let bestMultiHopAmount = BigNumber.from('0');
       let bestPath: string[] = [];
       let singleHopFailed = false;
-      let singleHopImpact = 0;
-      let lowestMultiHopImpact = 0;
+      let singleHopImpact = Infinity;
+      let lowestMultiHopImpact = Infinity;
+
+      const isNativeTokenInvolved =
+        path[0] === ethers.constants.AddressZero ||
+        path[path.length - 1] === ethers.constants.AddressZero;
 
       if (isETHtoWrapped(path) || isWrappedToETH(path)) {
         return await amountOut(amountToSell, path);
@@ -267,14 +283,14 @@ export function useSwapBetterCurrency() {
             ethers.utils.formatEther(amountOut)
           );
         } catch {
-          return 0;
+          return Infinity;
         }
       };
 
       try {
         singleHopAmount = await amountOut(amountToSell, path);
         singleHopImpact =
-          (await getPriceImpact(amountToSell, singleHopAmount)) ?? 0;
+          (await getPriceImpact(amountToSell, singleHopAmount)) ?? Infinity;
       } catch {
         singleHopFailed = true;
         if (!multihops) {
@@ -284,6 +300,10 @@ export function useSwapBetterCurrency() {
       }
 
       if (!multihops && !singleHopFailed) {
+        return singleHopAmount;
+      }
+
+      if (isNativeTokenInvolved && !singleHopFailed) {
         return singleHopAmount;
       }
 
@@ -309,8 +329,7 @@ export function useSwapBetterCurrency() {
 
               const priceImpact = await multiHopImpactGetter(
                 currPath,
-                amountToSell,
-                tradeIn
+                amountToSell
               );
 
               return {
@@ -346,22 +365,36 @@ export function useSwapBetterCurrency() {
         }
 
         if (!singleHopFailed) {
-          const useMultiHop =
-            lowestMultiHopImpact < singleHopImpact && isExactInRef.current
-              ? bestMultiHopAmount.gt(singleHopAmount)
-              : bestMultiHopAmount.lt(singleHopAmount);
+          if (isNativeTokenInvolved) {
+            const impactDifferencePercent =
+              ((singleHopImpact - lowestMultiHopImpact) /
+                lowestMultiHopImpact) *
+              100;
 
-          if (
-            useMultiHop &&
-            bestPath.length > 2 &&
-            bestMultiHopAmount.gt(BigNumber.from('0'))
-          ) {
-            onChangeMultiHopUiState(bestPath.slice(1, -1), changeUiHopArray);
-            return bestMultiHopAmount;
+            if (
+              impactDifferencePercent > 100 &&
+              bestPath.length > 2 &&
+              bestMultiHopAmount.gt(BigNumber.from('0'))
+            ) {
+              onChangeMultiHopUiState(bestPath.slice(1, -1), changeUiHopArray);
+              return bestMultiHopAmount;
+            }
+
+            onChangeMultiHopUiState([], changeUiHopArray);
+            return singleHopAmount;
+          } else {
+            if (
+              lowestMultiHopImpact < singleHopImpact &&
+              bestPath.length > 2 &&
+              bestMultiHopAmount.gt(BigNumber.from('0'))
+            ) {
+              onChangeMultiHopUiState(bestPath.slice(1, -1), changeUiHopArray);
+              return bestMultiHopAmount;
+            }
+
+            onChangeMultiHopUiState([], changeUiHopArray);
+            return singleHopAmount;
           }
-
-          onChangeMultiHopUiState([], changeUiHopArray);
-          return singleHopAmount;
         }
 
         return BigNumber.from('0');
@@ -373,7 +406,6 @@ export function useSwapBetterCurrency() {
     },
     [
       amountOut,
-      isExactInRef,
       multiHopImpactGetter,
       onChangeMultiHopUiState,
       setIsWarningToEnableMultihopActive,

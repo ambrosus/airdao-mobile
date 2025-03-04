@@ -4,8 +4,7 @@ import { Text, Row, Spinner } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapBetterRate } from '@features/swap/lib/hooks';
-import { SwapStringUtils } from '@features/swap/utils';
-import { verticalScale } from '@utils';
+import { NumberUtils, verticalScale } from '@utils';
 
 interface SwapCurrencyRateProps {
   tokenToSell: string;
@@ -49,7 +48,7 @@ const _SwapCurrencyRate = ({
   }, []);
 
   const transformedCurrencyRate = useMemo(
-    () => SwapStringUtils.transformCurrencyRate(+rate),
+    () => NumberUtils.toSignificantDigits(rate.toString(), 6),
     [rate]
   );
 

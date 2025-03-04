@@ -149,6 +149,14 @@ const formatDecimal = (value: string, decimals = 2): string => {
   return fixed.replace(/\.?0+$/, '');
 };
 
+const toSignificantDigits = (value: string, decimals = 6): string => {
+  const parsedValue = parseFloat(value);
+  if (!isNaN(parsedValue)) {
+    return parsedValue.toPrecision(decimals).replace(/\.?0+$/, '');
+  }
+  return value;
+};
+
 export const NumberUtils = {
   formatNumber,
   addSignToNumber,
@@ -157,5 +165,6 @@ export const NumberUtils = {
   formatAmount,
   minimiseAmount,
   numberToTransformedLocale,
-  formatDecimal
+  formatDecimal,
+  toSignificantDigits
 };

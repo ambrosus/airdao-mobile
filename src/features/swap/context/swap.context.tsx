@@ -87,7 +87,14 @@ export const SwapContext = () => {
   }, [_refExactGetter]);
 
   useEffect(() => {
-    allPairsRef.current = _refPairsGetter;
+    const existingPairs = new Set(
+      allPairsRef.current.map((pair) => JSON.stringify(pair))
+    );
+    const newPairs = _refPairsGetter.filter(
+      (pair) => !existingPairs.has(JSON.stringify(pair))
+    );
+
+    allPairsRef.current = [...allPairsRef.current, ...newPairs];
   }, [_refPairsGetter]);
 
   const reset = useCallback(() => {

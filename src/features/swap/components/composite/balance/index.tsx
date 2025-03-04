@@ -6,13 +6,13 @@ import {
   useMemo
 } from 'react';
 import { ethers } from 'ethers';
-import { formatEther } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
 import { ShimmerLoader } from '@components/animations';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { WalletOutlineIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
+import { AMB_DECIMALS } from '@constants/variables';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapBalance, useSwapFieldsHandler } from '@features/swap/lib/hooks';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
@@ -46,7 +46,7 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
   const normalizedTokenBalance = useMemo(() => {
     if (bnBalanceAmount) {
       return NumberUtils.limitDecimalCount(
-        formatEther(bnBalanceAmount?._hex),
+        ethers.utils.formatEther(bnBalanceAmount?._hex),
         2
       );
     }
@@ -62,8 +62,8 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
   const onSelectMaxTokensAmountPress = useCallback(() => {
     if (bnBalanceAmount) {
       const fullAmount = NumberUtils.limitDecimalCount(
-        formatEther(bnBalanceAmount?._hex),
-        18
+        ethers.utils.formatEther(bnBalanceAmount?._hex),
+        AMB_DECIMALS
       );
 
       onSelectMaxTokensAmount(type, fullAmount);
