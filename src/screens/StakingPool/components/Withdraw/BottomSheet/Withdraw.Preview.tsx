@@ -26,9 +26,7 @@ export const WithdrawTokenPreview = ({
 }: WithdrawTokenPreviewProps) => {
   const { t } = useTranslation();
   const usdAmount = useUSDPrice(amount);
-  const {
-    balance: { formattedBalance }
-  } = useAMBEntity(wallet);
+  const { balance } = useAMBEntity(wallet);
 
   const transformedEstimatedGas = useMemo(() => {
     const parsedGas = NumberUtils.limitDecimalCount(
@@ -40,15 +38,17 @@ export const WithdrawTokenPreview = ({
   }, [estimatedGas]);
 
   const label = useMemo(() => {
-    const parsedBalance = ethers.utils.parseEther(formattedBalance);
-    const parsedAmount = ethers.utils.parseEther(amount.toString());
+    if (amount) {
+      const parsedBalance = ethers.utils.parseEther(balance.formattedBalance);
+      const parsedAmount = ethers.utils.parseEther(amount.toString());
 
-    if (parsedBalance.lt(parsedAmount.add(estimatedGas))) {
-      return t('bridge.insufficient.funds');
+      if (parsedBalance && parsedBalance.lt(parsedAmount.add(estimatedGas))) {
+        return t('bridge.insufficient.funds');
+      }
     }
 
     return t('staking.pool.withdraw.now');
-  }, [amount, estimatedGas, formattedBalance, t]);
+  }, [amount, balance, estimatedGas, t]);
 
   const disabled = useMemo(
     () => label === t('bridge.insufficient.funds'),
