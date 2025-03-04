@@ -8,7 +8,6 @@ import { Balance, TokenSelector } from '@features/swap/components/composite';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapFieldsHandler } from '@features/swap/lib/hooks';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
-import { SwapStringUtils } from '@features/swap/utils';
 import { StringUtils, NumberUtils } from '@utils';
 import { styles } from './styles';
 
@@ -84,13 +83,10 @@ export const InputWithTokenSelect = ({
     return isPoolsLoading || isBalanceLoading;
   }, [isPoolsLoading, isBalanceLoading]);
 
-  const transformedValue = useMemo(() => {
-    if (type === FIELD.TOKEN_A) {
-      return value;
-    }
-
-    return SwapStringUtils.transformAmountValue(value);
-  }, [type, value]);
+  const transformedValue = useMemo(
+    () => NumberUtils.toSignificantDigits(value, 6),
+    [value]
+  );
 
   return (
     <View style={styles.wrapper}>
