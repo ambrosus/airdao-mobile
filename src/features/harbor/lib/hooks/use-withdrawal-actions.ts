@@ -4,6 +4,7 @@ import { ethers } from 'ethers';
 import { hbrYieldService } from '@api/harbor';
 import { CryptoCurrencyCode } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
+import { useStakeHBRStore } from '@entities/harbor';
 import { getTimestampFromBlockHash } from '@entities/harbor/utils';
 import { useWalletPrivateKey } from '@entities/wallet';
 
@@ -12,6 +13,8 @@ export function useWithdrawalActions(
   amountToWithdraw: string
 ) {
   const { _extractPrivateKey } = useWalletPrivateKey();
+  const { stake } = useStakeHBRStore();
+
   const [loading, setLoading] = useState(false);
   const [timestamp, setTimestamp] = useState(0);
   const [transaction, setTransaction] = useState<ethers.ContractReceipt | null>(
@@ -27,57 +30,86 @@ export function useWithdrawalActions(
     timestampHandler();
   }, [transaction]);
 
-  const handleWithdrawHBR = useCallback(async () => {
-    try {
-      setLoading(true);
-      const privateKey = await _extractPrivateKey();
-      const bnAmountToWithdraw = ethers.utils.parseEther(amountToWithdraw);
-      const tx = await hbrYieldService.withdraw(bnAmountToWithdraw, privateKey);
+  const handleWithdrawHBR = useCallback(
+    async ({ estimateGas = false }: { estimateGas?: boolean } = {}) => {
+      try {
+        setLoading(true);
+        const privateKey = await _extractPrivateKey();
+        const bnAmountToWithdraw = ethers.utils.parseEther(amountToWithdraw);
+        const tx = await hbrYieldService.withdraw(
+          bnAmountToWithdraw,
+          privateKey,
+          { estimateGas }
+        );
 
-      if (tx) {
-        setTransaction(tx);
-        setTimeout(() => bottomSheetRef.current?.show(), 500);
+        if (estimateGas) {
+          return tx;
+        }
+
+        if (tx) {
+          setTransaction(tx);
+          setTimeout(() => bottomSheetRef.current?.show(), 500);
+        }
+      } catch (error) {
+        throw error;
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  }, [_extractPrivateKey, amountToWithdraw]);
+    },
+    [_extractPrivateKey, amountToWithdraw]
+  );
 
-  const handleWithdrawAMB = useCallback(async () => {
-    try {
-      setLoading(true);
-      const privateKey = await _extractPrivateKey();
-      const bnAmountToWithdraw = ethers.utils.parseEther(amountToWithdraw);
-      const tx = await hbrYieldService.unstake(bnAmountToWithdraw, privateKey);
+  const handleWithdrawAMB = useCallback(
+    async ({ estimateGas = false }: { estimateGas?: boolean } = {}) => {
+      try {
+        setLoading(true);
+        const privateKey = await _extractPrivateKey();
+        const bnAmountToWithdraw = !!estimateGas
+          ? stake
+          : ethers.utils.parseEther(amountToWithdraw);
 
-      if (tx) {
-        setTransaction(tx);
+        const tx = await hbrYieldService.unstake(
+          bnAmountToWithdraw,
+          privateKey,
+          { estimateGas }
+        );
 
-        setTimeout(() => bottomSheetRef.current?.show(), 500);
+        if (estimateGas) {
+          return tx;
+        }
+
+        if (tx) {
+          setTransaction(tx);
+
+          setTimeout(() => bottomSheetRef.current?.show(), 500);
+        }
+      } catch (error) {
+        throw error;
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  }, [_extractPrivateKey, amountToWithdraw]);
+    },
+    [_extractPrivateKey, amountToWithdraw, stake]
+  );
 
-  const withdrawalCallback = useCallback(() => {
-    Keyboard.dismiss();
-    switch (token) {
-      case CryptoCurrencyCode.AMB: {
-        return handleWithdrawAMB();
+  const withdrawalCallback = useCallback(
+    async ({ estimateGas = false }: { estimateGas?: boolean } = {}) => {
+      Keyboard.dismiss();
+      switch (token) {
+        case CryptoCurrencyCode.AMB: {
+          return handleWithdrawAMB({ estimateGas });
+        }
+        case CryptoCurrencyCode.HBR: {
+          return handleWithdrawHBR({ estimateGas });
+        }
       }
-      case CryptoCurrencyCode.HBR: {
-        return handleWithdrawHBR();
-      }
-    }
-  }, [handleWithdrawAMB, handleWithdrawHBR, token]);
+    },
+    [handleWithdrawAMB, handleWithdrawHBR, token]
+  );
 
   return {
     withdrawalCallback,
+    handleWithdrawAMB,
     loading,
     timestamp,
     transaction,

@@ -44,6 +44,7 @@ export const StakeAMBInput = ({ error, tokenInstance }: StakeAMBInputProps) => {
     const availableBalanceAMB = ethers.BigNumber.from(
       tokenInstance.balance.wei
     );
+
     const addressLimit = ethers.BigNumber.from(
       limitsConfig?.maxStakePerUserValue
     ).sub(stake);

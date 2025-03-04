@@ -40,6 +40,7 @@ interface WithdrawalHbrYieldInputProps extends PropsWithChildren {
   token: CryptoCurrencyCode.AMB | CryptoCurrencyCode.HBR;
   type: LogStatus;
   logs: IAvailableWithdrawLogs | null;
+  onPressMaxButton: () => void;
 }
 
 export const WithdrawalHbrYieldInput = ({
@@ -47,7 +48,8 @@ export const WithdrawalHbrYieldInput = ({
   onChangeValue,
   token,
   type,
-  logs
+  logs,
+  onPressMaxButton
 }: WithdrawalHbrYieldInputProps) => {
   const { wallet } = useWalletStore();
   const { stake, deposit } = useStakeHBRStore();
@@ -128,15 +130,6 @@ export const WithdrawalHbrYieldInput = ({
     }
   }, [inputValueWidth, isErrorLog, lockIconStyle]);
 
-  const onPressMaxAmount = useCallback(() => {
-    switch (token) {
-      case CryptoCurrencyCode.AMB:
-        return onChangeValue(ethers.utils.formatEther(stake));
-      case CryptoCurrencyCode.HBR:
-        return onChangeValue(ethers.utils.formatEther(deposit));
-    }
-  }, [deposit, onChangeValue, stake, token]);
-
   return (
     <View style={containerStyle}>
       <InputWithoutTokenSelect
@@ -148,7 +141,7 @@ export const WithdrawalHbrYieldInput = ({
         onContentSizeChange={onInputContentSizeChange}
         token={tokenInstance}
         balance={ethers.utils.formatEther(balance)}
-        onPressMaxAmount={onPressMaxAmount}
+        onPressMaxAmount={onPressMaxButton}
         arrow={false}
         renderInputLockNode={renderInputLockNode}
         maxButtonLocked={isErrorLog || hbrWithdrawalDisabled}
