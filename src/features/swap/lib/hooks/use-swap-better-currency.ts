@@ -111,7 +111,6 @@ export function useSwapBetterCurrency() {
       let lowestMultiHopImpact = Infinity;
       let singleHopFailed = false;
 
-      // Check if native token is involved (ETH/MATIC/etc)
       const isNativeTokenInvolved =
         path[0] === ethers.constants.AddressZero ||
         path[path.length - 1] === ethers.constants.AddressZero;
@@ -124,7 +123,6 @@ export function useSwapBetterCurrency() {
         )[0];
       }
 
-      // Try single hop first
       try {
         const [amounts] = await getAmountsIn({
           path,
@@ -148,12 +146,10 @@ export function useSwapBetterCurrency() {
         return singleHopAmount;
       }
 
-      // If native token is involved and single hop works, prefer it
       if (isNativeTokenInvolved && !singleHopFailed) {
         return singleHopAmount;
       }
 
-      // Try multi-hop paths
       const possiblePaths = generateAllPossibleRoutes(
         path,
         MAX_HOPS + 1
@@ -164,7 +160,6 @@ export function useSwapBetterCurrency() {
       try {
         const pathResults = await Promise.all(
           possiblePaths.map(async (currentPath) => {
-            // Include direct path if single hop failed
             if (!singleHopFailed && currentPath.length <= 2) return null;
 
             try {
@@ -203,23 +198,19 @@ export function useSwapBetterCurrency() {
           lowestMultiHopImpact = bestResult.priceImpact;
         }
 
-        // Use multi-hop if single hop failed and we found a valid multi-hop path
         if (singleHopFailed && bestMultiHopAmount.gt(BigNumber.from('0'))) {
           const middleTokens = bestPath.slice(1, -1);
           onChangeMultiHopUiState(middleTokens, changeUiHopArray);
           return bestMultiHopAmount;
         }
 
-        // Compare paths if single hop didn't fail
         if (!singleHopFailed) {
-          // For native tokens, only use multi-hop if the price impact difference is significant
           if (isNativeTokenInvolved) {
             const impactDifferencePercent =
               ((singleHopImpact - lowestMultiHopImpact) /
                 lowestMultiHopImpact) *
               100;
 
-            // Only use multi-hop for native tokens if price impact is significantly better (>100%)
             if (
               impactDifferencePercent > 100 &&
               bestPath.length > 2 &&
@@ -232,7 +223,6 @@ export function useSwapBetterCurrency() {
             onChangeMultiHopUiState([], changeUiHopArray);
             return singleHopAmount;
           } else {
-            // For non-native tokens, use the path with lowest price impact
             if (
               lowestMultiHopImpact < singleHopImpact &&
               bestPath.length > 2 &&
@@ -247,7 +237,6 @@ export function useSwapBetterCurrency() {
           }
         }
 
-        // If we get here and have no valid paths, return zero
         return bnZERO;
       } catch (error) {
         console.error('Trade calculation error:', error);
@@ -279,7 +268,6 @@ export function useSwapBetterCurrency() {
       let singleHopImpact = Infinity;
       let lowestMultiHopImpact = Infinity;
 
-      // Check if native token is involved (ETH/MATIC/etc)
       const isNativeTokenInvolved =
         path[0] === ethers.constants.AddressZero ||
         path[path.length - 1] === ethers.constants.AddressZero;
@@ -315,7 +303,6 @@ export function useSwapBetterCurrency() {
         return singleHopAmount;
       }
 
-      // If native token is involved and single hop works, prefer it
       if (isNativeTokenInvolved && !singleHopFailed) {
         return singleHopAmount;
       }
@@ -378,14 +365,12 @@ export function useSwapBetterCurrency() {
         }
 
         if (!singleHopFailed) {
-          // For native tokens, only use multi-hop if the price impact difference is significant
           if (isNativeTokenInvolved) {
             const impactDifferencePercent =
               ((singleHopImpact - lowestMultiHopImpact) /
                 lowestMultiHopImpact) *
               100;
 
-            // Only use multi-hop for native tokens if price impact is significantly better (>100%)
             if (
               impactDifferencePercent > 100 &&
               bestPath.length > 2 &&
@@ -398,7 +383,6 @@ export function useSwapBetterCurrency() {
             onChangeMultiHopUiState([], changeUiHopArray);
             return singleHopAmount;
           } else {
-            // For non-native tokens, use the path with lowest price impact
             if (
               lowestMultiHopImpact < singleHopImpact &&
               bestPath.length > 2 &&

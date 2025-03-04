@@ -21,7 +21,6 @@ export function useAllLiquidityPools() {
       const pairCount = await contract.allPairsLength();
       const totalPairs = Number(pairCount);
 
-      // Process pairs in batches to avoid overwhelming the network
       const batchSize = 50;
 
       for (
