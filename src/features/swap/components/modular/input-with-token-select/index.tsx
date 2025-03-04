@@ -84,6 +84,14 @@ export const InputWithTokenSelect = ({
     return isPoolsLoading || isBalanceLoading;
   }, [isPoolsLoading, isBalanceLoading]);
 
+  const transformedValue = useMemo(() => {
+    if (type === FIELD.TOKEN_A) {
+      return value;
+    }
+
+    return SwapStringUtils.transformAmountValue(value);
+  }, [type, value]);
+
   return (
     <View style={styles.wrapper}>
       <Text
@@ -103,7 +111,7 @@ export const InputWithTokenSelect = ({
           <TextInput
             focusable={!disabled}
             editable={!disabled}
-            value={SwapStringUtils.transformAmountValue(value)}
+            value={transformedValue}
             placeholder="0"
             type="number"
             numberOfLines={1}

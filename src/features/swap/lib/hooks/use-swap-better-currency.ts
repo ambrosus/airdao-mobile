@@ -104,13 +104,17 @@ export function useSwapBetterCurrency() {
     ): Promise<BigNumber> => {
       onChangeMultiHopUiState([], changeUiHopArray);
 
-      const tradeIn = isExactInRef.current;
       let singleHopAmount: BigNumber = BigNumber.from('0');
       let bestMultiHopAmount: BigNumber = BigNumber.from('0');
       let bestPath: string[] = [];
       let singleHopImpact = Infinity;
       let lowestMultiHopImpact = Infinity;
       let singleHopFailed = false;
+
+      // Check if native token is involved (ETH/MATIC/etc)
+      const isNativeTokenInvolved =
+        path[0] === ethers.constants.AddressZero ||
+        path[path.length - 1] === ethers.constants.AddressZero;
 
       const bnAmountToSell = ethers.utils.parseEther(amountToSell);
 
@@ -144,6 +148,11 @@ export function useSwapBetterCurrency() {
         return singleHopAmount;
       }
 
+      // If native token is involved and single hop works, prefer it
+      if (isNativeTokenInvolved && !singleHopFailed) {
+        return singleHopAmount;
+      }
+
       // Try multi-hop paths
       const possiblePaths = generateAllPossibleRoutes(
         path,
@@ -166,8 +175,7 @@ export function useSwapBetterCurrency() {
 
               const priceImpact = await multiHopImpactGetter(
                 currentPath,
-                amountToSell,
-                tradeIn
+                amountToSell
               );
 
               return {
@@ -204,22 +212,39 @@ export function useSwapBetterCurrency() {
 
         // Compare paths if single hop didn't fail
         if (!singleHopFailed) {
-          const useMultiHop =
-            lowestMultiHopImpact < singleHopImpact && isExactInRef.current
-              ? bestMultiHopAmount.gt(singleHopAmount)
-              : bestMultiHopAmount.lt(singleHopAmount);
+          // For native tokens, only use multi-hop if the price impact difference is significant
+          if (isNativeTokenInvolved) {
+            const impactDifferencePercent =
+              ((singleHopImpact - lowestMultiHopImpact) /
+                lowestMultiHopImpact) *
+              100;
 
-          if (
-            useMultiHop &&
-            bestPath.length > 2 &&
-            bestMultiHopAmount.gt(BigNumber.from('0'))
-          ) {
-            onChangeMultiHopUiState(bestPath.slice(1, -1), changeUiHopArray);
-            return bestMultiHopAmount;
+            // Only use multi-hop for native tokens if price impact is significantly better (>100%)
+            if (
+              impactDifferencePercent > 100 &&
+              bestPath.length > 2 &&
+              bestMultiHopAmount.gt(BigNumber.from('0'))
+            ) {
+              onChangeMultiHopUiState(bestPath.slice(1, -1), changeUiHopArray);
+              return bestMultiHopAmount;
+            }
+
+            onChangeMultiHopUiState([], changeUiHopArray);
+            return singleHopAmount;
+          } else {
+            // For non-native tokens, use the path with lowest price impact
+            if (
+              lowestMultiHopImpact < singleHopImpact &&
+              bestPath.length > 2 &&
+              bestMultiHopAmount.gt(BigNumber.from('0'))
+            ) {
+              onChangeMultiHopUiState(bestPath.slice(1, -1), changeUiHopArray);
+              return bestMultiHopAmount;
+            }
+
+            onChangeMultiHopUiState([], changeUiHopArray);
+            return singleHopAmount;
           }
-
-          onChangeMultiHopUiState([], changeUiHopArray);
-          return singleHopAmount;
         }
 
         // If we get here and have no valid paths, return zero
@@ -231,7 +256,6 @@ export function useSwapBetterCurrency() {
       }
     },
     [
-      isExactInRef,
       multiHopImpactGetter,
       onChangeMultiHopUiState,
       setIsWarningToEnableMultihopActive,
@@ -248,13 +272,17 @@ export function useSwapBetterCurrency() {
     ): Promise<BigNumber> => {
       onChangeMultiHopUiState([], changeUiHopArray);
 
-      const tradeIn = isExactInRef.current;
       let singleHopAmount = BigNumber.from('0');
       let bestMultiHopAmount = BigNumber.from('0');
       let bestPath: string[] = [];
       let singleHopFailed = false;
-      let singleHopImpact = 0;
-      let lowestMultiHopImpact = 0;
+      let singleHopImpact = Infinity;
+      let lowestMultiHopImpact = Infinity;
+
+      // Check if native token is involved (ETH/MATIC/etc)
+      const isNativeTokenInvolved =
+        path[0] === ethers.constants.AddressZero ||
+        path[path.length - 1] === ethers.constants.AddressZero;
 
       if (isETHtoWrapped(path) || isWrappedToETH(path)) {
         return await amountOut(amountToSell, path);
@@ -267,14 +295,14 @@ export function useSwapBetterCurrency() {
             ethers.utils.formatEther(amountOut)
           );
         } catch {
-          return 0;
+          return Infinity;
         }
       };
 
       try {
         singleHopAmount = await amountOut(amountToSell, path);
         singleHopImpact =
-          (await getPriceImpact(amountToSell, singleHopAmount)) ?? 0;
+          (await getPriceImpact(amountToSell, singleHopAmount)) ?? Infinity;
       } catch {
         singleHopFailed = true;
         if (!multihops) {
@@ -284,6 +312,11 @@ export function useSwapBetterCurrency() {
       }
 
       if (!multihops && !singleHopFailed) {
+        return singleHopAmount;
+      }
+
+      // If native token is involved and single hop works, prefer it
+      if (isNativeTokenInvolved && !singleHopFailed) {
         return singleHopAmount;
       }
 
@@ -309,8 +342,7 @@ export function useSwapBetterCurrency() {
 
               const priceImpact = await multiHopImpactGetter(
                 currPath,
-                amountToSell,
-                tradeIn
+                amountToSell
               );
 
               return {
@@ -346,22 +378,39 @@ export function useSwapBetterCurrency() {
         }
 
         if (!singleHopFailed) {
-          const useMultiHop =
-            lowestMultiHopImpact < singleHopImpact && isExactInRef.current
-              ? bestMultiHopAmount.gt(singleHopAmount)
-              : bestMultiHopAmount.lt(singleHopAmount);
+          // For native tokens, only use multi-hop if the price impact difference is significant
+          if (isNativeTokenInvolved) {
+            const impactDifferencePercent =
+              ((singleHopImpact - lowestMultiHopImpact) /
+                lowestMultiHopImpact) *
+              100;
 
-          if (
-            useMultiHop &&
-            bestPath.length > 2 &&
-            bestMultiHopAmount.gt(BigNumber.from('0'))
-          ) {
-            onChangeMultiHopUiState(bestPath.slice(1, -1), changeUiHopArray);
-            return bestMultiHopAmount;
+            // Only use multi-hop for native tokens if price impact is significantly better (>100%)
+            if (
+              impactDifferencePercent > 100 &&
+              bestPath.length > 2 &&
+              bestMultiHopAmount.gt(BigNumber.from('0'))
+            ) {
+              onChangeMultiHopUiState(bestPath.slice(1, -1), changeUiHopArray);
+              return bestMultiHopAmount;
+            }
+
+            onChangeMultiHopUiState([], changeUiHopArray);
+            return singleHopAmount;
+          } else {
+            // For non-native tokens, use the path with lowest price impact
+            if (
+              lowestMultiHopImpact < singleHopImpact &&
+              bestPath.length > 2 &&
+              bestMultiHopAmount.gt(BigNumber.from('0'))
+            ) {
+              onChangeMultiHopUiState(bestPath.slice(1, -1), changeUiHopArray);
+              return bestMultiHopAmount;
+            }
+
+            onChangeMultiHopUiState([], changeUiHopArray);
+            return singleHopAmount;
           }
-
-          onChangeMultiHopUiState([], changeUiHopArray);
-          return singleHopAmount;
         }
 
         return BigNumber.from('0');
@@ -373,7 +422,6 @@ export function useSwapBetterCurrency() {
     },
     [
       amountOut,
-      isExactInRef,
       multiHopImpactGetter,
       onChangeMultiHopUiState,
       setIsWarningToEnableMultihopActive,
