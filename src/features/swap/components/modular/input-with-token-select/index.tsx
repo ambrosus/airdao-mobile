@@ -8,6 +8,7 @@ import { Balance, TokenSelector } from '@features/swap/components/composite';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapFieldsHandler } from '@features/swap/lib/hooks';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
+import { SwapStringUtils } from '@features/swap/utils';
 import { StringUtils, NumberUtils } from '@utils';
 import { styles } from './styles';
 
@@ -102,7 +103,7 @@ export const InputWithTokenSelect = ({
           <TextInput
             focusable={!disabled}
             editable={!disabled}
-            value={value}
+            value={SwapStringUtils.transformAmountValue(value)}
             placeholder="0"
             type="number"
             numberOfLines={1}
