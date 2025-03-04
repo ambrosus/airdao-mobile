@@ -10,9 +10,10 @@ import {
 } from '@features/swap/utils/contracts/instances';
 
 export function useAllLiquidityPools() {
-  const { setPairs, allPairsRef } = useSwapContextSelector();
+  const { setPairs, allPairsRef, setIsPoolsLoading } = useSwapContextSelector();
 
   const getAllPoolsCount = useCallback(async () => {
+    setIsPoolsLoading(true);
     try {
       const contract = createFactoryContract();
       const pairCount = await contract.allPairsLength();
@@ -49,8 +50,10 @@ export function useAllLiquidityPools() {
       console.error('Error fetching liquidity pools:', error);
       setPairs([]);
       return [];
+    } finally {
+      setIsPoolsLoading(false);
     }
-  }, [setPairs]);
+  }, [setPairs, setIsPoolsLoading]);
 
   const getPairAddress = useCallback(
     (selectedTokens: SelectedTokensState) => {
