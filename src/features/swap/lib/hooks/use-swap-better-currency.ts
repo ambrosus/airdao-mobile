@@ -13,8 +13,6 @@ import { getAmountsOut, getAmountsIn } from '../contracts';
 import { useSwapPriceImpact } from './use-swap-price-impact';
 import { useSwapSettings } from './use-swap-settings';
 
-const PRICE_IMPACT_THRESHOLD = 10;
-
 export function useSwapBetterCurrency() {
   const {
     setIsMultiHopSwapCurrencyBetter,
