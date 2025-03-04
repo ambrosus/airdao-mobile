@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { Alert } from 'react-native';
 import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
 import { PAIR } from '@features/swap/lib/abi';
@@ -10,47 +11,100 @@ import {
 } from '@features/swap/utils/contracts/instances';
 
 export function useAllLiquidityPools() {
-  const { setPairs, allPairsRef } = useSwapContextSelector();
+  const { setPairs, allPairsRef, setIsPoolsLoading } = useSwapContextSelector();
 
   const getAllPoolsCount = useCallback(async () => {
+    setIsPoolsLoading(true);
+    const results = [];
     try {
       const contract = createFactoryContract();
       const pairCount = await contract.allPairsLength();
+      const totalPairs = Number(pairCount);
 
-      const pairPromises = Array.from(
-        { length: Number(pairCount) },
-        async (_, i) => {
-          const pairAddress = await contract.allPairs(i);
-          const pairContract = new ethers.Contract(
-            pairAddress,
-            PAIR,
-            createAMBProvider()
-          );
+      const batchSize = 50;
 
-          const [token0, token1] = await Promise.all([
-            pairContract.token0(),
-            pairContract.token1()
-          ]);
+      for (
+        let batchStart = 0;
+        batchStart < totalPairs;
+        batchStart += batchSize
+      ) {
+        const batchEnd = Math.min(batchStart + batchSize, totalPairs);
 
-          return {
-            pairAddress,
-            token0,
-            token1
-          };
-        }
-      );
+        const batchPromises = Array.from(
+          { length: batchEnd - batchStart },
+          async (_, index) => {
+            const i = batchStart + index;
+            try {
+              const pairAddress = await contract.allPairs(i);
+              const pairContract = new ethers.Contract(
+                pairAddress,
+                PAIR,
+                createAMBProvider()
+              );
 
-      const results = await Promise.all(pairPromises);
+              const [token0, token1] = await Promise.all([
+                pairContract.token0(),
+                pairContract.token1()
+              ]);
 
-      setPairs(results);
+              return {
+                pairAddress,
+                token0,
+                token1
+              };
+            } catch (error) {
+              if (__DEV__) {
+                Alert.alert(
+                  `Error fetching pair at index ${i}:`,
+                  JSON.stringify(error)
+                );
+              }
+
+              return null;
+            }
+          }
+        );
+
+        const batchResults = await Promise.all(batchPromises);
+
+        const validResults = batchResults.filter(
+          (
+            result
+          ): result is {
+            pairAddress: string;
+            token0: string;
+            token1: string;
+          } => result !== null
+        );
+        results.push(...validResults);
+
+        setPairs(validResults);
+      }
+
+      if (__DEV__) {
+        Alert.alert(
+          'Successfully loaded liquidity pools',
+          `Successfully loaded ${results.length} of ${totalPairs} pairs`
+        );
+      }
 
       return results;
     } catch (error) {
-      console.error('Error fetching liquidity pools:', error);
-      setPairs([]);
-      return [];
+      if (__DEV__) {
+        Alert.alert(
+          'Error fetching liquidity pools count:',
+          JSON.stringify(error)
+        );
+      }
+
+      if (results.length > 0) {
+        return results;
+      }
+      return allPairsRef.current;
+    } finally {
+      setIsPoolsLoading(false);
     }
-  }, [setPairs]);
+  }, [setPairs, setIsPoolsLoading, allPairsRef]);
 
   const getPairAddress = useCallback(
     (selectedTokens: SelectedTokensState) => {

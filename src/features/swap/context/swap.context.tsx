@@ -37,6 +37,8 @@ export const SwapContext = () => {
   const isExactInRef = useRef<boolean>(true);
   const allPairsRef = useRef<SelectedPairsState>([]);
   const [isExecutingPrice, setIsExecutingPrice] = useState(false);
+  const [isPoolsLoading, setIsPoolsLoading] = useState(false);
+
   const [isInsufficientBalance, setIsInsufficientBalance] = useState(false);
   const [isExtractingMaxPrice, setIsExtractingMaxPrice] = useState(false);
   const [bottomSheetSwapStatus, setBottomSheetSwapStatus] =
@@ -93,7 +95,14 @@ export const SwapContext = () => {
   }, [_refExactGetter]);
 
   useEffect(() => {
-    allPairsRef.current = _refPairsGetter;
+    const existingPairs = new Set(
+      allPairsRef.current.map((pair) => JSON.stringify(pair))
+    );
+    const newPairs = _refPairsGetter.filter(
+      (pair) => !existingPairs.has(JSON.stringify(pair))
+    );
+
+    allPairsRef.current = [...allPairsRef.current, ...newPairs];
   }, [_refPairsGetter]);
 
   const reset = useCallback(() => {
@@ -143,6 +152,8 @@ export const SwapContext = () => {
     bottomSheetSwapStatus,
     isExecutingPrice,
     setIsExecutingPrice,
+    isPoolsLoading,
+    setIsPoolsLoading
     isInsufficientBalance,
     setIsInsufficientBalance,
     estimatedGasValues,

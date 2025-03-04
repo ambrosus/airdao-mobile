@@ -6,7 +6,6 @@ import {
   useMemo
 } from 'react';
 import { ethers } from 'ethers';
-import { formatEther } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
 import { ShimmerLoader } from '@components/animations';
@@ -60,7 +59,7 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
   const normalizedTokenBalance = useMemo(() => {
     if (bnBalanceAmount) {
       return NumberUtils.limitDecimalCount(
-        formatEther(bnBalanceAmount?._hex),
+        ethers.utils.formatEther(bnBalanceAmount?._hex),
         2
       );
     }
@@ -73,59 +72,18 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
     selectedTokens[type]?.symbol as CryptoCurrencyCode
   );
 
-  const onSelectMaxTokensAmountPress = useCallback(async () => {
-    setIsExtractingMaxPrice(true);
-    setIsExactIn(type === FIELD.TOKEN_A);
+  const onSelectMaxTokensAmountPress = useCallback(() => {
+    if (bnBalanceAmount) {
+      const fullAmount = NumberUtils.limitDecimalCount(
+        ethers.utils.formatEther(bnBalanceAmount?._hex),
+        AMB_DECIMALS
+      );
 
-    if (!bnBalanceAmount) return;
+      onSelectMaxTokensAmount(type, fullAmount);
+      setIsExactIn(type === FIELD.TOKEN_A);
 
-    try {
-      const parsedBalance = ethers.utils.formatEther(bnBalanceAmount);
-
-      const isNative =
-        type === FIELD.TOKEN_A &&
-        selectedTokens.TOKEN_A.address === ethers.constants.AddressZero;
-
-      if (isNative) {
-        const bnAmountToReceive = await bestTradeCurrency(parsedBalance, [
-          selectedTokens.TOKEN_A.address,
-          selectedTokens.TOKEN_B.address
-        ]);
-
-        const estimatedGas = await swapCallback({
-          amountIn: parsedBalance,
-          amountOut: ethers.utils.formatEther(bnAmountToReceive),
-          estimateGas: true
-        });
-
-        const maxSpendableAmount = bnBalanceAmount.sub(estimatedGas);
-
-        if (maxSpendableAmount.lt(0)) {
-          setIsInsufficientBalance(true);
-          setSelectedTokensAmount({
-            [FIELD.TOKEN_A]: '0',
-            [FIELD.TOKEN_B]: ''
-          });
-          return;
-        }
-
-        const amount = NumberUtils.limitDecimalCount(
-          formatEther(maxSpendableAmount),
-          AMB_DECIMALS
-        );
-
-        onSelectMaxTokensAmount(type, amount);
-      } else {
-        const amount = NumberUtils.limitDecimalCount(
-          formatEther(bnBalanceAmount),
-          AMB_DECIMALS
-        );
-
-        onSelectMaxTokensAmount(type, amount);
-      }
-
-      setTimeout(() => {
-        updateReceivedTokensOutput();
+      setTimeout(async () => {
+        await updateReceivedTokensOutput();
       });
     } catch (error) {
       throw error;

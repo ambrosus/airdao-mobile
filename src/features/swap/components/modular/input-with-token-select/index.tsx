@@ -21,7 +21,7 @@ export const InputWithTokenSelect = ({
   estimated
 }: InputWithTokenSelectProps) => {
   const { t } = useTranslation();
-  const { selectedTokensAmount, setLastChangedInput } =
+  const { selectedTokensAmount, setLastChangedInput, isPoolsLoading } =
     useSwapContextSelector();
   const { onChangeSelectedTokenAmount } = useSwapFieldsHandler();
 
@@ -79,6 +79,15 @@ export const InputWithTokenSelect = ({
     []
   );
 
+  const disabled = useMemo(() => {
+    return isPoolsLoading || isBalanceLoading;
+  }, [isPoolsLoading, isBalanceLoading]);
+
+  const transformedValue = useMemo(
+    () => NumberUtils.toSignificantDigits(value, 6),
+    [value]
+  );
+
   return (
     <View style={styles.wrapper}>
       <Text
@@ -96,9 +105,9 @@ export const InputWithTokenSelect = ({
           style={styles.inputContainer}
         >
           <TextInput
-            focusable={!isBalanceLoading}
-            editable={!isBalanceLoading}
-            value={value}
+            focusable={!disabled}
+            editable={!disabled}
+            value={transformedValue}
             placeholder="0"
             type="number"
             numberOfLines={1}

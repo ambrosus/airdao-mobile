@@ -3,7 +3,6 @@ import { formatEther } from 'ethers/lib/utils';
 import debounce from 'lodash/debounce';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
-import { SwapStringUtils } from '@features/swap/utils';
 import { useSwapBetterCurrency } from './use-swap-better-currency';
 import { useSwapHelpers } from './use-swap-helpers';
 
@@ -36,11 +35,11 @@ export function useSwapFieldsHandler() {
     if (isEmptyAmount(amountToSell)) return setIsExecutingPrice(false);
 
     try {
-      const bnAmountToReceive = await bestTradeCurrency(amountToSell, path);
+      const bnAmountToReceive = await bestTradeCurrency(amountToSell, path, {
+        changeUiHopArray: true
+      });
 
-      const normalizedAmount = SwapStringUtils.transformAmountValue(
-        formatEther(bnAmountToReceive?._hex)
-      );
+      const normalizedAmount = formatEther(bnAmountToReceive?._hex);
 
       setSelectedTokensAmount((prevSelectedTokensAmounts) => {
         const currentAmount =
