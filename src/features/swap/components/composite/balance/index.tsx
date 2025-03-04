@@ -14,7 +14,12 @@ import { WalletOutlineIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
 import { AMB_DECIMALS } from '@constants/variables';
 import { useSwapContextSelector } from '@features/swap/context';
-import { useSwapBalance, useSwapFieldsHandler } from '@features/swap/lib/hooks';
+import {
+  useSwapActions,
+  useSwapBalance,
+  useSwapBetterCurrency,
+  useSwapFieldsHandler
+} from '@features/swap/lib/hooks';
 import { FIELD, SelectedTokensKeys } from '@features/swap/types';
 import { useUSDPrice } from '@hooks';
 import { NumberUtils, scale } from '@utils';
@@ -26,15 +31,23 @@ interface BalanceProps {
 
 export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
   const { t } = useTranslation();
+
   const {
     selectedTokens,
     selectedTokensAmount,
+    setSelectedTokensAmount,
     setIsExactIn,
-    isExecutingPrice
+    isExecutingPrice,
+    setIsInsufficientBalance,
+    isExtractingMaxPrice,
+    setIsExtractingMaxPrice
   } = useSwapContextSelector();
   const { onSelectMaxTokensAmount, updateReceivedTokensOutput } =
     useSwapFieldsHandler();
 
+  const { swapCallback } = useSwapActions();
+
+  const { bestTradeCurrency } = useSwapBetterCurrency();
   const { bnBalanceAmount, isFetchingBalance } = useSwapBalance(
     selectedTokens[type]
   );
@@ -72,11 +85,22 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
       setTimeout(async () => {
         await updateReceivedTokensOutput();
       });
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsExtractingMaxPrice(false);
     }
   }, [
+    bestTradeCurrency,
     bnBalanceAmount,
     onSelectMaxTokensAmount,
+    selectedTokens.TOKEN_A.address,
+    selectedTokens.TOKEN_B.address,
     setIsExactIn,
+    setIsExtractingMaxPrice,
+    setIsInsufficientBalance,
+    setSelectedTokensAmount,
+    swapCallback,
     type,
     updateReceivedTokensOutput
   ]);
@@ -139,7 +163,7 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
           <>
             <Spacer horizontal value={scale(4)} />
             <Button
-              disabled={isExecutingPrice}
+              disabled={isExecutingPrice || isExtractingMaxPrice}
               onPress={onSelectMaxTokensAmountPress}
             >
               <Text

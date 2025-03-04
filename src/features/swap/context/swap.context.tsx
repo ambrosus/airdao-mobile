@@ -7,6 +7,7 @@ import {
   SelectedTokensKeys
 } from '@/features/swap/types';
 import { BottomSheetRef } from '@components/composite';
+import { bnZERO } from '@constants/variables';
 import { createContextSelector } from '@utils';
 import {
   INITIAL_UI_BOTTOM_SHEET_INFORMATION,
@@ -38,6 +39,8 @@ export const SwapContext = () => {
   const [isExecutingPrice, setIsExecutingPrice] = useState(false);
   const [isPoolsLoading, setIsPoolsLoading] = useState(false);
 
+  const [isInsufficientBalance, setIsInsufficientBalance] = useState(false);
+  const [isExtractingMaxPrice, setIsExtractingMaxPrice] = useState(false);
   const [bottomSheetSwapStatus, setBottomSheetSwapStatus] =
     useState<BottomSheetStatus>(BottomSheetStatus.PREVIEW);
 
@@ -57,6 +60,11 @@ export const SwapContext = () => {
   const [balancesLoading, setBalancesLoading] = useState(false);
   const [balances, setBalances] =
     useState<Record<string, ethers.BigNumber>[]>(initialBalances);
+
+  const [estimatedGasValues, setEstimatedGasValues] = useState({
+    approval: bnZERO,
+    swap: bnZERO
+  });
 
   const [_refSettingsGetter, setSettings] = useState(INITIAL_SETTINGS);
   const [isProcessingSwap, setIsProcessingSwap] = useState(false);
@@ -146,6 +154,12 @@ export const SwapContext = () => {
     setIsExecutingPrice,
     isPoolsLoading,
     setIsPoolsLoading
+    isInsufficientBalance,
+    setIsInsufficientBalance,
+    estimatedGasValues,
+    setEstimatedGasValues,
+    isExtractingMaxPrice,
+    setIsExtractingMaxPrice
   };
 };
 

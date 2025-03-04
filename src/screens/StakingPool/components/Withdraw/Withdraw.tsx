@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { staking } from '@api/staking/staking-service';
 import { ReturnedPoolDetails } from '@api/staking/types';
@@ -9,18 +10,19 @@ import { InputRef, Row, Spacer, Text } from '@components/base';
 import {
   BottomSheet,
   BottomSheetRef,
-  InputWithIcon
+  InputWithIcon,
+  TextOrSpinner
 } from '@components/composite';
 import { PercentageBox } from '@components/composite/PercentageBox';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
+import { bnZERO } from '@constants/variables';
 import { AccountDBModel } from '@database';
 import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
 import { StakePending } from '@screens/StakingPool/components';
-
 import { NumberUtils, StringUtils, verticalScale } from '@utils';
 import { WithdrawTokenPreview } from './BottomSheet/Withdraw.Preview';
 import { styles } from './styles';
@@ -51,6 +53,8 @@ export const WithdrawToken = ({
   const previewBottomSheetRef = useRef<BottomSheetRef>(null);
 
   const [loading, setLoading] = useState(false);
+  const [isEstimatingGas, setIsEstimatingGas] = useState(false);
+  const [estimatedGas, setEstimatedGas] = useState(bnZERO);
   const [withdrawAmount, setWithdrawAmount] = useState<string>('');
 
   const _onScroll = (type: ScrollType) => {
@@ -63,8 +67,31 @@ export const WithdrawToken = ({
     setWithdrawAmount(StringUtils.removeNonNumericCharacters(value));
   };
 
+  const onSelectMaxTokensAmount = useCallback(async () => {
+    if (!pool) return;
+
+    const maxWithdrawAmount =
+      (parseFloat(String(pool?.user?.amb) || '0') * 100) / 100;
+
+    const estimatedGas = await staking.unstake({
+      pool,
+      value: maxWithdrawAmount.toString() ?? '',
+      walletHash: (wallet?._raw as unknown as { hash: string }).hash,
+      estimateGas: true
+    });
+
+    const parsedBalance = ethers.utils.parseEther(maxWithdrawAmount.toString());
+
+    setWithdrawAmount(
+      ethers.utils.formatEther(parsedBalance.sub(estimatedGas))
+    );
+  }, [pool, wallet?._raw]);
+
   const onPercentSelect = useCallback(
     (percentage: number) => {
+      if (percentage === 100) {
+        onSelectMaxTokensAmount();
+      }
       const calculatedToWithdraw = NumberUtils.limitDecimalCount(
         (parseFloat(String(pool?.user?.amb) || '0') * percentage) / 100,
         2
@@ -72,15 +99,33 @@ export const WithdrawToken = ({
 
       setWithdrawAmount(calculatedToWithdraw);
     },
-    [pool]
+    [onSelectMaxTokensAmount, pool?.user?.amb]
   );
 
-  const onWithdrawPreview = () => {
-    setTimeout(() => {
-      previewBottomSheetRef.current?.show();
-    }, 500);
-    inputRef.current?.blur();
-  };
+  const onWithdrawPreview = useCallback(async () => {
+    try {
+      if (!!pool) {
+        setIsEstimatingGas(true);
+        const estimatedGas = await staking.unstake({
+          pool,
+          value: withdrawAmount,
+          walletHash: (wallet?._raw as unknown as { hash: string }).hash,
+          estimateGas: true
+        });
+
+        setEstimatedGas(estimatedGas);
+      }
+
+      setTimeout(() => {
+        previewBottomSheetRef.current?.show();
+      }, 500);
+      inputRef.current?.blur();
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsEstimatingGas(false);
+    }
+  }, [pool, wallet?._raw, withdrawAmount]);
 
   async function simulateNavigationDelay(navigate: () => void) {
     const delay = (ms: number) =>
@@ -182,10 +227,20 @@ export const WithdrawToken = ({
         ))}
       </Row>
       <Spacer value={verticalScale(44)} />
-      <PrimaryButton onPress={onWithdrawPreview} disabled={isWrongStakeValue}>
-        <Text color={isWrongStakeValue ? COLORS.alphaBlack30 : COLORS.neutral0}>
-          {t(isWrongStakeValue ? 'button.enter.amount' : 'common.review')}
-        </Text>
+      <PrimaryButton
+        onPress={onWithdrawPreview}
+        disabled={isWrongStakeValue || isEstimatingGas}
+      >
+        <TextOrSpinner
+          loading={isEstimatingGas}
+          spinnerColor={COLORS.brand500}
+          label={t(isWrongStakeValue ? 'button.enter.amount' : 'common.review')}
+          styles={{
+            active: {
+              color: isWrongStakeValue ? COLORS.alphaBlack30 : COLORS.neutral0
+            }
+          }}
+        />
       </PrimaryButton>
 
       <BottomSheet
@@ -201,6 +256,7 @@ export const WithdrawToken = ({
             onSubmitWithdrawTokens={onSubmitWithdrawTokens}
             wallet={wallet?.address ?? ''}
             amount={parseFloat(withdrawAmount)}
+            estimatedGas={estimatedGas}
           />
         )}
         <Spacer value={verticalScale(36)} />

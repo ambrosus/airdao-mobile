@@ -11,9 +11,11 @@ import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
+import { estimatedNetworkProviderFee } from '@utils';
 
 const STAKE_ESTIMATED_GAS_LIMIT = 67079;
-const UNSTAKE_ESTIMATED_GAS_LIMIT = 77516;
+// TODO: temporary unused constant
+// const UNSTAKE_ESTIMATED_GAS_LIMIT = 77516;
 
 const TEN = BigNumber.from(10);
 const FIXED_POINT = TEN.pow(18);
@@ -133,7 +135,7 @@ class Staking {
     }
   }
 
-  async unstake({ pool, value, walletHash }: StakeArgs) {
+  async unstake({ pool, value, walletHash, estimateGas = false }: StakeArgs) {
     const overrides = {
       value: utils.parseEther(value)
     };
@@ -148,14 +150,25 @@ class Staking {
 
       const [tokenPriceAMB] = await Promise.all([contract.getTokenPrice()]);
 
-      const estimatedGas = await this.estimateGas(UNSTAKE_ESTIMATED_GAS_LIMIT);
-      overrides.value = overrides.value.sub(estimatedGas);
+      if (estimateGas) {
+        const estimatedGas = await contract.estimateGas.unstake(value);
+
+        return await estimatedNetworkProviderFee(estimatedGas);
+      }
+
+      const estimatedGas = await contract.estimateGas.unstake(value);
+      const executedNetworkFee = await estimatedNetworkProviderFee(
+        estimatedGas
+      );
+
+      overrides.value = overrides.value.sub(executedNetworkFee);
 
       const bnUnstakeAmountInTokens = overrides.value
         .mul(FIXED_POINT)
         .div(tokenPriceAMB);
 
       const unstakeContract = await contract.unstake(bnUnstakeAmountInTokens);
+
       return await unstakeContract.wait();
     } catch (err) {
       // @ts-ignore

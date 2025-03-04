@@ -4,11 +4,12 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HomeNavigationProp } from '@appTypes';
-import { Row, Spacer, Spinner, Text } from '@components/base';
+import { Row, Spacer, Text } from '@components/base';
 import {
   BottomSheetErrorView,
   BottomSheetSuccessView
 } from '@components/base/BottomSheetStatusView';
+import { TextOrSpinner } from '@components/composite';
 import { PrimaryButton, SecondaryButton, TokenLogo } from '@components/modular';
 import { AddressRowWithAction } from '@components/templates/ExplorerAccount/components';
 import { COLORS } from '@constants/colors';
@@ -30,6 +31,7 @@ interface ConfirmTransactionProps {
   onSendPress: () => unknown;
   onSuccessBottomSheetDismiss: () => void;
   dismissBottomSheet: () => void;
+  isInsufficientBalance: boolean;
 }
 
 const Title = (props: PropsWithChildren) => {
@@ -48,7 +50,8 @@ export const ConfirmTransaction = ({
   estimatedFee,
   onSendPress,
   onSuccessBottomSheetDismiss,
-  dismissBottomSheet
+  dismissBottomSheet,
+  isInsufficientBalance
 }: ConfirmTransactionProps) => {
   const navigation: HomeNavigationProp = useNavigation();
   const { t } = useTranslation();
@@ -59,22 +62,27 @@ export const ConfirmTransaction = ({
     onChangeState
   } = useSendFundsStore();
 
+  const disabled = useMemo(
+    () => loading || isInsufficientBalance,
+    [loading, isInsufficientBalance]
+  );
+
   const containerStyle = useMemo(
     () => [styles.container, { paddingBottom: bottom }],
     [bottom]
   );
 
   const buttonColors = useMemo(() => {
-    return loading
+    return disabled
       ? [COLORS.primary50, COLORS.primary50]
       : [COLORS.brand600, COLORS.brand600];
-  }, [loading]);
+  }, [disabled]);
 
   const buttonShadow: StyleProp<ViewStyle> = useMemo(() => {
-    if (loading) return { shadowOpacity: 0 };
+    if (disabled) return { shadowOpacity: 0 };
 
     return cssShadowToNative('0px 0px 12px 0px rgba(53, 104, 221, 0.50)');
-  }, [loading]);
+  }, [disabled]);
 
   const shadow = useMemo(
     () => cssShadowToNative('0px 0px 12px 0px rgba(53, 104, 221, 0.50)'),
@@ -194,24 +202,24 @@ export const ConfirmTransaction = ({
           style={buttonShadow}
           colors={buttonColors}
           onPress={onSendPress}
-          disabled={loading}
+          disabled={disabled}
         >
-          {loading ? (
-            <Row alignItems="center" style={styles.pendingLayout}>
-              <Spinner size="xs" />
-              <Text
-                fontSize={16}
-                fontFamily="Inter_600SemiBold"
-                color={COLORS.brand600}
-              >
-                {t('button.sending')}
-              </Text>
-            </Row>
-          ) : (
-            <Text color={COLORS.neutral0} fontSize={16}>
-              {t('button.confirm')}
-            </Text>
-          )}
+          <TextOrSpinner
+            loading={loading}
+            loadingLabel={t('button.sending')}
+            label={t(
+              isInsufficientBalance
+                ? 'bridge.insufficient.funds'
+                : 'button.confirm'
+            )}
+            styles={{
+              active: {
+                fontSize: 16,
+                fontFamily: 'Inter_600SemiBold',
+                color: isInsufficientBalance ? COLORS.brand400 : COLORS.neutral0
+              }
+            }}
+          />
         </PrimaryButton>
       </View>
     </View>

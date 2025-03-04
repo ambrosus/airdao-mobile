@@ -99,17 +99,28 @@ export function useSwapActions() {
   ]);
 
   const swapCallback = useCallback(
-    async ({ estimateGas = false }: { estimateGas?: boolean }) => {
+    async ({
+      estimateGas = false,
+      amountIn,
+      amountOut
+    }: {
+      estimateGas?: boolean;
+      amountIn?: string;
+      amountOut?: string;
+    }) => {
       const signer = createSigner(await _extractPrivateKey());
       const { slippageTolerance, deadline, multihops } = settings.current;
       const _slippage = +slippageTolerance;
 
+      const _amountIn = amountIn ?? tokenToSell.AMOUNT;
+      const _amountOut = amountOut ?? tokenToReceive.AMOUNT;
+
       // Handle ETH wrapping/unwrapping
       if (isETHtoWrapped(tokensRoute)) {
-        return await wrapETH(tokenToSell.AMOUNT, signer);
+        return await wrapETH(_amountIn, signer, { estimateGas });
       }
       if (isWrappedToETH(tokensRoute)) {
-        return await unwrapETH(tokenToSell.AMOUNT, signer);
+        return await unwrapETH(_amountIn, signer, { estimateGas });
       }
 
       sendFirebaseEvent(CustomAppEvents.swap_start);
@@ -128,8 +139,8 @@ export function useSwapActions() {
         ];
 
         return await swapMultiHopExactTokensForTokens(
-          tokenToSell.AMOUNT,
-          tokenToReceive.AMOUNT,
+          _amountIn,
+          _amountOut,
           path,
           signer,
           _slippage,
@@ -142,8 +153,8 @@ export function useSwapActions() {
       // Handle direct routes
       if (isStartsWithETH) {
         return await swapExactETHForTokens(
-          tokenToSell.AMOUNT,
-          tokenToReceive.AMOUNT,
+          _amountIn,
+          _amountOut,
           wrappedPathWithoutMultihops,
           signer,
           _slippage,
@@ -155,8 +166,8 @@ export function useSwapActions() {
 
       if (isEndsWithETH) {
         return await swapExactTokensForETH(
-          tokenToSell.AMOUNT,
-          tokenToReceive.AMOUNT,
+          _amountIn,
+          _amountOut,
           wrappedPathWithoutMultihops,
           signer,
           _slippage,
@@ -167,8 +178,8 @@ export function useSwapActions() {
       }
 
       return await swapExactTokensForTokens(
-        tokenToSell.AMOUNT,
-        tokenToReceive.AMOUNT,
+        _amountIn,
+        _amountOut,
         wrappedPathWithoutMultihops,
         signer,
         _slippage,

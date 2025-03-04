@@ -32,7 +32,8 @@ export function useSwapFieldsHandler() {
     const path = [TOKEN_A?.address, TOKEN_B.address];
     const amountToSell = isExactIn ? AMOUNT_A : AMOUNT_B;
 
-    if (isEmptyAmount(amountToSell)) return;
+    if (isEmptyAmount(amountToSell)) return setIsExecutingPrice(false);
+
     try {
       const bnAmountToReceive = await bestTradeCurrency(amountToSell, path, {
         changeUiHopArray: true

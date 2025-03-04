@@ -37,7 +37,8 @@ export const ReviewSwapButton = () => {
     isExecutingPrice,
     selectedTokens,
     selectedTokensAmount,
-    isWarningToEnableMultihopActive
+    isWarningToEnableMultihopActive,
+    isExtractingMaxPrice
   } = useSwapContextSelector();
 
   const [isProcessingBottomSheet, setIsProcessingBottomSheet] = useState(false);

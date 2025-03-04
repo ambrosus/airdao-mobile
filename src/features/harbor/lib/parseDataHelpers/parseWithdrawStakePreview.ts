@@ -1,5 +1,5 @@
 import { CryptoCurrencyCode } from '@appTypes';
-import { WithdrawPreviewDataModel } from '@features/harbor/components/harbor-preview/model';
+import { WithdrawPreviewDataModel } from '@features/harbor/components/templates/harbor-preview/model';
 import { NumberUtils } from '@utils';
 
 export const parseWithdrawStakePreview = (
@@ -23,9 +23,8 @@ export const parseWithdrawStakePreview = (
         symbol: CryptoCurrencyCode.BOND
       },
       {
-        // TODO: Update translation key after implementing network fee support
-        name: 'swap.bottom.sheet.lpfee',
-        value: `${0} ${CryptoCurrencyCode.AMB}`
+        name: 'common.network.fee',
+        value: `${previewData.estimatedGas ?? 0} ${CryptoCurrencyCode.AMB}`
       }
     ],
     success: [

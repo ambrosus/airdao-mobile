@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, Keyboard, View } from 'react-native';
 import { CommonActions, useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ethers } from 'ethers';
 import * as Clipboard from 'expo-clipboard';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -54,16 +55,19 @@ export const SendFunds = ({ navigation, route }: Props) => {
 
   const tokenFromNavigationParams = route.params?.token;
   const bottomSheetTokensListRef = useRef<BottomSheetRef>(null);
+  const transactionIdRef = useRef('');
 
   const [isTextInputActive, setIsTextInputActive] = useState(false);
+  const [isInsufficientBalance, setIsInsufficientBalance] = useState(false);
+
+  const onTextInputFocus = useCallback(() => setIsTextInputActive(true), []);
+  const onTextInputBlur = useCallback(() => setIsTextInputActive(false), []);
 
   const {
     to: destinationAddress = '',
     from: senderAddress = '',
     transactionId
   } = state;
-
-  const transactionIdRef = useRef('');
 
   const { wallet: account } = useWalletStore();
   const walletHash = account?.wallet.id ?? '';
@@ -119,28 +123,80 @@ export const SendFunds = ({ navigation, route }: Props) => {
     onChangeState({ to: address });
   };
 
+  const handleEstimatedFeeCalculation = useCallback(() => {
+    setIsInsufficientBalance(false);
+
+    const nativeTokenBalance = +_AMBEntity.balance.formattedBalance;
+    const amount = +amountInCrypto;
+    const fee = +estimatedFee;
+
+    const isNativeToken = !!selectedToken.isNativeCoin;
+
+    if (isNativeToken) {
+      setIsInsufficientBalance(nativeTokenBalance < amount + fee);
+    } else {
+      setIsInsufficientBalance(nativeTokenBalance < fee);
+    }
+  }, [
+    _AMBEntity.balance.formattedBalance,
+    amountInCrypto,
+    estimatedFee,
+    selectedToken.isNativeCoin
+  ]);
+
   const onPressMaxAmount = useCallback(
-    (maxBalanceString?: string, decimals = 3) => {
-      if (maxBalanceString) {
-        let maxSpendableBalance: number = +maxBalanceString;
+    async (maxBalanceString?: string, decimals = 3) => {
+      if (!maxBalanceString) return;
 
-        if (selectedToken.name === 'AirDAO') {
-          maxSpendableBalance -= 0.0005;
-        }
-
-        setAmountInCrypto(
-          NumberUtils.limitDecimalCount(
-            maxSpendableBalance.toString(),
-            decimals
-          )
+      try {
+        const parsedMaxBalance = ethers.utils.parseUnits(
+          maxBalanceString,
+          selectedToken.decimals
         );
+
+        if (!!selectedToken.isNativeCoin) {
+          const fee = await TransactionUtils.getEstimatedFee(
+            senderAddress,
+            destinationAddress || senderAddress,
+            +maxBalanceString,
+            selectedToken
+          );
+
+          const parsedFee = ethers.utils.parseEther(fee.toString());
+          const maxSpendableAmount = parsedMaxBalance.sub(parsedFee);
+
+          if (maxSpendableAmount.lt(0)) return setAmountInCrypto('0');
+
+          setAmountInCrypto(
+            NumberUtils.limitDecimalCount(
+              ethers.utils.formatUnits(
+                maxSpendableAmount,
+                selectedToken.decimals
+              ),
+              decimals
+            )
+          );
+        } else {
+          setAmountInCrypto(
+            NumberUtils.limitDecimalCount(
+              ethers.utils.formatUnits(
+                parsedMaxBalance,
+                selectedToken.decimals
+              ),
+              decimals
+            )
+          );
+        }
+      } catch (error) {
+        setAmountInCrypto('0');
       }
     },
-    [selectedToken.name, setAmountInCrypto]
+    [destinationAddress, selectedToken, senderAddress, setAmountInCrypto]
   );
 
   const showReviewModal = () => {
     Keyboard.dismiss();
+    handleEstimatedFeeCalculation();
 
     return setTimeout(() => {
       confirmModalRef.current?.show();
@@ -234,9 +290,6 @@ export const SendFunds = ({ navigation, route }: Props) => {
     ),
     [isFetchingTokens, onSelectToken, selectedToken]
   );
-
-  const onTextInputFocus = useCallback(() => setIsTextInputActive(true), []);
-  const onTextInputBlur = useCallback(() => setIsTextInputActive(false), []);
 
   const onPercentItemPress = useCallback(
     (percent: number) => {
@@ -350,6 +403,7 @@ export const SendFunds = ({ navigation, route }: Props) => {
               onSendPress={sendTx}
               onSuccessBottomSheetDismiss={onSuccessBottomSheetDismiss}
               dismissBottomSheet={hideReviewModal}
+              isInsufficientBalance={isInsufficientBalance}
             />
             <Spacer value={15} />
           </BottomSheet>

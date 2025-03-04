@@ -10,6 +10,7 @@ export interface HarborPreViewData {
   timeSymbol?: string;
   title?: boolean;
 }
+
 export interface StakePreviewDataModel {
   amount: string;
   token: CryptoCurrencyCode;
@@ -17,6 +18,7 @@ export interface StakePreviewDataModel {
   receiveToken: CryptoCurrencyCode;
   fromAddress: string;
   apy: string;
+  estimatedGas: string;
 }
 
 export interface WithdrawPreviewDataModel {
@@ -24,6 +26,7 @@ export interface WithdrawPreviewDataModel {
   rewardAmb: string;
   rewardBond: string;
   delay: string;
+  estimatedGas: string;
 }
 
 export interface FormTemplateProps {
@@ -31,6 +34,8 @@ export interface FormTemplateProps {
   buttonTitle: string;
   onAcceptPress: () => void;
   loading: boolean;
+  estimatedGas?: string;
+  type: ModalTypes;
 }
 
 export interface SuccessTemplateDataProps {
@@ -41,9 +46,3 @@ export interface SuccessTemplateDataProps {
 }
 
 export type HarborPreView = StakePreviewDataModel | WithdrawPreviewDataModel;
-
-export interface BottomSheetHarborPreViewProps {
-  modalType: ModalTypes;
-  previewData: HarborPreView;
-  amountSetter?: (payload: string) => void;
-}

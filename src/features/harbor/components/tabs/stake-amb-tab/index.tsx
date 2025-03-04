@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 import { Spacer } from '@components/base';
-import { useHarborStore } from '@entities/harbor/model/harbor-store';
+import { useHarborStore } from '@entities/harbor/model';
 import { useWalletStore } from '@entities/wallet';
 import {
   StakeInfoContainer,
