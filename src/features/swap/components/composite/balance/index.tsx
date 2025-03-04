@@ -72,18 +72,59 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
     selectedTokens[type]?.symbol as CryptoCurrencyCode
   );
 
-  const onSelectMaxTokensAmountPress = useCallback(() => {
-    if (bnBalanceAmount) {
-      const fullAmount = NumberUtils.limitDecimalCount(
-        ethers.utils.formatEther(bnBalanceAmount?._hex),
-        AMB_DECIMALS
-      );
+  const onSelectMaxTokensAmountPress = useCallback(async () => {
+    setIsExtractingMaxPrice(true);
+    setIsExactIn(type === FIELD.TOKEN_A);
 
-      onSelectMaxTokensAmount(type, fullAmount);
-      setIsExactIn(type === FIELD.TOKEN_A);
+    if (!bnBalanceAmount) return;
 
-      setTimeout(async () => {
-        await updateReceivedTokensOutput();
+    try {
+      const parsedBalance = ethers.utils.formatEther(bnBalanceAmount);
+
+      const isNative =
+        type === FIELD.TOKEN_A &&
+        selectedTokens.TOKEN_A.address === ethers.constants.AddressZero;
+
+      if (isNative) {
+        const bnAmountToReceive = await bestTradeCurrency(parsedBalance, [
+          selectedTokens.TOKEN_A.address,
+          selectedTokens.TOKEN_B.address
+        ]);
+
+        const estimatedGas = await swapCallback({
+          amountIn: parsedBalance,
+          amountOut: ethers.utils.formatEther(bnAmountToReceive),
+          estimateGas: true
+        });
+
+        const maxSpendableAmount = bnBalanceAmount.sub(estimatedGas);
+
+        if (maxSpendableAmount.lt(0)) {
+          setIsInsufficientBalance(true);
+          setSelectedTokensAmount({
+            [FIELD.TOKEN_A]: '0',
+            [FIELD.TOKEN_B]: ''
+          });
+          return;
+        }
+
+        const amount = NumberUtils.limitDecimalCount(
+          ethers.utils.formatEther(maxSpendableAmount),
+          AMB_DECIMALS
+        );
+
+        onSelectMaxTokensAmount(type, amount);
+      } else {
+        const amount = NumberUtils.limitDecimalCount(
+          ethers.utils.formatEther(bnBalanceAmount),
+          AMB_DECIMALS
+        );
+
+        onSelectMaxTokensAmount(type, amount);
+      }
+
+      setTimeout(() => {
+        updateReceivedTokensOutput();
       });
     } catch (error) {
       throw error;

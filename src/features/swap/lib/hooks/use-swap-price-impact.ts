@@ -136,9 +136,7 @@ export function useSwapPriceImpact() {
   );
 
   const uiPriceImpactGetter = useCallback(async () => {
-    const isMultiHopPathAvailable =
-      isMultiHopSwapBetterCurrency.tokens.length > 0;
-
+    const isMultiHopPathAvailable = isMultiHopSwapAvailable(tokensRoute);
     if (settings.current.multihops && isMultiHopPathAvailable) {
       return await multiHopImpactGetter();
     } else {
@@ -148,7 +146,7 @@ export function useSwapPriceImpact() {
       );
     }
   }, [
-    isMultiHopSwapBetterCurrency.tokens.length,
+    tokensRoute,
     settings,
     multiHopImpactGetter,
     singleHopImpactGetter,
