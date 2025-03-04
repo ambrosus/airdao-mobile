@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 import { ethers } from 'ethers';
-import { useSwapContextSelector } from '@features/swap/context';
-import { getAmountsOut } from '@features/swap/lib/contracts';
+import { getAmountsIn, getAmountsOut } from '@features/swap/lib/contracts';
 import { FIELD, SwapToken } from '@features/swap/types';
 import {
   subtractRealizedLPFeeFromInput,
@@ -16,7 +15,6 @@ import { useSwapSettings } from './use-swap-settings';
 import { useSwapTokens } from './use-swap-tokens';
 
 export function useSwapPriceImpact() {
-  const { isExactInRef } = useSwapContextSelector();
   const { getPairAddress, getReserves } = useAllLiquidityPools();
   const { hasWrapNativeToken } = useSwapHelpers();
   const { settings } = useSwapSettings();
@@ -66,11 +64,7 @@ export function useSwapPriceImpact() {
   );
 
   const multiHopImpactGetter = useCallback(
-    async (_path?: string[]) => {
-      if (!isMultiHopSwapAvailable(tokensRoute) || !isExactInRef.current) {
-        return 0;
-      }
-
+    async (_path?: string[], _amountIn?: string, isTradeIn?: boolean) => {
       const path =
         _path ??
         withMultiHopPath([
@@ -79,13 +73,20 @@ export function useSwapPriceImpact() {
         ]);
 
       try {
-        const amountIn = ethers.utils.parseEther(tokenToSell.AMOUNT);
-        const amounts = await getAmountsOut({
-          path,
-          amountToSell: amountIn
-        });
+        const amountIn = ethers.utils.parseEther(
+          _amountIn ?? tokenToSell.AMOUNT
+        );
 
-        // Calculate impact only for the current path
+        const amounts = !isTradeIn
+          ? await getAmountsIn({
+              path,
+              amountToReceive: amountIn
+            })
+          : await getAmountsOut({
+              path,
+              amountToSell: amountIn
+            });
+
         let totalImpact = 0;
         for (let i = 0; i < path.length - 1; i++) {
           const pairAddress = getPairAddress({
@@ -121,17 +122,16 @@ export function useSwapPriceImpact() {
 
         return Math.abs(totalImpact);
       } catch (error) {
+        console.error(error);
         return 0;
       }
     },
     [
       getPairAddress,
       getReserves,
-      isExactInRef,
       tokenToReceive.TOKEN,
       tokenToSell.AMOUNT,
-      tokenToSell.TOKEN,
-      tokensRoute
+      tokenToSell.TOKEN
     ]
   );
 

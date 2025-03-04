@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { toString, split } from 'lodash';
+import { split, toString } from 'lodash';
 
 const AMOUNT_FLOAT_DIGITS_LENGTH: { [key: number]: number } = {
   1: 5,

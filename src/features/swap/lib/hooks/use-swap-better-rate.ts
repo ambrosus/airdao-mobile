@@ -1,22 +1,17 @@
 import { useCallback, useState } from 'react';
 import { ethers } from 'ethers';
 import { useSwapContextSelector } from '@features/swap/context';
-import { SwapStringUtils } from '@features/swap/utils/transformers';
-import { useSwapBetterCurrency } from './use-swap-better-currency';
-import { useSwapSettings } from './use-swap-settings';
 import { useSwapTokens } from './use-swap-tokens';
 
 export function useSwapBetterRate() {
-  const { bestTradeExactIn, bestTradeExactOut } = useSwapBetterCurrency();
   const { tokenToSell, tokenToReceive } = useSwapTokens();
   const [isTradeIn, setIsTradeIn] = useState(false);
-  const { _refSettingsGetter } = useSwapSettings();
-  const { selectedTokensAmount } = useSwapContextSelector();
+
+  const { selectedTokensAmount, _refExactGetter } = useSwapContextSelector();
 
   const [isExecutingRate, setIsExecutingRate] = useState(false);
 
-  const [oppositeAmountPerOneToken, setOppositeAmountPerOneToken] =
-    useState('0');
+  const [rate, setRate] = useState<string | number>(Infinity);
 
   const [tokens, setTokens] = useState({
     symbolInput: tokenToReceive.TOKEN.symbol,
@@ -25,55 +20,56 @@ export function useSwapBetterRate() {
 
   const onToggleTokensOrder = useCallback(() => {
     setIsExecutingRate(true);
-    setOppositeAmountPerOneToken('0');
+    setRate('0');
     setIsTradeIn((prevState) => !prevState);
   }, []);
 
-  const bestSwapRate = useCallback(
-    async (path: string[]) => {
-      const { TOKEN_A: amountA, TOKEN_B: amountB } = selectedTokensAmount;
+  const bestSwapRate = useCallback(() => {
+    const { TOKEN_A: amountA, TOKEN_B: amountB } = selectedTokensAmount;
+
+    setRate('0');
+
+    const isExactTradeIn = _refExactGetter;
+    const tokenA = tokenToSell.TOKEN.symbol;
+    const tokenB = tokenToReceive.TOKEN?.symbol;
+
+    setTokens({
+      symbolInput: isTradeIn ? tokenA : tokenB,
+      symbolOutput: isTradeIn ? tokenB : tokenA
+    });
+
+    if (+amountA > 0 && +amountB > 0) {
       try {
-        const singleHopOnly = _refSettingsGetter.multihops;
+        // Convert to BigNumber for precision
+        const bnAmountA = ethers.utils.parseUnits(amountA.toString(), 18);
+        const bnAmountB = ethers.utils.parseUnits(amountB.toString(), 18);
 
-        const amount = !isTradeIn
-          ? await bestTradeExactOut(amountA, path, singleHopOnly)
-          : await bestTradeExactIn(amountB, path, singleHopOnly);
-
-        if (amount) {
-          const inputAmountNum = +(!isTradeIn ? amountA : amountB);
-          const outputAmountNum = +ethers.utils.formatEther(amount);
-          const ratePerToken = inputAmountNum / outputAmountNum;
-
-          setOppositeAmountPerOneToken(
-            SwapStringUtils.transformCurrencyRate(ratePerToken)
-          );
-
-          const tokenA = tokenToSell.TOKEN.symbol;
-          const tokenB = tokenToReceive.TOKEN?.symbol;
-
-          setTokens({
-            symbolInput: isTradeIn ? tokenA : tokenB,
-            symbolOutput: isTradeIn ? tokenB : tokenA
-          });
-
-          setIsExecutingRate(false);
-          return ratePerToken;
+        // Calculate rate with BigNumber
+        let rate;
+        if (isExactTradeIn) {
+          rate = isTradeIn
+            ? bnAmountB.mul(ethers.constants.WeiPerEther).div(bnAmountA)
+            : bnAmountA.mul(ethers.constants.WeiPerEther).div(bnAmountB);
+        } else {
+          rate = isTradeIn
+            ? bnAmountB.mul(ethers.constants.WeiPerEther).div(bnAmountA)
+            : bnAmountA.mul(ethers.constants.WeiPerEther).div(bnAmountB);
         }
-      } catch (error) {
+
         setIsExecutingRate(false);
-        throw error;
+        return ethers.utils.formatUnits(rate, 18);
+      } catch (error) {
+        console.error('Error calculating swap rate:', error);
+        return '0';
       }
-    },
-    [
-      _refSettingsGetter.multihops,
-      bestTradeExactIn,
-      bestTradeExactOut,
-      isTradeIn,
-      selectedTokensAmount,
-      tokenToReceive.TOKEN?.symbol,
-      tokenToSell.TOKEN.symbol
-    ]
-  );
+    }
+  }, [
+    selectedTokensAmount,
+    _refExactGetter,
+    tokenToSell.TOKEN.symbol,
+    tokenToReceive.TOKEN?.symbol,
+    isTradeIn
+  ]);
 
   return {
     bestSwapRate,
@@ -81,7 +77,7 @@ export function useSwapBetterRate() {
     isTradeIn,
     tokens,
     isExecutingRate,
-    oppositeAmountPerOneToken,
-    setOppositeAmountPerOneToken
+    rate,
+    setRate
   };
 }
