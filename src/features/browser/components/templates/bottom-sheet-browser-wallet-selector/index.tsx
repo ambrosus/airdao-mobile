@@ -65,6 +65,8 @@ export const BottomSheetBrowserWalletSelector = forwardRef<
   return (
     <BottomSheet
       ref={localRef}
+      onClose={outsideModalData?.onReject}
+      onBackdropPress={outsideModalData?.onReject}
       containerStyle={styles.main}
       swiperIconVisible
       title={uri}

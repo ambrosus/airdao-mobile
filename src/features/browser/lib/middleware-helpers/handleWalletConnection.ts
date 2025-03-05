@@ -26,15 +26,15 @@ export const handleWalletConnection = async ({
 }: ConnectionRequest) => {
   const { setConnectedAddress } = useBrowserStore.getState();
   try {
-    const address = await new Promise<string>(async (resolve) => {
+    const address = await new Promise<string>(async (resolve, reject) => {
       await delay(400);
       browserWalletSelectorRef.current?.show({
         onWalletSelect: async (walletAddress: string) => {
           resolve(walletAddress);
           browserWalletSelectorRef.current?.dismiss();
           return walletAddress;
-        }
-        // onReject: () => reject(new Error('User rejected connection'))
+        },
+        onReject: () => reject(new Error('User rejected connection'))
       });
     });
 
