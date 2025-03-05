@@ -78,7 +78,7 @@ export const INJECTED_PROVIDER_JS = `
           }));
         });
       },
-   
+
       on: function(eventName, callback) {
         if (!this._events.has(eventName)) {
           this._events.set(eventName, new Set());
@@ -86,8 +86,8 @@ export const INJECTED_PROVIDER_JS = `
         this._events.get(eventName).add(callback);
 
         // Only emit initial state if there's an actual change
-        if (this.selectedAddress && 
-            this.selectedAddress !== lastEmittedState.address && 
+        if (this.selectedAddress &&
+            this.selectedAddress !== lastEmittedState.address &&
             !isHandlingRequest) {
           switch(eventName) {
             case 'connect':

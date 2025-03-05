@@ -29,7 +29,7 @@ import { connectWallet } from '@features/browser/utils';
 import { useAllAccounts } from '@hooks/database';
 import { getConnectedAddressTo } from '@lib';
 import { Cache, CacheKey } from '@lib/cache';
-import { StringUtils } from '@utils';
+import { isIos, StringUtils } from '@utils';
 import { styles } from './styles';
 
 export const BrowserScreen = () => {
@@ -99,7 +99,9 @@ export const BrowserScreen = () => {
 
   const onMessageEventHandler = useCallback(
     async (event: WebViewMessageEvent) => {
-      event.persist();
+      if (isIos) {
+        event.persist();
+      }
       try {
         const privateKey = (await Cache.getItem(
           // @ts-ignore
