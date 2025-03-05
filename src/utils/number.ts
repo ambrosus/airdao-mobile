@@ -149,43 +149,39 @@ const formatDecimal = (value: string, decimals = 2): string => {
   return fixed.replace(/\.?0+$/, '');
 };
 
-const toSignificantDigits = (value: string, decimals = 6): string => {
-  if (!value || value === '.' || value === ',') {
-    return value;
-  }
+const toSignificantDigits = (value: string, significantDigits = 6): string => {
+  if (!value || value === '0' || value === '0.0') return '';
 
-  const endsWithSeparator = value.endsWith('.') || value.endsWith(',');
+  const parsedValue = parseFloat(value);
+  if (isNaN(parsedValue)) return '';
 
-  const usesComma = value.includes(',');
-  const normalizedValue = value.replace(/,/g, '.');
+  const stringValue = parsedValue.toString();
+  const [integerPart, decimalPart = ''] = stringValue.split('.');
 
-  const parsedValue = parseFloat(normalizedValue);
+  const effectiveIntegerPart = integerPart === '0' ? '' : integerPart;
 
-  if (isNaN(parsedValue)) {
-    return value;
-  }
-
-  let formatted;
-  if (Math.abs(parsedValue) >= 1e6 || Math.abs(parsedValue) < 0.0001) {
-    const integerDigits = Math.floor(Math.abs(parsedValue)).toString().length;
-    const decimalPlaces = Math.max(0, decimals - integerDigits);
-    formatted = parsedValue.toFixed(decimalPlaces).replace(/\.?0+$/, '');
-  } else {
-    formatted = parsedValue.toPrecision(decimals).replace(/\.?0+$/, '');
-  }
-
-  if (usesComma) {
-    formatted = formatted.replace('.', ',');
-  }
-
-  if (endsWithSeparator) {
-    const separator = usesComma ? ',' : '.';
-    if (!formatted.includes(separator)) {
-      formatted += separator;
+  let leadingZeros = 0;
+  if (effectiveIntegerPart === '' && decimalPart) {
+    for (let i = 0; i < decimalPart.length; i++) {
+      if (decimalPart[i] !== '0') break;
+      leadingZeros++;
     }
   }
 
-  return formatted;
+  const integerDigits = effectiveIntegerPart.length;
+
+  const neededDecimalDigits =
+    integerDigits === 0
+      ? Math.max(0, significantDigits + leadingZeros)
+      : Math.max(0, significantDigits - integerDigits);
+
+  const truncatedDecimalPart = decimalPart.slice(0, neededDecimalDigits);
+
+  const result = truncatedDecimalPart
+    ? `${integerPart}.${truncatedDecimalPart}`
+    : integerPart;
+
+  return result.replace(/\.?0+$/, '');
 };
 
 export const NumberUtils = {

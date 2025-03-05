@@ -16,7 +16,7 @@ export function singleHopImpact(
   const newPrice = newReserveOut / newReserveIn;
   const priceImpact = ((newPrice - initialPrice) / initialPrice) * 99.7;
 
-  return priceImpact.toFixed(2);
+  return priceImpact.toString();
 }
 
 export function multiHopCumulativeImpact(
@@ -30,10 +30,10 @@ export function multiHopCumulativeImpact(
     (1 + intermediateImpactDecimal) * (1 + finalImpactDecimal) - 1;
   const cumulativeImpactPercentage = cumulativeImpact * 100;
 
-  const truncatedCumulativeImpactPercentage =
-    Math.trunc(cumulativeImpactPercentage * 100) / 100;
+  const roundedCumulativeImpactPercentage =
+    Math.round(cumulativeImpactPercentage * 100) / 100;
 
   return cumulativeImpactPercentage >= 0
-    ? truncatedCumulativeImpactPercentage
-    : -truncatedCumulativeImpactPercentage;
+    ? roundedCumulativeImpactPercentage
+    : -roundedCumulativeImpactPercentage;
 }

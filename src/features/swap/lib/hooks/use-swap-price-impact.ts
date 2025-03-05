@@ -65,12 +65,12 @@ export function useSwapPriceImpact() {
 
   const multiHopImpactGetter = useCallback(
     async (_path?: string[], _amountIn?: string, isTradeIn?: boolean) => {
-      const path =
-        _path ??
-        withMultiHopPath([
+      const path = withMultiHopPath(
+        _path ?? [
           tokenToSell.TOKEN?.address ?? '',
           tokenToReceive.TOKEN?.address ?? ''
-        ]);
+        ]
+      );
 
       try {
         const amountIn = ethers.utils.parseEther(
@@ -116,7 +116,7 @@ export function useSwapPriceImpact() {
 
           totalImpact = multiHopCumulativeImpact(
             totalImpact.toString(),
-            impact
+            (+impact >= 0 ? impact : -impact).toString()
           );
         }
 
