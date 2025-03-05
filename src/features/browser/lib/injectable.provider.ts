@@ -200,8 +200,8 @@ export const INJECTED_JS = `
       }
     }
 
-    // Android document.addEventListener('message', eventHandler);
-    // IOS window.addEventListener('message', eventHandler);
+    // for Android: document.addEventListener('message', eventHandler);
+    // for IOS: window.addEventListener('message', eventHandler);
 
     {{listener}}('message', eventHandler)
 
