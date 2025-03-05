@@ -142,14 +142,22 @@ class HBRYieldService {
     }
   }
 
-  async withdraw(deposit: ethers.BigNumber, privateKey: string) {
+  async withdraw(
+    deposit: ethers.BigNumber,
+    privateKey: string,
+    { estimateGas = false }: { estimateGas?: boolean } = {}
+  ) {
     try {
       if (deposit.isZero()) throw Error('Deposit is too low');
 
-      sendFirebaseEvent(CustomAppEvents.harbor_hbr_withdraw_start);
       const signer = createSigner(privateKey);
       const contract = createHBRLiquidityPoolContract(signer);
 
+      if (estimateGas) {
+        return await contract.estimateGas.withdraw(deposit);
+      }
+
+      sendFirebaseEvent(CustomAppEvents.harbor_hbr_withdraw_start);
       const tx = await contract.withdraw(deposit);
       const response = await tx.wait();
 
@@ -167,15 +175,22 @@ class HBRYieldService {
     }
   }
 
-  async unstake(stake: ethers.BigNumber, privateKey: string) {
+  async unstake(
+    stake: ethers.BigNumber,
+    privateKey: string,
+    { estimateGas = false }: { estimateGas?: boolean } = {}
+  ) {
     try {
       if (stake.isZero()) throw Error('Deposit is too low');
 
-      // Analytics initial point
-      sendFirebaseEvent(CustomAppEvents.harbor_hbr_amb_withdraw_start);
       const signer = createSigner(privateKey);
       const contract = createHBRLiquidityPoolContract(signer);
 
+      if (estimateGas) {
+        return await contract.estimateGas.unstake(stake);
+      }
+
+      sendFirebaseEvent(CustomAppEvents.harbor_hbr_amb_withdraw_start);
       const tx = await contract.unstake(stake);
       const response = await tx.wait();
 
