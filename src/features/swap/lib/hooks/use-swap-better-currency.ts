@@ -365,12 +365,11 @@ export function useSwapBetterCurrency() {
         }
 
         if (!singleHopFailed) {
-          if (isNativeTokenInvolved) {
-            const impactDifferencePercent =
-              ((singleHopImpact - lowestMultiHopImpact) /
-                lowestMultiHopImpact) *
-              100;
+          const impactDifferencePercent =
+            ((singleHopImpact - lowestMultiHopImpact) / lowestMultiHopImpact) *
+            100;
 
+          if (isNativeTokenInvolved) {
             if (
               impactDifferencePercent > 100 &&
               bestPath.length > 2 &&
@@ -384,6 +383,7 @@ export function useSwapBetterCurrency() {
             return singleHopAmount;
           } else {
             if (
+              impactDifferencePercent > 100 &&
               lowestMultiHopImpact < singleHopImpact &&
               bestPath.length > 2 &&
               bestMultiHopAmount.gt(BigNumber.from('0'))
