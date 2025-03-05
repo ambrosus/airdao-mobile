@@ -170,7 +170,8 @@ export function useSwapBetterCurrency() {
 
               const priceImpact = await multiHopImpactGetter(
                 currentPath,
-                amountToSell
+                amountToSell,
+                false
               );
 
               return {
@@ -205,14 +206,13 @@ export function useSwapBetterCurrency() {
         }
 
         if (!singleHopFailed) {
-          if (isNativeTokenInvolved) {
-            const impactDifferencePercent =
-              ((singleHopImpact - lowestMultiHopImpact) /
-                lowestMultiHopImpact) *
-              100;
+          const impactDifferencePercent =
+            ((singleHopImpact - lowestMultiHopImpact) / lowestMultiHopImpact) *
+            100;
 
+          if (isNativeTokenInvolved) {
             if (
-              impactDifferencePercent > 100 &&
+              impactDifferencePercent > -100 &&
               bestPath.length > 2 &&
               bestMultiHopAmount.gt(BigNumber.from('0'))
             ) {
@@ -224,9 +224,10 @@ export function useSwapBetterCurrency() {
             return singleHopAmount;
           } else {
             if (
-              lowestMultiHopImpact < singleHopImpact &&
+              impactDifferencePercent > -50 &&
+              bestMultiHopAmount.gt(BigNumber.from('0')) &&
               bestPath.length > 2 &&
-              bestMultiHopAmount.gt(BigNumber.from('0'))
+              bestMultiHopAmount.lt(singleHopAmount)
             ) {
               onChangeMultiHopUiState(bestPath.slice(1, -1), changeUiHopArray);
               return bestMultiHopAmount;
@@ -329,7 +330,8 @@ export function useSwapBetterCurrency() {
 
               const priceImpact = await multiHopImpactGetter(
                 currPath,
-                amountToSell
+                amountToSell,
+                true
               );
 
               return {
@@ -371,7 +373,7 @@ export function useSwapBetterCurrency() {
 
           if (isNativeTokenInvolved) {
             if (
-              impactDifferencePercent > 100 &&
+              impactDifferencePercent < 75 &&
               bestPath.length > 2 &&
               bestMultiHopAmount.gt(BigNumber.from('0'))
             ) {
@@ -383,10 +385,10 @@ export function useSwapBetterCurrency() {
             return singleHopAmount;
           } else {
             if (
-              impactDifferencePercent > 100 &&
-              lowestMultiHopImpact < singleHopImpact &&
+              impactDifferencePercent > -50 &&
+              bestMultiHopAmount.gt(BigNumber.from('0')) &&
               bestPath.length > 2 &&
-              bestMultiHopAmount.gt(BigNumber.from('0'))
+              bestMultiHopAmount.gt(singleHopAmount)
             ) {
               onChangeMultiHopUiState(bestPath.slice(1, -1), changeUiHopArray);
               return bestMultiHopAmount;

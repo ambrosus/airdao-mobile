@@ -12,6 +12,7 @@ import {
   maximumAmountIn,
   minimumAmountOut
 } from '@features/swap/utils';
+import { NumberUtils } from '@utils';
 import { useEstimatedGas } from './use-estimated-gas';
 import { useSwapActions } from './use-swap-actions';
 import { useSwapBottomSheetHandler } from './use-swap-bottom-sheet-handler';
@@ -108,7 +109,9 @@ export function useSwapInterface() {
         : receivedAmountOut;
 
       setUiBottomSheetInformation({
-        priceImpact: priceImpact ?? 0,
+        priceImpact: priceImpact
+          ? Number(NumberUtils.limitDecimalCount(priceImpact, 2))
+          : 0,
         minimumReceivedAmount,
         allowance: allowance
           ? AllowanceStatus.INCREASE
