@@ -150,11 +150,42 @@ const formatDecimal = (value: string, decimals = 2): string => {
 };
 
 const toSignificantDigits = (value: string, decimals = 6): string => {
-  const parsedValue = parseFloat(value);
-  if (!isNaN(parsedValue)) {
-    return parsedValue.toPrecision(decimals).replace(/\.?0+$/, '');
+  if (!value || value === '.' || value === ',') {
+    return value;
   }
-  return value;
+
+  const endsWithSeparator = value.endsWith('.') || value.endsWith(',');
+
+  const usesComma = value.includes(',');
+  const normalizedValue = value.replace(/,/g, '.');
+
+  const parsedValue = parseFloat(normalizedValue);
+
+  if (isNaN(parsedValue)) {
+    return value;
+  }
+
+  let formatted;
+  if (Math.abs(parsedValue) >= 1e6 || Math.abs(parsedValue) < 0.0001) {
+    const integerDigits = Math.floor(Math.abs(parsedValue)).toString().length;
+    const decimalPlaces = Math.max(0, decimals - integerDigits);
+    formatted = parsedValue.toFixed(decimalPlaces).replace(/\.?0+$/, '');
+  } else {
+    formatted = parsedValue.toPrecision(decimals).replace(/\.?0+$/, '');
+  }
+
+  if (usesComma) {
+    formatted = formatted.replace('.', ',');
+  }
+
+  if (endsWithSeparator) {
+    const separator = usesComma ? ',' : '.';
+    if (!formatted.includes(separator)) {
+      formatted += separator;
+    }
+  }
+
+  return formatted;
 };
 
 export const NumberUtils = {
