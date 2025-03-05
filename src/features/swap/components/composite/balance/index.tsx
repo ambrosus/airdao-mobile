@@ -40,7 +40,8 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
     isExecutingPrice,
     setIsInsufficientBalance,
     isExtractingMaxPrice,
-    setIsExtractingMaxPrice
+    setIsExtractingMaxPrice,
+    isPoolsLoading
   } = useSwapContextSelector();
   const { onSelectMaxTokensAmount, updateReceivedTokensOutput } =
     useSwapFieldsHandler();
@@ -204,7 +205,9 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
           <>
             <Spacer horizontal value={scale(4)} />
             <Button
-              disabled={isExecutingPrice || isExtractingMaxPrice}
+              disabled={
+                isExecutingPrice || isExtractingMaxPrice || isPoolsLoading
+              }
               onPress={onSelectMaxTokensAmountPress}
             >
               <Text
