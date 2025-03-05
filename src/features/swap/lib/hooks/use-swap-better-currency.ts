@@ -212,7 +212,7 @@ export function useSwapBetterCurrency() {
 
           if (isNativeTokenInvolved) {
             if (
-              impactDifferencePercent > -100 &&
+              impactDifferencePercent > -50 &&
               bestPath.length > 2 &&
               bestMultiHopAmount.gt(BigNumber.from('0'))
             ) {
@@ -373,7 +373,7 @@ export function useSwapBetterCurrency() {
 
           if (isNativeTokenInvolved) {
             if (
-              impactDifferencePercent < 75 &&
+              impactDifferencePercent > -50 &&
               bestPath.length > 2 &&
               bestMultiHopAmount.gt(BigNumber.from('0'))
             ) {
