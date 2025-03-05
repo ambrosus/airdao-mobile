@@ -1,5 +1,6 @@
 import WebView from '@metamask/react-native-webview';
 import { randomUUID } from 'expo-crypto';
+import { isIos } from '@utils';
 import { AMB_CHAIN_ID_DEC, AMB_CHAIN_ID_HEX } from '../constants';
 import { EIP6963_PROVIDER_INFO } from './eip6963';
 
@@ -14,7 +15,7 @@ export const updateWindowObject = (
   }, 100);
 };
 
-export const INJECTED_PROVIDER_JS = `
+export const INJECTED_JS = `
   (function() {
     if (window.ethereum) return true;
 
@@ -168,10 +169,12 @@ export const INJECTED_PROVIDER_JS = `
       }
     };
 
-    window.addEventListener('message', function(event) {
+    function eventHandler(event) {
       try {
         const response = JSON.parse(event.data);
         const { id, result, error } = response;
+
+        console.log('RN Message received',{id, result, error})
 
         const pendingRequest = pendingRequests.get(id);
         if (pendingRequest) {
@@ -195,7 +198,12 @@ export const INJECTED_PROVIDER_JS = `
       } catch (error) {
         console.error('Failed to process message:', error);
       }
-    });
+    }
+
+    // Android document.addEventListener('message', eventHandler);
+    // IOS window.addEventListener('message', eventHandler);
+
+    {{listener}}('message', eventHandler)
 
     window.ethereum = provider;
 
@@ -211,6 +219,11 @@ export const INJECTED_PROVIDER_JS = `
     return true;
   })();
 `;
+
+export const INJECTED_PROVIDER_JS = INJECTED_JS.replace(
+  '{{listener}}',
+  isIos ? 'window.addEventListener' : 'document.addEventListener'
+);
 
 export const REVOKE_PERMISSIONS_JS = `
   (function() {
