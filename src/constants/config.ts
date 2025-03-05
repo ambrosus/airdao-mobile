@@ -96,7 +96,7 @@ const envs = {
     HBR_LIQUIDITY_POOL: '0xA89621016D945408a556ECcb4A10c0122aB852F2',
     HBR_TOKEN_ADDRESS: '0xd09270E917024E75086e27854740871F1C8E0E10',
     BROWSER_CONFIG:
-      'https://raw.githubusercontent.com/ambrosus/browser-config/refs/heads/main/config.json'
+      'https://raw.githubusercontent.com/ambrosus/browser-config/refs/heads/stage/config.json'
   },
   testnet: {
     WALLET_API_URL: 'https://wallet-api.ambrosus-test.io',
@@ -142,7 +142,7 @@ const envs = {
     HBR_LIQUIDITY_POOL: '0x255b5ff5026f198c83575d9a1A4561fe820ab92e',
     HBR_TOKEN_ADDRESS: '0x7B58Cbb7c4Ff2E53F8c4405606D0A7AF707ab00b',
     BROWSER_CONFIG:
-      'https://raw.githubusercontent.com/ambrosus/browser-config/refs/heads/main/config.json'
+      'https://raw.githubusercontent.com/ambrosus/browser-config/refs/heads/dev/config.json'
   }
 };
 
@@ -161,7 +161,7 @@ switch (Updates.channel) {
     break;
   }
   default: {
-    Config = envs.prod;
+    Config = envs.testnet;
     break;
   }
 }

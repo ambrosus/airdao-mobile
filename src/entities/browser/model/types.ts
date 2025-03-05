@@ -3,7 +3,9 @@ import { IsNullableAccount } from '@entities/wallet/model/types';
 export interface BrowserStoreModel {
   connectedAddress: string;
   connectedAccount: IsNullableAccount;
+  productTitle: string;
   browserConfig: BrowserConfig;
+  setProductTitle: (payload: string) => void;
   setConnectedAccount: (payload: IsNullableAccount) => void;
   setConnectedAddress: (payload: string) => void;
   setBrowserConfig: () => Promise<void>;
