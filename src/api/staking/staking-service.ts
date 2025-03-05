@@ -151,17 +151,12 @@ class Staking {
       const [tokenPriceAMB] = await Promise.all([contract.getTokenPrice()]);
 
       if (estimateGas) {
-        const estimatedGas = await contract.estimateGas.unstake(value);
+        const estimatedGas = await contract.estimateGas.unstake(
+          overrides.value
+        );
 
         return await estimatedNetworkProviderFee(estimatedGas);
       }
-
-      const estimatedGas = await contract.estimateGas.unstake(value);
-      const executedNetworkFee = await estimatedNetworkProviderFee(
-        estimatedGas
-      );
-
-      overrides.value = overrides.value.sub(executedNetworkFee);
 
       const bnUnstakeAmountInTokens = overrides.value
         .mul(FIXED_POINT)

@@ -29,12 +29,16 @@ export const WithdrawTokenPreview = ({
   const { balance } = useAMBEntity(wallet);
 
   const transformedEstimatedGas = useMemo(() => {
-    const parsedGas = NumberUtils.limitDecimalCount(
-      ethers.utils.formatEther(estimatedGas),
-      1
-    );
+    if (estimatedGas) {
+      const parsedGas = NumberUtils.limitDecimalCount(
+        ethers.utils.formatEther(estimatedGas),
+        1
+      );
 
-    return `${parsedGas} ${CryptoCurrencyCode.AMB}`;
+      return `${parsedGas} ${CryptoCurrencyCode.AMB}`;
+    }
+
+    return `0 ${CryptoCurrencyCode.AMB}`;
   }, [estimatedGas]);
 
   const label = useMemo(() => {
