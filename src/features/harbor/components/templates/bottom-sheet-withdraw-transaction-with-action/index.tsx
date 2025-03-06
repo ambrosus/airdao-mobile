@@ -12,12 +12,13 @@ interface BottomSheetWithdrawTransactionWithActionProps {
   token: CryptoCurrencyCode.AMB | CryptoCurrencyCode.HBR;
   logs: IAvailableWithdrawLogs | null;
   estimatedGas: ethers.BigNumber;
+  ambBalance: ethers.BigNumber;
 }
 
 export const BottomSheetWithdrawTransactionWithAction = forwardRef<
   BottomSheetRef,
   BottomSheetWithdrawTransactionWithActionProps
->(({ amount, token, logs, estimatedGas }, ref) => {
+>(({ amount, token, logs, estimatedGas, ambBalance }, ref) => {
   const { loading, timestamp, transaction, withdrawalCallback } =
     useWithdrawalActions(token, amount);
 
@@ -49,6 +50,8 @@ export const BottomSheetWithdrawTransactionWithAction = forwardRef<
         loading={loading}
         onButtonPress={onWithdrawalCallback}
         amountToWithdraw={amount}
+        estimatedGas={estimatedGas}
+        ambBalance={ambBalance}
       />
     </BottomSheetWithdrawTransaction>
   );

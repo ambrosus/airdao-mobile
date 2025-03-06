@@ -4,6 +4,7 @@ import { ethers } from 'ethers';
 import { hbrYieldService } from '@api/harbor';
 import { CryptoCurrencyCode } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
+import { KEYBOARD_OPENING_TIME } from '@constants/variables';
 import { useStakeHBRStore } from '@entities/harbor';
 import { getTimestampFromBlockHash } from '@entities/harbor/utils';
 import { useWalletPrivateKey } from '@entities/wallet';
@@ -13,7 +14,7 @@ export function useWithdrawalActions(
   amountToWithdraw: string
 ) {
   const { _extractPrivateKey } = useWalletPrivateKey();
-  const { stake } = useStakeHBRStore();
+  const { stake, deposit } = useStakeHBRStore();
 
   const [loading, setLoading] = useState(false);
   const [timestamp, setTimestamp] = useState(0);
@@ -35,7 +36,10 @@ export function useWithdrawalActions(
       try {
         setLoading(true);
         const privateKey = await _extractPrivateKey();
-        const bnAmountToWithdraw = ethers.utils.parseEther(amountToWithdraw);
+        const bnAmountToWithdraw = !!estimateGas
+          ? deposit
+          : ethers.utils.parseEther(amountToWithdraw);
+
         const tx = await hbrYieldService.withdraw(
           bnAmountToWithdraw,
           privateKey,
@@ -56,7 +60,7 @@ export function useWithdrawalActions(
         setLoading(false);
       }
     },
-    [_extractPrivateKey, amountToWithdraw]
+    [_extractPrivateKey, amountToWithdraw, deposit]
   );
 
   const handleWithdrawAMB = useCallback(
@@ -81,7 +85,10 @@ export function useWithdrawalActions(
         if (tx) {
           setTransaction(tx);
 
-          setTimeout(() => bottomSheetRef.current?.show(), 500);
+          setTimeout(
+            () => bottomSheetRef.current?.show(),
+            KEYBOARD_OPENING_TIME
+          );
         }
       } catch (error) {
         throw error;
