@@ -1,11 +1,9 @@
 /* eslint-disable no-console */
 // tslint:disable:no-console
 import { WebViewMessageEvent } from '@metamask/react-native-webview';
+import Config from '@constants/config';
 import { useBrowserStore } from '@entities/browser/model';
-import {
-  AMB_CHAIN_ID_DEC,
-  INITIAL_ACCOUNTS_PERMISSIONS
-} from '@features/browser/constants';
+import { INITIAL_ACCOUNTS_PERMISSIONS } from '@features/browser/constants';
 import { ethEstimateGas } from '@features/browser/lib/middleware-helpers/ethEstimateGas';
 import { rpcErrorHandler } from '@features/browser/utils/rpc-error-handler';
 import {
@@ -81,7 +79,7 @@ export async function handleWebViewMessage({
       switch (method) {
         // net_version
         case RPCMethods.NetVersion:
-          response.result = AMB_CHAIN_ID_DEC;
+          response.result = Config.CHAIN_ID;
           break;
 
         // eth_requestAccounts

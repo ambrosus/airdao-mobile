@@ -543,7 +543,7 @@
   "browser.disclaimer.description": "!!!You are about to visit an external website. This site is not maintained or verified by AirDAO.",
   "browser.wallet.selector.header": "!!!Connected accounts:",
   "browser.wallet.selector.account": "!!!Account",
-  "browser.approve.permissions.header": "!!${{uri}} wants to:",
+  "browser.approve.permissions.header": "!!!${{uri}} wants to:",
   "browser.approve": {
     "permission": "!!!See your account and suggest transactions",
     "personal.sign": "!!!The message is used to sign message on wallet",

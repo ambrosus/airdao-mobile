@@ -1,5 +1,5 @@
+import Config from '@constants/config';
 import { useBrowserStore } from '@entities/browser/model';
-import { AMB_CHAIN_ID_HEX } from '../constants';
 import { Permissions, PermissionType, BasePermissions } from '../types';
 import { rpcRejectHandler } from '../utils';
 
@@ -10,7 +10,7 @@ const BASE_PERMISSIONS = [
     caveats: [
       {
         type: PermissionType.RESTRICT_CHAINS,
-        value: [AMB_CHAIN_ID_HEX]
+        value: [Config.CHAIN_ID_HEX]
       }
     ]
   }

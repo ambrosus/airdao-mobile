@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 // tslint:disable:no-console
 import { ModalActionTypes } from '@components/composite';
+import Config from '@constants/config';
 import { useBrowserStore } from '@entities/browser/model';
-import { AMB_CHAIN_ID_HEX } from '@features/browser/constants';
 import { ConnectionRequest } from '@features/browser/types';
 import {
   requestUserApproval,
@@ -56,7 +56,7 @@ export const handleWalletConnection = async ({
 
     updateWindowObject(
       webViewRef,
-      UPDATE_ETHEREUM_STATE_JS(address, AMB_CHAIN_ID_HEX)
+      UPDATE_ETHEREUM_STATE_JS(address, Config.CHAIN_ID_HEX)
     );
 
     return permissionsHandler.bind(address);
