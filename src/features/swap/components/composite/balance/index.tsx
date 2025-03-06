@@ -80,53 +80,56 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
     if (!bnBalanceAmount) return;
 
     try {
-      const parsedBalance = ethers.utils.formatEther(bnBalanceAmount);
+      setTimeout(async () => {
+        const parsedBalance = ethers.utils.formatEther(bnBalanceAmount);
 
-      const isNative =
-        type === FIELD.TOKEN_A &&
-        selectedTokens.TOKEN_A.address === ethers.constants.AddressZero;
+        const isNative =
+          type === FIELD.TOKEN_A &&
+          selectedTokens.TOKEN_A.address === ethers.constants.AddressZero;
 
-      if (isNative) {
-        const bnAmountToReceive = await bestTradeCurrency(parsedBalance, [
-          selectedTokens.TOKEN_A.address,
-          selectedTokens.TOKEN_B.address
-        ]);
+        if (isNative) {
+          const bnAmountToReceive = await bestTradeCurrency(parsedBalance, [
+            selectedTokens.TOKEN_A.address,
+            selectedTokens.TOKEN_B.address
+          ]);
 
-        const estimatedGas = await swapCallback({
-          amountIn: parsedBalance,
-          amountOut: ethers.utils.formatEther(bnAmountToReceive),
-          estimateGas: true
-        });
-
-        const maxSpendableAmount = bnBalanceAmount.sub(estimatedGas);
-
-        if (maxSpendableAmount.lt(0)) {
-          setIsInsufficientBalance(true);
-          setSelectedTokensAmount({
-            [FIELD.TOKEN_A]: '0',
-            [FIELD.TOKEN_B]: ''
+          const estimatedGas = await swapCallback({
+            amountIn: parsedBalance,
+            amountOut: ethers.utils.formatEther(bnAmountToReceive),
+            estimateGas: true,
+            tradeIn: type === FIELD.TOKEN_A
           });
-          return;
+
+          const maxSpendableAmount = bnBalanceAmount.sub(estimatedGas);
+
+          if (maxSpendableAmount.lt(0)) {
+            setIsInsufficientBalance(true);
+            setSelectedTokensAmount({
+              [FIELD.TOKEN_A]: '0',
+              [FIELD.TOKEN_B]: ''
+            });
+            return;
+          }
+
+          const amount = NumberUtils.limitDecimalCount(
+            ethers.utils.formatEther(maxSpendableAmount),
+            AMB_DECIMALS
+          );
+
+          onSelectMaxTokensAmount(type, amount);
+        } else {
+          const amount = NumberUtils.limitDecimalCount(
+            ethers.utils.formatEther(bnBalanceAmount),
+            AMB_DECIMALS
+          );
+
+          onSelectMaxTokensAmount(type, amount);
         }
 
-        const amount = NumberUtils.limitDecimalCount(
-          ethers.utils.formatEther(maxSpendableAmount),
-          AMB_DECIMALS
-        );
-
-        onSelectMaxTokensAmount(type, amount);
-      } else {
-        const amount = NumberUtils.limitDecimalCount(
-          ethers.utils.formatEther(bnBalanceAmount),
-          AMB_DECIMALS
-        );
-
-        onSelectMaxTokensAmount(type, amount);
-      }
-
-      setTimeout(() => {
-        updateReceivedTokensOutput();
-      });
+        setTimeout(() => {
+          updateReceivedTokensOutput();
+        });
+      }, 250);
     } catch (error) {
       throw error;
     } finally {

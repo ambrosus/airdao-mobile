@@ -14,7 +14,7 @@ export function singleHopImpact(
   const newReserveOut = reserveOut.sub(amountOut);
   // @ts-ignore
   const newPrice = newReserveOut / newReserveIn;
-  const priceImpact = ((newPrice - initialPrice) / initialPrice) * 99.7;
+  const priceImpact = ((newPrice - initialPrice) / initialPrice) * 100;
 
   return priceImpact.toString();
 }

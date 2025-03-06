@@ -4,10 +4,12 @@ import { bnZERO } from '@constants/variables';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
   MAX_HOPS,
+  addresses,
   dexValidators,
   generateAllPossibleRoutes,
   isETHtoWrapped,
-  isWrappedToETH
+  isWrappedToETH,
+  wrapNativeAddress
 } from '@features/swap/utils';
 import { getAmountsOut, getAmountsIn } from '../contracts';
 import { useSwapPriceImpact } from './use-swap-price-impact';
@@ -111,9 +113,11 @@ export function useSwapBetterCurrency() {
       let lowestMultiHopImpact = Infinity;
       let singleHopFailed = false;
 
+      const pathWithoutETH = wrapNativeAddress(path);
+
       const isNativeTokenInvolved =
-        path[0] === ethers.constants.AddressZero ||
-        path[path.length - 1] === ethers.constants.AddressZero;
+        pathWithoutETH[0] === addresses.SAMB ||
+        pathWithoutETH[pathWithoutETH.length - 1] === addresses.SAMB;
 
       const bnAmountToSell = ethers.utils.parseEther(amountToSell);
 
@@ -269,9 +273,11 @@ export function useSwapBetterCurrency() {
       let singleHopImpact = Infinity;
       let lowestMultiHopImpact = Infinity;
 
+      const pathWithoutETH = wrapNativeAddress(path);
+
       const isNativeTokenInvolved =
-        path[0] === ethers.constants.AddressZero ||
-        path[path.length - 1] === ethers.constants.AddressZero;
+        pathWithoutETH[0] === addresses.SAMB ||
+        pathWithoutETH[pathWithoutETH.length - 1] === addresses.SAMB;
 
       if (isETHtoWrapped(path) || isWrappedToETH(path)) {
         return await amountOut(amountToSell, path);

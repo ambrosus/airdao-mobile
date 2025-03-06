@@ -39,13 +39,10 @@ export function useSwapPriceImpact() {
           );
 
           if (reserveIn && reserveOut) {
-            const amountToSellWithRealizedFee =
-              subtractRealizedLPFeeFromInput(amountToSell);
-
             const bnAmountOut = ethers.utils.parseEther(amountToReceive);
 
             const impact = singleHopImpact(
-              amountToSellWithRealizedFee,
+              amountToSell,
               bnAmountOut,
               reserveIn,
               reserveOut
