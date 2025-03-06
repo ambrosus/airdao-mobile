@@ -155,7 +155,11 @@ export const BrowserScreen = () => {
         />
       </View>
 
-      <PanGestureHandler onGestureEvent={onGestureEvent}>
+      <PanGestureHandler
+        onGestureEvent={onGestureEvent}
+        shouldCancelWhenOutside={false}
+        activeOffsetX={[-10, 10]}
+      >
         <View style={styles.webViewWrapper}>
           <WebView
             ref={webViewRef}
