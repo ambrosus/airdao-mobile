@@ -6,7 +6,6 @@ import { JsonRpcResponse } from '@walletconnect/jsonrpc-types';
 import { ethers } from 'ethers';
 import Config from '@constants/config';
 import { TransactionParams } from '@features/browser/types';
-import { AMB_CHAIN_ID_DEC } from '../constants';
 import { rpcErrorHandler } from '../utils';
 
 const extractWallet = async (privateKey: string) => {
@@ -27,7 +26,7 @@ const getCurrentAddress = async (privateKey: string) => {
 };
 
 const handleChainIdRequest = async () => {
-  return `0x${Number(AMB_CHAIN_ID_DEC).toString(16)}`;
+  return `0x${Number(Config.CHAIN_ID).toString(16)}`;
 };
 
 const handleSendTransaction = async (

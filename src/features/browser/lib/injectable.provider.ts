@@ -1,7 +1,7 @@
 import WebView from '@metamask/react-native-webview';
 import { randomUUID } from 'expo-crypto';
+import Config from '@constants/config';
 import { isIos } from '@utils';
-import { AMB_CHAIN_ID_DEC, AMB_CHAIN_ID_HEX } from '../constants';
 import { EIP6963_PROVIDER_INFO } from './eip6963';
 
 const uuid = randomUUID;
@@ -41,8 +41,8 @@ export const INJECTED_JS = `
     const provider = {
       isMetaMask: true,
       selectedAddress: null,
-      chainId: '${AMB_CHAIN_ID_HEX}',
-      networkVersion: ${AMB_CHAIN_ID_DEC},
+      chainId: '${Config.CHAIN_ID_HEX}',
+      networkVersion: ${Config.CHAIN_ID},
       _events: new Map(),
 
       isConnected: () => true,
