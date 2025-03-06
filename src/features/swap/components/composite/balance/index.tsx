@@ -168,7 +168,8 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
       type === FIELD.TOKEN_B ||
       !bnBalanceAmount ||
       !selectedTokensAmount[FIELD.TOKEN_A] ||
-      !isFetchingBalance
+      !isFetchingBalance ||
+      !isPoolsLoading
     )
       return false;
 
@@ -178,7 +179,13 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
     );
 
     return bnSelectedAmount.gt(bnInputBalance);
-  }, [bnBalanceAmount, isFetchingBalance, selectedTokensAmount, type]);
+  }, [
+    bnBalanceAmount,
+    isFetchingBalance,
+    isPoolsLoading,
+    selectedTokensAmount,
+    type
+  ]);
 
   return (
     <Row alignItems="center" justifyContent={containerJustifyContent}>
@@ -188,7 +195,7 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
             color={error ? COLORS.error500 : COLORS.neutral500}
           />
           <Spacer horizontal value={4} />
-          {isFetchingBalance ? (
+          {isFetchingBalance || isPoolsLoading ? (
             <ShimmerLoader width={45} height={12} />
           ) : (
             <Text

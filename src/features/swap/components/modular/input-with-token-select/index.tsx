@@ -88,15 +88,20 @@ export const InputWithTokenSelect = ({
   }, [isPoolsLoading, isBalanceLoading]);
 
   const transformedValue = useMemo(() => {
-    const tradeIn = isExactInRef.current;
-    if (type === FIELD.TOKEN_A && tradeIn) return value;
+    const independentField = isExactInRef.current
+      ? FIELD.TOKEN_A
+      : FIELD.TOKEN_B;
 
     const parsedAmount = NumberUtils.toSignificantDigits(
       selectedTokensAmount[type],
       6
     );
 
-    return parsedAmount ?? value;
+    if (type === independentField) {
+      return value;
+    } else {
+      return parsedAmount;
+    }
   }, [isExactInRef, selectedTokensAmount, type, value]);
 
   return (

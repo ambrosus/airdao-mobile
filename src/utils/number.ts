@@ -150,38 +150,21 @@ const formatDecimal = (value: string, decimals = 2): string => {
 };
 
 const toSignificantDigits = (value: string, significantDigits = 6): string => {
-  if (!value || value === '0' || value === '0.0') return '';
+  if (!value) return '';
 
-  const parsedValue = parseFloat(value);
-  if (isNaN(parsedValue)) return '';
-
-  const stringValue = parsedValue.toString();
-  const [integerPart, decimalPart = ''] = stringValue.split('.');
-
-  const effectiveIntegerPart = integerPart === '0' ? '' : integerPart;
-
-  let leadingZeros = 0;
-  if (effectiveIntegerPart === '' && decimalPart) {
-    for (let i = 0; i < decimalPart.length; i++) {
-      if (decimalPart[i] !== '0') break;
-      leadingZeros++;
-    }
+  if (value === '0' || value === '0.') return value;
+  if (value.startsWith('0') && value[1] !== '.' && value.length > 1) {
+    value = value.slice(1);
   }
 
-  const integerDigits = effectiveIntegerPart.length;
+  if (value.endsWith('.')) return value;
 
-  const neededDecimalDigits =
-    integerDigits === 0
-      ? Math.max(0, significantDigits + leadingZeros)
-      : Math.max(0, significantDigits - integerDigits);
+  const num = parseFloat(value);
+  if (isNaN(num)) return '';
 
-  const truncatedDecimalPart = decimalPart.slice(0, neededDecimalDigits);
+  const formatted = num.toPrecision(significantDigits);
 
-  const result = truncatedDecimalPart
-    ? `${integerPart}.${truncatedDecimalPart}`
-    : integerPart;
-
-  return result.replace(/\.?0+$/, '');
+  return parseFloat(formatted).toString();
 };
 
 export const NumberUtils = {

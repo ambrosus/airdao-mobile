@@ -47,4 +47,25 @@ describe('NumberUtils', () => {
     expect(NumberUtils.numberToTransformedLocale(1234.0)).toBe('1,234');
     expect(NumberUtils.numberToTransformedLocale(1234.56)).toBe('1,234.56');
   });
+
+  describe('toSignificantDigits', () => {
+    it('should format to significant digits', () => {
+      expect(NumberUtils.toSignificantDigits('123.456789', 4)).toBe('123.5');
+      expect(NumberUtils.toSignificantDigits('0.00123456', 3)).toBe('0.00123');
+      expect(NumberUtils.toSignificantDigits('1000000', 2)).toBe('1000000');
+    });
+
+    it('should handle special cases', () => {
+      expect(NumberUtils.toSignificantDigits('')).toBe('');
+      expect(NumberUtils.toSignificantDigits('0')).toBe('0');
+      expect(NumberUtils.toSignificantDigits('0.')).toBe('0.');
+      expect(NumberUtils.toSignificantDigits('10.')).toBe('10.');
+      expect(NumberUtils.toSignificantDigits('abc')).toBe('');
+    });
+
+    it('should handle leading zeros', () => {
+      expect(NumberUtils.toSignificantDigits('01234')).toBe('1234');
+      expect(NumberUtils.toSignificantDigits('00.1234')).toBe('0.1234');
+    });
+  });
 });
