@@ -74,30 +74,16 @@ export const WithdrawHarborPoolScreen = ({ route, navigation }: Props) => {
   }, []);
 
   const onPressMaxButton = useCallback(async () => {
-    if (token === CryptoCurrencyCode.AMB) {
-      const availableBalanceAMB = ethers.BigNumber.from(
-        ambInstance.balance.wei
-      );
+    const txEstimateGas = await withdrawalCallback({ estimateGas: true });
+    const txGasFee = await estimatedNetworkProviderFee(txEstimateGas);
+    setEstimatedGas(txGasFee);
 
-      const txEstimateGas = await withdrawalCallback({ estimateGas: true });
-      const txGasFee = await estimatedNetworkProviderFee(txEstimateGas);
-
-      if (availableBalanceAMB.gt(stake.add(txGasFee))) {
-        onChangeAmountToWithdraw(ethers.utils.formatEther(stake));
-      } else {
-        onChangeAmountToWithdraw(ethers.utils.formatEther(stake.sub(txGasFee)));
-      }
-    } else {
-      onChangeAmountToWithdraw(ethers.utils.formatEther(deposit));
-    }
-  }, [
-    ambInstance.balance.wei,
-    deposit,
-    onChangeAmountToWithdraw,
-    stake,
-    token,
-    withdrawalCallback
-  ]);
+    onChangeAmountToWithdraw(
+      ethers.utils.formatEther(
+        token === CryptoCurrencyCode.AMB ? stake : deposit
+      )
+    );
+  }, [deposit, onChangeAmountToWithdraw, stake, token, withdrawalCallback]);
 
   const onPreviewBottomSheet = useCallback(async () => {
     Keyboard.dismiss();
@@ -170,6 +156,9 @@ export const WithdrawHarborPoolScreen = ({ route, navigation }: Props) => {
         amount={amountToWithdraw}
         ref={withdrawalBottomSheetRef}
         estimatedGas={estimatedGas}
+        ambBalance={ethers.utils.parseEther(
+          ambInstance.balance.formattedBalance
+        )}
       />
     </SafeAreaView>
   );
