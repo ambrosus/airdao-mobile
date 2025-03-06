@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 // tslint:disable:no-console
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { View } from 'react-native';
 import { WebView, WebViewMessageEvent } from '@metamask/react-native-webview';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import {
@@ -10,7 +10,7 @@ import {
   PanGestureHandler,
   PanGestureHandlerEventPayload
 } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CommonStackParamsList } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
 import { useBrowserStore } from '@entities/browser/model';
@@ -66,15 +66,7 @@ export const BrowserScreen = () => {
 
   const [hasSwiped, setHasSwiped] = useState(false);
 
-  const containerStyle = useMemo<StyleProp<ViewStyle>>(
-    () => ({
-      flex: 1
-    }),
-    []
-  );
-
   useEffect(() => {
-    console.log(100, 'EFFETT');
     const getSelectedWallet = async () => {
       const _selectedAddress = await getConnectedAddressTo(uri);
       const account = accounts.find(
@@ -150,15 +142,19 @@ export const BrowserScreen = () => {
   const openWalletSelector = () => {
     browserWalletSelectorRef?.current?.show();
   };
+  const { top } = useSafeAreaInsets();
   return (
-    <SafeAreaView style={containerStyle}>
-      <BrowserHeader
-        openWalletSelector={openWalletSelector}
-        reload={reload}
-        closeWebView={closeWebView}
-        webViewRef={webViewRef}
-        uri={uri}
-      />
+    <>
+      <View style={{ marginTop: top }}>
+        <BrowserHeader
+          openWalletSelector={openWalletSelector}
+          reload={reload}
+          closeWebView={closeWebView}
+          webViewRef={webViewRef}
+          uri={uri}
+        />
+      </View>
+
       <PanGestureHandler onGestureEvent={onGestureEvent}>
         <View style={styles.webViewWrapper}>
           <WebView
@@ -170,7 +166,6 @@ export const BrowserScreen = () => {
             javaScriptEnabled={true}
             injectedJavaScriptBeforeContentLoaded={INJECTED_PROVIDER_JS}
             onMessage={onMessageEventHandler}
-            style={containerStyle}
             webviewDebuggingEnabled={__DEV__}
           />
         </View>
@@ -183,6 +178,6 @@ export const BrowserScreen = () => {
 
       <BottomSheetBrowserModal ref={browserModalRef} />
       <BottomSheetApproveBrowserAction ref={browserApproveRef} uri={uri} />
-    </SafeAreaView>
+    </>
   );
 };

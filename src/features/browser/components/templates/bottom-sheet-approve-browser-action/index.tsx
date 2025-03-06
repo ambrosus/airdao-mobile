@@ -11,7 +11,7 @@ import {
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useForwardedRef } from '@hooks';
-import { scale, StringUtils } from '@utils';
+import { isIos, scale, StringUtils } from '@utils';
 import { styles } from './styles';
 
 type Props = {
@@ -90,7 +90,9 @@ export const BottomSheetApproveBrowserAction = forwardRef<
       swiperIconVisible
       setOutsideModalData={setOutsideModalData}
     >
-      <View style={[styles.main, { paddingBottom: bottom }]}>
+      <View
+        style={[styles.main, { paddingBottom: isIos ? bottom : scale(15) }]}
+      >
         <Text align="center" color={COLORS.neutral900} fontSize={scale(17)}>
           {getHeaderText()}
         </Text>

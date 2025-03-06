@@ -214,8 +214,17 @@ export const INJECTED_JS = `
         provider.announceProvider();
       });
       window.dispatchEvent(new Event('ethereum#initialized'));
-    }
 
+      // Get the title of the page and send it to React Native
+    }
+    window.addEventListener('load', function() {
+      const title = document.title;
+      window.ReactNativeWebView.postMessage(JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'get_title',
+        params: [title]
+      }));
+    });
     return true;
   })();
 `;

@@ -4,11 +4,10 @@ import { WebView } from '@metamask/react-native-webview';
 import * as Clipboard from 'expo-clipboard';
 import { Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
-import { BackIcon } from '@components/svg/icons';
 import { CloseCircleIcon, ThreeDots } from '@components/svg/icons/v2';
-import { WalletsActiveIcon } from '@components/svg/icons/v2/bottom-tabs-navigation';
 import { COLORS } from '@constants/colors';
 
+import { useBrowserStore } from '@entities/browser/model';
 import { BottomSheetBrowserActions } from '@features/browser/components/templates';
 import { StringUtils } from '@utils';
 import { styles } from './styles';
@@ -24,10 +23,13 @@ interface BrowserHeaderProps {
 export const BrowserHeader = ({
   uri,
   reload,
-  closeWebView,
-  openWalletSelector
-}: BrowserHeaderProps) => {
+  closeWebView
+}: // openWalletSelector
+BrowserHeaderProps) => {
   const browserActionsRef = useRef<BottomSheetRef>(null);
+
+  const { productTitle } = useBrowserStore();
+  const title = productTitle || StringUtils.formatUri({ uri });
 
   const copyUri = useCallback(
     async () => await Clipboard.setStringAsync(uri),
@@ -38,23 +40,26 @@ export const BrowserHeader = ({
     browserActionsRef?.current?.show();
   };
 
+  const onRefresh = () => {
+    reload();
+    browserActionsRef?.current?.dismiss();
+  };
+
+  // temporary disabled this logic
+  // const WalletSelector = () => (
+  //   <TouchableOpacity style={styles.walletButton} onPress={openWalletSelector}>
+  //     <WalletsActiveIcon color={COLORS.neutral800} />
+  //     <View style={styles.backIconWrapper}>
+  //       <BackIcon scale={0.7} color={COLORS.neutral800} />
+  //     </View>
+  //   </TouchableOpacity>
+  // );
   return (
     <>
       <View style={styles.headerContainer}>
-        <TouchableOpacity
-          style={styles.walletButton}
-          onPress={openWalletSelector}
-        >
-          <WalletsActiveIcon color={COLORS.neutral800} />
-          <View style={styles.backIconWrapper}>
-            <BackIcon scale={0.7} color={COLORS.neutral800} />
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={copyUri} style={styles.urlWrapper}>
-          <Text color={COLORS.neutral900}>
-            {StringUtils.formatUri({ uri })}
-          </Text>
+        <View style={styles.leftContainer}>{/* <WalletSelector /> */}</View>
+        <TouchableOpacity onPress={copyUri} style={styles.centerContainer}>
+          <Text style={styles.urlText}>{StringUtils.formatUri({ uri })}</Text>
         </TouchableOpacity>
         <View style={styles.actionsContainer}>
           <TouchableOpacity
@@ -73,10 +78,9 @@ export const BrowserHeader = ({
       <BottomSheetBrowserActions
         ref={browserActionsRef}
         uri={uri}
-        // TODO dynamic change browser product name
-        title="HARBOR"
+        title={title}
         onCopy={copyUri}
-        onRefresh={reload}
+        onRefresh={onRefresh}
       />
     </>
   );
