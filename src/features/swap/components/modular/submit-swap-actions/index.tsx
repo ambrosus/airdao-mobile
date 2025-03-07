@@ -98,15 +98,6 @@ export const SubmitSwapActions = () => {
     return !isInsufficientBalance && allowance !== AllowanceStatus.SUITABLE;
   }, [allowance, isInsufficientBalance]);
 
-  if (isInsufficientBalance || allowance === AllowanceStatus.SUITABLE) {
-    return (
-      <SwapButton
-        isProcessingSwap={isProcessingSwap}
-        onCompleteMultiStepSwap={onCompleteMultiStepSwap}
-      />
-    );
-  }
-
   // UI Button Elements
   if (!hasApprovalRequired && priceImpact && priceImpact > 5) {
     return (
@@ -122,6 +113,15 @@ export const SubmitSwapActions = () => {
       <ApprovalRequiredButton
         isProcessingSwap={isProcessingSwap}
         isIncreasingAllowance={isIncreasingAllowance}
+        onCompleteMultiStepSwap={onCompleteMultiStepSwap}
+      />
+    );
+  }
+
+  if (isInsufficientBalance || allowance === AllowanceStatus.SUITABLE) {
+    return (
+      <SwapButton
+        isProcessingSwap={isProcessingSwap}
         onCompleteMultiStepSwap={onCompleteMultiStepSwap}
       />
     );

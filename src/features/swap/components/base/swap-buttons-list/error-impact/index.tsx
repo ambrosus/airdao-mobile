@@ -30,6 +30,8 @@ export const SwapErrorImpactButton = ({
     }
   } = useSwapSettings();
 
+  const { isInsufficientBalance } = useSwapContextSelector();
+
   const buttonStyle = useMemo<StyleProp<ViewStyle>>(() => {
     return minimized ? { flex: 1 } : {};
   }, [minimized]);
@@ -38,16 +40,21 @@ export const SwapErrorImpactButton = ({
     if (priceImpact) {
       return (
         allowance === AllowanceStatus.INCREASE ||
-        (priceImpact > 10 && !extendedMode)
+        (priceImpact > 10 && !extendedMode) ||
+        isInsufficientBalance
       );
     }
 
     return false;
-  }, [allowance, extendedMode, priceImpact]);
+  }, [allowance, extendedMode, isInsufficientBalance, priceImpact]);
 
   const buttonActionString = useMemo(() => {
     if (minimized) {
       return t('swap.button.swap.anyway');
+    }
+
+    if (isInsufficientBalance) {
+      return t('bridge.insufficient.funds');
     }
 
     if (priceImpact) {
@@ -57,7 +64,7 @@ export const SwapErrorImpactButton = ({
         return t('swap.button.swap.anyway');
       }
     }
-  }, [minimized, priceImpact, t, extendedMode]);
+  }, [minimized, isInsufficientBalance, priceImpact, t, extendedMode]);
 
   const buttonColors = useMemo(() => {
     if (priceImpact && priceImpact >= 5 && priceImpact < 10) {
