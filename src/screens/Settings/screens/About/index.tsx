@@ -1,4 +1,4 @@
-import { Linking, ScrollView, View } from 'react-native';
+import { Linking, View } from 'react-native';
 import Constants from 'expo-constants';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
