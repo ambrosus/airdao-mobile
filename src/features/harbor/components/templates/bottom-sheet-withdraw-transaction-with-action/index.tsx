@@ -1,4 +1,5 @@
-import { forwardRef, useMemo } from 'react';
+import { forwardRef, useCallback, useMemo } from 'react';
+import { ethers } from 'ethers';
 import { CryptoCurrencyCode } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
 import { BottomSheetWithdrawTransaction } from '@entities/harbor/components/composite';
@@ -10,12 +11,14 @@ interface BottomSheetWithdrawTransactionWithActionProps {
   amount: string;
   token: CryptoCurrencyCode.AMB | CryptoCurrencyCode.HBR;
   logs: IAvailableWithdrawLogs | null;
+  estimatedGas: ethers.BigNumber;
+  ambBalance: ethers.BigNumber;
 }
 
 export const BottomSheetWithdrawTransactionWithAction = forwardRef<
   BottomSheetRef,
   BottomSheetWithdrawTransactionWithActionProps
->(({ amount, token, logs }, ref) => {
+>(({ amount, token, logs, estimatedGas, ambBalance }, ref) => {
   const { loading, timestamp, transaction, withdrawalCallback } =
     useWithdrawalActions(token, amount);
 
@@ -25,10 +28,16 @@ export const BottomSheetWithdrawTransactionWithAction = forwardRef<
     return transaction.transactionHash;
   }, [transaction]);
 
+  const onWithdrawalCallback = useCallback(
+    async () => withdrawalCallback({ estimateGas: false }),
+    [withdrawalCallback]
+  );
+
   return (
     <BottomSheetWithdrawTransaction
       ref={ref}
       amount={amount}
+      estimatedGas={estimatedGas}
       success={!!transaction?.transactionHash}
       timestamp={timestamp}
       txHash={txHash}
@@ -39,8 +48,10 @@ export const BottomSheetWithdrawTransactionWithAction = forwardRef<
         logs={logs}
         token={token}
         loading={loading}
-        onButtonPress={withdrawalCallback}
+        onButtonPress={onWithdrawalCallback}
         amountToWithdraw={amount}
+        estimatedGas={estimatedGas}
+        ambBalance={ambBalance}
       />
     </BottomSheetWithdrawTransaction>
   );

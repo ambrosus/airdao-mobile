@@ -12,17 +12,21 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { CryptoCurrencyCode } from '@appTypes';
 import { HarborTabParamsList } from '@appTypes/navigation/harbor';
 import { BottomSheetRef, Header } from '@components/composite';
+import { KEYBOARD_OPENING_TIME, bnZERO } from '@constants/variables';
 import { useAvailableWithdrawLogs, useStakeHBRStore } from '@entities/harbor';
 import { WithdrawalHbrYieldInput } from '@entities/harbor/components/modular';
 import { LogStatus } from '@entities/harbor/types';
+import { useWalletStore } from '@entities/wallet';
+import { useWithdrawalActions } from '@features/harbor';
 import { CountdownTimer } from '@features/harbor/components/composite';
 import { WithdrawalButton } from '@features/harbor/components/modular';
 import { BottomSheetWithdrawTransactionWithAction } from '@features/harbor/components/templates';
+import { useAMBEntity } from '@features/send-funds/lib/hooks';
 import {
   keyboardAvoidingViewOffsetWithNotchSupportedValue,
   useKeyboardContainerStyleWithSafeArea
 } from '@hooks';
-import { NumberUtils } from '@utils';
+import { NumberUtils, estimatedNetworkProviderFee } from '@utils';
 import { styles } from './styles';
 
 type Props = NativeStackScreenProps<
@@ -32,23 +36,29 @@ type Props = NativeStackScreenProps<
 
 export const WithdrawHarborPoolScreen = ({ route, navigation }: Props) => {
   const { t } = useTranslation();
+  const { wallet } = useWalletStore();
+  const ambInstance = useAMBEntity(wallet?.address ?? '');
+  const { stake, deposit, limitsConfig } = useStakeHBRStore();
+  const { logs: stateLogs, refetchLogs } = useAvailableWithdrawLogs(
+    limitsConfig.stakeLockPeriod
+  );
+
   const {
     params: { token, logs }
   } = route;
 
+  const [loading, setLoading] = useState(false);
+  const [estimatedGas, setEstimatedGas] = useState<ethers.BigNumber>(bnZERO);
+
   const withdrawalBottomSheetRef = useRef<BottomSheetRef>(null);
-
-  const { stake, limitsConfig } = useStakeHBRStore();
-
-  const { logs: stateLogs, refetchLogs } = useAvailableWithdrawLogs(
-    limitsConfig.stakeLockPeriod
-  );
 
   const [amountToWithdraw, setAmountToWithdraw] = useState(
     token === CryptoCurrencyCode.AMB && logs?.status === LogStatus.ERROR
       ? NumberUtils.limitDecimalCount(ethers.utils.formatEther(stake), 2)
       : ''
   );
+
+  const { withdrawalCallback } = useWithdrawalActions(token, amountToWithdraw);
 
   const refetchLogsHandle = useCallback(() => {
     new Promise<void>((resolve) => {
@@ -62,6 +72,37 @@ export const WithdrawHarborPoolScreen = ({ route, navigation }: Props) => {
   const onChangeAmountToWithdraw = useCallback((amount: string) => {
     setAmountToWithdraw(amount);
   }, []);
+
+  const onPressMaxButton = useCallback(async () => {
+    const txEstimateGas = await withdrawalCallback({ estimateGas: true });
+    const txGasFee = await estimatedNetworkProviderFee(txEstimateGas);
+    setEstimatedGas(txGasFee);
+
+    onChangeAmountToWithdraw(
+      ethers.utils.formatEther(
+        token === CryptoCurrencyCode.AMB ? stake : deposit
+      )
+    );
+  }, [deposit, onChangeAmountToWithdraw, stake, token, withdrawalCallback]);
+
+  const onPreviewBottomSheet = useCallback(async () => {
+    Keyboard.dismiss();
+    setLoading(true);
+    try {
+      const txEstimateGas = await withdrawalCallback({ estimateGas: true });
+      const txGasFee = await estimatedNetworkProviderFee(txEstimateGas);
+      setEstimatedGas(txGasFee);
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+
+    setTimeout(
+      () => withdrawalBottomSheetRef.current?.show(),
+      KEYBOARD_OPENING_TIME
+    );
+  }, [withdrawalCallback]);
 
   const footerStyle = useKeyboardContainerStyleWithSafeArea(styles.footer);
 
@@ -82,6 +123,7 @@ export const WithdrawHarborPoolScreen = ({ route, navigation }: Props) => {
               <WithdrawalHbrYieldInput
                 value={amountToWithdraw}
                 onChangeValue={onChangeAmountToWithdraw}
+                onPressMaxButton={onPressMaxButton}
                 token={token}
                 type={logs?.status ?? LogStatus.ERROR}
                 logs={logs}
@@ -99,7 +141,8 @@ export const WithdrawHarborPoolScreen = ({ route, navigation }: Props) => {
                   logs={logs}
                   token={token}
                   amountToWithdraw={amountToWithdraw}
-                  onButtonPress={withdrawalBottomSheetRef.current?.show}
+                  onButtonPress={onPreviewBottomSheet}
+                  loading={loading}
                 />
               </View>
             </View>
@@ -112,6 +155,10 @@ export const WithdrawHarborPoolScreen = ({ route, navigation }: Props) => {
         token={token}
         amount={amountToWithdraw}
         ref={withdrawalBottomSheetRef}
+        estimatedGas={estimatedGas}
+        ambBalance={ethers.utils.parseEther(
+          ambInstance.balance.formattedBalance
+        )}
       />
     </SafeAreaView>
   );

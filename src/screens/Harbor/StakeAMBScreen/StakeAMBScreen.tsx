@@ -16,14 +16,14 @@ import { Row, Spacer, Text } from '@components/base';
 import { BottomSheetRef, Header, TextOrSpinner } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { KEYBOARD_OPENING_TIME } from '@constants/variables';
+import { KEYBOARD_OPENING_TIME, bnZERO } from '@constants/variables';
 import { useStakeHBRStore } from '@entities/harbor';
 import { HeaderAPYLabel } from '@entities/harbor/components/base';
 import {
   AmbInputWithPoolDetails,
   StakedBalanceInfo
 } from '@entities/harbor/components/composite';
-import { bnZERO } from '@entities/harbor/constants';
+
 import { useInputErrorStakeAMB } from '@entities/harbor/lib/hooks/use-input-error';
 import { useWalletStore } from '@entities/wallet';
 import { useStakeHBRActionsStore } from '@features/harbor';
@@ -36,6 +36,7 @@ import {
 } from '@hooks';
 import { estimatedNetworkProviderFee, NumberUtils, scale } from '@utils';
 import { styles } from './styles';
+
 type Props = NativeStackScreenProps<HarborTabParamsList, 'StakeAMBScreen'>;
 
 export const StakeAMBScreen = ({ route }: Props) => {
@@ -48,7 +49,7 @@ export const StakeAMBScreen = ({ route }: Props) => {
   const error = useInputErrorStakeAMB(ambInstance);
 
   const [loading, setLoading] = useState(false);
-  // TODO: update from common consts bnZERO
+
   const [estimatedGas, setEstimatedGas] = useState<ethers.BigNumber>(bnZERO);
 
   const bottomSheetReviewTxRef = useRef<BottomSheetRef>(null);

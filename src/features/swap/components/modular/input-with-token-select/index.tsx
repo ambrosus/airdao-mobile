@@ -21,8 +21,12 @@ export const InputWithTokenSelect = ({
   estimated
 }: InputWithTokenSelectProps) => {
   const { t } = useTranslation();
-  const { selectedTokensAmount, setLastChangedInput, isPoolsLoading } =
-    useSwapContextSelector();
+  const {
+    selectedTokensAmount,
+    setLastChangedInput,
+    isPoolsLoading,
+    isExactInRef
+  } = useSwapContextSelector();
   const { onChangeSelectedTokenAmount } = useSwapFieldsHandler();
 
   const textInputRef = useRef<InputRef>(null);
@@ -83,10 +87,22 @@ export const InputWithTokenSelect = ({
     return isPoolsLoading || isBalanceLoading;
   }, [isPoolsLoading, isBalanceLoading]);
 
-  const transformedValue = useMemo(
-    () => NumberUtils.toSignificantDigits(value, 6),
-    [value]
-  );
+  const transformedValue = useMemo(() => {
+    const independentField = isExactInRef.current
+      ? FIELD.TOKEN_A
+      : FIELD.TOKEN_B;
+
+    const parsedAmount = NumberUtils.toSignificantDigits(
+      selectedTokensAmount[type],
+      6
+    );
+
+    if (type === independentField) {
+      return value;
+    } else {
+      return parsedAmount;
+    }
+  }, [isExactInRef, selectedTokensAmount, type, value]);
 
   return (
     <View style={styles.wrapper}>

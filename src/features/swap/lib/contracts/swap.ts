@@ -254,9 +254,7 @@ export async function swapExactTokensForETH(
 
       return await wrapEstimatedGas(
         routerContract,
-        tradeIn
-          ? 'swapExactTokensForAMBSupportingFeeOnTransferTokens'
-          : 'swapTokensForExactAMB',
+        tradeIn ? 'swapExactTokensForAMB' : 'swapTokensForExactAMB',
         args
       );
     }

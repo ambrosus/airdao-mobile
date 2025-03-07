@@ -13,14 +13,14 @@ import { CryptoCurrencyCode } from '@appTypes';
 import { BottomSheetRef, Header, TextOrSpinner } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { KEYBOARD_OPENING_TIME } from '@constants/variables';
+import { KEYBOARD_OPENING_TIME, bnZERO } from '@constants/variables';
 import {
   useHBRInstance,
   useInputErrorStakeHBR,
   useStakeHBRStore
 } from '@entities/harbor';
 import { StakedBalanceInfo } from '@entities/harbor/components/composite';
-import { bnZERO } from '@entities/harbor/constants';
+
 import { useWalletStore } from '@entities/wallet';
 import {
   useApproveContract,

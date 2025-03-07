@@ -31,9 +31,9 @@ export function useSwapActions() {
   const { _extractPrivateKey } = useWalletPrivateKey();
 
   const {
-    _refExactGetter,
     uiBottomSheetInformation,
     setUiBottomSheetInformation,
+    isExactInRef,
     isMultiHopSwapBetterCurrency
   } = useSwapContextSelector();
 
@@ -102,15 +102,18 @@ export function useSwapActions() {
     async ({
       estimateGas = false,
       amountIn,
-      amountOut
+      amountOut,
+      tradeIn
     }: {
       estimateGas?: boolean;
       amountIn?: string;
       amountOut?: string;
+      tradeIn?: boolean;
     }) => {
       const signer = createSigner(await _extractPrivateKey());
       const { slippageTolerance, deadline, multihops } = settings.current;
       const _slippage = +slippageTolerance;
+      const isTradeIn = tradeIn ?? isExactInRef.current;
 
       const _amountIn = amountIn ?? tokenToSell.AMOUNT;
       const _amountOut = amountOut ?? tokenToReceive.AMOUNT;
@@ -145,7 +148,7 @@ export function useSwapActions() {
           signer,
           _slippage,
           deadline,
-          _refExactGetter,
+          isTradeIn,
           estimateGas
         );
       }
@@ -159,7 +162,7 @@ export function useSwapActions() {
           signer,
           _slippage,
           deadline,
-          _refExactGetter,
+          isTradeIn,
           estimateGas
         );
       }
@@ -172,7 +175,7 @@ export function useSwapActions() {
           signer,
           _slippage,
           deadline,
-          _refExactGetter,
+          isTradeIn,
           estimateGas
         );
       }
@@ -184,14 +187,14 @@ export function useSwapActions() {
         signer,
         _slippage,
         deadline,
-        _refExactGetter,
+        isTradeIn,
         estimateGas
       );
     },
     [
       _extractPrivateKey,
-      _refExactGetter,
       isEndsWithETH,
+      isExactInRef,
       isMultiHopSwapBetterCurrency.tokens,
       isStartsWithETH,
       settings,

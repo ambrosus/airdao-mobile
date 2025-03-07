@@ -153,7 +153,7 @@ export const SwapContext = () => {
     isExecutingPrice,
     setIsExecutingPrice,
     isPoolsLoading,
-    setIsPoolsLoading
+    setIsPoolsLoading,
     isInsufficientBalance,
     setIsInsufficientBalance,
     estimatedGasValues,

@@ -15,6 +15,8 @@ interface WithdrawalButtonProps {
   logs: IAvailableWithdrawLogs | null;
   amountToWithdraw: string;
   onButtonPress?: () => void;
+  estimatedGas?: ethers.BigNumber;
+  ambBalance?: ethers.BigNumber;
 }
 
 export const WithdrawalButton = ({
@@ -22,7 +24,9 @@ export const WithdrawalButton = ({
   token,
   logs,
   amountToWithdraw,
-  onButtonPress
+  onButtonPress,
+  estimatedGas,
+  ambBalance
 }: WithdrawalButtonProps) => {
   const { t } = useTranslation();
 
@@ -33,6 +37,12 @@ export const WithdrawalButton = ({
     const bnAmountToWithdraw = ethers.utils.parseEther(
       !amountToWithdraw ? '0' : amountToWithdraw
     );
+
+    if (estimatedGas && ambBalance) {
+      const notEnoughBalanceToCoverGas = estimatedGas.gt(ambBalance);
+
+      return notEnoughBalanceToCoverGas || loading;
+    }
 
     switch (token) {
       case CryptoCurrencyCode.HBR: {
@@ -64,7 +74,16 @@ export const WithdrawalButton = ({
         );
       }
     }
-  }, [amountToWithdraw, deposit, loading, logs?.status, stake, token]);
+  }, [
+    ambBalance,
+    amountToWithdraw,
+    deposit,
+    estimatedGas,
+    loading,
+    logs?.status,
+    stake,
+    token
+  ]);
 
   const buttonStyle = useMemo<StyleProp<ViewStyle>>(
     () => ({
@@ -78,16 +97,21 @@ export const WithdrawalButton = ({
       !amountToWithdraw ? '0' : amountToWithdraw
     );
 
-    if (token === CryptoCurrencyCode.HBR && bnAmountToWithdraw.gt(deposit)) {
-      return t('bridge.insufficient.funds');
-    }
+    if (token)
+      if (token === CryptoCurrencyCode.HBR && bnAmountToWithdraw.gt(deposit)) {
+        return t('bridge.insufficient.funds');
+      }
 
     if (token === CryptoCurrencyCode.AMB && bnAmountToWithdraw.gt(stake)) {
       return t('bridge.insufficient.funds');
     }
 
+    if (estimatedGas && ambBalance && estimatedGas.gt(ambBalance)) {
+      return t('bridge.insufficient.funds');
+    }
+
     return t('staking.pool.withdraw');
-  }, [amountToWithdraw, deposit, stake, t, token]);
+  }, [ambBalance, amountToWithdraw, deposit, estimatedGas, stake, t, token]);
 
   return (
     <>

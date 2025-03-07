@@ -78,14 +78,16 @@ export const ReviewSwapButton = () => {
       swapButtonString !== t('common.review') ||
       isProcessingBottomSheet ||
       isExecutingPrice ||
-      isPoolsLoading
+      isPoolsLoading ||
+      isExtractingMaxPrice
     );
   }, [
     swapButtonString,
     t,
     isProcessingBottomSheet,
     isExecutingPrice,
-    isPoolsLoading
+    isPoolsLoading,
+    isExtractingMaxPrice
   ]);
 
   const buttonColors = useMemo(() => {

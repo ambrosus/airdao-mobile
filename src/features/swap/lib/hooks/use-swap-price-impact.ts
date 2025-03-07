@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { ethers } from 'ethers';
+import { useSwapContextSelector } from '@features/swap/context';
 import { getAmountsIn, getAmountsOut } from '@features/swap/lib/contracts';
 import { FIELD, SwapToken } from '@features/swap/types';
 import {
@@ -19,6 +20,7 @@ export function useSwapPriceImpact() {
   const { hasWrapNativeToken } = useSwapHelpers();
   const { settings } = useSwapSettings();
   const { tokenToSell, tokenToReceive, tokensRoute } = useSwapTokens();
+  const { isExactInRef } = useSwapContextSelector();
 
   const singleHopImpactGetter = useCallback(
     async (amountToSell: string, amountToReceive: string) => {
@@ -37,13 +39,10 @@ export function useSwapPriceImpact() {
           );
 
           if (reserveIn && reserveOut) {
-            const amountToSellWithRealizedFee =
-              subtractRealizedLPFeeFromInput(amountToSell);
-
             const bnAmountOut = ethers.utils.parseEther(amountToReceive);
 
             const impact = singleHopImpact(
-              amountToSellWithRealizedFee,
+              amountToSell,
               bnAmountOut,
               reserveIn,
               reserveOut
@@ -65,12 +64,12 @@ export function useSwapPriceImpact() {
 
   const multiHopImpactGetter = useCallback(
     async (_path?: string[], _amountIn?: string, isTradeIn?: boolean) => {
-      const path =
-        _path ??
-        withMultiHopPath([
+      const path = withMultiHopPath(
+        _path ?? [
           tokenToSell.TOKEN?.address ?? '',
           tokenToReceive.TOKEN?.address ?? ''
-        ]);
+        ]
+      );
 
       try {
         const amountIn = ethers.utils.parseEther(
@@ -116,7 +115,7 @@ export function useSwapPriceImpact() {
 
           totalImpact = multiHopCumulativeImpact(
             totalImpact.toString(),
-            impact
+            (+impact >= 0 ? impact : -impact).toString()
           );
         }
 
@@ -136,11 +135,14 @@ export function useSwapPriceImpact() {
   );
 
   const uiPriceImpactGetter = useCallback(async () => {
-    const isMultiHopPathAvailable =
-      isMultiHopSwapBetterCurrency.tokens.length > 0;
-
+    const isMultiHopPathAvailable = isMultiHopSwapAvailable(tokensRoute);
+    const isTradeIn = isExactInRef.current;
     if (settings.current.multihops && isMultiHopPathAvailable) {
-      return await multiHopImpactGetter();
+      return await multiHopImpactGetter(
+        undefined,
+        tokenToSell.AMOUNT,
+        isTradeIn
+      );
     } else {
       return await singleHopImpactGetter(
         tokenToSell.AMOUNT,
@@ -148,11 +150,12 @@ export function useSwapPriceImpact() {
       );
     }
   }, [
-    isMultiHopSwapBetterCurrency.tokens.length,
+    tokensRoute,
+    isExactInRef,
     settings,
     multiHopImpactGetter,
-    singleHopImpactGetter,
     tokenToSell.AMOUNT,
+    singleHopImpactGetter,
     tokenToReceive.AMOUNT
   ]);
 

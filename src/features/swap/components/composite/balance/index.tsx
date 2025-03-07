@@ -12,7 +12,7 @@ import { ShimmerLoader } from '@components/animations';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { WalletOutlineIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
-import { AMB_DECIMALS } from '@constants/variables';
+import { AMB_DECIMALS, KEYBOARD_OPENING_TIME } from '@constants/variables';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
   useSwapActions,
@@ -40,7 +40,8 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
     isExecutingPrice,
     setIsInsufficientBalance,
     isExtractingMaxPrice,
-    setIsExtractingMaxPrice
+    setIsExtractingMaxPrice,
+    isPoolsLoading
   } = useSwapContextSelector();
   const { onSelectMaxTokensAmount, updateReceivedTokensOutput } =
     useSwapFieldsHandler();
@@ -72,19 +73,63 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
     selectedTokens[type]?.symbol as CryptoCurrencyCode
   );
 
-  const onSelectMaxTokensAmountPress = useCallback(() => {
-    if (bnBalanceAmount) {
-      const fullAmount = NumberUtils.limitDecimalCount(
-        ethers.utils.formatEther(bnBalanceAmount?._hex),
-        AMB_DECIMALS
-      );
+  const onSelectMaxTokensAmountPress = useCallback(async () => {
+    setIsExtractingMaxPrice(true);
+    setIsExactIn(type === FIELD.TOKEN_A);
 
-      onSelectMaxTokensAmount(type, fullAmount);
-      setIsExactIn(type === FIELD.TOKEN_A);
+    if (!bnBalanceAmount) return;
 
+    try {
       setTimeout(async () => {
-        await updateReceivedTokensOutput();
-      });
+        const parsedBalance = ethers.utils.formatEther(bnBalanceAmount);
+
+        const isNative =
+          type === FIELD.TOKEN_A &&
+          selectedTokens.TOKEN_A.address === ethers.constants.AddressZero;
+
+        if (isNative) {
+          const bnAmountToReceive = await bestTradeCurrency(parsedBalance, [
+            selectedTokens.TOKEN_A.address,
+            selectedTokens.TOKEN_B.address
+          ]);
+
+          const estimatedGas = await swapCallback({
+            amountIn: parsedBalance,
+            amountOut: ethers.utils.formatEther(bnAmountToReceive),
+            estimateGas: true,
+            tradeIn: type === FIELD.TOKEN_A
+          });
+
+          const maxSpendableAmount = bnBalanceAmount.sub(estimatedGas);
+
+          if (maxSpendableAmount.lt(0)) {
+            setIsInsufficientBalance(true);
+            setSelectedTokensAmount({
+              [FIELD.TOKEN_A]: '0',
+              [FIELD.TOKEN_B]: ''
+            });
+            return;
+          }
+
+          const amount = NumberUtils.limitDecimalCount(
+            ethers.utils.formatEther(maxSpendableAmount),
+            AMB_DECIMALS
+          );
+
+          onSelectMaxTokensAmount(type, amount);
+        } else {
+          const amount = NumberUtils.limitDecimalCount(
+            ethers.utils.formatEther(bnBalanceAmount),
+            AMB_DECIMALS
+          );
+
+          onSelectMaxTokensAmount(type, amount);
+        }
+
+        setTimeout(() => {
+          updateReceivedTokensOutput();
+        });
+      }, KEYBOARD_OPENING_TIME);
     } catch (error) {
       throw error;
     } finally {
@@ -126,7 +171,8 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
       type === FIELD.TOKEN_B ||
       !bnBalanceAmount ||
       !selectedTokensAmount[FIELD.TOKEN_A] ||
-      !isFetchingBalance
+      !isFetchingBalance ||
+      !isPoolsLoading
     )
       return false;
 
@@ -136,7 +182,13 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
     );
 
     return bnSelectedAmount.gt(bnInputBalance);
-  }, [bnBalanceAmount, isFetchingBalance, selectedTokensAmount, type]);
+  }, [
+    bnBalanceAmount,
+    isFetchingBalance,
+    isPoolsLoading,
+    selectedTokensAmount,
+    type
+  ]);
 
   return (
     <Row alignItems="center" justifyContent={containerJustifyContent}>
@@ -146,7 +198,7 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
             color={error ? COLORS.error500 : COLORS.neutral500}
           />
           <Spacer horizontal value={4} />
-          {isFetchingBalance ? (
+          {isFetchingBalance || isPoolsLoading ? (
             <ShimmerLoader width={45} height={12} />
           ) : (
             <Text
@@ -163,7 +215,9 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
           <>
             <Spacer horizontal value={scale(4)} />
             <Button
-              disabled={isExecutingPrice || isExtractingMaxPrice}
+              disabled={
+                isExecutingPrice || isExtractingMaxPrice || isPoolsLoading
+              }
               onPress={onSelectMaxTokensAmountPress}
             >
               <Text
