@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
@@ -15,7 +15,6 @@ import { ILogs } from '@entities/harbor/model/types';
 import { useWalletStore } from '@entities/wallet';
 import { useEffectOnce } from '@hooks';
 import { RequestItem } from '@screens/Harbor/WithdrawRequests/components';
-import { scale } from '@utils';
 import { styles } from './WithdrawRequests.style';
 
 export const WithdrawRequests = () => {
@@ -54,13 +53,7 @@ export const WithdrawRequests = () => {
 
   const EmptyList = () => {
     return (
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: scale(40)
-        }}
-      >
+      <View style={styles.emptyList}>
         {!withdrawListLoader && <Text>{t('common.no.transactions')}</Text>}
       </View>
     );

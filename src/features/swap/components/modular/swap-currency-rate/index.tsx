@@ -1,11 +1,10 @@
-import React, { memo, useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo } from 'react';
 import { StyleProp, TouchableOpacity, ViewStyle } from 'react-native';
-import { formatEther } from 'ethers/lib/utils';
 import { Text, Row, Spinner } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapBetterRate } from '@features/swap/lib/hooks';
-import { SwapStringUtils } from '@features/swap/utils';
-import { verticalScale } from '@utils';
+import { NumberUtils, verticalScale } from '@utils';
 
 interface SwapCurrencyRateProps {
   tokenToSell: string;
@@ -15,28 +14,31 @@ interface SwapCurrencyRateProps {
 
 const _SwapCurrencyRate = ({
   tokenToSell,
-  tokenToReceive,
-  tokensRoute
+  tokenToReceive
 }: SwapCurrencyRateProps) => {
-  const { bestSwapRate, onToggleTokensOrder, tokens, isExecutingRate } =
-    useSwapBetterRate();
-
-  const [oppositeAmountPerOneToken, setOppositeAmountPerOneToken] =
-    useState('0');
+  const { isExecutingPrice } = useSwapContextSelector();
+  const {
+    bestSwapRate,
+    onToggleTokensOrder,
+    tokens,
+    isExecutingRate,
+    rate,
+    setRate
+  } = useSwapBetterRate();
 
   useEffect(() => {
-    (async () => {
-      if (tokenToSell && tokenToReceive) {
-        const bnAmount = await bestSwapRate(tokensRoute);
+    const timeout = setTimeout(() => {
+      if (tokenToSell && tokenToReceive && !isExecutingPrice) {
+        const executedTokensRate = bestSwapRate();
 
-        const normalizedAmount = SwapStringUtils.transformAmountValue(
-          formatEther(bnAmount?._hex)
-        );
-
-        setOppositeAmountPerOneToken(normalizedAmount);
+        if (!!executedTokensRate) {
+          setRate(executedTokensRate);
+        }
       }
-    })();
-  }, [bestSwapRate, tokenToReceive, tokenToSell, tokensRoute]);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [bestSwapRate, tokenToReceive, tokenToSell, isExecutingPrice, setRate]);
 
   const containerStyle: StyleProp<ViewStyle> = useMemo(() => {
     return {
@@ -45,9 +47,14 @@ const _SwapCurrencyRate = ({
     };
   }, []);
 
+  const transformedCurrencyRate = useMemo(
+    () => NumberUtils.toSignificantDigits(rate.toString(), 6),
+    [rate]
+  );
+
   return (
     <Row style={containerStyle} justifyContent="center" alignItems="center">
-      {isExecutingRate ? (
+      {isExecutingRate || typeof rate === 'number' ? (
         <Spinner customSize={17.5} />
       ) : (
         <TouchableOpacity onPress={onToggleTokensOrder}>
@@ -56,7 +63,7 @@ const _SwapCurrencyRate = ({
             fontFamily="Inter_600SemiBold"
             color={COLORS.brand500}
           >
-            1 {tokens.symbolInput ?? 'AMB'} = {oppositeAmountPerOneToken}{' '}
+            1 {tokens.symbolInput ?? 'AMB'} = {transformedCurrencyRate}{' '}
             {tokens.symbolOutput}
           </Text>
         </TouchableOpacity>

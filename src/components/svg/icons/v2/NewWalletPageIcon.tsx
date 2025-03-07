@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Svg, { Circle, Path } from 'react-native-svg';
 
 export const NewWalletPageIcon = () => (

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -124,7 +124,10 @@ export const CreateWalletStep2 = () => {
       onPositionIncorrect();
     }
     return (
-      <View style={{ width: scale(100) }} key={`${word.index}-${word.word}`}>
+      <View
+        style={styles.mnemoicRandomPhrase}
+        key={`${word.index}-${word.word}`}
+      >
         <MnemonicSelected
           word={word.word}
           onPress={onPressOnSelected}
@@ -151,7 +154,10 @@ export const CreateWalletStep2 = () => {
       setWalletMnemonicSelected([...walletMnemonicSelected]);
     };
     return (
-      <View style={{ width: scale(100) }} key={`${word.index}-${word.word}`}>
+      <View
+        style={styles.mnemoicRandomPhrase}
+        key={`${word.index}-${word.word}`}
+      >
         <MnemonicRandom
           word={word.word}
           onPress={onPressOnRandom}
@@ -213,7 +219,7 @@ export const CreateWalletStep2 = () => {
                 color={COLORS.error600}
                 fontFamily="Inter_400Regular"
                 fontSize={scale(15)}
-                style={{ paddingHorizontal: 30 }}
+                style={styles.createText}
               >
                 {t('create.wallet.recovery.phrase.error')}
               </Text>

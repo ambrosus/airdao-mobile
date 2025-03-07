@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useImperativeHandle } from 'react';
+import { PropsWithChildren, forwardRef, useImperativeHandle } from 'react';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -15,7 +15,7 @@ type RotationAnimationProps = {
   duration?: number;
 };
 
-export const RotationAnimation = React.forwardRef<
+export const RotationAnimation = forwardRef<
   RotationAnimationRef,
   PropsWithChildren<RotationAnimationProps>
 >((props, ref) => {

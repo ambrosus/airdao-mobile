@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, useCallback, useRef } from 'react';
+import { ForwardedRef, forwardRef, useCallback, useRef } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Button, Text } from '@components/base';

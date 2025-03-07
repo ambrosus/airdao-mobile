@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { View } from 'react-native';
 import { CryptoCurrencyCode } from '@appTypes';
 import { Button, Spacer, Text } from '@components/base';

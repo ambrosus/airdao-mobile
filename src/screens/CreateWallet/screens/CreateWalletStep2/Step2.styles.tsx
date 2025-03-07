@@ -4,6 +4,15 @@ import { moderateScale, scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   main: { flex: 1 },
+  mnemonicRandom: {
+    backgroundColor: COLORS.neutral100,
+    paddingHorizontal: scale(16),
+    paddingVertical: verticalScale(8),
+    borderWidth: 1,
+    borderColor: COLORS.neutral200,
+    borderRadius: 1000
+  },
+  mnemoicRandomPhrase: { width: scale(100) },
   header: {
     shadowColor: COLORS.transparent,
     borderBottomWidth: 1,
@@ -31,6 +40,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     columnGap: scale(14)
   },
+  createText: { paddingHorizontal: 30 },
   button: {
     position: 'relative',
     flexDirection: 'row',
@@ -38,5 +48,11 @@ export const styles = StyleSheet.create({
     width: '90%',
     alignSelf: 'center',
     paddingVertical: verticalScale(12)
+  },
+  mnemonicSelected: {
+    paddingHorizontal: scale(16),
+    height: 20,
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 });

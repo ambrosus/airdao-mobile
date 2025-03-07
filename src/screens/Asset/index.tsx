@@ -1,8 +1,9 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { View } from 'react-native';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ethers } from 'ethers';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { HomeNavigationProp, HomeParamsList } from '@appTypes';
+import { HomeParamsList } from '@appTypes';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { TokenLogo } from '@components/modular';
@@ -10,8 +11,14 @@ import { ChartIcon } from '@components/svg/icons/v2';
 import { AccountTransactions } from '@components/templates';
 import { COLORS } from '@constants/colors';
 import { AssetsAccountActionsList } from '@features/wallet-assets/components/modular';
-import { useAMBPrice, useTokensAndTransactions, useUSDPrice } from '@hooks';
+import {
+  useAMBPrice,
+  useERC20Balance,
+  useTokensAndTransactions,
+  useUSDPrice
+} from '@hooks';
 import { useTransactionsOfToken } from '@hooks/query/useTransactionsOfToken';
+import { Token } from '@models';
 import {
   StringUtils,
   StringValidators,
@@ -21,18 +28,28 @@ import {
 } from '@utils';
 import { styles } from './styles';
 
-export const AssetScreen = () => {
+type Props = NativeStackScreenProps<HomeParamsList, 'AssetScreen'>;
+
+export const AssetScreen = ({ route, navigation }: Props) => {
   const {
     params: { tokenInfo, walletAccount }
-  } = useRoute<RouteProp<HomeParamsList, 'AssetScreen'>>();
-  const navigation = useNavigation<HomeNavigationProp>();
+  } = route;
 
   const { data: ambPriceData } = useAMBPrice();
+
+  const { balance: bnTokenBalance, refetch: refetchTokenBalance } =
+    useERC20Balance(
+      tokenInfo.address === walletAccount
+        ? ethers.constants.AddressZero
+        : tokenInfo.address,
+      walletAccount
+    );
 
   const {
     data: tokensAndTransactions,
     fetchNextPage: fetchNextPageAddress,
     loading: tokensAndTransactionsLoading,
+    refetch: refetchTokensAndTransactions,
     hasNextPage: hasNextPageOfAddress
   } = useTokensAndTransactions(
     walletAccount,
@@ -45,7 +62,8 @@ export const AssetScreen = () => {
     data: transactions,
     loading: transactionsLoading,
     fetchNextPage: fetchNextPageToken,
-    hasNextPage: hasNextPageOfToken
+    hasNextPage: hasNextPageOfToken,
+    refetch: refetchTransactions
   } = useTransactionsOfToken(
     walletAccount,
     tokenInfo.address,
@@ -125,6 +143,52 @@ export const AssetScreen = () => {
     ]
   );
 
+  const updateTokenBalance = useCallback(
+    (balance: ethers.BigNumber) => {
+      const parsedBalance = ethers.utils.formatUnits(
+        balance,
+        tokenInfo.decimals
+      );
+      const formattedNumber = +parsedBalance;
+
+      if (formattedNumber !== +tokenInfo.balance.formattedBalance) {
+        const updatedTokenInfo = {
+          ...(tokenInfo as Omit<Token, 'deriveNameAndSymbolFromDto'>),
+          balance: {
+            wei: balance.toString(),
+            formattedBalance: parsedBalance,
+            ether: formattedNumber
+          }
+        };
+        navigation.setParams({ tokenInfo: updatedTokenInfo as Token });
+      }
+    },
+    [navigation, tokenInfo]
+  );
+
+  useEffect(() => {
+    if (bnTokenBalance) {
+      updateTokenBalance(bnTokenBalance);
+    }
+  }, [bnTokenBalance, updateTokenBalance]);
+
+  const onRefresh = useCallback(() => {
+    typeof refetchTokenBalance === 'function' && refetchTokenBalance();
+
+    if (walletAccount === tokenInfo.address) {
+      typeof refetchTokensAndTransactions === 'function' &&
+        refetchTokensAndTransactions();
+    } else {
+      typeof refetchTransactions === 'function' && refetchTransactions();
+    }
+  }, [
+    refetchTokenBalance,
+    refetchTokensAndTransactions,
+    refetchTransactions,
+    tokenInfo.address,
+    walletAccount
+  ]);
+
   return (
     <SafeAreaView style={styles.container}>
       <Header
@@ -183,6 +247,7 @@ export const AssetScreen = () => {
           <AccountTransactions
             transactions={txs}
             listStyle={styles.transactionsList}
+            onRefresh={onRefresh}
             containerStyle={styles.transactionsContainer}
             loading={isTransactionsLoading}
             onEndReached={() => hasNextPage && fetchNextPage()}

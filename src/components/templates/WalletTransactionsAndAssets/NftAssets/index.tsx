@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { FlatList, RefreshControl, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { CryptoCurrencyCode, HomeNavigationProp } from '@appTypes';

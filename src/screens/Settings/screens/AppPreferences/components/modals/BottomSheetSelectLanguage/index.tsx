@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, RefObject, useState } from 'react';
+import { ForwardedRef, forwardRef, RefObject, useState } from 'react';
 import { FlatList, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -8,7 +8,7 @@ import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import useLocalization from '@contexts/Localizations';
 import { useForwardedRef } from '@hooks/useForwardedRef';
-import { SettingsModalItem } from '@screens/Settings/screens/AppPreferences/components/SettingsModalItem';
+import { SettingsModalItem } from '@screens/Settings/screens/AppPreferences/components/modals/SettingsModalItem/SettingsModalItem';
 import { LocalizationUtils, scale } from '@utils';
 import { styles } from '../style';
 
@@ -93,9 +93,7 @@ export const BottomSheetSelectLanguage = forwardRef<BottomSheetRef, Props>(
         />
         <Spacer value={19} />
         <FlatList
-          contentContainerStyle={{
-            paddingBottom: 150
-          }}
+          contentContainerStyle={styles.list}
           data={mockedLanguages}
           renderItem={({ item, index }) => {
             return (

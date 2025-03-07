@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef, useMemo } from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
@@ -14,6 +14,7 @@ import Animated from 'react-native-reanimated';
 import { Spacer, Text } from '@components/base';
 import { CenteredSpinner } from '@components/composite';
 import { COLORS } from '@constants/colors';
+import { useProgressViewOffset } from '@hooks/ui';
 import { Transaction } from '@models';
 import { scale, verticalScale } from '@utils';
 import { ExplorerAccountTransactionItem } from './components';
@@ -59,25 +60,26 @@ export const AccountTransactions = forwardRef<
     },
     ref
   ) => {
-    const sectionizedTransactions: SectionedTransaction[] =
-      React.useMemo(() => {
-        const sectionMap = new Map<string, Transaction[]>();
-        transactions.forEach((n) => {
-          const key = moment(n.timestamp).format(DAY_FORMAT);
-          const transactionsInSection = sectionMap.get(key) || [];
-          transactionsInSection.push(n);
-          sectionMap.set(key, transactionsInSection);
-        });
+    const progressViewOffset = useProgressViewOffset();
 
-        const sections: SectionedTransaction[] = [];
-        for (const [title, data] of sectionMap.entries()) {
-          sections.push({ type: 'header', title });
-          data.forEach((transaction) => {
-            sections.push({ type: 'transaction', transaction });
-          });
-        }
-        return sections;
-      }, [transactions]);
+    const sectionizedTransactions: SectionedTransaction[] = useMemo(() => {
+      const sectionMap = new Map<string, Transaction[]>();
+      transactions.forEach((n) => {
+        const key = moment(n.timestamp).format(DAY_FORMAT);
+        const transactionsInSection = sectionMap.get(key) || [];
+        transactionsInSection.push(n);
+        sectionMap.set(key, transactionsInSection);
+      });
+
+      const sections: SectionedTransaction[] = [];
+      for (const [title, data] of sectionMap.entries()) {
+        sections.push({ type: 'header', title });
+        data.forEach((transaction) => {
+          sections.push({ type: 'transaction', transaction });
+        });
+      }
+      return sections;
+    }, [transactions]);
 
     const renderItem = (
       args: ListRenderItemInfo<SectionedTransaction>
@@ -134,6 +136,7 @@ export const AccountTransactions = forwardRef<
             <RefreshControl
               onRefresh={onRefresh}
               refreshing={Boolean(isRefreshing)}
+              progressViewOffset={progressViewOffset}
             />
           }
         />

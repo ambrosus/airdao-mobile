@@ -1,9 +1,9 @@
-import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ProductsParams } from '@appTypes/navigation/products';
 import { HarborStacks } from '@navigation/stacks/HarborStacks/HarborStacks';
 import { Bridge, BridgeTransferError } from '@screens/Bridge';
 import { BridgeHistory } from '@screens/BridgeHistory';
+import { BrowserScreen } from '@screens/Browser';
 import { KosmosOrderList } from '@screens/KosmosOrderList';
 import { ProductScreen } from '@screens/Products';
 import { StakingPoolScreen } from '@screens/StakingPool';
@@ -57,6 +57,7 @@ export const ProductsStack = () => {
 
       {/* HARBOR ROUTES */}
       <Stack.Screen name="Harbor" component={HarborStacks} />
+      <Stack.Screen name="BrowserScreen" component={BrowserScreen} />
       {getCommonStack(Stack as any)}
     </Stack.Navigator>
   );

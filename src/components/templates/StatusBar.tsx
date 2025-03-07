@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import { COLORS } from '@constants/colors';
 import { useCurrentRoute } from '@contexts';

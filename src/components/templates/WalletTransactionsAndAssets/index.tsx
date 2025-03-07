@@ -1,16 +1,11 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   NativeScrollEvent,
   NativeSyntheticEvent,
   View
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { DerivedValue } from 'react-native-reanimated';
 import { Spinner } from '@components/base';
@@ -71,7 +66,7 @@ export const WalletTransactionsAndAssets = ({
     }
   };
 
-  const _onRefresh = () => {
+  const _onRefresh = useCallback(() => {
     setUserPerformedRefresh(true);
     if (typeof refetchAssets === 'function') {
       refetchAssets();
@@ -79,7 +74,18 @@ export const WalletTransactionsAndAssets = ({
     if (typeof onRefresh === 'function') {
       onRefresh();
     }
-  };
+  }, [onRefresh, refetchAssets]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (typeof refetchAssets === 'function') {
+        refetchAssets();
+      }
+      if (typeof onRefresh === 'function') {
+        onRefresh();
+      }
+    }, [onRefresh, refetchAssets])
+  );
 
   const tokensOrNFTs = useMemo(() => {
     return _tokensOrNftMapper(tokens);

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { View } from 'react-native';
 import { ethers } from 'ethers';
 import { Row, Spacer, Text } from '@components/base';

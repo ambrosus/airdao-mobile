@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { scale } from '@utils';
+import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   container: {
@@ -7,5 +7,9 @@ export const styles = StyleSheet.create({
   },
   listHeader: {
     paddingHorizontal: scale(20)
+  },
+  listContainer: {
+    paddingHorizontal: scale(16),
+    paddingTop: verticalScale(16)
   }
 });

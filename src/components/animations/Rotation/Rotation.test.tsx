@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from '@testing-library/react-native';
 import { RotationAnimation } from '@components/animations';
 import { ChevronDownIcon } from '@components/svg/icons';

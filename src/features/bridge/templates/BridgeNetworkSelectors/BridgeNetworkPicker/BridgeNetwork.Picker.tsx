@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Button, Row, Spacer, Text } from '@components/base';
@@ -10,7 +10,7 @@ import { useBridgeContextData } from '@features/bridge/context';
 import { BottomSheetBridgeNetworkSelector } from '@features/bridge/templates/BottomSheetBridgeNetworkSelector';
 import { BridgeNetworkPickerProps, ParsedBridge } from '@models/Bridge';
 import { scale } from '@utils';
-import { styles } from '../../BridgeNetworkSelectors/styles';
+import { styles } from './styles';
 
 export const BridgeNetworkPicker = ({ type }: BridgeNetworkPickerProps) => {
   const isFrom = type === 'from';

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { FlexAlignType, View } from 'react-native';
 import { Row, Spacer, Text } from '@components/base';
 import { PercentChange } from '@components/composite';
@@ -7,6 +7,7 @@ import { useAMBPrice } from '@hooks';
 import { ExplorerAccount } from '@models/Explorer';
 import { scale, NumberUtils, StringUtils } from '@utils';
 import { AddressIndicator } from '../AddressIndicator';
+import { styles } from './WalletItem.styles';
 
 interface WalletItemProps {
   item: ExplorerAccount;
@@ -28,7 +29,7 @@ function WalletItemView(props: WalletItemProps): JSX.Element {
   }, []);
 
   return (
-    <View style={{ justifyContent: 'space-between' }} testID="Wallet_Item_View">
+    <View style={styles.main} testID="Wallet_Item_View">
       <Row
         justifyContent="space-between"
         alignItems={typographyAndContainerStyles.align as FlexAlignType}
@@ -85,4 +86,4 @@ function WalletItemView(props: WalletItemProps): JSX.Element {
   );
 }
 
-export const WalletItem = React.memo(WalletItemView);
+export const WalletItem = memo(WalletItemView);

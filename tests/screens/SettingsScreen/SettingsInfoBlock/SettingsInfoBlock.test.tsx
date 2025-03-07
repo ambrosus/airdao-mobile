@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/react-native';
 import { SettingsInfoBlock } from '@screens/Settings/components/SettingsInfoBlock';
-import React from 'react';
+
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import clearAllMocks = jest.clearAllMocks;
 

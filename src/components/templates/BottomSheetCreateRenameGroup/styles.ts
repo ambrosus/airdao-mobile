@@ -13,10 +13,6 @@ export const styles = StyleSheet.create({
   newListTitle: {
     alignSelf: 'flex-start'
   },
-  icon: {
-    alignSelf: 'center',
-    paddingTop: 16
-  },
   bottomSheetInput: {
     marginVertical: 8,
     paddingVertical: 12,

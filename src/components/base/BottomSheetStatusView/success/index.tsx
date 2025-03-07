@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback, useMemo } from 'react';
+import { PropsWithChildren, useCallback, useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { t } from 'i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';

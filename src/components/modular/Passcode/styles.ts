@@ -1,18 +1,8 @@
 import { StyleSheet } from 'react-native';
 import { COLORS } from '@constants/colors';
-import { scale, verticalScale } from '@utils';
+import { scale } from '@utils';
 
 export const styles = StyleSheet.create({
-  input: {
-    fontSize: 24,
-    borderBottomWidth: 2,
-    borderColor: COLORS.neutral800,
-    width: scale(220),
-    height: verticalScale(100),
-    opacity: 0,
-    position: 'absolute',
-    zIndex: 10
-  },
   circlesContainer: {
     flexDirection: 'row',
     justifyContent: 'center'

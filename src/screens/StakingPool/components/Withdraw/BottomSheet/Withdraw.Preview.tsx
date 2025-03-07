@@ -1,9 +1,12 @@
-import React from 'react';
+import { useMemo } from 'react';
 import { View } from 'react-native';
+import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
+import { CryptoCurrencyCode } from '@appTypes';
 import { Row, Spacer, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
+import { useAMBEntity } from '@features/send-funds/lib/hooks';
 import { useUSDPrice } from '@hooks';
 import { NumberUtils, StringUtils, scale, verticalScale } from '@utils';
 import { styles } from './styles';
@@ -12,15 +15,48 @@ interface WithdrawTokenPreviewProps {
   wallet: string;
   amount: number;
   onSubmitWithdrawTokens: () => void;
+  estimatedGas: ethers.BigNumber;
 }
 
 export const WithdrawTokenPreview = ({
   wallet,
   amount,
-  onSubmitWithdrawTokens
+  onSubmitWithdrawTokens,
+  estimatedGas
 }: WithdrawTokenPreviewProps) => {
   const { t } = useTranslation();
   const usdAmount = useUSDPrice(amount);
+  const { balance } = useAMBEntity(wallet);
+
+  const transformedEstimatedGas = useMemo(() => {
+    if (estimatedGas) {
+      const parsedGas = NumberUtils.limitDecimalCount(
+        ethers.utils.formatEther(estimatedGas),
+        1
+      );
+
+      return `${parsedGas} ${CryptoCurrencyCode.AMB}`;
+    }
+
+    return `0 ${CryptoCurrencyCode.AMB}`;
+  }, [estimatedGas]);
+
+  const label = useMemo(() => {
+    if (amount) {
+      const parsedBalance = ethers.utils.parseEther(balance.formattedBalance);
+
+      if (parsedBalance && parsedBalance.lt(estimatedGas)) {
+        return t('bridge.insufficient.funds');
+      }
+    }
+
+    return t('staking.pool.withdraw.now');
+  }, [amount, balance, estimatedGas, t]);
+
+  const disabled = useMemo(
+    () => label === t('bridge.insufficient.funds'),
+    [label, t]
+  );
 
   return (
     <View style={styles.container}>
@@ -82,14 +118,33 @@ export const WithdrawTokenPreview = ({
           </Text>
         </Row>
       </Row>
+      <Spacer value={verticalScale(16)} />
+      <Row alignItems="center" justifyContent="space-between">
+        <Text
+          color={COLORS.neutral300}
+          fontSize={16}
+          fontWeight="600"
+          fontFamily="Inter_600SemiBold"
+        >
+          {t('common.network.fee')}
+        </Text>
+        <Text
+          color={COLORS.neutral800}
+          fontSize={16}
+          fontFamily="Inter_500Medium"
+          fontWeight="500"
+        >
+          {transformedEstimatedGas}
+        </Text>
+      </Row>
       <Spacer value={verticalScale(32)} />
-      <PrimaryButton onPress={onSubmitWithdrawTokens}>
+      <PrimaryButton disabled={disabled} onPress={onSubmitWithdrawTokens}>
         <Text
           fontSize={16}
           fontFamily="Inter_600SemiBold"
-          color={COLORS.neutral0}
+          color={disabled ? COLORS.alphaBlack30 : COLORS.neutral0}
         >
-          {t('staking.pool.withdraw.now')}
+          {label}
         </Text>
       </PrimaryButton>
     </View>

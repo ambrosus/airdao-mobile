@@ -1,4 +1,3 @@
-import React from 'react';
 import { ClipPath, Defs, G, Path, Rect, Svg } from 'react-native-svg';
 import { IconProps } from './Icon.types';
 

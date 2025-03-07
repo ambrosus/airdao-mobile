@@ -113,16 +113,26 @@ class ERC20 {
     tokenAddress,
     privateKey,
     amount,
-    spenderAddress
-  }: SetAllowanceArgs): Promise<ethers.ContractTransaction> {
+    spenderAddress,
+    estimateGas = false
+  }: SetAllowanceArgs): Promise<ethers.ContractTransaction | ethers.BigNumber> {
     try {
       const bnAmount = ethers.utils.parseEther(amount);
-      const signer = this.createSigner(privateKey);
+
       const erc20 = new ethers.Contract(
         ethers.constants.AddressZero,
-        ERC20_ABI
+        ERC20_ABI,
+        this.createSigner(privateKey)
       );
-      const signedERC2OContract = erc20.attach(tokenAddress).connect(signer);
+      const signedERC2OContract = erc20.attach(tokenAddress);
+
+      if (estimateGas) {
+        return await signedERC2OContract.estimateGas.approve(
+          spenderAddress,
+          bnAmount
+        );
+      }
+
       return await signedERC2OContract.approve(spenderAddress, bnAmount);
     } catch (error) {
       throw error;

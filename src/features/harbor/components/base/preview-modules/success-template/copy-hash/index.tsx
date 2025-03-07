@@ -1,4 +1,4 @@
-import React from 'react';
+import { useMemo } from 'react';
 import { Pressable } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { useTranslation } from 'react-i18next';
@@ -12,9 +12,10 @@ import { styles } from './styles';
 
 interface CopyHashModel {
   hash: string;
+  bgColor?: string;
 }
 
-export const CopyHash = ({ hash }: CopyHashModel) => {
+export const CopyHash = ({ hash, bgColor }: CopyHashModel) => {
   const { t } = useTranslation();
   const onTxPress = async () => {
     Toast.show({
@@ -25,9 +26,17 @@ export const CopyHash = ({ hash }: CopyHashModel) => {
     await Clipboard.setStringAsync(hash);
   };
 
+  const containerStyle = useMemo(
+    () => ({
+      ...contentBox,
+      backgroundColor: bgColor ?? contentBox.backgroundColor
+    }),
+    [bgColor]
+  );
+
   return (
     <Pressable onPress={onTxPress}>
-      <Row alignItems="center" justifyContent="center" style={contentBox}>
+      <Row alignItems="center" justifyContent="center" style={containerStyle}>
         <GlobeIcon color={COLORS.neutral600} />
         <Text color={COLORS.neutral500} fontSize={scale(12)}>
           {' '}

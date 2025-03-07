@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { View } from 'react-native';
 import { Text } from '@components/base';
-import { TierRewardItem } from '@entities/harbor/model/types';
+import { TierRewardItem } from '@entities/harbor/model';
 import { scale } from '@utils';
 import { styles } from './styles';
 

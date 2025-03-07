@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Badge, Button, Row, Spacer, Text } from '@components/base';
@@ -122,13 +122,10 @@ export const ExplorerAccountView = ({
           testID="Copy_To_Clipboard_Button"
           textToDisplay={StringUtils.formatAddress(account.address, 11, 5)}
           textToCopy={account.address}
-          textProps={{
-            fontSize: 14,
-            fontFamily: 'Inter_600SemiBold',
-            color: COLORS.neutral400
-          }}
+          // @ts-ignore
+          textProps={styles.copyText}
           showToast={true}
-          style={{ padding: 4 }}
+          style={styles.copyTextContainer}
         />
         {!nameVisible && renderListAndWalletInfo()}
       </Row>

@@ -1,4 +1,4 @@
-import React, { forwardRef, PropsWithChildren, useMemo } from 'react';
+import { forwardRef, PropsWithChildren, useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { useForwardedRef } from '@hooks';

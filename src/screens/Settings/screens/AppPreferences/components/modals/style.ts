@@ -14,6 +14,9 @@ export const styles = StyleSheet.create({
     borderTopLeftRadius: scale(10),
     borderTopRightRadius: scale(10)
   },
+  list: {
+    paddingBottom: 150
+  },
   headerTitle: {
     fontFamily: 'Inter_700Bold',
     fontSize: 16,

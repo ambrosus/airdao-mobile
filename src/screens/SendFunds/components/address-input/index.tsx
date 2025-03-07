@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import {
   InteractionManager,
   StyleProp,
@@ -53,13 +53,7 @@ export const AddressInput = ({
   }, []);
 
   const invisibleTouchableHandlerStyles: StyleProp<ViewStyle> = useMemo(() => {
-    return {
-      width: '100%',
-      height: 60,
-      position: 'absolute',
-      top: 15,
-      zIndex: 100
-    };
+    return styles.touchableHandlerArea;
   }, []);
 
   return (
@@ -78,7 +72,7 @@ export const AddressInput = ({
           onFocus={toggleFocused}
           onBlur={toggleFocused}
           value={maskedValue}
-          style={{ fontSize: 16, letterSpacing: -0.16 }}
+          style={styles.input}
           onChangeValue={onAddressChange}
           placeholder="0x..."
         />

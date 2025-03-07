@@ -1,4 +1,4 @@
-import React, { forwardRef, RefObject, useMemo } from 'react';
+import { forwardRef, RefObject, useMemo } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { BigNumber } from 'ethers';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +10,7 @@ import { useBridgeContextData } from '@features/bridge/context';
 import { amountCheckers } from '@features/bridge/templates/BottomSheetBridgePreview/helpers/amountChecker';
 import { scale, verticalScale } from '@utils';
 import { GeneralPreviewTemplate } from './components';
+import { styles } from './styles';
 
 interface BottomSheetChoseNetworksProps {
   ref: RefObject<BottomSheetRef>;
@@ -41,11 +42,9 @@ export const BottomSheetBridgePreview = forwardRef<
   const errorBalance = useMemo(() => {
     const networkNativeTokenSymbol = networkNativeToken?.symbol ?? 'amb';
     if (selectedTokenFrom.symbol === networkNativeTokenSymbol) {
-      let withdrawSum = BigNumber.from(0);
-      dataToPreview
+      const withdrawSum = dataToPreview
         .filter((item) => item.symbol === selectedTokenFrom?.symbol)
-        .forEach((item) => (withdrawSum = withdrawSum.add(item.crypto.amount)));
-
+        .reduce((acc, cur) => acc.add(cur.crypto.amount), BigNumber.from(0));
       return amountCheckers.isAmountGraterThenBalance({
         balance: selectedTokenFrom.balance,
         amount: withdrawSum,
@@ -69,7 +68,7 @@ export const BottomSheetBridgePreview = forwardRef<
       ref={ref}
       swiperIconVisible={false}
     >
-      <View style={{ marginHorizontal: scale(24) }}>
+      <View style={styles.main}>
         {showHeader && (
           <>
             <Spacer value={20} />

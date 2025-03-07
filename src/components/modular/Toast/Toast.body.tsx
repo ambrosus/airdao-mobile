@@ -1,4 +1,3 @@
-import React from 'react';
 import { View } from 'react-native';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { CloseIcon } from '@components/svg/icons';

@@ -5,7 +5,6 @@ import { scale } from '@utils';
 export const styles = StyleSheet.create({
   mainButton: {
     marginBottom: scale(10),
-
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: scale(15),
@@ -28,9 +27,5 @@ export const styles = StyleSheet.create({
   },
   textBottom: {
     fontSize: scale(15)
-  },
-  boldText: {
-    fontSize: scale(16),
-    fontWeight: '600'
   }
 });

@@ -1,4 +1,3 @@
-import React from 'react';
 import { View } from 'react-native';
 import { Spacer } from '@components/base';
 import { BridgeForm } from '@features/bridge/templates/BridgeForm/BridgeForm';

@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { DatabaseProvider } from '@nozbe/watermelondb/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -13,7 +13,7 @@ import { combineComponents } from '@utils';
 
 const queryClient = new QueryClient();
 
-const WrappedQueryClientProvider: React.FC = ({ children }: any) => (
+const WrappedQueryClientProvider: FC = ({ children }: any) => (
   <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 );
 
@@ -26,31 +26,31 @@ const ApolloQueryProvider = ({ children }: any) => {
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
 
-const WrappedSafeAreaProvider: React.FC = ({ children }: any) => (
+const WrappedSafeAreaProvider: FC = ({ children }: any) => (
   <SafeAreaProvider style={{ flex: 1 }}>{children}</SafeAreaProvider>
 );
 
-const WrappedLocalizationProvider: React.FC = ({ children }: any) => (
+const WrappedLocalizationProvider: FC = ({ children }: any) => (
   <LocalizationProvider>{children}</LocalizationProvider>
 );
 
-const LocalDBProvider: React.FC = ({ children }: any) => (
+const LocalDBProvider: FC = ({ children }: any) => (
   <DatabaseProvider database={Database.getDatabase()}>
     {children}
   </DatabaseProvider>
 );
 
-const BridgeProvider: React.FC = ({ children }: any) => (
+const BridgeProvider: FC = ({ children }: any) => (
   // @ts-ignore
   <BridgeContextProvider>{children}</BridgeContextProvider>
 );
 
-const SwapProvider: React.FC = ({ children }: any) => (
+const SwapProvider: FC = ({ children }: any) => (
   // @ts-ignore
   <SwapContextProvider>{children}</SwapContextProvider>
 );
 
-const WalletConnectProvider: React.FC = ({ children }: any) => (
+const WalletConnectProvider: FC = ({ children }: any) => (
   // @ts-ignore
   <WalletConnectContextProvider>{children}</WalletConnectContextProvider>
 );

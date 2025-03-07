@@ -1,4 +1,4 @@
-import React, { ComponentType, useCallback } from 'react';
+import { ComponentType, useCallback } from 'react';
 import { Row } from '@components/base';
 import Config from '@constants/config';
 import { ExplorerAccount, Token } from '@models';

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
@@ -95,7 +95,7 @@ export const CreateWalletStep1 = () => {
   return (
     <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
       <Header
-        style={{ shadowColor: 'transparent' }}
+        style={styles.header}
         bottomBorder
         title={
           <Text
@@ -109,7 +109,7 @@ export const CreateWalletStep1 = () => {
         }
       />
       <Spacer value={scale(23)} />
-      <View style={{ paddingHorizontal: scale(28) }}>
+      <View style={styles.wrapper}>
         <Text
           fontSize={15}
           align="center"

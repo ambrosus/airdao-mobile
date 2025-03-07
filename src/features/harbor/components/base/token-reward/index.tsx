@@ -1,4 +1,3 @@
-import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Row, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';

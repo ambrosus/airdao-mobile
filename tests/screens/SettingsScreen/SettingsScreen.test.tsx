@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { render } from '@testing-library/react-native';
 import { SettingsScreen } from '@screens/Settings';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';

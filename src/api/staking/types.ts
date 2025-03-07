@@ -9,6 +9,7 @@ export interface PoolDetailsArgs {
 export interface ReturnedPoolDetails {
   addressHash: string;
   contractName: string;
+  totalStakeInAMB: number;
   active: boolean;
   user: {
     amb: number;
@@ -20,4 +21,5 @@ export interface StakeArgs {
   pool: ReturnedPoolDetails;
   value: string;
   walletHash: string;
+  estimateGas?: boolean;
 }
