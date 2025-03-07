@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { staking } from '@api/staking/staking-service';
 import { ReturnedPoolDetails } from '@api/staking/types';
@@ -73,19 +72,8 @@ export const WithdrawToken = ({
     const maxWithdrawAmount =
       (parseFloat(String(pool?.user?.amb) || '0') * 100) / 100;
 
-    const estimatedGas = await staking.unstake({
-      pool,
-      value: maxWithdrawAmount.toString() ?? '',
-      walletHash: (wallet?._raw as unknown as { hash: string }).hash,
-      estimateGas: true
-    });
-
-    const parsedBalance = ethers.utils.parseEther(maxWithdrawAmount.toString());
-
-    setWithdrawAmount(
-      ethers.utils.formatEther(parsedBalance.sub(estimatedGas))
-    );
-  }, [pool, wallet?._raw]);
+    setWithdrawAmount(maxWithdrawAmount.toString());
+  }, [pool]);
 
   const onPercentSelect = useCallback(
     (percentage: number) => {

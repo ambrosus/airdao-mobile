@@ -44,9 +44,8 @@ export const WithdrawTokenPreview = ({
   const label = useMemo(() => {
     if (amount) {
       const parsedBalance = ethers.utils.parseEther(balance.formattedBalance);
-      const parsedAmount = ethers.utils.parseEther(amount.toString());
 
-      if (parsedBalance && parsedBalance.lt(parsedAmount.add(estimatedGas))) {
+      if (parsedBalance && parsedBalance.lt(estimatedGas)) {
         return t('bridge.insufficient.funds');
       }
     }
