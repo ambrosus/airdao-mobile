@@ -12,7 +12,7 @@ import { ShimmerLoader } from '@components/animations';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { WalletOutlineIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
-import { AMB_DECIMALS } from '@constants/variables';
+import { AMB_DECIMALS, KEYBOARD_OPENING_TIME } from '@constants/variables';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
   useSwapActions,
@@ -129,7 +129,7 @@ export const Balance = ({ type, setIsBalanceLoading }: BalanceProps) => {
         setTimeout(() => {
           updateReceivedTokensOutput();
         });
-      }, 250);
+      }, KEYBOARD_OPENING_TIME);
     } catch (error) {
       throw error;
     } finally {
