@@ -49,9 +49,9 @@ export function useSwapPriceImpact() {
               reserveOut
             );
 
-            return Number(+impact >= 0 ? impact : -impact)
-              .toFixed(AMB_DECIMALS)
-              .toString();
+            return Number(
+              Number(+impact >= 0 ? impact : -impact).toFixed(AMB_DECIMALS)
+            );
           }
         }
       }
