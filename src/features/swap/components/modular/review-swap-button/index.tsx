@@ -33,6 +33,7 @@ export const ReviewSwapButton = () => {
   const { bnBalances } = useSwapMultiplyBalance();
   const { resolveBottomSheetData } = useSwapInterface();
   const {
+    isLockedAfterReverse,
     isPoolsLoading,
     isExecutingPrice,
     selectedTokens,
@@ -79,7 +80,8 @@ export const ReviewSwapButton = () => {
       isProcessingBottomSheet ||
       isExecutingPrice ||
       isPoolsLoading ||
-      isExtractingMaxPrice
+      isExtractingMaxPrice ||
+      isLockedAfterReverse
     );
   }, [
     swapButtonString,
@@ -87,7 +89,8 @@ export const ReviewSwapButton = () => {
     isProcessingBottomSheet,
     isExecutingPrice,
     isPoolsLoading,
-    isExtractingMaxPrice
+    isExtractingMaxPrice,
+    isLockedAfterReverse
   ]);
 
   const buttonColors = useMemo(() => {
@@ -112,7 +115,12 @@ export const ReviewSwapButton = () => {
       <TextOrSpinner
         label={swapButtonString}
         loadingLabel={undefined}
-        loading={isExecutingPrice || isProcessingBottomSheet || isPoolsLoading}
+        loading={
+          isExecutingPrice ||
+          isProcessingBottomSheet ||
+          isPoolsLoading ||
+          isLockedAfterReverse
+        }
         styles={buttonStyles(disabled)}
       />
     </PrimaryButton>

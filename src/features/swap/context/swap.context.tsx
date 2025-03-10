@@ -38,6 +38,7 @@ export const SwapContext = () => {
   const allPairsRef = useRef<SelectedPairsState>([]);
   const [isExecutingPrice, setIsExecutingPrice] = useState(false);
   const [isPoolsLoading, setIsPoolsLoading] = useState(false);
+  const [isLockedAfterReverse, setIsLockedAfterReverse] = useState(false);
 
   const [isInsufficientBalance, setIsInsufficientBalance] = useState(false);
   const [isExtractingMaxPrice, setIsExtractingMaxPrice] = useState(false);
@@ -159,7 +160,9 @@ export const SwapContext = () => {
     estimatedGasValues,
     setEstimatedGasValues,
     isExtractingMaxPrice,
-    setIsExtractingMaxPrice
+    setIsExtractingMaxPrice,
+    isLockedAfterReverse,
+    setIsLockedAfterReverse
   };
 };
 
