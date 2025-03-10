@@ -12,7 +12,6 @@ import {
   maximumAmountIn,
   minimumAmountOut
 } from '@features/swap/utils';
-import { NumberUtils } from '@utils';
 import { useEstimatedGas } from './use-estimated-gas';
 import { useSwapActions } from './use-swap-actions';
 import { useSwapBottomSheetHandler } from './use-swap-bottom-sheet-handler';
@@ -78,7 +77,6 @@ export function useSwapInterface() {
       );
 
       const priceImpact = await uiPriceImpactGetter();
-      console.log('priceImpact', priceImpact);
 
       const allowance = await checkAllowance();
 
