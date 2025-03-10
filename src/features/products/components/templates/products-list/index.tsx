@@ -42,11 +42,15 @@ export const ProductsList = () => {
   const { currentLanguage } = useLocalization();
 
   const WEB_PRODUCTS = useMemo(() => {
-    return browserConfig && browserConfig?.products
+    const webProductList = parseWebProduct(
+      browserConfig.products,
+      currentLanguage
+    );
+    return webProductList.length && browserConfig && browserConfig?.products
       ? [
           {
             title: 'WEB',
-            data: parseWebProduct(browserConfig.products, currentLanguage)
+            data: webProductList
           }
         ]
       : [];

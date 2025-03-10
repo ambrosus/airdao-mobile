@@ -164,7 +164,7 @@ switch (Updates.channel) {
     break;
   }
   default: {
-    Config = envs.stage;
+    Config = envs.testnet;
     break;
   }
 }
