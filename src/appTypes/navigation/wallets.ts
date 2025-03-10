@@ -39,6 +39,9 @@ export type HomeParamsList = {
   Harbor: undefined;
   BrowserScreen: { uri?: string };
   CreateWalletStep2: undefined;
+
+  // TODO: Remove later
+  OAuthScreen: undefined;
 } & CommonStackParamsList;
 
 export type HomeNavigationProp = CompositeNavigationProp<

@@ -11,6 +11,7 @@ import Animated, {
 import { HomeNavigationProp } from '@appTypes/navigation';
 import { Button, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
+import { AddIcon } from '@components/svg/icons';
 import {
   BarcodeScannerIcon,
   NotificationBellIcon
@@ -123,6 +124,9 @@ export const HomeHeader = memo(
     const renderContentRight = useMemo(() => {
       return (
         <>
+          <Button onPress={() => navigation.navigate('OAuthScreen')}>
+            <AddIcon />
+          </Button>
           <Spacer horizontal value={scale(25)} />
           <Button onPress={navigateToNotifications}>
             <NotificationBellIcon />
@@ -132,7 +136,7 @@ export const HomeHeader = memo(
           </Button>
         </>
       );
-    }, [navigateToNotifications, newNotificationsCount]);
+    }, [navigateToNotifications, navigation, newNotificationsCount]);
 
     const renderContentLeft = useMemo(() => {
       return (

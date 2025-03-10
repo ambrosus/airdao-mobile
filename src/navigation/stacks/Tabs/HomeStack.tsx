@@ -9,6 +9,7 @@ import { BridgeHistory } from '@screens/BridgeHistory';
 import { KosmosOrderList } from '@screens/KosmosOrderList';
 import { NFTScreen } from '@screens/NFTScreen';
 import { Notifications } from '@screens/Notifications';
+import { OAuthScreen } from '@screens/OAuth';
 import { SendFunds } from '@screens/SendFunds';
 import {
   StakeErrorScreen,
@@ -61,6 +62,9 @@ export const HomeStack = () => {
         <Stack.Screen name="KosmosScreen" component={KosmosOrderList} />
         {/* HARBOR ROUTES */}
         <Stack.Screen name="Harbor" component={HarborStacks} />
+
+        {/* TODO: Test OAuth */}
+        <Stack.Screen name="OAuthScreen" component={OAuthScreen} />
         {getCommonStack(Stack as any)}
       </Stack.Navigator>
       <WalletSessionsBottomSheet />
