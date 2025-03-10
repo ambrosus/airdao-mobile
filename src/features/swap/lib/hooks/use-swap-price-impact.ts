@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { ethers } from 'ethers';
+import { AMB_DECIMALS } from '@constants/variables';
 import { useSwapContextSelector } from '@features/swap/context';
 import { getAmountsIn, getAmountsOut } from '@features/swap/lib/contracts';
 import { FIELD, SwapToken } from '@features/swap/types';
@@ -48,7 +49,9 @@ export function useSwapPriceImpact() {
               reserveOut
             );
 
-            return Number(+impact >= 0 ? impact : -impact);
+            return Number(+impact >= 0 ? impact : -impact).toFixed(
+              AMB_DECIMALS
+            );
           }
         }
       }
