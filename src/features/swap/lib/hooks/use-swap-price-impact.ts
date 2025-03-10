@@ -8,8 +8,8 @@ import {
   subtractRealizedLPFeeFromInput,
   multiHopCumulativeImpact,
   singleHopImpact,
-  isMultiHopSwapAvailable,
-  withMultiHopPath
+  withMultiHopPath,
+  wrapNativeToken
 } from '@features/swap/utils';
 import { useAllLiquidityPools } from './use-all-liquidity-pools';
 import { useSwapHelpers } from './use-swap-helpers';
@@ -20,15 +20,16 @@ export function useSwapPriceImpact() {
   const { getPairAddress, getReserves } = useAllLiquidityPools();
   const { hasWrapNativeToken } = useSwapHelpers();
   const { settings } = useSwapSettings();
-  const { tokenToSell, tokenToReceive, tokensRoute } = useSwapTokens();
-  const { isExactInRef } = useSwapContextSelector();
+  const { tokenToSell, tokenToReceive } = useSwapTokens();
+  const { isExactInRef, isMultiHopSwapBetterCurrency } =
+    useSwapContextSelector();
 
   const singleHopImpactGetter = useCallback(
     async (amountToSell: string, amountToReceive: string) => {
       if (!hasWrapNativeToken) {
         const selectedTokens = {
-          [FIELD.TOKEN_A]: tokenToSell.TOKEN,
-          [FIELD.TOKEN_B]: tokenToReceive.TOKEN
+          [FIELD.TOKEN_A]: wrapNativeToken(tokenToSell.TOKEN),
+          [FIELD.TOKEN_B]: wrapNativeToken(tokenToReceive.TOKEN)
         };
 
         const pool = getPairAddress(selectedTokens);
@@ -49,12 +50,11 @@ export function useSwapPriceImpact() {
               reserveOut
             );
 
-            return Number(
-              Number(+impact >= 0 ? impact : -impact).toFixed(AMB_DECIMALS)
-            );
+            return Number(Math.abs(Number(impact)).toFixed(AMB_DECIMALS));
           }
         }
       }
+      return Infinity; // Return Infinity as a fallback when calculation fails
     },
     [
       getPairAddress,
@@ -70,6 +70,7 @@ export function useSwapPriceImpact() {
       const path = withMultiHopPath(
         _path ?? [
           tokenToSell.TOKEN?.address ?? '',
+          ...isMultiHopSwapBetterCurrency.tokens,
           tokenToReceive.TOKEN?.address ?? ''
         ]
       );
@@ -131,14 +132,16 @@ export function useSwapPriceImpact() {
     [
       getPairAddress,
       getReserves,
-      tokenToReceive.TOKEN,
+      isMultiHopSwapBetterCurrency.tokens,
+      tokenToReceive.TOKEN?.address,
       tokenToSell.AMOUNT,
-      tokenToSell.TOKEN
+      tokenToSell.TOKEN?.address
     ]
   );
 
   const uiPriceImpactGetter = useCallback(async () => {
-    const isMultiHopPathAvailable = isMultiHopSwapAvailable(tokensRoute);
+    const isMultiHopPathAvailable =
+      isMultiHopSwapBetterCurrency.tokens.length > 0;
     const isTradeIn = isExactInRef.current;
     if (settings.current.multihops && isMultiHopPathAvailable) {
       return await multiHopImpactGetter(
@@ -153,7 +156,7 @@ export function useSwapPriceImpact() {
       );
     }
   }, [
-    tokensRoute,
+    isMultiHopSwapBetterCurrency.tokens.length,
     isExactInRef,
     settings,
     multiHopImpactGetter,

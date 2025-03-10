@@ -41,12 +41,19 @@ export const SwapErrorImpactButton = ({
       return (
         allowance === AllowanceStatus.INCREASE ||
         (priceImpact > 10 && !extendedMode) ||
-        isInsufficientBalance
+        isInsufficientBalance ||
+        isProcessingSwap
       );
     }
 
     return false;
-  }, [allowance, extendedMode, isInsufficientBalance, priceImpact]);
+  }, [
+    allowance,
+    extendedMode,
+    isInsufficientBalance,
+    isProcessingSwap,
+    priceImpact
+  ]);
 
   const buttonActionString = useMemo(() => {
     if (minimized) {

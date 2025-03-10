@@ -78,6 +78,7 @@ export function useSwapInterface() {
       );
 
       const priceImpact = await uiPriceImpactGetter();
+      console.log('priceImpact', priceImpact);
 
       const allowance = await checkAllowance();
 
@@ -109,9 +110,7 @@ export function useSwapInterface() {
         : receivedAmountOut;
 
       setUiBottomSheetInformation({
-        priceImpact: priceImpact
-          ? Number(NumberUtils.limitDecimalCount(priceImpact, 2))
-          : 0,
+        priceImpact: priceImpact ? Number(Number(priceImpact).toFixed(2)) : 0,
         minimumReceivedAmount,
         allowance: allowance
           ? AllowanceStatus.INCREASE
