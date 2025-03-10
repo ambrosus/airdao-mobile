@@ -13,6 +13,7 @@ import { useBrowserStore } from '@entities/browser/model';
 import { BottomSheetBrowserModal } from '@features/browser/components/templates';
 import { PRODUCTS } from '@features/products/entities';
 import {
+  filterDisplayedProducts,
   parseWebProduct,
   Product,
   SectionizedProducts
@@ -42,11 +43,14 @@ export const ProductsList = () => {
   const { currentLanguage } = useLocalization();
 
   const WEB_PRODUCTS = useMemo(() => {
-    return browserConfig && browserConfig?.products
+    const data = filterDisplayedProducts(
+      parseWebProduct(browserConfig.products, currentLanguage)
+    );
+    return browserConfig && browserConfig?.products && data.length > 0
       ? [
           {
             title: 'WEB',
-            data: parseWebProduct(browserConfig.products, currentLanguage)
+            data
           }
         ]
       : [];

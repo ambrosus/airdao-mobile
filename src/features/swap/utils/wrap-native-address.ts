@@ -26,6 +26,12 @@ export function wrapNativeAddress(path: string[]): [string, string] {
   ) as [string, string];
 }
 
+export function wrapNativeToken(token: SwapToken) {
+  return token.address === ethers.constants.AddressZero
+    ? { name: 'SAMB', symbol: 'SAMB', address: addresses.SAMB }
+    : token;
+}
+
 export function isETHtoWrapped(path: Array<string | undefined>) {
   return path[0] === ethers.constants.AddressZero && path[1] === addresses.SAMB;
 }
