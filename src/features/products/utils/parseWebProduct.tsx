@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { ProductSwap } from '@components/svg/icons/v2';
 import { BrowserItemModel } from '@entities/browser/model';
@@ -15,6 +16,7 @@ export const parseWebProduct = (
 ) => {
   return products
     .filter((product) => product.uri && product.name)
+    .filter((product) => product?.platforms?.includes(Platform.OS))
     .map((product: BrowserItemModel) => {
       const icon = product.icon ? (
         <SvgXml xml={product.icon} width={56} height={56} />

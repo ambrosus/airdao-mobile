@@ -14,6 +14,7 @@ export interface BrowserStoreModel {
 export interface BrowserItemModel {
   id: number;
   icon: string;
+  platforms: string[];
   description: { [key: string]: string };
   name: { [key: string]: string };
   background: string[];
