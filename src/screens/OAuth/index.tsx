@@ -92,13 +92,13 @@ export const OAuthScreen = () => {
   const getSigner = async () => {
     if (!provider) return alert('Provider not found');
 
-    const { getSigner, getBalance } = new ethers.providers.Web3Provider(
-      provider
-    );
+    const web3Provider = new ethers.providers.Web3Provider(provider);
 
-    const signer = getSigner();
+    const signer = web3Provider.getSigner();
     const address = await signer.getAddress();
-    const balance = ethers.utils.formatEther(await getBalance(address));
+    const balance = ethers.utils.formatEther(
+      await web3Provider.getBalance(address)
+    );
 
     alert(address);
     alert(balance);
