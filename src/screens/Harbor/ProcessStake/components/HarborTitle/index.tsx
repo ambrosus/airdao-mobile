@@ -1,9 +1,8 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { HeaderAPYLabel } from '@entities/harbor/components/base';
 import { scale } from '@utils';
-import { StakeHeaderIcon } from '../StakedHeaderIcon';
 
 export const HarborTitle = ({ harborAPR }: { harborAPR: string }) => {
   const { t } = useTranslation();
@@ -17,7 +16,7 @@ export const HarborTitle = ({ harborAPR }: { harborAPR: string }) => {
         {t('harbor.stakeAMB.header')}
       </Text>
       <Spacer horizontal value={scale(8)} />
-      <StakeHeaderIcon apr={harborAPR} />
+      <HeaderAPYLabel apr={harborAPR} />
     </Row>
   );
 };

@@ -1,7 +1,7 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { FlatList, View } from 'react-native';
 import { formatUnits } from 'ethers/lib/utils';
-import { Text } from '@components/base';
+import { Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { BridgeSelectorItem } from '@components/templates/BridgeSelectorItem';
 import { COLORS } from '@constants/colors';
@@ -32,7 +32,7 @@ export const TokenSelectData = forwardRef<
     const tokenBalanceInfo = `${balance} ${token.symbol}`;
     return (
       <Text fontSize={scale(14)} color={COLORS.black}>
-        {tokenBalanceInfo}
+        {NumberUtils.numberToTransformedLocale(tokenBalanceInfo)}
       </Text>
     );
   };
@@ -64,6 +64,7 @@ export const TokenSelectData = forwardRef<
         data={selectedBridgeData.pairs}
         renderItem={renderTokenItem}
       />
+      <Spacer value={scale(50)} />
     </View>
   );
 });

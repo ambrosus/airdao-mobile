@@ -1,4 +1,3 @@
-import React from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { formatEther } from 'ethers/lib/utils';
@@ -73,23 +72,51 @@ export const StakeInfoContainer = ({
           <Spacer value={scale(15)} />
           <View style={styles.infoMain}>
             <Row justifyContent={'space-between'}>
-              <Text style={styles.infoTitleText}>{t('harbor.apr')}</Text>
-              <Text style={styles.aprText}>{harborAPR} %</Text>
+              <Text
+                fontSize={14}
+                fontFamily="Inter_500Medium"
+                color={COLORS.neutral600}
+              >
+                {t('harbor.apr')}
+              </Text>
+              <Text
+                fontSize={14}
+                fontFamily="Inter_500Medium"
+                color={COLORS.success500}
+              >
+                {harborAPR} %
+              </Text>
             </Row>
-            <Spacer value={scale(8)} />
             <Row justifyContent={'space-between'}>
-              <Text style={styles.infoTitleText}>
+              <Text
+                fontSize={14}
+                fontFamily="Inter_500Medium"
+                color={COLORS.neutral600}
+              >
                 {t('harbor.total.staked')}
               </Text>
-              <Text style={styles.intoText}>{totalAMBStaked} AMB</Text>
+              <Text
+                fontSize={14}
+                fontFamily="Inter_500Medium"
+                color={COLORS.neutral900}
+              >
+                {totalAMBStaked} AMB
+              </Text>
             </Row>
-            <Spacer value={scale(8)} />
             <Row justifyContent={'space-between'}>
-              <Text style={styles.infoTitleText}>
+              <Text
+                fontSize={14}
+                fontFamily="Inter_500Medium"
+                color={COLORS.neutral600}
+              >
                 {t('harbor.total.staked.value')}
               </Text>
-              <Text style={styles.intoText}>
-                $ {NumberUtils.minimiseAmount(+totalStakedOnHarbor.usd)}
+              <Text
+                fontSize={14}
+                fontFamily="Inter_500Medium"
+                color={COLORS.neutral900}
+              >
+                ${NumberUtils.minimiseAmount(+totalStakedOnHarbor.usd)}
               </Text>
             </Row>
           </View>

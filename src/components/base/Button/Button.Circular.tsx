@@ -1,4 +1,3 @@
-import React from 'react';
 import { ViewStyle } from 'react-native';
 import { BaseButton } from './Button.Base';
 import { CircularButtonProps } from './Button.types';

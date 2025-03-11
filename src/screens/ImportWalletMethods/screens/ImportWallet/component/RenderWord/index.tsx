@@ -1,4 +1,4 @@
-import React, { MutableRefObject, RefObject, useCallback } from 'react';
+import { MutableRefObject, RefObject, useCallback } from 'react';
 import { View, FlatList } from 'react-native';
 import { InputRef, Text } from '@components/base';
 import { InputWithIcon } from '@components/composite';

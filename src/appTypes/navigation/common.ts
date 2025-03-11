@@ -11,6 +11,7 @@ export type CommonStackParamsList = {
   Passcode: PasscodeParams;
   Collection: { group: AccountList };
   Explore: { address: string };
+  BrowserScreen: { uri: string };
 };
 
 export type CommonStackNavigationProp = CompositeNavigationProp<

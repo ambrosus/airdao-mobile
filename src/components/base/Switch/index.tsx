@@ -1,4 +1,3 @@
-import React from 'react';
 import { ColorValue, StyleProp, ViewProps, ViewStyle } from 'react-native';
 import { Switch as RNGHSwitch } from 'react-native-gesture-handler';
 import { COLORS } from '@constants/colors';

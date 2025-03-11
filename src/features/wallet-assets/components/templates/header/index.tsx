@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Animated, {
@@ -39,7 +39,7 @@ interface HomeHeaderProps {
   isHeaderHidden: SharedValue<boolean>;
 }
 
-export const HomeHeader = React.memo(
+export const HomeHeader = memo(
   ({ account, isHeaderHidden }: HomeHeaderProps): JSX.Element => {
     const navigation = useNavigation<HomeNavigationProp>();
 
@@ -136,7 +136,7 @@ export const HomeHeader = React.memo(
 
     const renderContentLeft = useMemo(() => {
       return (
-        <View style={{ bottom: scale(3) }}>
+        <View style={styles.leftContainer}>
           <Button onPress={openScanner}>
             <BarcodeScannerIcon />
           </Button>

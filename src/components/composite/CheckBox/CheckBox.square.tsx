@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button } from '@components/base';
 import { CheckIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';

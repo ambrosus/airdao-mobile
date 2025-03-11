@@ -3,7 +3,7 @@ import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
-  container: {},
+  main: { paddingTop: verticalScale(15) },
   contentWrapper: {
     justifyContent: 'space-between',
     paddingBottom: '22%',

@@ -1,4 +1,4 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -8,7 +8,7 @@ import clearAllMocks = jest.clearAllMocks;
 const queryClient = new QueryClient();
 
 jest.mock('react-native-modal', () => {
-  return ({ children }: { children: React.ReactNode }) => <>{children}</>;
+  return ({ children }: { children: ReactNode }) => <>{children}</>;
 });
 
 describe('BottomSheetCreateRenameGroup', () => {

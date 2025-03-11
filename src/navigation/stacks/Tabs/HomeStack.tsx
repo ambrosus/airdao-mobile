@@ -1,4 +1,3 @@
-import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeParamsList } from '@appTypes/navigation/wallets';
 import { WalletSessionsBottomSheet } from '@features/wallet-connect/components/templates';
@@ -62,7 +61,6 @@ export const HomeStack = () => {
         <Stack.Screen name="KosmosScreen" component={KosmosOrderList} />
         {/* HARBOR ROUTES */}
         <Stack.Screen name="Harbor" component={HarborStacks} />
-
         {getCommonStack(Stack as any)}
       </Stack.Navigator>
       <WalletSessionsBottomSheet />

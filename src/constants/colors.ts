@@ -14,6 +14,7 @@ export const COLORS = {
   neutral900: '#0C0C0D',
   neutral900Alpha: {
     5: 'rgba(14, 14, 14, 0.05)',
+    20: 'rgba(14, 14, 14, 0.2)',
     60: 'rgba(14, 14, 14, 0.60)'
   },
   asphaltBlack: '#2E313A',
@@ -119,6 +120,7 @@ export const COLORS = {
   veryLightGrey: '#ffffff99',
   navyIndigo: '#162c5d',
   separator: '#2f2b431a',
+  softGrayBlue: 'rgba(88, 94, 119, 1)',
 
   // V2
   foregroundSecondaryContent: 'rgba(148, 151, 156, 1)',

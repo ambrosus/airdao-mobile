@@ -1,4 +1,3 @@
-import React from 'react';
 import { Row, Spacer, Spinner, Text } from '@components/base';
 import { FontFamily } from '@components/base/Text/Text.types';
 import { COLORS } from '@constants/colors';
@@ -6,7 +5,7 @@ import { scale } from '@utils';
 
 interface TextOrSpinnerProps {
   loading: boolean;
-  loadingLabel: string | undefined;
+  loadingLabel?: string;
   label: string;
   spinnerColor?: string;
   spinnerCustomSize?: number;

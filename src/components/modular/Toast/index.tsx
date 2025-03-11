@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { ToastOptions, ToastRef } from './Toast.types';
 import { ToastWrapper } from './Toast.wrapper';
 

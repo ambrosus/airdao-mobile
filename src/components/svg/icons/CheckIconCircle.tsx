@@ -1,4 +1,3 @@
-import React from 'react';
 import { View } from 'react-native';
 import { CheckIcon } from '@components/svg/icons/Check';
 import { COLORS } from '@constants/colors';

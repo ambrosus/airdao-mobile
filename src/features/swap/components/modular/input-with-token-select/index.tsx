@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { LayoutChangeEvent, Platform, Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { InputRef, Text } from '@components/base';
@@ -21,12 +21,17 @@ export const InputWithTokenSelect = ({
   estimated
 }: InputWithTokenSelectProps) => {
   const { t } = useTranslation();
-  const { selectedTokensAmount, setLastChangedInput } =
-    useSwapContextSelector();
+  const {
+    selectedTokensAmount,
+    setLastChangedInput,
+    isPoolsLoading,
+    isExactInRef
+  } = useSwapContextSelector();
   const { onChangeSelectedTokenAmount } = useSwapFieldsHandler();
 
   const textInputRef = useRef<InputRef>(null);
 
+  const [isBalanceLoading, setIsBalanceLoading] = useState(true);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [inputContainerWidth, setInputContainerWidth] = useState(0);
 
@@ -68,16 +73,36 @@ export const InputWithTokenSelect = ({
     });
   }, []);
 
-  const onInputContainerPress = useCallback(
-    () => textInputRef.current?.focus(),
-    []
-  );
+  const onInputContainerPress = useCallback(() => {
+    if (!isBalanceLoading) textInputRef.current?.focus();
+  }, [isBalanceLoading]);
 
   const onLayoutEventHandle = useCallback(
     (event: LayoutChangeEvent) =>
       setInputContainerWidth(event.nativeEvent.layout.width),
     []
   );
+
+  const disabled = useMemo(() => {
+    return isPoolsLoading || isBalanceLoading;
+  }, [isPoolsLoading, isBalanceLoading]);
+
+  const transformedValue = useMemo(() => {
+    const independentField = isExactInRef.current
+      ? FIELD.TOKEN_A
+      : FIELD.TOKEN_B;
+
+    const parsedAmount = NumberUtils.toSignificantDigits(
+      selectedTokensAmount[type],
+      6
+    );
+
+    if (type === independentField) {
+      return value;
+    } else {
+      return parsedAmount;
+    }
+  }, [isExactInRef, selectedTokensAmount, type, value]);
 
   return (
     <View style={styles.wrapper}>
@@ -96,7 +121,9 @@ export const InputWithTokenSelect = ({
           style={styles.inputContainer}
         >
           <TextInput
-            value={value}
+            focusable={!disabled}
+            editable={!disabled}
+            value={transformedValue}
             placeholder="0"
             type="number"
             numberOfLines={1}
@@ -111,7 +138,7 @@ export const InputWithTokenSelect = ({
         </Pressable>
       </View>
 
-      <Balance type={type} />
+      <Balance type={type} setIsBalanceLoading={setIsBalanceLoading} />
     </View>
   );
 };

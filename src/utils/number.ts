@@ -26,6 +26,11 @@ const formatNumber = (amount: number, decimalPlaces = 2): string => {
     counter++;
   }
   const leftPart = (isNegative ? '-' : '') + formattedString;
+
+  if (decimalPlaces === 0) {
+    return leftPart;
+  }
+
   const rightPart = strAmount
     .substring(startingIdx + 1)
     .slice(0, decimalPlaces + 1);
@@ -121,6 +126,10 @@ const numberToTransformedLocale = (value: string | number) => {
     return '0';
   }
 
+  if (amount < 0.01) {
+    return '0.00';
+  }
+
   const [intPart, floatPart] = amount.toString().split('.');
 
   if (amount % 1 === 0) {
@@ -140,6 +149,24 @@ const formatDecimal = (value: string, decimals = 2): string => {
   return fixed.replace(/\.?0+$/, '');
 };
 
+const toSignificantDigits = (value: string, significantDigits = 6): string => {
+  if (!value) return '';
+
+  if (value === '0' || value === '0.') return value;
+  if (value.startsWith('0') && value[1] !== '.' && value.length > 1) {
+    value = value.slice(1);
+  }
+
+  if (value.endsWith('.')) return value;
+
+  const num = parseFloat(value);
+  if (isNaN(num)) return '';
+
+  const formatted = num.toPrecision(significantDigits);
+
+  return parseFloat(formatted).toString();
+};
+
 export const NumberUtils = {
   formatNumber,
   addSignToNumber,
@@ -148,5 +175,6 @@ export const NumberUtils = {
   formatAmount,
   minimiseAmount,
   numberToTransformedLocale,
-  formatDecimal
+  formatDecimal,
+  toSignificantDigits
 };

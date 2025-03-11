@@ -1,7 +1,6 @@
-import React from 'react';
 import { formatUnits } from 'ethers/lib/utils';
 import { WalletCard } from '@components/modular';
-import { useAMBPrice, useUSDPrice } from '@hooks';
+import { useAMBPrice, useUSDBigNumberAmount } from '@hooks';
 import { useBalanceOfAddress } from '@hooks/query/useBalanceOfAddress';
 import { AccountListItemProps, CardType } from './AccountList.types';
 
@@ -11,8 +10,7 @@ export const AccountListItem = (props: AccountListItemProps) => {
     account.address
   );
   const { data: ambPrice } = useAMBPrice();
-  const usdBalance = useUSDPrice(Number(ambBalance.ether) || 0);
-
+  const usdBalance = useUSDBigNumberAmount(ambBalance.wei);
   switch (type as CardType) {
     case 'credit-card': {
       return (

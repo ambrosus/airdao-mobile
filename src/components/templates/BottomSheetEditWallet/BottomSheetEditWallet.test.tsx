@@ -1,4 +1,4 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -10,7 +10,7 @@ import clearAllMocks = jest.clearAllMocks;
 const queryClient = new QueryClient();
 
 jest.mock('react-native-modal', () => {
-  return ({ children }: { children: React.ReactNode }) => <>{children}</>;
+  return ({ children }: { children: ReactNode }) => <>{children}</>;
 });
 
 jest.mock('@contexts/AllAddresses', () => ({
@@ -38,6 +38,7 @@ let mockedListsOfAddressGroup = [
   }
 ];
 
+// @ts-ignore
 const mockedWallet: ExplorerAccount = {
   _id: '6200de3b523162b8b87baff1',
   address: '0xF977814e90dA44bFA03b6295A0616a897441aceC',

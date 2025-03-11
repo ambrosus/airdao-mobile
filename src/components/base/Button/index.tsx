@@ -1,4 +1,3 @@
-import React from 'react';
 import { BaseButton } from './Button.Base';
 import { BorderedButton } from './Button.Bordered';
 import { CircularButton } from './Button.Circular';

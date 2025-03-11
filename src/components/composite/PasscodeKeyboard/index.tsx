@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import {
   Text,
   TextStyle,
@@ -11,8 +11,8 @@ import { Row } from '@components/base';
 import { BackIcon } from '@components/svg/icons';
 import { FingerPrintIcon, FaceIDIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
-import { DEVICE_HEIGHT } from '@constants/variables';
-import { scale, DeviceUtils } from '@utils';
+import { DeviceUtils } from '@utils';
+import { styles } from './styles';
 
 const DEFAULT_BUTTONS = [
   ['1', '2', '3'],
@@ -119,11 +119,7 @@ export const PasscodeKeyboard = ({
         onPress={onButtonPress}
         disabled={!title}
         style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '25%',
-          margin: 5,
-          height: DEVICE_HEIGHT * 0.08,
+          ...styles.container,
           ...buttonContainerStyle
         }}
       >
@@ -132,8 +128,7 @@ export const PasscodeKeyboard = ({
         ) : (
           <Text
             style={{
-              fontFamily: 'Inter_700Bold',
-              fontSize: scale(20),
+              ...styles.btnText,
               ...buttonTextStyle
             }}
           >
@@ -145,13 +140,7 @@ export const PasscodeKeyboard = ({
   };
 
   return (
-    <View
-      style={{
-        width: '100%',
-        height: DEVICE_HEIGHT * 0.4,
-        alignItems: 'center'
-      }}
-    >
+    <View style={styles.main}>
       {buttons.map((item, index) => {
         return (
           <Row key={`${index}`}>

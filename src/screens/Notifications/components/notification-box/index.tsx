@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { Text as RNText, View } from 'react-native';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';

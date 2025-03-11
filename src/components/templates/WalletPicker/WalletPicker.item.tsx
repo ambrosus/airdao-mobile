@@ -1,4 +1,3 @@
-import React from 'react';
 import { View } from 'react-native';
 import { CryptoCurrencyCode } from '@appTypes';
 import { Row, Spacer, Text } from '@components/base';

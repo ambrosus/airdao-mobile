@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Tooltip from 'react-native-walkthrough-tooltip';
@@ -10,10 +10,9 @@ import {
   EMPTY_SELECTED_TIER,
   REWARD_TIERS_LIST
 } from '@entities/harbor/constants';
-import { useHarborStore } from '@entities/harbor/model/harbor-store';
-import { TierRewardItem } from '@entities/harbor/model/types';
+import { useHarborStore, TierRewardItem } from '@entities/harbor/model';
 import { TokenReward } from '@features/harbor/components/base/token-reward';
-import { calculateClaimAmount } from '@features/harbor/hooks';
+import { calculateClaimAmount } from '@features/harbor/lib';
 import { isAndroid, isIos, scale } from '@utils';
 import { styles } from './styles';
 

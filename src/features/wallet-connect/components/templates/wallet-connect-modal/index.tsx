@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { View } from 'react-native';
 import { BottomSheet } from '@components/composite';
 import { WalletConnectIcon } from '@components/svg/icons';

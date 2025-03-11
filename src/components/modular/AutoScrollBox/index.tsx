@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, JSX } from 'react';
 import { LayoutChangeEvent, ScrollView, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -7,12 +7,13 @@ import { DEVICE_HEIGHT } from '@constants/variables';
 import { useKeyboardHeight } from '@hooks';
 import { isAndroid, isSmallScreen, scale, verticalScale } from '@utils';
 import { styles } from './styles';
+
 const EXTRA_HEIGHT = isSmallScreen ? 164 : 0;
 
 interface AutoScrollBoxProps {
-  header?: React.JSX.Element;
-  refreshControl?: React.JSX.Element | undefined;
-  children: React.JSX.Element;
+  header?: JSX.Element;
+  refreshControl?: JSX.Element | undefined;
+  children: JSX.Element;
   autoScrollEnabled?: boolean;
   maxPointToScroll?: number;
 }

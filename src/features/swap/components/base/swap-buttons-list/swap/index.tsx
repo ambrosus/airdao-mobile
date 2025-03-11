@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Row, Spinner, Text } from '@components/base';
@@ -19,7 +19,12 @@ export const SwapButton = ({
   onCompleteMultiStepSwap
 }: SwapButtonProps) => {
   const { t } = useTranslation();
-  const { selectedTokens } = useSwapContextSelector();
+  const { selectedTokens, isInsufficientBalance } = useSwapContextSelector();
+
+  const disabled = useMemo(
+    () => isProcessingSwap || isInsufficientBalance,
+    [isInsufficientBalance, isProcessingSwap]
+  );
 
   const buttonActionString = useMemo(() => {
     const { TOKEN_A, TOKEN_B } = selectedTokens;
@@ -32,25 +37,28 @@ export const SwapButton = ({
       }
     }
 
-    // return t('swap.button.swap');
-    return 'Confirm';
-  }, [selectedTokens, t]);
+    if (isInsufficientBalance) {
+      return t('bridge.insufficient.funds');
+    }
+
+    return t('button.confirm');
+  }, [isInsufficientBalance, selectedTokens, t]);
 
   const buttonColors = useMemo(() => {
-    return isProcessingSwap
+    return disabled
       ? [COLORS.primary50, COLORS.primary50]
       : [COLORS.brand600, COLORS.brand600];
-  }, [isProcessingSwap]);
+  }, [disabled]);
 
   const buttonShadow: StyleProp<ViewStyle> = useMemo(() => {
-    if (isProcessingSwap) return { shadowOpacity: 0 };
+    if (disabled) return { shadowOpacity: 0 };
 
     return cssShadowToNative('0px 0px 12px 0px rgba(53, 104, 221, 0.50)');
-  }, [isProcessingSwap]);
+  }, [disabled]);
 
   return (
     <PrimaryButton
-      disabled={isProcessingSwap}
+      disabled={disabled}
       colors={buttonColors}
       onPress={onCompleteMultiStepSwap}
       style={{ ...styles.button, ...buttonShadow }}
@@ -70,7 +78,7 @@ export const SwapButton = ({
         <Text
           fontSize={16}
           fontFamily="Inter_600SemiBold"
-          color={isProcessingSwap ? COLORS.brand75 : COLORS.neutral0}
+          color={disabled ? COLORS.brand75 : COLORS.neutral0}
         >
           {buttonActionString}
         </Text>

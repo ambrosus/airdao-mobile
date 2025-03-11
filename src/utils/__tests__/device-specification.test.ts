@@ -4,6 +4,10 @@ import { isSmallScreen } from '@utils/deviceSpecification';
 jest.mock('react-native', () => ({
   Dimensions: {
     get: jest.fn().mockReturnValue({ width: 375, height: 667 })
+  },
+  Platform: {
+    OS: 'ios',
+    select: jest.fn((platform) => platform.ios)
   }
 }));
 

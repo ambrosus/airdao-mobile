@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { act, fireEvent, render } from '@testing-library/react-native';
 import { HomeScreen } from '@screens/Wallets';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';

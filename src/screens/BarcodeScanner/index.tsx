@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { BarCodeScanningResult, Camera, CameraType } from 'expo-camera';
@@ -13,9 +13,9 @@ import { Header } from '@components/composite';
 import { CloseIcon, WalletConnectIcon } from '@components/svg/icons';
 import { QRCodeIcon } from '@components/svg/icons/v2';
 import { ScanSquare } from '@components/templates/BarcodeScanner/components/ScanSquare';
-import { styles } from '@components/templates/BarcodeScanner/styles';
 import { COLORS } from '@constants/colors';
 import { useBarcodeScanner } from '@hooks';
+import { styles } from './styles';
 
 type Props = NativeStackScreenProps<
   RootStackParamsList,

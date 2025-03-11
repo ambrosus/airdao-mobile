@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, ReactNode } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { BigNumber, ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
@@ -55,7 +55,7 @@ export const StakingInfo = (props: StakingInfoProps) => {
               fontFamily="Inter_600SemiBold"
               color={COLORS.neutral800}
             >
-              {NumberUtils.formatNumber(totalStake, 0)} {currency}
+              {NumberUtils.formatNumber(totalStake, 0)} AMB
             </Text>
             <Spacer value={scale(8)} horizontal />
             <Text

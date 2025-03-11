@@ -1,4 +1,3 @@
-import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamsList } from '@appTypes';
 import { useCurrenciesQuery } from '@entities/currencies/lib';

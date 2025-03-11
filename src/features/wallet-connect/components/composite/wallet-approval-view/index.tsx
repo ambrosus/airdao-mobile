@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { getSdkError, buildApprovedNamespaces } from '@walletconnect/utils';
 import { useTranslation } from 'react-i18next';

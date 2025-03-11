@@ -1,4 +1,4 @@
-import React, {
+import {
   ReactNode,
   forwardRef,
   useCallback,
@@ -38,6 +38,7 @@ interface InputWithTokenSelectProps {
   bottomSheetNode?: ReactNode;
   bottomSheetContainerStyle?: StyleProp<ViewStyle>;
   onPreviewBottomSheet?: () => void;
+  tokenDecimal?: number;
   onFocus?: () => void;
   onBlur?: () => void;
   resetKeyboardState?: boolean;
@@ -61,6 +62,7 @@ export const InputWithTokenSelect = forwardRef<
       dispatch = true,
       bottomSheetNode,
       bottomSheetContainerStyle,
+      tokenDecimal,
       onFocus,
       onBlur,
       resetKeyboardState = false,
@@ -203,6 +205,7 @@ export const InputWithTokenSelect = forwardRef<
         )}
 
         <BalanceRow
+          tokenDecimal={tokenDecimal}
           token={token}
           value={value}
           dispatch={dispatch}

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Row, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import { styles } from './styles';

@@ -1,6 +1,7 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { TextStyle, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { CryptoCurrencyCode } from '@appTypes/blockchain';
 import { Row, Spacer, Text } from '@components/base';
 import { ArrowBottomFillIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
@@ -42,7 +43,10 @@ export const TokenSelector = ({
         <Row alignItems="center">
           {token && (
             <>
-              <TokenLogo scale={0.75} token={SAMBSupportedTokenLogo ?? ''} />
+              <TokenLogo
+                scale={token.symbol === CryptoCurrencyCode.HBR ? 0.9 : 0.8}
+                token={SAMBSupportedTokenLogo ?? ''}
+              />
               <Spacer horizontal value={scale(4)} />
             </>
           )}

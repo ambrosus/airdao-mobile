@@ -4,7 +4,7 @@ import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   bottomSheet: {
-    backgroundColor: 'rgba(14, 14, 14, 0.2)',
+    backgroundColor: COLORS.neutral900Alpha['20'],
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 16

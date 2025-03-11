@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   CONNECT_VIEW_STEPS,
   WalletConnectViewValues

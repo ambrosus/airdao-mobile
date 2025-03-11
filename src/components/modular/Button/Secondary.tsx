@@ -1,4 +1,3 @@
-import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Button } from '@components/base';
 import { ButtonProps } from '@components/base/Button';

@@ -18,17 +18,7 @@ export const styles = StyleSheet.create({
   infoMain: {
     backgroundColor: COLORS.neutral100,
     borderRadius: 16,
-    padding: scale(10)
-  },
-  infoTitleText: {
-    color: COLORS.neutral600,
-    fontSize: scale(14)
-  },
-  intoText: {
-    color: COLORS.neutral900,
-    fontSize: scale(14)
-  },
-  aprText: {
-    color: COLORS.success500
+    padding: scale(10),
+    rowGap: 12
   }
 });

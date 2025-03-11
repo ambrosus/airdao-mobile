@@ -8,12 +8,5 @@ export const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: COLORS.semanticsForegroundBorder,
     borderRadius: moderateScale(16)
-  },
-  logo: {
-    alignSelf: 'center'
-  },
-  item: {
-    flex: 1,
-    justifyContent: 'space-between'
   }
 });

@@ -31,9 +31,9 @@ export function useSwapActions() {
   const { _extractPrivateKey } = useWalletPrivateKey();
 
   const {
-    _refExactGetter,
     uiBottomSheetInformation,
     setUiBottomSheetInformation,
+    isExactInRef,
     isMultiHopSwapBetterCurrency
   } = useSwapContextSelector();
 
@@ -99,17 +99,31 @@ export function useSwapActions() {
   ]);
 
   const swapCallback = useCallback(
-    async ({ estimateGas = false }: { estimateGas?: boolean }) => {
+    async ({
+      estimateGas = false,
+      amountIn,
+      amountOut,
+      tradeIn
+    }: {
+      estimateGas?: boolean;
+      amountIn?: string;
+      amountOut?: string;
+      tradeIn?: boolean;
+    }) => {
       const signer = createSigner(await _extractPrivateKey());
       const { slippageTolerance, deadline, multihops } = settings.current;
       const _slippage = +slippageTolerance;
+      const isTradeIn = tradeIn ?? isExactInRef.current;
+
+      const _amountIn = amountIn ?? tokenToSell.AMOUNT;
+      const _amountOut = amountOut ?? tokenToReceive.AMOUNT;
 
       // Handle ETH wrapping/unwrapping
       if (isETHtoWrapped(tokensRoute)) {
-        return await wrapETH(tokenToSell.AMOUNT, signer);
+        return await wrapETH(_amountIn, signer, { estimateGas });
       }
       if (isWrappedToETH(tokensRoute)) {
-        return await unwrapETH(tokenToSell.AMOUNT, signer);
+        return await unwrapETH(_amountIn, signer, { estimateGas });
       }
 
       sendFirebaseEvent(CustomAppEvents.swap_start);
@@ -128,13 +142,13 @@ export function useSwapActions() {
         ];
 
         return await swapMultiHopExactTokensForTokens(
-          tokenToSell.AMOUNT,
-          tokenToReceive.AMOUNT,
+          _amountIn,
+          _amountOut,
           path,
           signer,
           _slippage,
           deadline,
-          _refExactGetter,
+          isTradeIn,
           estimateGas
         );
       }
@@ -142,45 +156,45 @@ export function useSwapActions() {
       // Handle direct routes
       if (isStartsWithETH) {
         return await swapExactETHForTokens(
-          tokenToSell.AMOUNT,
-          tokenToReceive.AMOUNT,
+          _amountIn,
+          _amountOut,
           wrappedPathWithoutMultihops,
           signer,
           _slippage,
           deadline,
-          _refExactGetter,
+          isTradeIn,
           estimateGas
         );
       }
 
       if (isEndsWithETH) {
         return await swapExactTokensForETH(
-          tokenToSell.AMOUNT,
-          tokenToReceive.AMOUNT,
+          _amountIn,
+          _amountOut,
           wrappedPathWithoutMultihops,
           signer,
           _slippage,
           deadline,
-          _refExactGetter,
+          isTradeIn,
           estimateGas
         );
       }
 
       return await swapExactTokensForTokens(
-        tokenToSell.AMOUNT,
-        tokenToReceive.AMOUNT,
+        _amountIn,
+        _amountOut,
         wrappedPathWithoutMultihops,
         signer,
         _slippage,
         deadline,
-        _refExactGetter,
+        isTradeIn,
         estimateGas
       );
     },
     [
       _extractPrivateKey,
-      _refExactGetter,
       isEndsWithETH,
+      isExactInRef,
       isMultiHopSwapBetterCurrency.tokens,
       isStartsWithETH,
       settings,

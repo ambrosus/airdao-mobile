@@ -1,6 +1,14 @@
-import { ReactNode } from 'react';
+import { Dispatch, ReactNode, SetStateAction } from 'react';
 import { ViewProps, ViewStyle } from 'react-native';
 import { ModalProps } from 'react-native-modal';
+
+export interface BottomSheetOutsideDataProps {
+  title?: string;
+  subTitle?: string;
+  buttonsLabels?: string[];
+  onReject?: () => void;
+  onApprove?: () => void;
+}
 
 export interface BottomSheetProps {
   backdropColor?: string;
@@ -19,13 +27,14 @@ export interface BottomSheetProps {
   onBackdropPress?: () => void;
   onCustomCrossPress?: () => void;
   title?: string;
+  setOutsideModalData?: Dispatch<SetStateAction<BottomSheetOutsideDataProps>>;
 }
 
 export type BottomSheetRef = {
   /**
    * Shows modal
    */
-  show: () => void;
+  show: (props?: BottomSheetOutsideDataProps) => void;
 
   /**
    * Hides modal

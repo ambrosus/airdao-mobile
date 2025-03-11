@@ -1,44 +1,45 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HarborNavigationProp } from '@appTypes/navigation/harbor';
-import { Button } from '@components/base';
-import { Header } from '@components/composite';
-import { WithdrawIcon } from '@components/svg/icons/v2/harbor';
+import { HeaderWithWithdrawal } from '@entities/harbor/components/composite';
+import { useStakeHBRStore, useStakeUIStore } from '@entities/harbor/model';
 import { useHarborStore } from '@entities/harbor/model/harbor-store';
 import { useWalletStore } from '@entities/wallet';
 import { HarborStakeTabs } from '@features/harbor/components/tabs';
 import { styles } from './styles';
 
 export const StakeHarborScreen = () => {
-  const { t } = useTranslation();
   const navigation = useNavigation<HarborNavigationProp>();
-  const { updateAll, loading } = useHarborStore();
+  const { updateAll } = useHarborStore();
+  const { hbrYieldFetcher } = useStakeHBRStore();
   const { wallet } = useWalletStore();
+  const { setActiveTabIndex } = useStakeUIStore();
 
   useEffect(() => {
-    updateAll(wallet?.address || '');
+    Promise.all([
+      updateAll(wallet?.address || ''),
+      hbrYieldFetcher(wallet?.address || '')
+    ]);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wallet?.address]);
 
-  const RightContent = () => (
-    <Button
-      onPress={() => {
-        if (loading) {
-          return;
-        }
-        navigation.navigate('WithdrawHarborScreen');
-      }}
-    >
-      <WithdrawIcon />
-    </Button>
-  );
+  useEffect(() => {
+    // Reset active tab index when going back
+    const unsubscribe = navigation.addListener('beforeRemove', (event) => {
+      if (event.data.action.type === 'GO_BACK') {
+        setActiveTabIndex(0);
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, setActiveTabIndex]);
 
   return (
     <SafeAreaView>
-      <Header title={t('staking.header')} contentRight={<RightContent />} />
+      <HeaderWithWithdrawal />
       <View style={styles.main}>
         <HarborStakeTabs />
       </View>

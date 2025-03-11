@@ -34,3 +34,6 @@ export * from './address';
 export * from './bridge';
 export * from './environment';
 export * from './deviceSpecification';
+export * from './wrap-callback-with-error-handler';
+export * from './hasDigits';
+export * from './estimated-gas';

@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     shadowColor: COLORS.culturedWhite,
     backgroundColor: 'white'
   },
+  leftContainer: { bottom: scale(3) },
   notificationCountContainer: {
     position: 'absolute',
     backgroundColor: COLORS.yellow500,
@@ -19,10 +20,5 @@ export const styles = StyleSheet.create({
     height: moderateScale(11),
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  addOrImportWalletButton: {
-    backgroundColor: COLORS.alphaBlack5,
-    width: scale(38),
-    height: scale(38)
   }
 });

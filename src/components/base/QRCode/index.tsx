@@ -1,4 +1,3 @@
-import React from 'react';
 import QRCodeSvg from 'react-native-qrcode-svg';
 
 export interface QRCodeProps {

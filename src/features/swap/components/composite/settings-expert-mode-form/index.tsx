@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Row, Switch, Text } from '@components/base';
 import { COLORS } from '@constants/colors';

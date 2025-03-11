@@ -11,9 +11,11 @@ import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
+import { estimatedNetworkProviderFee } from '@utils';
 
 const STAKE_ESTIMATED_GAS_LIMIT = 67079;
-const UNSTAKE_ESTIMATED_GAS_LIMIT = 77516;
+// TODO: temporary unused constant
+// const UNSTAKE_ESTIMATED_GAS_LIMIT = 77516;
 
 const TEN = BigNumber.from(10);
 const FIXED_POINT = TEN.pow(18);
@@ -61,15 +63,21 @@ class Staking {
             providerOrSigner
           );
 
-          const [contractName, active, tokenPriceAMB, myStakeInTokens] =
-            await Promise.all([
-              poolContract.name(),
-              poolContract.active(),
-              poolContract.getTokenPrice(),
-              poolContract.viewStake({
-                from: address
-              })
-            ]);
+          const [
+            contractName,
+            active,
+            totalStakeInAMB,
+            tokenPriceAMB,
+            myStakeInTokens
+          ] = await Promise.all([
+            poolContract.name && poolContract.name(),
+            poolContract.active && poolContract.active(),
+            poolContract.totalStake && poolContract.totalStake(),
+            poolContract.getTokenPrice && poolContract.getTokenPrice(),
+            poolContract.viewStake({
+              from: address
+            })
+          ]);
 
           const myStakeInAMB = myStakeInTokens
             .mul(tokenPriceAMB)
@@ -78,6 +86,7 @@ class Staking {
           return {
             addressHash,
             contractName,
+            totalStakeInAMB: ethers.utils.formatEther(totalStakeInAMB),
             active,
             user: {
               raw: myStakeInAMB,
@@ -126,10 +135,8 @@ class Staking {
     }
   }
 
-  async unstake({ pool, value, walletHash }: StakeArgs) {
-    const overrides = {
-      value: utils.parseEther(value)
-    };
+  async unstake({ pool, value, walletHash, estimateGas = false }: StakeArgs) {
+    const parsedValue = ethers.utils.parseEther(value);
 
     try {
       const signer = await this.createProvider(walletHash);
@@ -141,14 +148,20 @@ class Staking {
 
       const [tokenPriceAMB] = await Promise.all([contract.getTokenPrice()]);
 
-      const estimatedGas = await this.estimateGas(UNSTAKE_ESTIMATED_GAS_LIMIT);
-      overrides.value = overrides.value.sub(estimatedGas);
-
-      const bnUnstakeAmountInTokens = overrides.value
+      const bnUnstakeAmountInTokens = parsedValue
         .mul(FIXED_POINT)
         .div(tokenPriceAMB);
 
+      if (estimateGas) {
+        const estimatedGas = await contract.estimateGas.unstake(
+          bnUnstakeAmountInTokens
+        );
+
+        return await estimatedNetworkProviderFee(estimatedGas);
+      }
+
       const unstakeContract = await contract.unstake(bnUnstakeAmountInTokens);
+
       return await unstakeContract.wait();
     } catch (err) {
       // @ts-ignore
