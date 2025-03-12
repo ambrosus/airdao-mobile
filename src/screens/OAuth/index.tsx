@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react';
+import '@ethersproject/shims';
+import { useCallback, useEffect, useState } from 'react';
 import { Alert, StyleProp, View, ViewStyle } from 'react-native';
 import {
   GoogleSignin,
@@ -8,7 +9,8 @@ import {
   isSuccessResponse,
   statusCodes
 } from '@react-native-google-signin/google-signin';
-import { IProvider } from '@web3auth/base';
+import { ADAPTER_EVENTS, IProvider } from '@web3auth/base';
+import { decodeToken } from '@web3auth/single-factor-auth';
 import { ethers } from 'ethers';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Text } from '@components/base';
@@ -18,16 +20,6 @@ import { scale } from '@utils';
 function alert(message: string) {
   Alert.alert(message);
 }
-
-const parseToken = (credential: string) => {
-  try {
-    const token = credential.split('.')[1];
-    return JSON.parse(atob(token));
-  } catch (e) {
-    console.error(e);
-    return null;
-  }
-};
 
 const verifier = process.env.W3A_IDENTIFIER ?? '';
 
@@ -42,6 +34,24 @@ const containerStyles: StyleProp<ViewStyle> = {
 
 export const OAuthScreen = () => {
   const [provider, setProvider] = useState<IProvider | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    const init = async () => {
+      try {
+        await web3auth.init();
+        setProvider(web3auth.provider);
+
+        if (web3auth.status === ADAPTER_EVENTS.CONNECTED) {
+          alert('Provider created!');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    init();
+  }, []);
 
   const onWeb3Auth = useCallback(async (response: SignInResponse) => {
     try {
@@ -49,12 +59,12 @@ export const OAuthScreen = () => {
 
       if (!idToken) return alert('Unable to parse idToken');
 
-      const data = parseToken(idToken);
+      const { payload } = decodeToken(idToken);
 
       const provider = await web3auth.connect({
         verifier,
-        verifierId: data?.email,
-        idToken: idToken!
+        verifierId: (payload as any).email,
+        idToken
       });
 
       alert('Provider successfully created!');
@@ -70,6 +80,7 @@ export const OAuthScreen = () => {
       const response = await GoogleSignin.signIn();
 
       if (isSuccessResponse(response)) {
+        setEmail(response.data?.user.email ?? null);
         onWeb3Auth(response);
       } else {
         alert('sign in was cancelled by user');
@@ -105,14 +116,22 @@ export const OAuthScreen = () => {
   };
 
   const logout = async () => {
-    await web3auth.logout();
-    await GoogleSignin.signOut();
+    try {
+      await GoogleSignin.signOut();
+      await web3auth.logout();
+
+      setEmail(null);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      alert('Logged out');
+    }
   };
 
   return (
     <SafeAreaView style={containerStyles}>
       <View>
-        <Text>OAuth</Text>
+        <Text>{email ? `Welcome ${email}` : 'OAuth'}</Text>
 
         <GoogleSigninButton onPress={signIn} />
 
@@ -121,6 +140,13 @@ export const OAuthScreen = () => {
         </Button>
         <Button onPress={getSigner}>
           <Text>Get Signer</Text>
+        </Button>
+        <Button
+          onPress={() =>
+            alert(GoogleSignin.getCurrentUser()?.user.email ?? 'No user found')
+          }
+        >
+          <Text>Get Current User</Text>
         </Button>
       </View>
     </SafeAreaView>

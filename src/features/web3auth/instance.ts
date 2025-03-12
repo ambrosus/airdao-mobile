@@ -29,6 +29,4 @@ const web3auth = new Web3Auth({
   storage: AsyncStorage
 });
 
-web3auth.init();
-
 export { web3auth };
