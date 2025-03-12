@@ -19,7 +19,7 @@ module.exports = {
       config: {
         usesNonExemptEncryption: false
       },
-      bundleIdentifier: 'io.airdao.app',
+      bundleIdentifier: 'io.test.airdao',
       googleServicesFile: './firebase/GoogleService-Info.plist',
       infoPlist: {
         UIBackgroundModes: ['fetch', 'remote-notification'],
@@ -28,7 +28,8 @@ module.exports = {
           'Allow $(PRODUCT_NAME) to access your microphone',
         NSFaceIDUsageDescription: 'Allow $(PRODUCT_NAME) to access FaceID'
       },
-      buildNumber: '1.3.14'
+      buildNumber: '1.3.14',
+      usesAppleSignIn: true
     },
     android: {
       versionCode: 121,
@@ -37,13 +38,13 @@ module.exports = {
         foregroundImage: './assets/adaptive-icon.png',
         backgroundColor: '#ffffff'
       },
-      package: 'io.airdao.app',
+      package: 'io.test.airdao',
       permissions: [
         'android.permission.CAMERA',
         'android.permission.RECORD_AUDIO'
       ],
       playStoreUrl:
-        'https://play.google.com/store/apps/details?id=io.airdao.app.app',
+        'https://play.google.com/store/apps/details?id=io.test.airdao.app',
       googleServicesFile: './firebase/google-services.json'
     },
     notification: {
@@ -56,6 +57,8 @@ module.exports = {
       favicon: './assets/favicon.png'
     },
     plugins: [
+      ['expo-apple-authentication'],
+      ['@react-native-google-signin/google-signin'],
       [
         'expo-local-authentication',
         {
@@ -112,7 +115,10 @@ module.exports = {
     extra: {
       eas: {
         projectId: 'fe81238e-85e8-4ace-8b87-65ff01c085b7',
-        REOWN_PROJECT_ID: process.env.REOWN_PROJECT_ID
+        REOWN_PROJECT_ID: process.env.REOWN_PROJECT_ID,
+        FIREBASE_OAUTH_CLIENT_ID: process.env.FIREBASE_OAUTH_CLIENT_ID,
+        W3A_IDENTIFIER: process.env.W3A_IDENTIFIER,
+        W3A_CLIENT_ID: process.env.W3A_CLIENT_ID
       }
     },
     runtimeVersion: {

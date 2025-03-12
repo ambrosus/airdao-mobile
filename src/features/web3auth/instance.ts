@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CHAIN_NAMESPACES } from '@web3auth/base';
 import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider';
 import { Web3Auth } from '@web3auth/single-factor-auth';
+import Constants from 'expo-constants';
 import Config from '@constants/config';
 
 const chainConfig = {
@@ -15,11 +16,13 @@ const chainConfig = {
   blockExplorer: Config.EXPLORER_URL
 };
 
+alert(JSON.stringify(Constants.expoConfig?.extra?.eas));
+
 const privateKeyProvider = new EthereumPrivateKeyProvider({
   config: { chainConfig }
 });
 
-const clientId = process.env.W3A_CLIENT_ID ?? '';
+const clientId = Constants.expoConfig?.extra?.eas.W3A_CLIENT_ID ?? '';
 
 const web3auth = new Web3Auth({
   clientId,

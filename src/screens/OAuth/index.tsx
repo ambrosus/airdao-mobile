@@ -1,4 +1,3 @@
-import '@ethersproject/shims';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, StyleProp, View, ViewStyle } from 'react-native';
 import {
@@ -12,8 +11,17 @@ import {
 import { ADAPTER_EVENTS, IProvider } from '@web3auth/base';
 import { decodeToken } from '@web3auth/single-factor-auth';
 import { ethers } from 'ethers';
+import {
+  AppleAuthenticationButtonType,
+  AppleAuthenticationButtonStyle,
+  signInAsync,
+  AppleAuthenticationScope,
+  AppleAuthenticationButton
+} from 'expo-apple-authentication';
+import Constants from 'expo-constants';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Text } from '@components/base';
+import { Button, Spacer, Text } from '@components/base';
+import { COLORS } from '@constants/colors';
 import { web3auth } from '@features/web3auth/instance';
 import { scale } from '@utils';
 
@@ -21,14 +29,15 @@ function alert(message: string) {
   Alert.alert(message);
 }
 
-const verifier = process.env.W3A_IDENTIFIER ?? '';
+const verifier = Constants.expoConfig?.extra?.eas.W3A_IDENTIFIER ?? '';
 
 GoogleSignin.configure({
-  webClientId: process.env.FIREBASE_OAUTH_CLIENT_ID
+  webClientId: Constants.expoConfig?.extra?.eas.FIREBASE_OAUTH_CLIENT_ID
 });
 
 const containerStyles: StyleProp<ViewStyle> = {
   flex: 1,
+  justifyContent: 'space-between',
   padding: scale(20)
 };
 
@@ -115,6 +124,25 @@ export const OAuthScreen = () => {
     alert(balance);
   };
 
+  const onAppleAuth = async () => {
+    try {
+      const credential = await signInAsync({
+        requestedScopes: [
+          AppleAuthenticationScope.FULL_NAME,
+          AppleAuthenticationScope.EMAIL
+        ]
+      });
+      alert(JSON.stringify(credential));
+      // signed in
+    } catch (e) {
+      if ((e as { code: string }).code === 'ERR_REQUEST_CANCELED') {
+        alert('User canceled the sign-in flow');
+      } else {
+        alert('Error signing in');
+      }
+    }
+  };
+
   const logout = async () => {
     try {
       await GoogleSignin.signOut();
@@ -133,22 +161,56 @@ export const OAuthScreen = () => {
       <View>
         <Text>{email ? `Welcome ${email}` : 'OAuth'}</Text>
 
-        <GoogleSigninButton onPress={signIn} />
+        <View>
+          <Text
+            fontSize={20}
+            fontFamily="Inter_700Bold"
+            color={COLORS.neutral800}
+          >
+            Auth Services
+          </Text>
+          <Spacer value={scale(10)} />
+          <GoogleSigninButton onPress={signIn} />
 
-        <Button onPress={logout}>
-          <Text>Logout</Text>
-        </Button>
-        <Button onPress={getSigner}>
-          <Text>Get Signer</Text>
-        </Button>
-        <Button
-          onPress={() =>
-            alert(GoogleSignin.getCurrentUser()?.user.email ?? 'No user found')
-          }
-        >
-          <Text>Get Current User</Text>
-        </Button>
+          <Spacer value={scale(10)} />
+          <AppleAuthenticationButton
+            onPress={onAppleAuth}
+            buttonType={AppleAuthenticationButtonType.SIGN_IN}
+            buttonStyle={AppleAuthenticationButtonStyle.BLACK}
+            cornerRadius={5}
+            style={{ width: '60%', height: 50 }}
+          />
+        </View>
+
+        <Spacer value={scale(20)} />
+
+        <View>
+          <Text
+            fontSize={16}
+            fontFamily="Inter_500Medium"
+            color={COLORS.neutral800}
+          >
+            Provider Methods
+          </Text>
+          <Spacer value={scale(10)} />
+
+          <Button onPress={getSigner}>
+            <Text>Get Signer</Text>
+          </Button>
+          <Button
+            onPress={() =>
+              alert(
+                GoogleSignin.getCurrentUser()?.user.email ?? 'No user found'
+              )
+            }
+          >
+            <Text>Get Current User</Text>
+          </Button>
+        </View>
       </View>
+      <Button onPress={logout}>
+        <Text>Logout</Text>
+      </Button>
     </SafeAreaView>
   );
 };
