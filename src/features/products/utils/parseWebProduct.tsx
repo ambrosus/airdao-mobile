@@ -2,6 +2,7 @@ import { Platform } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { ProductSwap } from '@components/svg/icons/v2';
 import { BrowserItemModel } from '@entities/browser/model';
+import { Product } from '@features/products/utils/product';
 
 const DEFAULT_GRADIENT = [
   'rgba(132, 224, 255, 0.2)',
@@ -13,7 +14,7 @@ const DEFAULT_TEXT_COLOR = 'rgba(52, 27, 104, 1)';
 export const parseWebProduct = (
   products: BrowserItemModel[],
   currentLanguage: string
-) => {
+): Product[] => {
   return products
     .filter((product) => product.uri && product.name)
     .filter((product) => product?.platforms?.includes(Platform.OS))

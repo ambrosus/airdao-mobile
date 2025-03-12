@@ -53,7 +53,9 @@ export const ProductListItem = ({
       // @ts-ignore
       navigation.navigate(product.route);
     }
-    sendFirebaseEvent(product.firebaseEvent);
+    if (product.firebaseEvent) {
+      sendFirebaseEvent(product.firebaseEvent);
+    }
   }, [
     isBrowserProduct,
     product.firebaseEvent,
