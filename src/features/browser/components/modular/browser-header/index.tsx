@@ -4,26 +4,28 @@ import { WebView } from '@metamask/react-native-webview';
 import * as Clipboard from 'expo-clipboard';
 import { Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
+import { BackIcon } from '@components/svg/icons';
 import { CloseCircleIcon, ThreeDots } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
 
 import { useBrowserStore } from '@entities/browser/model';
 import { BottomSheetBrowserActions } from '@features/browser/components/templates';
-import { StringUtils } from '@utils';
+import { isAndroid, StringUtils } from '@utils';
 import { styles } from './styles';
 
 interface BrowserHeaderProps {
   uri: string;
   webViewRef: React.RefObject<WebView>;
+  openWalletSelector: () => void;
   reload: () => void;
+  goBack: (() => void) | null;
   closeWebView: () => void;
-  openWalletSelector?: () => void;
 }
-
 export const BrowserHeader = ({
   uri,
   reload,
-  closeWebView
+  closeWebView,
+  goBack
 }: // openWalletSelector
 BrowserHeaderProps) => {
   const browserActionsRef = useRef<BottomSheetRef>(null);
@@ -45,6 +47,12 @@ BrowserHeaderProps) => {
     browserActionsRef?.current?.dismiss();
   };
 
+  const onGoBack = () => {
+    if (goBack) {
+      goBack();
+    }
+  };
+
   // temporary disabled this logic
   // const WalletSelector = () => (
   //   <TouchableOpacity style={styles.walletButton} onPress={openWalletSelector}>
@@ -54,10 +62,20 @@ BrowserHeaderProps) => {
   //     </View>
   //   </TouchableOpacity>
   // );
+  const GoBackButton = () => {
+    return (
+      <TouchableOpacity onPress={onGoBack}>
+        <BackIcon color={COLORS.neutral900} />
+      </TouchableOpacity>
+    );
+  };
   return (
     <>
       <View style={styles.headerContainer}>
-        <View style={styles.leftContainer}>{/* <WalletSelector /> */}</View>
+        <View style={styles.leftContainer}>
+          {goBack && isAndroid && <GoBackButton />}
+          {/* <WalletSelector /> */}
+        </View>
         <TouchableOpacity onPress={copyUri} style={styles.centerContainer}>
           <Text style={styles.urlText}>{StringUtils.formatUri({ uri })}</Text>
         </TouchableOpacity>

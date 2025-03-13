@@ -16,7 +16,8 @@ export enum ProductSequence {
   Kosmos = 3,
   Harbor = 4,
   Astra = 5,
-  Xena = 6
+  Snapshot = 6,
+  Xena = 7
 }
 
 export const PRODUCT_SEQUENCE: number[] = [
@@ -26,5 +27,6 @@ export const PRODUCT_SEQUENCE: number[] = [
   ProductSequence.Staking,
   ProductSequence.Kosmos,
   ProductSequence.Harbor,
+  ProductSequence.Snapshot,
   ProductSequence.Xena
 ];

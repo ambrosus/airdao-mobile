@@ -70,6 +70,7 @@ export type SignTypedDataParams = {
   params: [string, Record<string, unknown>]; // [address, typedData]
   response: RPCResponse;
   privateKey: string;
+  browserApproveRef: RefObject<BottomSheetRef>;
 };
 
 export type WalletConnectionResult =

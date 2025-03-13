@@ -134,7 +134,6 @@ export async function handleWebViewMessage({
         }
         // eth_sendTransaction
         case RPCMethods.EthSendTransaction:
-          console.log('params', params);
           await ethSendTransaction({
             params: params as [TransactionParams],
             response,
@@ -165,14 +164,26 @@ export async function handleWebViewMessage({
           });
           break;
 
-        // wallet_getPermissions
-        case RPCMethods.WalletGetPermissions:
-          await walletGetPermissions({ response });
+        // eth_signTypedData_v4
+        case RPCMethods.EthSignTypedDataV4:
+        // eth_signTypedData
+        case RPCMethods.EthSignTypedData:
+          await ethSignTypesData({
+            params: params as [string, Record<string, unknown>],
+            response,
+            privateKey,
+            browserApproveRef
+          });
           break;
 
         // eth_chainId
         case RPCMethods.EthChainId:
           response.result = await handleChainIdRequest();
+          break;
+
+        // wallet_getPermissions
+        case RPCMethods.WalletGetPermissions:
+          await walletGetPermissions({ response });
           break;
 
         // eth_signTransaction
@@ -188,17 +199,6 @@ export async function handleWebViewMessage({
         // eth_getBalance
         case RPCMethods.EthGetBalance:
           response.result = await handleGetBalance(params[0], params[1]);
-          break;
-
-        // eth_signTypedData_v4
-        case RPCMethods.EthSignTypedDataV4:
-        // eth_signTypedData
-        case RPCMethods.EthSignTypedData:
-          await ethSignTypesData({
-            params: params as [string, Record<string, unknown>],
-            response,
-            privateKey
-          });
           break;
 
         default:
