@@ -25,7 +25,10 @@ export const StakedDetails = ({
         <Row alignItems="center" justifyContent="space-between">
           {/* Token Details */}
           <Row alignItems="center">
-            <TokenLogo token={token} />
+            <TokenLogo
+              token={token}
+              scale={CryptoCurrencyCode.HBR === token ? 1.2 : 1}
+            />
             <Spacer horizontal value={scale(8)} />
             <Text
               fontSize={14}

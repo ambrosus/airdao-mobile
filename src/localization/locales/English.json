@@ -155,6 +155,7 @@
   "common.details": "Details",
   "common.day": "day",
   "common.days": "days",
+  "common.network.fee": "Network fee",
   "create.wallet.backup": "Backup your wallet",
   "create.wallet.backup.header": "Backup wallet",
   "create.wallet.backup.popup": "recovery phrase.",
@@ -514,6 +515,10 @@
   "harbor.stake.description": "Your AMB staking limit depends on the amount of HBR staked. Stake more HBR to increase your limit!",
   "harbor.stake.period.complete": "Lock period complete",
   "harbor.stake.unlock.date": "Available on {{date}}",
+  "harbor.button.insufficient.stake": "Insufficient Available to stake",
+  "harbor.button.address.limit": "Insufficient Per Address Limit",
+  "harbor.button.insufficient": "Insufficient {{symbol}} balance",
+  "harbor.button.total.limit": "Insufficient Total pool Limit",
   "wallet.connect": {
     "proposal": "Connect to {{origin}}",
     "warning": "Are you sure you want to connect your wallet to {{origin}}",

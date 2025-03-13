@@ -1,67 +1,94 @@
 import { useMemo } from 'react';
+import { ViewStyle, StyleProp } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Spinner, Text } from '@components/base';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapSettings } from '@features/swap/lib/hooks';
+import { AllowanceStatus } from '@features/swap/types';
 import { PriceImpactErrorColors } from '../utils/colors';
 
 interface SwapErrorImpactButtonProps {
   isProcessingSwap: boolean;
   onCompleteMultiStepSwap: () => void;
+  minimized?: boolean;
 }
 
 export const SwapErrorImpactButton = ({
   isProcessingSwap,
-  onCompleteMultiStepSwap
+  onCompleteMultiStepSwap,
+  minimized = false
 }: SwapErrorImpactButtonProps) => {
   const { t } = useTranslation();
-  const { uiBottomSheetInformation } = useSwapContextSelector();
-  const { settings } = useSwapSettings();
+  const {
+    uiBottomSheetInformation: { priceImpact, allowance }
+  } = useSwapContextSelector();
+  const {
+    settings: {
+      current: { extendedMode }
+    }
+  } = useSwapSettings();
+
+  const { isInsufficientBalance } = useSwapContextSelector();
+
+  const buttonStyle = useMemo<StyleProp<ViewStyle>>(() => {
+    return minimized ? { flex: 1 } : {};
+  }, [minimized]);
 
   const disabled = useMemo(() => {
-    if (uiBottomSheetInformation.priceImpact) {
+    if (priceImpact) {
       return (
-        uiBottomSheetInformation.priceImpact > 10 &&
-        !settings.current.extendedMode
+        allowance === AllowanceStatus.INCREASE ||
+        (priceImpact > 10 && !extendedMode) ||
+        isInsufficientBalance ||
+        isProcessingSwap
       );
     }
 
     return false;
-  }, [settings, uiBottomSheetInformation.priceImpact]);
+  }, [
+    allowance,
+    extendedMode,
+    isInsufficientBalance,
+    isProcessingSwap,
+    priceImpact
+  ]);
 
   const buttonActionString = useMemo(() => {
-    const { priceImpact } = uiBottomSheetInformation;
-    const expertMode = settings.current.extendedMode;
+    if (minimized) {
+      return t('swap.button.swap.anyway');
+    }
+
+    if (isInsufficientBalance) {
+      return t('bridge.insufficient.funds');
+    }
 
     if (priceImpact) {
-      if (priceImpact > 10 && !expertMode) {
+      if (priceImpact > 10 && !extendedMode) {
         return t('swap.button.impact.high');
       } else {
         return t('swap.button.swap.anyway');
       }
     }
-  }, [settings, uiBottomSheetInformation, t]);
+  }, [minimized, isInsufficientBalance, priceImpact, t, extendedMode]);
 
   const buttonColors = useMemo(() => {
-    const { priceImpact } = uiBottomSheetInformation;
-    const expertMode = settings.current.extendedMode;
-
     if (priceImpact && priceImpact >= 5 && priceImpact < 10) {
       return PriceImpactErrorColors.expert;
     }
 
     return PriceImpactErrorColors[
-      !expertMode
+      !extendedMode || allowance === AllowanceStatus.INCREASE
         ? 'default'
         : ('expert' as keyof typeof PriceImpactErrorColors)
     ];
-  }, [uiBottomSheetInformation, settings]);
+  }, [allowance, extendedMode, priceImpact]);
 
   return (
     <PrimaryButton
       disabled={disabled}
+      style={buttonStyle}
       onPress={onCompleteMultiStepSwap}
       colors={buttonColors as [string, string]}
     >

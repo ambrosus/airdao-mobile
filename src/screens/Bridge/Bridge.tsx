@@ -4,20 +4,18 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HomeNavigationProp } from '@appTypes';
 import { Spacer, Spinner } from '@components/base';
-import { CopyToClipboardButton, Header } from '@components/composite';
+import { Header } from '@components/composite';
 import { HistoryIcon } from '@components/svg/icons';
-import { useWalletStore } from '@entities/wallet';
 import { useBridgeContextData } from '@features/bridge/context';
 import { usePendingTransactions } from '@features/bridge/hooks/usePendingTransactions';
 import { BridgeTemplate } from '@features/bridge/templates';
-import { StringUtils, scale } from '@utils';
-import { isTestnet } from '@utils/isEnv';
+import { scale } from '@utils';
 import { styles } from './styles';
 
 export const Bridge = () => {
   const navigation = useNavigation<HomeNavigationProp>();
 
-  const { wallet } = useWalletStore();
+  // const { wallet } = useWalletStore();
 
   const onNavigateToHistory = () => navigation.navigate('BridgeHistory');
   const { methods, variables } = useBridgeContextData();
@@ -63,12 +61,12 @@ export const Bridge = () => {
         bottomBorder
         contentRight={renderHeaderRightContent}
       />
-      {(__DEV__ || isTestnet) && (
-        <CopyToClipboardButton
-          textToDisplay={StringUtils.formatAddress(wallet?.address ?? '', 5, 6)}
-          textToCopy={wallet?.address}
-        />
-      )}
+      {/*{(__DEV__ || isTestnet) && (*/}
+      {/*  <CopyToClipboardButton*/}
+      {/*    textToDisplay={StringUtils.formatAddress(wallet?.address ?? '', 5, 6)}*/}
+      {/*    textToCopy={wallet?.address}*/}
+      {/*  />*/}
+      {/*)}*/}
       <Spacer value={scale(15)} />
       <BridgeTemplate />
     </SafeAreaView>

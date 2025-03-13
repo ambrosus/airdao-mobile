@@ -42,6 +42,7 @@ import { DEVICE_HEIGHT } from '@constants/variables';
 import { useAddressesStore, useFetchAddresses } from '@entities/addresses';
 import { useWatchlist } from '@hooks';
 import { useExplorerAccounts, useExplorerInfo } from '@hooks/query';
+import { useProgressViewOffset } from '@hooks/ui';
 import {
   CustomAppEvents,
   sendFirebaseEvent
@@ -53,15 +54,21 @@ import { SearchSort } from './Search.types';
 import { styles } from './styles';
 
 export const Explore = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation<SearchTabNavigationProp>();
   const { params } = useRoute<RouteProp<SearchTabParamsList, 'Explore'>>();
+  const progressViewOffset = useProgressViewOffset();
+
   const searchAddressRef = useRef<SearchAddressRef>(null);
 
+  const [searchAddressContentVisible, setSearchAddressContentVisible] =
+    useState(false);
+
+  const { watchlist } = useWatchlist();
   const { loading: addressesLoading } = useAddressesStore();
   const { refetch: refetchAddresses } = useFetchAddresses();
 
   const { data: infoData, refetch: refetchInfo } = useExplorerInfo();
-  const { t } = useTranslation();
   const {
     data: accounts,
     loading: accountsLoading,
@@ -71,12 +78,8 @@ export const Explore = () => {
     refetch: refetchAssets,
     refetching
   } = useExplorerAccounts(SearchSort.Balance);
-  const [searchAddressContentVisible, setSearchAddressContentVisible] =
-    useState(false);
 
   const [userPerformedRefresh, setUserPerformedRefresh] = useState(false);
-
-  const { watchlist } = useWatchlist();
 
   useEffect(() => {
     if (!refetching) setUserPerformedRefresh(false);
@@ -179,30 +182,38 @@ export const Explore = () => {
   }, [userPerformedRefresh, accountsLoading, watchlist]);
 
   const onSearchFocusHandle = useCallback(() => {
-    InteractionManager.runAfterInteractions(() => {
-      searchAddressRef?.current?.focus();
-    });
+    InteractionManager.runAfterInteractions(searchAddressRef?.current?.focus);
   }, []);
-  const ContentRight = () => (
-    <>
-      <Button onPress={onSearchFocusHandle}>
-        <SearchLargeIcon color={COLORS.alphaBlack50} />
-      </Button>
-      <Spacer horizontal value={scale(19)} />
-      <Button onPress={searchAddressRef.current?.showScanner}>
-        <ScannerIcon color={COLORS.neutral600} />
-      </Button>
-    </>
+
+  const onShowScanner = useCallback(() => {
+    InteractionManager.runAfterInteractions(
+      searchAddressRef?.current?.showScanner
+    );
+  }, []);
+
+  const headerContentRightNode = useMemo(
+    () => (
+      <>
+        <Button onPress={onSearchFocusHandle}>
+          <SearchLargeIcon color={COLORS.alphaBlack50} />
+        </Button>
+        <Spacer horizontal value={scale(19)} />
+        <Button onPress={onShowScanner}>
+          <ScannerIcon color={COLORS.neutral600} />
+        </Button>
+      </>
+    ),
+    [onSearchFocusHandle, onShowScanner]
   );
 
   return (
     <SafeAreaView style={styles.main}>
       {!searchAddressContentVisible && (
         <Header
-          onBackPress={navigation.goBack}
-          title={t('tab.explore')}
           bottomBorder
-          contentRight={<ContentRight />}
+          title={t('tab.explore')}
+          onBackPress={navigation.goBack}
+          contentRight={headerContentRightNode}
         />
       )}
       <Spacer value={15} />
@@ -214,8 +225,8 @@ export const Explore = () => {
         >
           <SearchAddress
             searchAddress
-            scannerDisabled={true}
             ref={searchAddressRef}
+            scannerDisabled={true}
             onContentVisibilityChanged={renderSearch}
           />
         </Animated.View>
@@ -250,6 +261,7 @@ export const Explore = () => {
                     <RefreshControl
                       onRefresh={_onRefresh}
                       refreshing={!!(refetching && userPerformedRefresh)}
+                      progressViewOffset={progressViewOffset}
                     />
                   }
                   renderItem={renderAccount}

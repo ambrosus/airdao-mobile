@@ -1,6 +1,6 @@
 import { CryptoCurrencyCode } from '@appTypes';
 import { COLORS } from '@constants/colors';
-import { WithdrawPreviewDataModel } from '@features/harbor/components/harbor-preview/model';
+import { WithdrawPreviewDataModel } from '@features/harbor/components/templates/harbor-preview/model';
 import { NumberUtils } from '@utils';
 
 export const parseWithdrawReward = (previewData: WithdrawPreviewDataModel) => {
@@ -15,6 +15,10 @@ export const parseWithdrawReward = (previewData: WithdrawPreviewDataModel) => {
         name: 'harbor.withdraw.preview.bond.reward',
         value: NumberUtils.limitDecimalCount(previewData.rewardBond, 2),
         symbol: CryptoCurrencyCode.BOND
+      },
+      {
+        name: 'common.network.fee',
+        value: `${previewData.estimatedGas ?? 0} ${CryptoCurrencyCode.AMB}`
       }
     ],
     success: [

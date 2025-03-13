@@ -6,9 +6,9 @@ import { TextOrSpinner } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { useBridgeContextData } from '@features/bridge/context';
-import { PreviewDataItem } from '@features/bridge/templates/BottomSheetBridgePreview/components/PreviewDataTemplate/components/PreviewDataItem';
 import { BridgeNetworksSelected } from '@features/bridge/templates/BridgeNetworksSelected/BridgeNetworksSelected';
 import { verticalScale } from '@utils';
+import { PreviewDataItem } from './components';
 
 interface PreviewDataTemplateModel {
   errorBalance: boolean;

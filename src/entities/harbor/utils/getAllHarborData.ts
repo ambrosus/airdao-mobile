@@ -9,7 +9,7 @@ export const getAllHarborData = async (address: string) => {
       ['stakeLimit', await harborService.getStakeLimit()],
       ['userStaked', await harborService.getUserStaked(address)],
       ['tier', await harborService.getTier(address)],
-      ['unStakeDelay', await harborService.getUnStakeLockTime()],
+      ['unStakeDelay', await harborService.getUnstakeLockTime()],
       ['token', await getHarborToken(address)]
     ]);
     if (data) {

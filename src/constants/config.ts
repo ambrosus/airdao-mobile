@@ -156,7 +156,7 @@ switch (Updates.channel) {
     break;
   }
   case 'stage': {
-    Config = envs.testnet;
+    Config = envs.prod;
     break;
   }
   case 'testnet': {
@@ -164,7 +164,7 @@ switch (Updates.channel) {
     break;
   }
   default: {
-    Config = envs.stage;
+    Config = envs.prod;
     break;
   }
 }

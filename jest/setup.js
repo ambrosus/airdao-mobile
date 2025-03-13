@@ -193,6 +193,24 @@ jest.mock('ethers', () => {
       constants: {
         AddressZero: ETH_ADDRESS
       },
+      BigNumber: {
+        from: jest.fn((value) => ({
+          mul: jest.fn(() => ({
+            div: jest.fn(() => ({ value })),
+            sub: jest.fn(() => ({ value })),
+            gt: jest.fn(() => true),
+            gte: jest.fn(() => true),
+            lt: jest.fn(() => false),
+            isZero: jest.fn(() => false)
+          })),
+          div: jest.fn(() => ({ value })),
+          sub: jest.fn(() => ({ value })),
+          gt: jest.fn(() => true),
+          gte: jest.fn(() => true),
+          lt: jest.fn(() => false),
+          isZero: jest.fn(() => false)
+        }))
+      },
       Contract: MockContract,
       Wallet: MockWallet
     }

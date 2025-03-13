@@ -154,6 +154,7 @@
   "common.details": "Ayrıntılar",
   "common.day": "gün",
   "common.days": "günler",
+  "common.network.fee": "Ağ Ücreti",
   "create.wallet.backup": "Cüzdanınızı yedekleyin",
   "create.wallet.backup.header": "Yedekleme cüzdanı",
   "create.wallet.backup.popup": "kurtarma cümlesi ile yedeklenecektir.",
@@ -396,6 +397,7 @@
   "bridge.select.assets": "Varlıklarım Seç",
   "bridge.set.amount": "Miktar belirleyin",
   "bridge.amount.network.fee": "Ağ Ücreti ",
+  "bridge.amount.network.fee": "Ağ Ücreti",
   "bridge.preview.title": "Önizleme",
   "bridge.preview.receive": "Alacağınız",
   "bridge.preview.bridge.fee": "Köprü Ücreti",
@@ -513,6 +515,13 @@
   "harbor.stake.description": "AMB staking limitiniz, stake edilen HBR miktarına bağlıdır. Limitinizi artırmak için daha fazla HBR stake edin!",
   "harbor.stake.period.complete": "Kilitleme süresi tamamlandı",
   "harbor.stake.unlock.date": "Şu tarihte müsait {{date}}",
+
+
+  "harbor.button.insufficient.stake": "Stake için yetersiz",
+  "harbor.button.address.limit": "Adres Başına Yetersiz Limit",
+  "harbor.button.insufficient": "Yetersiz {{symbol}} bakiyesi",
+  "harbor.button.total.limit": "Yetersiz Toplam havuz Limiti",
+
   "wallet.connect": {
     "proposal": "{{origin}} adresine bağlanınf",
     "warning": "Cüzdanınızı {{origin}} adresine bağlamak istediğinizden emin misiniz?",

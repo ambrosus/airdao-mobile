@@ -8,7 +8,7 @@ import { Header } from '@components/composite';
 import { AutoScrollBox } from '@components/modular';
 import { AnimatedTabsV2 } from '@components/modular/AnimatedTabsV2';
 import { NoteIcon } from '@components/svg/icons/v2/harbor';
-import { useHarborStore } from '@entities/harbor/model/harbor-store';
+import { useHarborStore } from '@entities/harbor/model';
 import { useWalletStore } from '@entities/wallet';
 import { WithdrawRewardOnlyTab } from '../withdraw-reward-only-tab';
 import { WithdrawStakeRewardTab } from '../withdraw-stake-reward-tab';

@@ -1,15 +1,9 @@
-import React, {
-  PropsWithChildren,
-  forwardRef,
-  useCallback,
-  useMemo
-} from 'react';
+import { PropsWithChildren, forwardRef, useCallback, useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { ethers } from 'ethers';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CryptoCurrencyCode } from '@appTypes';
-import { HarborNavigationProp } from '@appTypes/navigation/harbor';
 import { Row, Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { TokenLogo } from '@components/modular';
@@ -17,7 +11,7 @@ import { COLORS } from '@constants/colors';
 import { useStakeHBRStore } from '@entities/harbor/model';
 import { useWalletStore } from '@entities/wallet';
 import { useForwardedRef } from '@hooks';
-import { StringUtils, _delayNavigation, verticalScale } from '@utils';
+import { NumberUtils, StringUtils, verticalScale } from '@utils';
 import { styles } from './styles';
 import { SuccessTxView } from '../../base';
 
@@ -27,105 +21,136 @@ interface BottomSheetReviewTransactionProps extends PropsWithChildren {
   timestamp?: number;
   txHash?: string;
   loading: boolean;
+  estimatedGas: ethers.BigNumber;
 }
 
 export const BottomSheetReviewTransaction = forwardRef<
   BottomSheetRef,
   BottomSheetReviewTransactionProps
->(({ amount, success, timestamp, txHash, loading, children }, ref) => {
-  const { t } = useTranslation();
-  const navigation = useNavigation<HarborNavigationProp>();
-  const { bottom } = useSafeAreaInsets();
-  const { wallet } = useWalletStore();
-  const { hbrYieldFetcher } = useStakeHBRStore();
+>(
+  (
+    { amount, success, timestamp, txHash, loading, estimatedGas, children },
+    ref
+  ) => {
+    const { t } = useTranslation();
 
-  const bottomSheetRef = useForwardedRef(ref);
+    const { bottom } = useSafeAreaInsets();
+    const { wallet } = useWalletStore();
+    const { hbrYieldFetcher } = useStakeHBRStore();
 
-  const containerStyle = useMemo<StyleProp<ViewStyle>>(
-    () => ({
-      ...styles.container,
-      paddingBottom: verticalScale(bottom === 0 ? 20 : bottom)
-    }),
-    [bottom]
-  );
+    const bottomSheetRef = useForwardedRef(ref);
 
-  const dismiss = useCallback(() => {
-    if (bottomSheetRef.current) {
-      bottomSheetRef.current.dismiss();
-    }
-  }, [bottomSheetRef]);
+    const containerStyle = useMemo<StyleProp<ViewStyle>>(
+      () => ({
+        ...styles.container,
+        paddingBottom: verticalScale(bottom === 0 ? 20 : bottom)
+      }),
+      [bottom]
+    );
 
-  const onDismissBottomSheet = useCallback(async () => {
-    try {
-      await hbrYieldFetcher(wallet?.address ?? '');
-      _delayNavigation(dismiss, () => navigation.goBack());
-    } catch (error) {
-      throw error;
-    }
-  }, [dismiss, hbrYieldFetcher, navigation, wallet?.address]);
+    const dismiss = useCallback(() => {
+      if (bottomSheetRef.current) {
+        bottomSheetRef.current.dismiss();
+      }
+    }, [bottomSheetRef]);
 
-  return (
-    <BottomSheet
-      ref={bottomSheetRef}
-      title={success ? undefined : t('common.review')}
-      onBackdropPress={onDismissBottomSheet}
-      closeOnBackPress={!loading}
-      swipingEnabled={!loading}
-    >
-      <View style={containerStyle}>
-        {success ? (
-          <SuccessTxView
-            amount={amount}
-            timestamp={timestamp}
-            txHash={txHash}
-            dismiss={dismiss}
-          />
-        ) : (
-          <>
-            <View style={styles.details}>
-              <Row alignItems="center" justifyContent="space-between">
-                <Text
-                  fontSize={14}
-                  fontFamily="Inter_500Medium"
-                  color={COLORS.neutral600}
-                >
-                  {t('staking.pool.stake.amount')}
-                </Text>
-                <Row alignItems="center">
-                  <TokenLogo scale={0.75} token={CryptoCurrencyCode.HBR} />
-                  <Spacer horizontal value={4} />
+    const onDismissBottomSheet = useCallback(async () => {
+      try {
+        await hbrYieldFetcher(wallet?.address ?? '');
+      } catch (error) {
+        throw error;
+      }
+    }, [hbrYieldFetcher, wallet?.address]);
+
+    const transformedEstimatedGas = useMemo(() => {
+      const parsedGas = NumberUtils.limitDecimalCount(
+        ethers.utils.formatEther(estimatedGas),
+        1
+      );
+
+      return `${parsedGas} ${CryptoCurrencyCode.AMB}`;
+    }, [estimatedGas]);
+
+    return (
+      <BottomSheet
+        ref={bottomSheetRef}
+        title={success ? undefined : t('common.review')}
+        onBackdropPress={onDismissBottomSheet}
+        closeOnBackPress={!loading}
+        swipingEnabled={!loading}
+      >
+        <View style={containerStyle}>
+          {success ? (
+            <SuccessTxView
+              amount={amount}
+              timestamp={timestamp}
+              txHash={txHash}
+              dismiss={dismiss}
+            />
+          ) : (
+            <>
+              <View style={styles.details}>
+                <Row alignItems="center" justifyContent="space-between">
+                  <Text
+                    fontSize={14}
+                    fontFamily="Inter_500Medium"
+                    color={COLORS.neutral600}
+                  >
+                    {t('staking.pool.stake.amount')}
+                  </Text>
+                  <Row alignItems="center">
+                    <TokenLogo scale={0.75} token={CryptoCurrencyCode.HBR} />
+                    <Spacer horizontal value={4} />
+                    <Text
+                      fontSize={14}
+                      fontFamily="Inter_500Medium"
+                      color={COLORS.neutral900}
+                    >
+                      {NumberUtils.numberToTransformedLocale(amount)}{' '}
+                      {CryptoCurrencyCode.HBR}
+                    </Text>
+                  </Row>
+                </Row>
+
+                <Row alignItems="center" justifyContent="space-between">
+                  <Text
+                    fontSize={14}
+                    fontFamily="Inter_500Medium"
+                    color={COLORS.neutral600}
+                  >
+                    {t('common.transaction.from')}
+                  </Text>
                   <Text
                     fontSize={14}
                     fontFamily="Inter_500Medium"
                     color={COLORS.neutral900}
                   >
-                    {amount} {CryptoCurrencyCode.HBR}
+                    {StringUtils.formatAddress(wallet?.address ?? '', 10, 3)}
                   </Text>
                 </Row>
-              </Row>
+                <Row alignItems="center" justifyContent="space-between">
+                  <Text
+                    fontSize={14}
+                    fontFamily="Inter_500Medium"
+                    color={COLORS.neutral600}
+                  >
+                    {t('common.network.fee')}
+                  </Text>
+                  <Text
+                    fontSize={14}
+                    fontFamily="Inter_500Medium"
+                    color={COLORS.neutral900}
+                  >
+                    {transformedEstimatedGas}
+                  </Text>
+                </Row>
+              </View>
 
-              <Row alignItems="center" justifyContent="space-between">
-                <Text
-                  fontSize={14}
-                  fontFamily="Inter_500Medium"
-                  color={COLORS.neutral600}
-                >
-                  {t('common.transaction.from')}
-                </Text>
-                <Text
-                  fontSize={14}
-                  fontFamily="Inter_500Medium"
-                  color={COLORS.neutral900}
-                >
-                  {StringUtils.formatAddress(wallet?.address ?? '', 10, 3)}
-                </Text>
-              </Row>
-            </View>
-
-            <View style={styles.footer}>{children}</View>
-          </>
-        )}
-      </View>
-    </BottomSheet>
-  );
-});
+              <View style={styles.footer}>{children}</View>
+            </>
+          )}
+        </View>
+      </BottomSheet>
+    );
+  }
+);

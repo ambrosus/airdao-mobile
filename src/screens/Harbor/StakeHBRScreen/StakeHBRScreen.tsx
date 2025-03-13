@@ -13,31 +13,79 @@ import { CryptoCurrencyCode } from '@appTypes';
 import { BottomSheetRef, Header, TextOrSpinner } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { KEYBOARD_OPENING_TIME } from '@constants/variables';
-import { useHBRInstance, useStakeHBRStore } from '@entities/harbor';
+import { KEYBOARD_OPENING_TIME, bnZERO } from '@constants/variables';
+import {
+  useHBRInstance,
+  useInputErrorStakeHBR,
+  useStakeHBRStore
+} from '@entities/harbor';
 import { StakedBalanceInfo } from '@entities/harbor/components/composite';
-import { useApproveContract, useStakeHBRActionsStore } from '@features/harbor';
+
+import { useWalletStore } from '@entities/wallet';
+import {
+  useApproveContract,
+  useDepositHBR,
+  useStakeHBRActionsStore
+} from '@features/harbor';
 import { StakeInput } from '@features/harbor/components/modular';
 import { BottomSheetReviewTransactionWithAction } from '@features/harbor/components/templates';
+import { useAMBEntity } from '@features/send-funds/lib/hooks';
 import {
   keyboardAvoidingViewOffsetWithNotchSupportedValue,
+  useDebounce,
   useKeyboardContainerStyleWithSafeArea
 } from '@hooks';
-import { NumberUtils } from '@utils';
+import { estimatedNetworkProviderFee, NumberUtils } from '@utils';
 import { styles } from './styles';
 
 export const StakeHBRScreen = () => {
   const { t } = useTranslation();
+  const { wallet } = useWalletStore();
   const hbrInstance = useHBRInstance();
   const { approving, approve } = useApproveContract();
   const footerStyle = useKeyboardContainerStyleWithSafeArea(styles.footer);
+  const error = useInputErrorStakeHBR(hbrInstance);
 
-  const { deposit, allowance, limitsConfig } = useStakeHBRStore();
+  const ambInstance = useAMBEntity(wallet?.address ?? '');
+
+  const { deposit, allowance } = useStakeHBRStore();
   const { amount, onChangeHBRAmountToStake } = useStakeHBRActionsStore();
-
-  const [inputError, setInputError] = useState('');
+  const { estimateTransactionGas } = useDepositHBR();
 
   const bottomSheetReviewTxRef = useRef<BottomSheetRef>(null);
+
+  const [estimatedGas, setEstimatedGas] = useState(bnZERO);
+  const [isInsufficientBalance, setIsInsufficientBalance] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleEstimateFeeEffect = useCallback(async () => {
+    if (+amount >= 1000) {
+      setLoading(true);
+      setIsInsufficientBalance(false);
+      const bnAmount = ethers.utils.parseEther(amount);
+      const parsedAmbBalance = ethers.utils.parseEther(
+        ambInstance.balance.formattedBalance
+      );
+
+      if (allowance.lt(bnAmount)) {
+        const approveEstimatedGas = await approve({ estimateGas: true });
+        if (approveEstimatedGas instanceof ethers.BigNumber) {
+          const txGasFee = await estimatedNetworkProviderFee(
+            approveEstimatedGas
+          );
+          setEstimatedGas(txGasFee);
+
+          if (parsedAmbBalance.lt(txGasFee)) {
+            setIsInsufficientBalance(true);
+          }
+        }
+      }
+      setLoading(false);
+    }
+  }, [allowance, ambInstance.balance.formattedBalance, amount, approve]);
+
+  // Effect to check estimated gas fee from input
+  useDebounce(handleEstimateFeeEffect, 0);
 
   useFocusEffect(
     useCallback(() => {
@@ -47,44 +95,33 @@ export const StakeHBRScreen = () => {
     }, [onChangeHBRAmountToStake])
   );
 
-  useMemo(() => {
-    if (amount) {
-      const greaterThenBalance = ethers.utils
-        .parseEther(amount)
-        .gt(hbrInstance.balance.wei);
-      if (greaterThenBalance) {
-        setInputError(t('bridge.insufficient.funds'));
-      } else {
-        setInputError('');
-      }
-    }
-  }, [amount, hbrInstance.balance.wei, t]);
-
   const label = useMemo(() => {
-    const bnAmount = ethers.utils.parseEther(!amount ? '0' : amount);
+    if (!amount) {
+      return t('button.confirm');
+    }
 
-    return allowance.lt(bnAmount)
-      ? t('swap.button.approve', {
-          symbol: CryptoCurrencyCode.HBR
-        })
-      : t('button.confirm');
-  }, [allowance, amount, t]);
+    const bnAmount = ethers.utils.parseEther(amount);
+
+    if (isInsufficientBalance) return t('bridge.insufficient.funds');
+
+    if (!!error) return error;
+
+    if (allowance.lt(bnAmount)) {
+      return t('swap.button.approve', {
+        symbol: CryptoCurrencyCode.HBR
+      });
+    }
+
+    return t('button.confirm');
+  }, [allowance, amount, error, isInsufficientBalance, t]);
 
   const disabled = useMemo(
-    () => !!inputError || !amount || approving,
-    [amount, approving, inputError]
+    () => !!error || !amount || approving || loading || isInsufficientBalance,
+    [amount, approving, error, isInsufficientBalance, loading]
   );
 
   const onButtonPress = useCallback(async () => {
     Keyboard.dismiss();
-
-    if (ethers.utils.parseEther(amount).lt(limitsConfig.minStakeValue)) {
-      return setInputError(
-        `Min ${NumberUtils.formatNumber(
-          +ethers.utils.formatEther(limitsConfig.minStakeValue)
-        )} ${CryptoCurrencyCode.HBR}`
-      );
-    }
 
     if (
       label.includes(
@@ -96,22 +133,33 @@ export const StakeHBRScreen = () => {
       return await approve();
     }
 
+    setLoading(true);
+
+    try {
+      const txEstimateGas = await estimateTransactionGas();
+      const txGasFee = await estimatedNetworkProviderFee(txEstimateGas);
+      setEstimatedGas(txGasFee);
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+
     setTimeout(
       () => bottomSheetReviewTxRef.current?.show(),
       KEYBOARD_OPENING_TIME
     );
-  }, [amount, approve, label, limitsConfig.minStakeValue, t]);
+  }, [approve, estimateTransactionGas, label, t]);
 
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Stake HBR" />
-
       <KeyboardAvoidingView
         behavior="padding"
+        style={styles.justifyContent}
         keyboardVerticalOffset={keyboardAvoidingViewOffsetWithNotchSupportedValue(
           8
         )}
-        style={styles.justifyContent}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.innerContainer}>
@@ -127,7 +175,7 @@ export const StakeHBRScreen = () => {
             />
 
             <StakeInput
-              error={inputError}
+              error={undefined}
               description={t('harbor.stake.description')}
             />
           </View>
@@ -136,8 +184,7 @@ export const StakeHBRScreen = () => {
         <View style={footerStyle}>
           <PrimaryButton disabled={disabled} onPress={onButtonPress}>
             <TextOrSpinner
-              loading={approving}
-              loadingLabel={undefined}
+              loading={approving || loading}
               label={label}
               styles={{
                 active: {
@@ -151,7 +198,10 @@ export const StakeHBRScreen = () => {
         </View>
       </KeyboardAvoidingView>
 
-      <BottomSheetReviewTransactionWithAction ref={bottomSheetReviewTxRef} />
+      <BottomSheetReviewTransactionWithAction
+        ref={bottomSheetReviewTxRef}
+        estimatedGas={estimatedGas}
+      />
     </SafeAreaView>
   );
 };

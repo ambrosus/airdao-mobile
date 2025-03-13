@@ -17,6 +17,7 @@ import { useSwapContextSelector } from '@features/swap/context';
 import { useAllLiquidityPools } from '@features/swap/lib/hooks';
 import { useSwapAllBalances } from '@features/swap/lib/hooks/use-swap-all-balances';
 import { FIELD } from '@features/swap/types';
+import { useEffectOnce } from '@hooks';
 import { styles } from './styles';
 
 type Props = NativeStackScreenProps<HomeParamsList, 'SwapScreen'>;
@@ -24,13 +25,17 @@ type Props = NativeStackScreenProps<HomeParamsList, 'SwapScreen'>;
 export const SwapScreen = ({ navigation }: Props) => {
   const { t } = useTranslation();
   useSwapAllBalances();
-  useAllLiquidityPools();
+  const { getAllPoolsCount } = useAllLiquidityPools();
   const {
     bottomSheetTokenARef,
     bottomSheetTokenBRef,
     bottomSheetPreviewSwapRef,
     reset
   } = useSwapContextSelector();
+
+  useEffectOnce(() => {
+    getAllPoolsCount();
+  });
 
   useFocusEffect(
     useCallback(() => {
