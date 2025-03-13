@@ -4,8 +4,8 @@ import { IconProps } from './Icon.types';
 
 export function CheckIcon(props: IconProps) {
   const { color = COLORS.black, scale = 1 } = props;
-  const width = 14,
-    height = 10;
+  const width = 14;
+  const height = 10;
   return (
     <Svg
       width={width * scale}

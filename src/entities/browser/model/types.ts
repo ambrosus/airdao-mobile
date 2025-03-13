@@ -1,16 +1,25 @@
+import { IsNullableAccount } from '@entities/wallet/model/types';
+import { ProductSections } from '@features/products/utils';
+
 export interface BrowserStoreModel {
   connectedAddress: string;
+  connectedAccount: IsNullableAccount;
+  productTitle: string;
   browserConfig: BrowserConfig;
-  setConnectedAddress: (address: string) => void;
+  setProductTitle: (payload: string) => void;
+  setConnectedAccount: (payload: IsNullableAccount) => void;
+  setConnectedAddress: (payload: string) => void;
   setBrowserConfig: () => Promise<void>;
 }
 
 export interface BrowserItemModel {
   id: number;
+  section: ProductSections;
   icon: string;
+  platforms: string[];
   description: { [key: string]: string };
   name: { [key: string]: string };
-  background: string[];
+  background: [string, string];
   color: string;
   uri: string;
   isAirDaoApp: string;

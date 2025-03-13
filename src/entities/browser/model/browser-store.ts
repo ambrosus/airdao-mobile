@@ -7,8 +7,16 @@ export const useBrowserStore = create<BrowserStoreModel>((set) => ({
   browserConfig: {
     products: []
   },
-  setConnectedAddress: async (address: string) => {
-    set({ connectedAddress: address });
+  connectedAccount: null,
+  productTitle: '',
+  setProductTitle: async (productTitle) => {
+    set({ productTitle });
+  },
+  setConnectedAccount: async (connectedAccount) => {
+    set({ connectedAccount });
+  },
+  setConnectedAddress: async (connectedAddress) => {
+    set({ connectedAddress });
   },
   setBrowserConfig: async () => {
     set({ browserConfig: await browserService.getBrowserConfig() });

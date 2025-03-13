@@ -7,15 +7,12 @@
   "Portuguese": "Português",
   "Russian": "Русский",
   "Chinese": "Chinese",
-
   "tab.wallets": "Cüzdan",
   "tab.watchlist": "İzleme listesi",
   "tab.explore": "Keşfet",
   "tab.settings": "Ayarlar",
   "tab.notifications": "Bildirimler",
-
   "airdao.wallet": "AirDAO Cüzdan",
-
   "account": {
     "actions": {
       "swap": "Swap",
@@ -39,10 +36,8 @@
   "address.rename": "Adı değiştirin",
   "address.share.performance": "Adres performansını paylaşın",
   "address.watchlisted": "İzleme listesine eklendi",
-
   "alert.invalid.qr.code.msg": "Geçersiz QR kod",
   "alert.scan.again.msg": "Tekrar tarayın",
-
   "amb.market.about.airdao": "AirDAO Hakkında",
   "amb.market.circulating.supply": "Dolaşımdaki arz",
   "amb.market.circulating.supply.popup": "Piyasada dolaşımda olan ve halka açık olan token miktarıdır. Bu, hisse senedi piyasasındaki dolaşan paylara benzer.",
@@ -59,10 +54,9 @@
   "amb.market.stats": "İstatistikler",
   "amb.market.total.supply": "Toplam arz",
   "amb.market.total.supply.popup": "Zaten oluşturulmuş olan jeton miktarı, yakılan tokenlar çıkarıldıktan sonra, bir kripto paranın mevcut arzını ölçen bir ölçüdür.",
-
   "button.add": "Ekle",
   "button.add.wallet": "Cüzdan ekle",
-  "button.processed": "!!!Processed",
+  "button.processed": "İşlendi",
   "button.cancel": "İptal et",
   "button.continue": "Devam et",
   "button.create": "Oluştur",
@@ -88,19 +82,18 @@
   "button.importing.wallet": "Importing wallet",
   "button.sending": "Gönderme",
   "button.insufficient.funds": "Yetersiz bakiye",
-
+  "button.refresh.action": "Yenile",
+  "button.copy.action": "Kopyala",
   "change.passcode.confirm.new.passcode": "Yeni şifreyi onaylayın",
   "change.passcode.enter.new.passcode": "Şifrenizi girin",
   "change.passcode.success": "Şifre değiştirildi!",
   "change.passcode.header.old": "Mevcut şifre",
   "change.passcode.header.new": "Yeni şifre",
   "change.passcode.header.confirm": "Şifreyi onayla",
-
   "chart.timeframe.24H": "24 saat",
   "chart.timeframe.daily": "1G",
   "chart.timeframe.weekly": "1H",
   "chart.timeframe.monthly": "1A",
-
   "collection.add.address": "Adres ekleyin",
   "collection.create": "Grup oluşturun",
   "collection.create.new": "Yeni grup oluşturun",
@@ -109,7 +102,8 @@
   "collection.search.input": "Grupları arayın",
   "collection.search.public.address.placeholder": "Açık adres arayın",
   "collection.total.balance": "TOPLAM BAKİYE",
-
+  "common.reject": "Reddet",
+  "common.approve": "Onayla",
   "common.address": "Adres",
   "common.address_plural": "Adresler",
   "common.address.with.count": "{{count}} adres",
@@ -161,7 +155,6 @@
   "common.day": "gün",
   "common.days": "günler",
   "common.network.fee": "Ağ Ücreti",
-
   "create.wallet.backup": "Cüzdanınızı yedekleyin",
   "create.wallet.backup.header": "Yedekleme cüzdanı",
   "create.wallet.backup.popup": "kurtarma cümlesi ile yedeklenecektir.",
@@ -179,38 +172,31 @@
   "create.wallet.verify.text": "Kurtarma ifadenizi tam olarak gösterildiği gibi yazın. Daha sonra doğrulayacaksınız. Gizli ve güvenli tutun!",
   "create.wallet.recovery.phrase": "Kurtarma ifadeniz",
   "create.wallet.recovery.phrase.error": "Doğrulama başarısız oldu. Devam etmek için kelimelere doğru sırayla dokunun.",
-
   "empty.addresses": "İzleme listenize bir adres ekleyin ve herhangi bir cüzdanı takip edin",
   "empty.assets": "Henüz varlık yok",
   "empty.groups": "Birden fazla adresi kolayca takip etmek için kişiselleştirilmiş gruplar oluşturun",
   "empty.notifications": "Şu anda herhangi bir bildiriminiz bulunmamaktadır.",
   "empty.notifications.check.later": "Lütfen daha sonra tekrar bakınız.",
-
   "explore.search.check.typos": "Lütfen yazım hatası olup olmadığını kontrol edin veya farklı bir adres deneyin",
   "explore.search.no.account.info": "Hesap bilgileri yüklenemedi",
   "explore.search.no.matches": "Hata! Hiçbir sonuç bulunamadı",
   "explore.search.placeholder": "Adres veya işlem arayın",
   "explore.single.address.holding": "Arzın {{share}}%'ne sahip",
-
   "notification.settings": "Bildirim ayarları",
   "notification.settings.price.alerts.switch": "Fiyat bildirimleri",
   "notification.settings.price.alerts.treshold": "Fiyat bildirim limiti",
   "notification.settings.price.alerts.treshold.text": "Bildirim almak için 24 saatlik fiyat değişim tutarını ayarlayın.",
   "notification.settings.transaction.alerts.switch": "İşlem bildirimleri",
   "notification.settings.transaction.alerts.switch.text": "İzleme listenizdeki güncellemeler hakkında bildirim alın.",
-
   "asset.your.balance": "BAKIYENIZ",
-
   "transaction.modal": {
     "buttons": {
       "explorer": "Gezginde görüntüle",
       "share": "Paylaş"
     }
   },
-
   "receive.funds": "Varlık al",
   "receive.funds.amb.network.only": "Varlık yalnızca aynı AirDAO ağı içinde gönderilebilir.",
-
   "send.funds.balance": "Bakiye",
   "send.funds.error.insufficient.balance": "Ağ ücretini ödemek için yeterli bakiye yok. Devam etmek için miktarı değiştirin veya bakiyenizi arttırın.",
   "send.funds.error.network": "Kötü internet bağlantısı!",
@@ -229,7 +215,6 @@
   "send.funds.sent": "gönderildi",
   "send.funds.transfer.fee": "Tahmini transfer ücreti",
   "send.funds.use.max": "Hepsini kullan",
-
   "import.wallet.methods.mnemonic": "Kurtarma ifadesi",
   "import.wallet.methods.mnemonic.info": "12 kelimelik kurtarma ifadenizi kullanın.",
   "import.wallet.methods.key": "Özel anahtar",
@@ -254,7 +239,6 @@
   "import.wallet.error": "İçe aktarma başarısız oldu. Devam etmek için kelimelere doğru sırayla dokunun.",
   "import.private.key.error": "Özel anahtar hiçbir cüzdana karşılık gelmiyor. Lütfen tekrar deneyin",
   "import.private.key.already.exist": "Cüzdan zaten mevcut",
-
   "no.wallet.address.tracking": "Adres takibi",
   "no.wallet.address.tracking.description": "Gerçek zamanlı adres takibi ile gelişmelerden haberdar olun.",
   "no.wallet.create.new": "Yeni cüzdan oluştur",
@@ -264,7 +248,6 @@
   "no.wallet.send.receive.description": "Sadece birkaç dokunuşla güvenli bir şekilde para gönderip alın.",
   "no.wallet.stay.informed": "Haberdar olun",
   "no.wallet.stay.informed.description": "İşlemler ve önemli cüzdan etkinlikleriyle ilgili güncellemeleri alın.",
-
   "settings.about": "Hakkında",
   "settings.help": "Yardım merkezi",
   "settings.manage.wallet": "Cüzdan yönetimi",
@@ -276,16 +259,13 @@
   "settings.twitter": "X",
   "settings.telegram": "Telegram",
   "settings.medium": "Medium",
-
   "settings.preferences.currency": "Para birimi",
   "settings.preferences.language": "Dil",
   "settings.preferences.select.language": "Uygulama dilini seçin",
   "settings.preferences.select.base.currency": "Para birimini seçin",
-
   "settings.about.privacy": "Gizlilik politikası",
   "settings.about.rate": "Bizi değerlendirin",
   "settings.about.terms": "Kullanım koşulları",
-
   "singleWallet.name": "İsim",
   "singleWallet.remove": "Sil",
   "singleWallet.remove.alert.title": "Cüzdanı silmek istediğinizden emin misiniz?",
@@ -300,11 +280,9 @@
   "singleWallet.tab.phrase": "Kurtarma ifadesi",
   "singleWallet.tab.keys": "Özel anahtarlar",
   "singleWallet.tab.phrase.warn": "Gösterildiği gibi yazdığınızdan emin olun.",
-
   "login.enter.your.passcode": "Şifrenizi girin",
   "login.with.face.id": "Face ID ile oturum açın",
   "login.with.fingerprint": "Parmak iziyle oturum açın",
-
   "security.authenticate.with.face.id": "Face ID ile kimlik doğrulaması yapın",
   "security.authenticate.with.fingerprint": "Parmak iziyle kimlik doğrulama",
   "security.confirm.passcode.description": "Cüzdanınızı güvence altına almak için şifrenizi tekrar girin",
@@ -317,7 +295,6 @@
   "security.manage": "cüzdan güvenliğinizi yönetmek için.",
   "security.passcode.doesnt.match": "Şifre kodu eşleşmiyor",
   "security.wallet.protected": "Cüzdanınız artık korunuyor. Git",
-
   "settings.security.change.passcode": "Şifreyi değiştir",
   "settings.security.face.id.not.available": "Bu cihazda Face ID mevcut değil",
   "settings.security.face.id.not.accessible": "Bu cihazda Face ID erişimi yok",
@@ -325,16 +302,13 @@
   "settings.security.fingerprint.not.accessible": "Bu cihazda parmak izi erişimi yok",
   "settings.security.no.biometrics.available": "Bu cihazda herhangi biyometrik kimlik doğrulama bulunmamaktadır",
   "settings.security.press.to.open.settings": "Ayarları düzenlemek için buraya dokunun",
-
   "share.tx.fee": "İşlem Ücreti",
   "share.time": "Tarih",
   "share.24hr": "24 saat",
-
   "staking.apy": "YFG",
   "staking.current.stake": "{{amount}} {{symbol}} Şu anda stake ediliyo",
   "staking.header": "Stake",
   "staking.pools": "Havuzlar",
-
   "staking.pool.apy": "APY",
   "staking.pool.earnings": "Kazanç",
   "staking.pool.preview": "Özet",
@@ -357,7 +331,6 @@
   "staking.pool.error": "Staking talebinizi işlerken bir aksaklıkla karşılaştık. Cüzdan bakiyenizi ve ağ bağlantınızı bir kez daha kontrol edin.",
   "staking.pool.stake.warning": "Stake yapmak için en az 1000 AMB gereklidir.",
   "staking.pool.withdraw.warning": "Geri çekilmek için en az 1000 AMB gereklidir.",
-
   "toast.address.watchlisted.msg": "Harika! Adres izleme listesine eklendi.",
   "toast.the.address.upper.case": "Adres",
   "toast.the.message.lower.case": "adres",
@@ -367,21 +340,17 @@
   "toast.removed.wallet.from.group": "Cüzdan gruptan başarıyla kaldırıldı!",
   "toast.you.added.address.to.watchlist": "{{name}} artık izleme listenizde!",
   "toast.wallet.created": "Yedekleme başarılı!",
-
   "token.picker.select": "Gönderilecek varlığı seçin",
   "token.actions.swap": "Takas",
   "token.actions.stake": "Stake",
-
   "wallet.assets.empty.description": "Cüzdan özelliklerinizin kilidini açmak için Para Yatırın.",
   "wallet.assets.deposit.button": "Para Yatırın",
   "wallet.empty.nft.header": "Henüz NFT yok.",
   "wallet.empty.nft.subheader": "Özel NFT'ler kazanmak için yaklaşan etkinlikler ve aktiviteler için bizi izlemeye devam edin.",
-
   "wallet.my.assets": "Varlıklar",
   "wallet.nfts": "Nft’ler",
   "wallet.history": "Geçmiş",
   "wallet.picker.select": "Cüzdan seç",
-
   "swap.route": "Rota",
   "swap.pay": "Gönderdiğiniz",
   "swap.receive": "Alacağın",
@@ -424,12 +393,11 @@
   "bridge.transaction.preview.header": "Ethereum'a {{amount}} {{symbol}} gönderiliyor",
   "bridge.transaction.preview.time": "Tahmini varış saati",
   "bridge.transaction.success.description": "${{amount}} ${{symbol}} gönderdiniz",
-
   "bridge.select.network": "Ağ Seç",
   "bridge.select.assets": "Varlıklarım Seç",
   "bridge.set.amount": "Miktar belirleyin",
+  "bridge.amount.network.fee": "Ağ Ücreti ",
   "bridge.amount.network.fee": "Ağ Ücreti",
-
   "bridge.preview.title": "Önizleme",
   "bridge.preview.receive": "Alacağınız",
   "bridge.preview.bridge.fee": "Köprü Ücreti",
@@ -437,7 +405,6 @@
   "bridge.preview.gas.fee": "Gaz Ücreti",
   "bridge.preview.button": "Onaylayın",
   "bridge.preview.button.max": "Maksimum",
-
   "bridge.transaction.info.subheader": "Transferiniz işleniyor ve 5-20 dakika içinde tamamlanacak.",
   "bridge.transfer.failed.header": "Köprü İşlemi Başarısız",
   "bridge.transfer.failed.sub.header": "İşleminiz gerçekleştirilirken bir hata oluştu.",
@@ -447,8 +414,7 @@
   "bridge.insufficient.funds.to.pay.fee.subHeader": "Lütfen ağ maliyetlerini karşılamak için {{symbol}}} ekleyin.",
   "bridge.unknown.error": "Bilinmeyen hata",
   "bridge.insufficient.funds": "Yetersiz bakiye",
-  "bridge.insufficient.funds.description": "!!!You do not have enough funds in your account to pay for network fees.",
-
+  "bridge.insufficient.funds.description": "Hesabınızda ağ ücretlerini ödemek için yeterli para yok.",
   "kosmos.primary.tabs.market": "Piyasalar",
   "kosmos.primary.tabs.orders": "Siparişlerim",
   "kosmos.table.headings.discount": "İndirim",
@@ -456,7 +422,6 @@
   "kosmos.orders.total.bonded": "Tahvil edilen toplam değer",
   "kosmos.orders.claimable": "TALEP EDİLEBİLİR",
   "kosmos.payout": "Ödeme",
-
   "kosmos.button.reset": "Sıfırla",
   "kosmos.button.apply": "Başvur",
   "kosmos.button.claimed": "Talep Edildi",
@@ -467,14 +432,12 @@
   "kosmos.button.ready.claim": "Talep edilmeye hazır",
   "kosmos.button.claiming": "Talep ediliyor",
   "kosmos.button.processing": "İşleme",
-
   "kosmos.status.all": "Tümü",
   "kosmos.status.closed": "Kapalı",
   "kosmos.status.active": "Aktif",
   "kosmos.filter": "Filtre",
   "kosmos.filter.by": "Göre filtrele",
   "kosmos.filter.payment": "Ödeme belirteci",
-
   "kosmos.success.toast": "Başarıl! {{amount}}$ talep ettiniz",
   "kosmos.buy.success.toast": "Başarılı! {{amount}} {{amountSymbol}} tahvil satın aldınız",
   "kosmos.input.error.max.bondable": "Maksimum bağlanabilir değerden daha az bir miktar girin.max.bondable",
@@ -491,15 +454,11 @@
   "kosmos.bought": "Satın aldınız",
   "kosmos.getting": "Alacaksınız",
   "kosmos.protocol.fee": "Protokol ücreti",
-
   "kosmos.chart.explanation.bond": "Tahvil fiyatı",
   "kosmos.chart.explanation.market": "Piyasa fiyatı",
-
   "kosmos.market.tabs.buy.bond": "Tahvil Satın al",
   "kosmos.market.tabs.history": "Geçmiş",
-
   "settings.version": "Doğrulanıyor",
-
   "harbor.requests.header": "İsteklerim",
   "harbor.withdraw.header": "Geri çekmek",
   "harbor.stakeAMB.header": "AMB Stake et",
@@ -513,7 +472,6 @@
   "harbor.staked.balance": "Stake edilen bakiye",
   "harbor.staked.info": "Havuza AMB yatırdığınızda, havuzdaki payınızı temsil eden stAMB token'ını alırsınız.",
   "harbor.stake.pool.limit": "Toplam havuz limiti",
-
   "harbor.stake.amount.preview.title": "Stake miktarı",
   "harbor.receive.amount.preview.title": "Alacağınız",
   "harbor.stake.from": "Gönderen",
@@ -522,38 +480,28 @@
   "harbor.stake.limit.address": "Adres Başına Limit",
   "harbor.successfully.stake.header": "Başarıyla stake ettiniz",
   "harbor.successfully.withdraw.header": "Başarıyla çektiniz",
-
   "harbor.withdraw.stake.reward": "Stake + Ödüller",
   "harbor.withdraw.reward": "Yalnızca ödüller",
   "harbor.tiers.container.header": "Ödül Dağıtımı",
-
   "harbor.exchange.rate": "Döviz kuru",
   "harbor.withdrawal.delay": "Çekme Gecikmesi",
   "harbor.withdrawal.button": "Çekme Talebinde Bulun",
   "harbor.transaction.failed": "İşlem başarısız oldu.",
-
   "harbor.withdraw.preview.success.header": "Çekme talebi gönderildi",
   "harbor.withdraw.amount": "Çekme miktarı",
   "harbor.withdraw.preview.amb.reward": "Ödül AMB",
   "harbor.withdraw.preview.bond.reward": "Ödül BOND",
   "harbor.withdraw.preview.delay": "Çekme Gecikmesi",
-
   "harbor.button.processing": "İşleme",
-
   "harbor.tier.1.header": "Yeni Stake'ciler",
   "harbor.tier.1.content": "25% ödül hemen kullanılabilir, her 250K blokta %1 artar.",
-
   "harbor.tier.2.header": "1 yıl ve üzeri Staker'lar",
   "harbor.tier.2.content": "Ödüllerin %50'si anında kullanılabilir, her 250 bin blokta %1 artar.",
-
   "harbor.tier.3.header": "2 yıl ve üzeri Staker'lar",
   "harbor.tier.3.content": "Ödüllerin %75'i anında kullanılabilir, her 250 bin blokta %1 artar.",
-
   "harbor.tier.4.header": "3 yıl ve üzeri Staker'lar",
   "harbor.tier.4.content": "Ödüllerin %100'ü anında kullanılabilir, her 250 bin blokta %1 artar.",
-
   "harbor.tier.info": "Kalan ödüller, Bond pazarında takas edilebilen $BOND olarak mevcuttur.",
-
   "harbor.requests.date": "İstek tarihi",
   "harbor.unlock.date": "Kilit açma tarihi",
   "harbor.empty.withdrawals.list": "Şu anda herhangi bir çekim isteği yok.",
@@ -567,10 +515,13 @@
   "harbor.stake.description": "AMB staking limitiniz, stake edilen HBR miktarına bağlıdır. Limitinizi artırmak için daha fazla HBR stake edin!",
   "harbor.stake.period.complete": "Kilitleme süresi tamamlandı",
   "harbor.stake.unlock.date": "Şu tarihte müsait {{date}}",
+
+
   "harbor.button.insufficient.stake": "Stake için yetersiz",
   "harbor.button.address.limit": "Adres Başına Yetersiz Limit",
   "harbor.button.insufficient": "Yetersiz {{symbol}} bakiyesi",
   "harbor.button.total.limit": "Yetersiz Toplam havuz Limiti",
+
   "wallet.connect": {
     "proposal": "{{origin}} adresine bağlanınf",
     "warning": "Cüzdanınızı {{origin}} adresine bağlamak istediğinizden emin misiniz?",
@@ -597,12 +548,22 @@
     "approve.token": "Tokenı onayla",
     "spender": "Harcayan"
   },
-  "browser.disclaimer.header": "!!!Security warning",
-  "browser.disclaimer.description": "!!!You are about to visit an external website. This site is not maintained or verified by AirDAO.",
+  "browser.disclaimer.header": "Güvenlik uyarısı",
+  "browser.disclaimer.description": "Harici bir web sitesini ziyaret etmek üzeresiniz. Bu site AirDAO tarafından yönetilmiyor veya doğrulanmıyor.",
+  "browser.wallet.selector.header": "Bağlı Hesaplar: :",
+  "browser.wallet.selector.account": "Hesap",
+  "browser.approve.permissions.header": "${{uri}} şunları istiyor:",
+  "browser.approve": {
+    "permission": "Hesabınızı görün ve işlem önerin",
+    "personal.sign": "Mesaj, cüzdanda mesajı imzalamak için kullanılır",
+    "address": "İsteniyor:",
+    "send.transaction": "İşlem gönder"
+  },
   "products": {
-    "header": "!!!Products",
+    "header": "Ürünler",
     "title.trade": "Alım satım yapın",
     "title.earn": "Kazan",
+    "title.web": "!!!Web",
     "swap.description": "Havuzlarla kazanın ve token takas edin",
     "bridge.description": "Sorunsuz varlık transferleri",
     "stake.description": "AMB ödülleri kazanın",

@@ -252,7 +252,6 @@ export const AssetScreen = ({ route, navigation }: Props) => {
             loading={isTransactionsLoading}
             onEndReached={() => hasNextPage && fetchNextPage()}
           />
-          <Text>asdf</Text>
         </View>
       </View>
     </SafeAreaView>
