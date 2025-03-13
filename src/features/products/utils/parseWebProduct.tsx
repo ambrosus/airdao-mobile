@@ -1,13 +1,8 @@
 import { Platform } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { Image, Platform } from 'react-native';
 import { ProductSwap } from '@components/svg/icons/v2';
 import { BrowserItemModel } from '@entities/browser/model';
 import { Product } from '@features/products/utils/product';
-
-enum Products {
-  AstraDEX = 'Astra DEX'
-}
 
 const DEFAULT_GRADIENT = [
   'rgba(132, 224, 255, 0.2)',
@@ -43,14 +38,4 @@ export const parseWebProduct = (
         firebaseEvent: ''
       };
     });
-};
-
-export const filterDisplayedProducts = (products: any[]) => {
-  const productsToIgnore = Platform.select({
-    android: [Products.AstraDEX],
-    ios: [],
-    default: []
-  });
-
-  return products.filter((product) => !productsToIgnore.includes(product.name));
 };

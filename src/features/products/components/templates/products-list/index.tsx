@@ -12,12 +12,7 @@ import useLocalization from '@contexts/Localizations';
 import { useBrowserStore } from '@entities/browser/model';
 import { BottomSheetBrowserModal } from '@features/browser/components/templates';
 import { PRODUCTS } from '@features/products/entities';
-import {
-  filterDisplayedProducts,
-  parseWebProduct,
-  Product,
-  SectionizedProducts
-} from '@features/products/utils';
+import { Product, SectionizedProducts } from '@features/products/utils';
 import { verticalScale } from '@utils';
 import { styles } from './styles';
 import { ProductListItem } from '../../base';
@@ -42,23 +37,6 @@ export const ProductsList = () => {
     []
   );
 
-  const { browserConfig } = useBrowserStore();
-  const { currentLanguage } = useLocalization();
-
-  const WEB_PRODUCTS = useMemo(() => {
-    const data = filterDisplayedProducts(
-      parseWebProduct(browserConfig.products, currentLanguage)
-    );
-    return browserConfig && browserConfig?.products && data.length > 0
-      ? [
-          {
-            title: 'WEB',
-            data
-          }
-        ]
-      : [];
-  }, [browserConfig, currentLanguage]);
-  
   const renderSectionHeader = useCallback(
     (info: { section: SectionListData<Product, SectionizedProducts> }) => {
       return (
