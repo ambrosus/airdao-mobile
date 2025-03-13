@@ -1,9 +1,13 @@
 /* eslint-disable no-console */
 // tslint:disable:no-console
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
-import { WebView, WebViewMessageEvent } from '@metamask/react-native-webview';
+import {
+  WebView,
+  WebViewMessageEvent,
+  WebViewNavigation
+} from '@metamask/react-native-webview';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import {
   GestureEvent,
@@ -65,6 +69,7 @@ export const BrowserScreen = () => {
   const { data: allAccounts } = useAllAccounts();
 
   const [hasSwiped, setHasSwiped] = useState(false);
+  const [canGoBack, setCanGoBack] = useState(false);
 
   useEffect(() => {
     const getSelectedWallet = async () => {
@@ -142,11 +147,16 @@ export const BrowserScreen = () => {
   const openWalletSelector = () => {
     browserWalletSelectorRef?.current?.show();
   };
+  const handleNavigationStateChange = (navState: WebViewNavigation) => {
+    setCanGoBack(navState.canGoBack);
+  };
+
   const { top } = useSafeAreaInsets();
   return (
     <>
       <View style={{ marginTop: top }}>
         <BrowserHeader
+          goBack={canGoBack ? goBack : null}
           openWalletSelector={openWalletSelector}
           reload={reload}
           closeWebView={closeWebView}
@@ -159,6 +169,7 @@ export const BrowserScreen = () => {
         onGestureEvent={onGestureEvent}
         shouldCancelWhenOutside={false}
         activeOffsetX={[-10, 10]}
+        enabled={isIos}
       >
         <View style={styles.webViewWrapper}>
           <WebView
@@ -171,6 +182,7 @@ export const BrowserScreen = () => {
             injectedJavaScriptBeforeContentLoaded={INJECTED_PROVIDER_JS}
             onMessage={onMessageEventHandler}
             webviewDebuggingEnabled={__DEV__}
+            onNavigationStateChange={handleNavigationStateChange} // Додаємо тут
           />
         </View>
       </PanGestureHandler>

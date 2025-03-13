@@ -73,9 +73,20 @@ const signMessage = async (message: any, privateKey: string) => {
 };
 
 const _signTypedData = async (data: any, privateKey: string) => {
-  const wallet = await extractWallet(privateKey);
+  if (!data.domain || !data.types || !data.message) {
+    throw new Error('Invalid EIP-712 typed data format');
+  }
 
-  return await wallet._signTypedData(data.domain, data.types, data.message);
+  if (!data.types[data.primaryType]) {
+    throw new Error(`Primary type "${data.primaryType}" is missing in types`);
+  }
+  const cleanedTypes = { ...data.types };
+
+  if (cleanedTypes.EIP712Domain) {
+    delete cleanedTypes.EIP712Domain;
+  }
+  const wallet = await extractWallet(privateKey);
+  return await wallet._signTypedData(data.domain, cleanedTypes, data.message);
 };
 
 export const rpcMethods = {
