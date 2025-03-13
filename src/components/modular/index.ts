@@ -14,5 +14,6 @@ export * from './Passcode';
 export * from './PrivateKeyMaskedInput';
 export * from './TokenSelector';
 export * from './AutoScrollBox';
+export * from './WalletSelectorItem';
 export { BalanceRow } from './BalanceRow';
 export { SingleAssetNFT } from './SingleAssetNFT';

@@ -2,12 +2,22 @@ import { Dispatch, ReactNode, SetStateAction } from 'react';
 import { ViewProps, ViewStyle } from 'react-native';
 import { ModalProps } from 'react-native-modal';
 
+export enum ModalActionTypes {
+  PERMISSIONS = 'permissions',
+  PERSONAL_SIGN = 'personalSign',
+  SEND_TRANSACTION = 'sendTransaction',
+  DISCONNECT = 'disconnect'
+}
+
 export interface BottomSheetOutsideDataProps {
+  modalType?: ModalActionTypes;
   title?: string;
   subTitle?: string;
   buttonsLabels?: string[];
   onReject?: () => void;
   onApprove?: () => void;
+  selectedAddress?: string;
+  onWalletSelect?: (address: string) => Promise<string>;
 }
 
 export interface BottomSheetProps {

@@ -24,6 +24,9 @@ import { ProductListItem } from '../../base';
 
 export const ProductsList = () => {
   const { t } = useTranslation();
+  const { browserConfig } = useBrowserStore();
+  const { currentLanguage } = useLocalization();
+
   const disclaimerModalRef = useRef<BottomSheetRef>(null);
 
   const renderProductItem = useCallback(
@@ -55,7 +58,7 @@ export const ProductsList = () => {
         ]
       : [];
   }, [browserConfig, currentLanguage]);
-
+  
   const renderSectionHeader = useCallback(
     (info: { section: SectionListData<Product, SectionizedProducts> }) => {
       return (
@@ -76,13 +79,11 @@ export const ProductsList = () => {
 
   const devSupportedProducts = useMemo(
     () =>
-      PRODUCTS(t).map((section) => ({
+      PRODUCTS(t, browserConfig, currentLanguage).map((section) => ({
         ...section,
-        data: section.data.filter(
-          (item) => !(!__DEV__ && item.route === 'BrowserScreen')
-        )
+        data: section.data
       })),
-    [t]
+    [browserConfig, currentLanguage, t]
   );
 
   return (
@@ -90,9 +91,7 @@ export const ProductsList = () => {
       <SectionList<Product, SectionizedProducts>
         bounces={false}
         keyExtractor={(item) => item.id.toString()}
-        // TODO type fix
-        // @ts-ignore
-        sections={[...devSupportedProducts, ...WEB_PRODUCTS]}
+        sections={devSupportedProducts}
         renderSectionHeader={renderSectionHeader}
         renderItem={renderProductItem}
         style={styles.container}
