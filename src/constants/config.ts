@@ -45,6 +45,7 @@ const envs = {
     ROUTER_V2_ADDRESS: '0xf7237C595425b49Eaeb3Dc930644de6DCa09c3C4',
     FACTORY_ADDRESS: '0x2b6852CeDEF193ece9814Ee99BE4A4Df7F463557',
     CHAIN_ID: 16718,
+    CHAIN_ID_HEX: '0x414e',
     CURRENCY_GRAPH_URL:
       'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b',
     HBR_LIQUIDITY_POOL: '0xA89621016D945408a556ECcb4A10c0122aB852F2',
@@ -91,12 +92,13 @@ const envs = {
     FACTORY_ADDRESS: '0x2b6852CeDEF193ece9814Ee99BE4A4Df7F463557',
     MARKETPLACE_URL: 'https://bond-backend-api.ambrosus.io',
     CHAIN_ID: 16718,
+    CHAIN_ID_HEX: '0x414e',
     CURRENCY_GRAPH_URL:
       'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b',
     HBR_LIQUIDITY_POOL: '0xA89621016D945408a556ECcb4A10c0122aB852F2',
     HBR_TOKEN_ADDRESS: '0xd09270E917024E75086e27854740871F1C8E0E10',
     BROWSER_CONFIG:
-      'https://raw.githubusercontent.com/ambrosus/browser-config/refs/heads/main/config.json'
+      'https://raw.githubusercontent.com/ambrosus/browser-config/refs/heads/stage/config.json'
   },
   testnet: {
     WALLET_API_URL: 'https://wallet-api.ambrosus-test.io',
@@ -137,12 +139,13 @@ const envs = {
     FACTORY_ADDRESS: '0x7bf4227eDfAA6823aD577dc198DbCadECccbEb07',
     MARKETPLACE_URL: 'https://bond-backend-api.ambrosus-test.io',
     CHAIN_ID: 22040,
+    CHAIN_ID_HEX: '0x5618',
     CURRENCY_GRAPH_URL:
       'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b',
     HBR_LIQUIDITY_POOL: '0x255b5ff5026f198c83575d9a1A4561fe820ab92e',
     HBR_TOKEN_ADDRESS: '0x7B58Cbb7c4Ff2E53F8c4405606D0A7AF707ab00b',
     BROWSER_CONFIG:
-      'https://raw.githubusercontent.com/ambrosus/browser-config/refs/heads/main/config.json'
+      'https://raw.githubusercontent.com/ambrosus/browser-config/refs/heads/dev/config.json'
   }
 };
 

@@ -12,18 +12,16 @@ import useLocalization from '@contexts/Localizations';
 import { useBrowserStore } from '@entities/browser/model';
 import { BottomSheetBrowserModal } from '@features/browser/components/templates';
 import { PRODUCTS } from '@features/products/entities';
-import {
-  filterDisplayedProducts,
-  parseWebProduct,
-  Product,
-  SectionizedProducts
-} from '@features/products/utils';
+import { Product, SectionizedProducts } from '@features/products/utils';
 import { verticalScale } from '@utils';
 import { styles } from './styles';
 import { ProductListItem } from '../../base';
 
 export const ProductsList = () => {
   const { t } = useTranslation();
+  const { browserConfig } = useBrowserStore();
+  const { currentLanguage } = useLocalization();
+
   const disclaimerModalRef = useRef<BottomSheetRef>(null);
 
   const renderProductItem = useCallback(
@@ -38,23 +36,6 @@ export const ProductsList = () => {
     },
     []
   );
-
-  const { browserConfig } = useBrowserStore();
-  const { currentLanguage } = useLocalization();
-
-  const WEB_PRODUCTS = useMemo(() => {
-    const data = filterDisplayedProducts(
-      parseWebProduct(browserConfig.products, currentLanguage)
-    );
-    return browserConfig && browserConfig?.products && data.length > 0
-      ? [
-          {
-            title: 'WEB',
-            data
-          }
-        ]
-      : [];
-  }, [browserConfig, currentLanguage]);
 
   const renderSectionHeader = useCallback(
     (info: { section: SectionListData<Product, SectionizedProducts> }) => {
@@ -76,13 +57,11 @@ export const ProductsList = () => {
 
   const devSupportedProducts = useMemo(
     () =>
-      PRODUCTS(t).map((section) => ({
+      PRODUCTS(t, browserConfig, currentLanguage).map((section) => ({
         ...section,
-        data: section.data.filter(
-          (item) => !(!__DEV__ && item.route === 'BrowserScreen')
-        )
+        data: section.data
       })),
-    [t]
+    [browserConfig, currentLanguage, t]
   );
 
   return (
@@ -90,9 +69,7 @@ export const ProductsList = () => {
       <SectionList<Product, SectionizedProducts>
         bounces={false}
         keyExtractor={(item) => item.id.toString()}
-        // TODO type fix
-        // @ts-ignore
-        sections={[...devSupportedProducts, ...WEB_PRODUCTS]}
+        sections={devSupportedProducts}
         renderSectionHeader={renderSectionHeader}
         renderItem={renderProductItem}
         style={styles.container}

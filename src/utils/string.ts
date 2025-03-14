@@ -116,11 +116,38 @@ function wrapAndroidString(
   return str;
 }
 
+const formatUri = ({
+  uri,
+  actions = ['format', 'cleanHttp'],
+  formatLength = 25
+}: {
+  uri: string;
+  actions?: ('cleanHttp' | 'format')[];
+  formatLength?: number;
+}): string => {
+  let res = uri;
+
+  const formatUriAction = {
+    format: (_uri: string) => _uri.replace(/^https?:\/\//, ''),
+    cleanHttp: (_uri: string) =>
+      _uri.length > formatLength
+        ? `${_uri.slice(0, formatLength - 3)}...`
+        : _uri
+  };
+
+  actions.forEach((action) => {
+    res = formatUriAction[action](res);
+  });
+
+  return res;
+};
+
 export const StringUtils = {
   formatAddress,
   pluralize,
   removeNonNumericCharacters,
   removeNonAlphabeticCharacters,
   formatNumberInput,
-  wrapAndroidString
+  wrapAndroidString,
+  formatUri
 };

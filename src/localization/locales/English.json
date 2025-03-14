@@ -82,6 +82,9 @@
   "button.importing.wallet": "Importing wallet",
   "button.sending": "Sending",
   "button.insufficient.funds": "Insufficient funds",
+  "button.refresh.action": "Refresh",
+  "button.copy.action": "Copy",
+
   "change.passcode.confirm.new.passcode": "Confirm new passcode",
   "change.passcode.enter.new.passcode": "Enter your passcode",
   "change.passcode.success": "Passcode changed!",
@@ -100,6 +103,8 @@
   "collection.search.input": "Search groups",
   "collection.search.public.address.placeholder": "Search public address",
   "collection.total.balance": "TOTAL VALUE",
+  "common.reject": "Reject",
+  "common.approve": "Approve",
   "common.address": "Address",
   "common.address_plural": "Addresses",
   "common.address.with.count": "{{count}} address",
@@ -542,10 +547,21 @@
   },
   "browser.disclaimer.header": "Security warning",
   "browser.disclaimer.description": "You are about to visit an external website. This site is not maintained or verified by AirDAO.",
+  "browser.wallet.selector.header": "Connected accounts:",
+  "browser.wallet.selector.account": "Account",
+  "browser.approve.permissions.header": "{{uri}} wants to:",
+  "browser.approve":{
+    "permission": "See your account and suggest transactions",
+    "personal.sign": "The message is used to sign message on wallet",
+    "send.transaction": "Send transaction",
+    "address": "Requesting for:"
+  },
+
   "products": {
     "header": "Products",
     "title.trade": "Trade",
     "title.earn": "Earn",
+    "title.web": "Web",
     "swap.description": "Earn with pools & swap tokens",
     "bridge.description": "Seamless asset transfers",
     "stake.description": "Earn AMB rewards",
