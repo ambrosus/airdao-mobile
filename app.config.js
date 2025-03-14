@@ -2,7 +2,7 @@ module.exports = {
   expo: {
     name: 'AirDAO',
     slug: 'AirDao',
-    version: '1.3.6',
+    version: '1.4',
     orientation: 'portrait',
     icon: './assets/logo.png',
     owner: 'airdao_mobile',
@@ -28,10 +28,10 @@ module.exports = {
           'Allow $(PRODUCT_NAME) to access your microphone',
         NSFaceIDUsageDescription: 'Allow $(PRODUCT_NAME) to access FaceID'
       },
-      buildNumber: '1.3.14'
+      buildNumber: '1.4.1'
     },
     android: {
-      versionCode: 121,
+      versionCode: 123,
       softwareKeyboardLayoutMode: 'pan',
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
