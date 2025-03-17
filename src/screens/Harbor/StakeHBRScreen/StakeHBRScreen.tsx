@@ -122,24 +122,23 @@ export const StakeHBRScreen = () => {
 
   const onButtonPress = useCallback(async () => {
     Keyboard.dismiss();
-
-    if (
-      label.includes(
-        t('swap.button.approve', {
-          symbol: CryptoCurrencyCode.HBR
-        })
-      )
-    ) {
-      return await approve();
-    }
-
     setLoading(true);
 
     try {
-      const txEstimateGas = await estimateTransactionGas();
-      const txGasFee = await estimatedNetworkProviderFee(txEstimateGas);
-      setEstimatedGas(txGasFee);
+      if (allowance.lt(ethers.utils.parseEther(amount))) {
+        const txEstimateGas = await approve({ estimateGas: true });
+
+        if (txEstimateGas instanceof ethers.BigNumber) {
+          const txGasFee = await estimatedNetworkProviderFee(txEstimateGas);
+          setEstimatedGas(txGasFee);
+        }
+      } else {
+        const txEstimateGas = await estimateTransactionGas();
+        const txGasFee = await estimatedNetworkProviderFee(txEstimateGas);
+        setEstimatedGas(txGasFee);
+      }
     } catch (error) {
+      console.error(error);
       throw error;
     } finally {
       setLoading(false);
@@ -149,7 +148,7 @@ export const StakeHBRScreen = () => {
       () => bottomSheetReviewTxRef.current?.show(),
       KEYBOARD_OPENING_TIME
     );
-  }, [approve, estimateTransactionGas, label, t]);
+  }, [allowance, amount, approve, estimateTransactionGas]);
 
   return (
     <SafeAreaView style={styles.container}>
