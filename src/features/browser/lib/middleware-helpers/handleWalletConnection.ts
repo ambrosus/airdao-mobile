@@ -64,6 +64,7 @@ export const handleWalletConnection = async ({
     console.log(2, 'TYT');
     response.error = rpcRejectHandler(4001, error);
     setConnectedAddress('');
+    await setConnectedAddressTo(uri, '');
     rpcErrorHandler('handleWalletConnection', error);
   }
 };
