@@ -7,5 +7,5 @@ export const ERRORS = {
 };
 
 export function $error(message: keyof typeof ERRORS) {
-  throw new Error(ERRORS[message as keyof typeof ERRORS]);
+  throw new Error(ERRORS[message]);
 }
