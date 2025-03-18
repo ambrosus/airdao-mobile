@@ -1,215 +1,195 @@
-import { useCallback, useEffect, useState } from 'react';
 import { Alert, StyleProp, View, ViewStyle } from 'react-native';
 import {
   GoogleSignin,
-  GoogleSigninButton,
-  SignInResponse,
-  isErrorWithCode,
-  isSuccessResponse,
-  statusCodes
+  GoogleSigninButton
 } from '@react-native-google-signin/google-signin';
-import { ADAPTER_EVENTS, IProvider } from '@web3auth/base';
-import { decodeToken } from '@web3auth/single-factor-auth';
-import { ethers } from 'ethers';
 import {
   AppleAuthenticationButtonType,
   AppleAuthenticationButtonStyle,
-  signInAsync,
-  AppleAuthenticationScope,
   AppleAuthenticationButton
 } from 'expo-apple-authentication';
-import Constants from 'expo-constants';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { custom, createWalletClient, formatEther } from 'viem';
 import { Button, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
-import { web3auth } from '@features/web3auth/instance';
+import { AUTH_ENVIRONMENT } from '@entities/oauth/utils';
+import { useAuth, web3auth } from '@features/oauth/lib';
+import { Network } from '@features/oauth/types';
+import { createNetworkProvider } from '@lib/providers';
 import { scale } from '@utils';
 
 function alert(message: string) {
   Alert.alert(message);
 }
 
-const verifier = Constants.expoConfig?.extra?.eas.W3A_IDENTIFIER ?? '';
-
 GoogleSignin.configure({
-  webClientId: Constants.expoConfig?.extra?.eas.FIREBASE_OAUTH_CLIENT_ID
+  webClientId: AUTH_ENVIRONMENT.firebaseClientId
 });
 
 const containerStyles: StyleProp<ViewStyle> = {
   flex: 1,
   justifyContent: 'space-between',
-  padding: scale(20)
+  padding: scale(20),
+  backgroundColor: COLORS.neutral100
+};
+
+const cardStyle: StyleProp<ViewStyle> = {
+  backgroundColor: COLORS.neutral0,
+  borderRadius: scale(12),
+  padding: scale(16),
+  shadowColor: COLORS.neutral800,
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+  shadowRadius: 4,
+  elevation: 3,
+  marginBottom: scale(16)
+};
+
+const headerStyle: StyleProp<ViewStyle> = {
+  marginBottom: scale(16),
+  borderBottomWidth: 1,
+  borderBottomColor: COLORS.neutral200,
+  paddingBottom: scale(8)
+};
+
+const buttonContainerStyle: StyleProp<ViewStyle> = {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginTop: scale(10)
 };
 
 export const OAuthScreen = () => {
-  const [provider, setProvider] = useState<IProvider | null>(null);
-  const [email, setEmail] = useState<string | null>(null);
-
-  useEffect(() => {
-    const init = async () => {
-      try {
-        await web3auth.init();
-        setProvider(web3auth.provider);
-
-        if (web3auth.status === ADAPTER_EVENTS.CONNECTED) {
-          alert('Provider created!');
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    init();
-  }, []);
-
-  const onWeb3Auth = useCallback(async (response: SignInResponse) => {
-    try {
-      const { idToken } = response.data ?? {};
-
-      if (!idToken) return alert('Unable to parse idToken');
-
-      const { payload } = decodeToken(idToken);
-
-      const provider = await web3auth.connect({
-        verifier,
-        verifierId: (payload as any).email,
-        idToken
-      });
-
-      alert('Provider successfully created!');
-      setProvider(provider);
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
-
-  const signIn = useCallback(async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const response = await GoogleSignin.signIn();
-
-      if (isSuccessResponse(response)) {
-        setEmail(response.data?.user.email ?? null);
-        onWeb3Auth(response);
-      } else {
-        alert('sign in was cancelled by user');
-      }
-    } catch (error) {
-      if (isErrorWithCode(error)) {
-        switch (error.code) {
-          case statusCodes.IN_PROGRESS:
-            alert('operation (eg. sign in) already in progress');
-            break;
-          case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-            alert('Android only, play services not available or outdated');
-            break;
-          default:
-        }
-      }
-    }
-  }, [onWeb3Auth]);
+  const { user, handleUserLogin, handleUserLogout } = useAuth();
 
   const getSigner = async () => {
-    if (!provider) return alert('Provider not found');
+    if (!web3auth.provider) return alert('Provider not found');
 
-    const web3Provider = new ethers.providers.Web3Provider(provider);
+    const publicClient = createNetworkProvider();
+    const provider = web3auth.provider;
 
-    const signer = web3Provider.getSigner();
-    const address = await signer.getAddress();
-    const balance = ethers.utils.formatEther(
-      await web3Provider.getBalance(address)
-    );
+    const walletClient = createWalletClient({
+      transport: custom(provider)
+    });
 
-    alert(address);
-    alert(balance);
-  };
+    const publicKey = await walletClient.getAddresses();
+    alert(`Public key, ${JSON.stringify(publicKey)}`);
 
-  const onAppleAuth = async () => {
-    try {
-      const credential = await signInAsync({
-        requestedScopes: [
-          AppleAuthenticationScope.FULL_NAME,
-          AppleAuthenticationScope.EMAIL
-        ]
-      });
-      alert(JSON.stringify(credential));
-      // signed in
-    } catch (e) {
-      if ((e as { code: string }).code === 'ERR_REQUEST_CANCELED') {
-        alert('User canceled the sign-in flow');
-      } else {
-        alert('Error signing in');
-      }
-    }
+    const balance = await publicClient.getBalance({
+      address: publicKey[0]
+    });
+    alert(`Balance, ${formatEther(balance)}`);
   };
 
   const logout = async () => {
-    try {
-      await GoogleSignin.signOut();
-      await web3auth.logout();
-
-      setEmail(null);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      alert('Logged out');
-    }
+    await web3auth.logout();
+    await handleUserLogout(Network.APPLE);
   };
 
   return (
     <SafeAreaView style={containerStyles}>
       <View>
-        <Text>{email ? `Welcome ${email}` : 'OAuth'}</Text>
+        <Text
+          fontSize={24}
+          fontFamily="Inter_700Bold"
+          color={COLORS.neutral800}
+          style={{ textAlign: 'center', marginBottom: scale(20) }}
+        >
+          {user ? `Welcome ${user}` : 'Connect your account'}
+        </Text>
 
-        <View>
-          <Text
-            fontSize={20}
-            fontFamily="Inter_700Bold"
-            color={COLORS.neutral800}
-          >
-            Auth Services
-          </Text>
-          <Spacer value={scale(10)} />
-          <GoogleSigninButton onPress={signIn} />
+        <View style={cardStyle}>
+          <View style={headerStyle}>
+            <Text
+              fontSize={20}
+              fontFamily="Inter_700Bold"
+              color={COLORS.neutral800}
+            >
+              Auth Services
+            </Text>
+          </View>
 
-          <Spacer value={scale(10)} />
-          <AppleAuthenticationButton
-            onPress={onAppleAuth}
-            buttonType={AppleAuthenticationButtonType.SIGN_IN}
-            buttonStyle={AppleAuthenticationButtonStyle.BLACK}
-            cornerRadius={5}
-            style={{ width: '60%', height: 50 }}
-          />
+          <View style={{ alignItems: 'center' }}>
+            <GoogleSigninButton
+              onPress={() => handleUserLogin(Network.GOOGLE)}
+              size={GoogleSigninButton.Size.Wide}
+              color={GoogleSigninButton.Color.Dark}
+              style={{ width: 240, height: 48 }}
+            />
+
+            <Spacer value={scale(16)} />
+
+            <AppleAuthenticationButton
+              onPress={() => handleUserLogin(Network.APPLE)}
+              buttonType={AppleAuthenticationButtonType.SIGN_IN}
+              buttonStyle={AppleAuthenticationButtonStyle.BLACK}
+              cornerRadius={8}
+              style={{ width: 240, height: 48 }}
+            />
+          </View>
         </View>
 
-        <Spacer value={scale(20)} />
+        <View style={cardStyle}>
+          <View style={headerStyle}>
+            <Text
+              fontSize={18}
+              fontFamily="Inter_600SemiBold"
+              color={COLORS.neutral800}
+            >
+              Provider Methods
+            </Text>
+          </View>
 
-        <View>
-          <Text
-            fontSize={16}
-            fontFamily="Inter_500Medium"
-            color={COLORS.neutral800}
-          >
-            Provider Methods
-          </Text>
-          <Spacer value={scale(10)} />
+          <View style={buttonContainerStyle}>
+            <Button
+              onPress={getSigner}
+              style={{
+                flex: 1,
+                marginRight: scale(8),
+                backgroundColor: COLORS.brand600,
+                borderRadius: scale(8),
+                padding: scale(12)
+              }}
+            >
+              <Text color={COLORS.neutral0} fontFamily="Inter_500Medium">
+                Get Signer
+              </Text>
+            </Button>
 
-          <Button onPress={getSigner}>
-            <Text>Get Signer</Text>
-          </Button>
-          <Button
-            onPress={() =>
-              alert(
-                GoogleSignin.getCurrentUser()?.user.email ?? 'No user found'
-              )
-            }
-          >
-            <Text>Get Current User</Text>
-          </Button>
+            <Button
+              onPress={() =>
+                alert(
+                  GoogleSignin.getCurrentUser()?.user.email ?? 'No user found'
+                )
+              }
+              style={{
+                flex: 1,
+                marginLeft: scale(8),
+                backgroundColor: COLORS.brand600,
+                borderRadius: scale(8),
+                padding: scale(12)
+              }}
+            >
+              <Text color={COLORS.neutral0} fontFamily="Inter_500Medium">
+                Current User
+              </Text>
+            </Button>
+          </View>
         </View>
       </View>
-      <Button onPress={logout}>
-        <Text>Logout</Text>
+
+      <Button
+        onPress={logout}
+        style={{
+          backgroundColor: COLORS.error600,
+          borderRadius: scale(8),
+          padding: scale(14),
+          alignItems: 'center',
+          marginTop: scale(20)
+        }}
+      >
+        <Text color={COLORS.neutral0} fontFamily="Inter_600SemiBold">
+          Logout
+        </Text>
       </Button>
     </SafeAreaView>
   );

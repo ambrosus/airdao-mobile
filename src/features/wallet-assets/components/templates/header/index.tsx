@@ -124,9 +124,12 @@ export const HomeHeader = memo(
     const renderContentRight = useMemo(() => {
       return (
         <>
-          <Button onPress={() => navigation.navigate('OAuthScreen')}>
-            <AddIcon />
-          </Button>
+          {/* TODO: Remove this once we have a proper way to handle OAuth */}
+          {__DEV__ && (
+            <Button onPress={() => navigation.navigate('OAuthScreen')}>
+              <AddIcon />
+            </Button>
+          )}
           <Spacer horizontal value={scale(25)} />
           <Button onPress={navigateToNotifications}>
             <NotificationBellIcon />

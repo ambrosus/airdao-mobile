@@ -1,9 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CHAIN_NAMESPACES } from '@web3auth/base';
+import { CHAIN_NAMESPACES, WEB3AUTH_NETWORK_TYPE } from '@web3auth/base';
 import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider';
-import { Web3Auth } from '@web3auth/single-factor-auth';
-import Constants from 'expo-constants';
+import { SDK_MODE, Web3Auth } from '@web3auth/single-factor-auth';
 import Config from '@constants/config';
+import { AUTH_ENVIRONMENT } from '@entities/oauth/utils';
+
+const clientId = AUTH_ENVIRONMENT.clientId;
+const web3AuthNetwork: WEB3AUTH_NETWORK_TYPE = 'sapphire_devnet';
 
 const chainConfig = {
   chainId: '0x5618', //22040
@@ -16,20 +19,20 @@ const chainConfig = {
   blockExplorer: Config.EXPLORER_URL
 };
 
-alert(JSON.stringify(Constants.expoConfig?.extra?.eas));
+alert(JSON.stringify(AUTH_ENVIRONMENT));
 
 const privateKeyProvider = new EthereumPrivateKeyProvider({
   config: { chainConfig }
 });
 
-const clientId = Constants.expoConfig?.extra?.eas.W3A_CLIENT_ID ?? '';
-
 const web3auth = new Web3Auth({
   clientId,
-  web3AuthNetwork: 'sapphire_devnet',
+  web3AuthNetwork,
   privateKeyProvider,
-  usePnPKey: false,
-  storage: AsyncStorage
+  storage: AsyncStorage,
+  mode: SDK_MODE.REACT_NATIVE
 });
+
+web3auth.init();
 
 export { web3auth };

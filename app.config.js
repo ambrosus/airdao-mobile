@@ -117,8 +117,9 @@ module.exports = {
         projectId: 'fe81238e-85e8-4ace-8b87-65ff01c085b7',
         REOWN_PROJECT_ID: process.env.REOWN_PROJECT_ID,
         FIREBASE_OAUTH_CLIENT_ID: process.env.FIREBASE_OAUTH_CLIENT_ID,
-        W3A_IDENTIFIER: process.env.W3A_IDENTIFIER,
-        W3A_CLIENT_ID: process.env.W3A_CLIENT_ID
+        W3A_CLIENT_ID: process.env.W3A_CLIENT_ID,
+        W3A_GOOGLE_PROVIDER: process.env.W3A_GOOGLE_PROVIDER,
+        W3A_APPLE_PROVIDER: process.env.W3A_APPLE_PROVIDER
       }
     },
     runtimeVersion: {
@@ -126,6 +127,7 @@ module.exports = {
     },
     updates: {
       url: 'https://u.expo.dev/fe81238e-85e8-4ace-8b87-65ff01c085b7'
-    }
+    },
+    scheme: ['fb', 'airdao']
   }
 };
