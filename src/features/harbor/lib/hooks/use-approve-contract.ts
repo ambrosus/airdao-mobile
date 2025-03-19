@@ -49,7 +49,7 @@ export function useApproveContract() {
         console.error('Error approving contract:', error);
         throw error;
       } finally {
-        setApproving(false);
+        setTimeout(() => setApproving(false), 475);
       }
     },
     [_extractPrivateKey, amount, fetchUserAllowance, wallet]
