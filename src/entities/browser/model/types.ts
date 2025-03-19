@@ -6,6 +6,8 @@ export interface BrowserStoreModel {
   connectedAccount: IsNullableAccount;
   productTitle: string;
   browserConfig: BrowserConfig;
+  productIcon: string;
+  setProductIcon: (payload: string) => void;
   setProductTitle: (payload: string) => void;
   setConnectedAccount: (payload: IsNullableAccount) => void;
   setConnectedAddress: (payload: string) => void;

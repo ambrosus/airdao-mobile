@@ -1,8 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-export enum AsyncStorageKey {
-  connectedAddressTo = 'connectedAddressTo'
-}
+import { AsyncStorageKey } from '@lib/storage.model';
 
 export const setConnectedAddressTo = async (uri: string, address: string) => {
   await AsyncStorage.setItem(

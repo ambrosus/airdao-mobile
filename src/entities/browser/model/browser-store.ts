@@ -9,8 +9,12 @@ export const useBrowserStore = create<BrowserStoreModel>((set) => ({
   },
   connectedAccount: null,
   productTitle: '',
+  productIcon: '',
   setProductTitle: async (productTitle) => {
     set({ productTitle });
+  },
+  setProductIcon: async (productIcon) => {
+    set({ productIcon });
   },
   setConnectedAccount: async (connectedAccount) => {
     set({ connectedAccount });
