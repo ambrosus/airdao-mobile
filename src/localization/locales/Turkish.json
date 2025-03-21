@@ -554,17 +554,24 @@
   "browser.wallet.selector.header": "Bağlı Hesaplar: :",
   "browser.wallet.selector.account": "Hesap",
   "browser.approve.permissions.header": "${{uri}} şunları istiyor:",
+  "browser.remove.permission.toast.header": "İzinler güncellendi",
+  "browser.remove.permission.modal.header": "Emin misiniz?",
+  "browser.remove.permission.modal.subheader": "Tekrar kullanmak için yeniden bağlanmanız gerekecek",
+  "browser.remove.no.permissions.header": "Bağlı Web Sitesi Yok",
+  "browser.remove.no.permissions.subheader": "Henüz hiçbir web sitesine bağlanmadınız. Bağlandığınızda, burada görünecekler",
+
   "browser.approve": {
     "permission": "Hesabınızı görün ve işlem önerin",
     "personal.sign": "Mesaj, cüzdanda mesajı imzalamak için kullanılır",
     "address": "İsteniyor:",
     "send.transaction": "İşlem gönder"
   },
+
   "products": {
     "header": "Ürünler",
     "title.trade": "Alım satım yapın",
     "title.earn": "Kazan",
-    "title.web": "!!!Web",
+    "title.web": "Web",
     "swap.description": "Havuzlarla kazanın ve token takas edin",
     "bridge.description": "Sorunsuz varlık transferleri",
     "stake.description": "AMB ödülleri kazanın",

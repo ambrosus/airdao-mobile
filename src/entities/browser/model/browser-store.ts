@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { browserService } from '@api/browser-service';
 import { BrowserStoreModel } from '@entities/browser/model/types';
 
-export const useBrowserStore = create<BrowserStoreModel>((set) => ({
+export const useBrowserStore = create<BrowserStoreModel>((set, get) => ({
   connectedAddress: '',
   browserConfig: {
     products: []
@@ -10,6 +10,9 @@ export const useBrowserStore = create<BrowserStoreModel>((set) => ({
   connectedAccount: null,
   productTitle: '',
   productIcon: '',
+  getProductIcon: () => {
+    return get().productIcon;
+  },
   setProductTitle: async (productTitle) => {
     set({ productTitle });
   },

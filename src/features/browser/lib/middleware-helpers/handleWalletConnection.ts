@@ -9,7 +9,7 @@ import {
   rpcErrorHandler,
   rpcRejectHandler
 } from '@features/browser/utils';
-import { setConnectedAddressTo, setWalletPermissions } from '@lib';
+import { setConnectedAddressTo } from '@lib';
 import { delay } from '@utils';
 import {
   updateWindowObject,
@@ -24,8 +24,7 @@ export const handleWalletConnection = async ({
   browserWalletSelectorRef,
   uri
 }: ConnectionRequest) => {
-  const { setConnectedAddress, productIcon, productTitle } =
-    useBrowserStore.getState();
+  const { setConnectedAddress, getProductIcon } = useBrowserStore.getState();
   try {
     const address = await new Promise<string>(async (resolve, reject) => {
       await delay(400);
@@ -52,19 +51,8 @@ export const handleWalletConnection = async ({
     });
 
     await userConfirmation;
-    await setConnectedAddressTo(uri, address);
-    console.log({
-      uri,
-      address,
-      productIcon,
-      title: productTitle,
-      timestamp: +new Date()
-    });
-    await setWalletPermissions(address, {
-      productIcon,
-      uri,
-      timestamp: +new Date()
-    });
+    console.log('icon', getProductIcon());
+    await setConnectedAddressTo(uri, getProductIcon(), [address]);
     setConnectedAddress(address);
 
     updateWindowObject(
@@ -76,6 +64,7 @@ export const handleWalletConnection = async ({
   } catch (error: unknown) {
     response.error = rpcRejectHandler(4001, error);
     setConnectedAddress('');
+    await setConnectedAddressTo(uri, getProductIcon(), []);
     rpcErrorHandler('handleWalletConnection', error);
   }
 };

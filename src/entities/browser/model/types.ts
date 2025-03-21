@@ -7,6 +7,7 @@ export interface BrowserStoreModel {
   productTitle: string;
   browserConfig: BrowserConfig;
   productIcon: string;
+  getProductIcon: () => string;
   setProductIcon: (payload: string) => void;
   setProductTitle: (payload: string) => void;
   setConnectedAccount: (payload: IsNullableAccount) => void;

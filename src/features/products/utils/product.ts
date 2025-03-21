@@ -13,6 +13,7 @@ type AvailableProductsPath = keyof Pick<
 
 export type Product = {
   id: number;
+  uid?: string;
   section: string;
   name: string;
   description: string;
@@ -22,7 +23,7 @@ export type Product = {
   route: AvailableProductsPath | string;
   firebaseEvent: CustomAppEvents | '';
   isAirDaoApp?: boolean;
-  uri?: string;
+  uri: string;
   platforms?: string[];
 };
 

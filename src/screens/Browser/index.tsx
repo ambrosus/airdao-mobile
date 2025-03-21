@@ -2,7 +2,7 @@
 // tslint:disable:no-console
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 import {
   WebView,
   WebViewMessageEvent,
@@ -31,10 +31,7 @@ import {
 } from '@features/browser/lib';
 import { connectWallet } from '@features/browser/utils';
 import { useAllAccounts } from '@hooks/database';
-import {
-  clearStorage,
-  getConnectedAddressTo,
-} from '@lib';
+import { getConnectedAddressTo } from '@lib';
 import { Cache, CacheKey } from '@lib/cache';
 import { isIos, StringUtils } from '@utils';
 import { styles } from './styles';
@@ -88,14 +85,8 @@ export const BrowserScreen = () => {
     if (webViewRef.current && connectedAddress) {
       connectWallet(connectedAddress, webViewRef);
     }
-  }, [
-    accounts,
-    allAccounts,
-    connectedAddress,
-    setConnectedAccount,
-    setConnectedAddress,
-    uri
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accounts, allAccounts, setConnectedAccount, setConnectedAddress, uri]);
 
   const onMessageEventHandler = useCallback(
     async (event: WebViewMessageEvent) => {
@@ -167,15 +158,6 @@ export const BrowserScreen = () => {
           uri={uri}
         />
       </View>
-      <TouchableOpacity
-        style={{ width: 20, height: 20, backgroundColor: 'red' }}
-        onPress={() => {
-          clearStorage();
-        }}
-      >
-        <Text> 123</Text>
-      </TouchableOpacity>
-
       <PanGestureHandler
         onGestureEvent={onGestureEvent}
         shouldCancelWhenOutside={false}
