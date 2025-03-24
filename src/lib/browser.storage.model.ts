@@ -1,8 +1,9 @@
 export enum AsyncStorageKey {
   browser = 'browser:'
 }
-export enum StorageKeys {
-  walletPermissionsDetails = 'walletPermissionsDetails'
+
+export enum DepressedBrowserStorage {
+  connectedAddressTo = 'connectedAddressTo'
 }
 
 export interface Permissions {
@@ -12,4 +13,10 @@ export interface Permissions {
 
 export interface WalletsPermissions {
   [key: string]: Permissions;
+}
+
+export interface SetConnectedAddressToModel {
+  uri: string;
+  addresses: string[];
+  icon?: string;
 }

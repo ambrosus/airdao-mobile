@@ -52,7 +52,11 @@ export const handleWalletConnection = async ({
 
     await userConfirmation;
     console.log('icon', getProductIcon());
-    await setConnectedAddressTo(uri, getProductIcon(), [address]);
+    await setConnectedAddressTo({
+      uri,
+      icon: getProductIcon(),
+      addresses: [address]
+    });
     setConnectedAddress(address);
 
     updateWindowObject(
@@ -64,7 +68,7 @@ export const handleWalletConnection = async ({
   } catch (error: unknown) {
     response.error = rpcRejectHandler(4001, error);
     setConnectedAddress('');
-    await setConnectedAddressTo(uri, getProductIcon(), []);
+    await setConnectedAddressTo({ uri, icon: getProductIcon(), addresses: [] });
     rpcErrorHandler('handleWalletConnection', error);
   }
 };

@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   AsyncStorageKey,
+  DepressedBrowserStorage,
+  SetConnectedAddressToModel,
   WalletsPermissions
 } from '@lib/browser.storage.model';
 
@@ -19,11 +21,11 @@ export const getConnectedAddressTo = async (uri: string) => {
   return res;
 };
 
-export const setConnectedAddressTo = async (
-  uri: string,
-  icon: string,
-  addresses: string[]
-) => {
+export const setConnectedAddressTo = async ({
+  uri,
+  addresses,
+  icon
+}: SetConnectedAddressToModel) => {
   const uriData = await Storage.getItem(`${AsyncStorageKey.browser}${uri}`);
   if (!addresses.length) {
     await Storage.removeItem(`${AsyncStorageKey.browser}${uri}`);
@@ -37,10 +39,14 @@ export const setConnectedAddressTo = async (
       JSON.stringify(data)
     );
   } else {
-    const data = {
-      icon,
-      addresses
-    };
+    const data = icon
+      ? {
+          icon,
+          addresses
+        }
+      : {
+          addresses
+        };
     await Storage.setItem(
       `${AsyncStorageKey.browser}${uri}`,
       JSON.stringify(data)
@@ -104,4 +110,21 @@ export const getAllWalletsPermissions: () => Promise<
         };
       })
   );
+};
+
+export const migrateToNewBrowserStorage = async () => {
+  const keys = await AsyncStorage.getAllKeys();
+  keys.map(async (key) => {
+    if (key.includes(DepressedBrowserStorage.connectedAddressTo)) {
+      const data = await AsyncStorage.getItem(key);
+      const _key = key.replace(
+        `${DepressedBrowserStorage.connectedAddressTo}:`,
+        ''
+      );
+      if (data && _key) {
+        await setConnectedAddressTo({ uri: _key, addresses: [data] });
+        await AsyncStorage.removeItem(key);
+      }
+    }
+  });
 };
