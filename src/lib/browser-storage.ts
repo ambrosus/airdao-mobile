@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   AsyncStorageKey,
-  DepressedBrowserStorage,
+  DeprecatedBrowserStorage,
   SetConnectedAddressToModel,
   WalletsPermissions
 } from '@lib/browser.storage.model';
@@ -115,10 +115,10 @@ export const getAllWalletsPermissions: () => Promise<
 export const migrateToNewBrowserStorage = async () => {
   const keys = await AsyncStorage.getAllKeys();
   keys.map(async (key) => {
-    if (key.includes(DepressedBrowserStorage.connectedAddressTo)) {
+    if (key.includes(DeprecatedBrowserStorage.connectedAddressTo)) {
       const data = await AsyncStorage.getItem(key);
       const _key = key.replace(
-        `${DepressedBrowserStorage.connectedAddressTo}:`,
+        `${DeprecatedBrowserStorage.connectedAddressTo}:`,
         ''
       );
       if (data && _key) {

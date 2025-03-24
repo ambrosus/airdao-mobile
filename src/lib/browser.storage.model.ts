@@ -2,7 +2,7 @@ export enum AsyncStorageKey {
   browser = 'browser:'
 }
 
-export enum DepressedBrowserStorage {
+export enum DeprecatedBrowserStorage {
   connectedAddressTo = 'connectedAddressTo'
 }
 
