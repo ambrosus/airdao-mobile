@@ -70,6 +70,7 @@ export const ProductsList = () => {
         bounces={false}
         keyExtractor={(item) => item.id.toString()}
         sections={devSupportedProducts}
+        stickySectionHeadersEnabled={false}
         renderSectionHeader={renderSectionHeader}
         renderItem={renderProductItem}
         style={styles.container}
