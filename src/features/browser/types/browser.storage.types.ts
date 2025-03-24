@@ -6,13 +6,13 @@ export enum DeprecatedBrowserStorage {
   connectedAddressTo = 'connectedAddressTo'
 }
 
-export interface Permissions {
+export interface StoragePermissions {
   addresses: string[];
   icon: string;
 }
 
 export interface WalletsPermissions {
-  [key: string]: Permissions;
+  [key: string]: StoragePermissions;
 }
 
 export interface SetConnectedAddressToModel {

@@ -4,7 +4,7 @@ import {
   DeprecatedBrowserStorage,
   SetConnectedAddressToModel,
   WalletsPermissions
-} from '@lib/browser.storage.model';
+} from '@features/browser/types/browser.storage.types';
 
 const Storage = AsyncStorage;
 

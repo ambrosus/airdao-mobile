@@ -2,13 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { FlatList, Image, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Spacer, Spinner, Text } from '@components/base';
-import { BottomSheetRef } from '@components/composite';
+import { BottomSheetRef, PermissionItem } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { BottomSheetRemovePermissions } from '@features/browser/components/templates';
 import { getAllWalletsPermissions, WalletsPermissions } from '@lib';
 import { scale } from '@utils';
 import { styles } from './styles';
-import { PermissionItem } from '../PermissionItem';
 
 export const AllProductPermissions = () => {
   const permissionsModalRef = useRef<BottomSheetRef>(null);

@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '@components/composite';
+import { AllProductPermissions } from '@components/templates';
 import { COLORS } from '@constants/colors';
-import { AllProductPermissions } from '@screens/Settings/screens/ManagePermissions/components';
 import { styles } from './styles';
 
 export const ManagePermissions = () => {
