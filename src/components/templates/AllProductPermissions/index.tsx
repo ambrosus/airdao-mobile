@@ -5,25 +5,26 @@ import { Spacer, Spinner, Text } from '@components/base';
 import { BottomSheetRef, PermissionItem } from '@components/composite';
 import { COLORS } from '@constants/colors';
 import { BottomSheetRemovePermissions } from '@features/browser/components/templates';
-import { getAllWalletsPermissions, WalletsPermissions } from '@lib';
+import { WalletsPermissions } from '@features/browser/types';
+import { getAllWalletsPermissions } from '@lib';
 import { scale } from '@utils';
 import { styles } from './styles';
 
 export const AllProductPermissions = () => {
-  const permissionsModalRef = useRef<BottomSheetRef>(null);
   const { t } = useTranslation();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [connectedDetails, setConnectedDetails] = useState<
     WalletsPermissions[]
   >([]);
+
+  const permissionsModalRef = useRef<BottomSheetRef>(null);
+
   const updatePermissions = async () => {
     try {
       setLoading(true);
       const allWalletsPermissions = await getAllWalletsPermissions();
       setConnectedDetails(allWalletsPermissions);
-    } catch (e) {
-      // ignore
     } finally {
       setLoading(false);
     }
