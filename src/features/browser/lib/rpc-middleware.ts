@@ -92,7 +92,7 @@ export async function handleWebViewMessage({
             webViewRef,
             browserApproveRef,
             permissions: INITIAL_ACCOUNTS_PERMISSIONS
-          }).then((result: WalletConnectionResult) => result.accounts);
+          }).then((result: WalletConnectionResult) => result?.accounts);
           break;
         }
 

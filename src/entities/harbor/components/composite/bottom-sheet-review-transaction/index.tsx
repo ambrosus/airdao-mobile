@@ -22,6 +22,8 @@ interface BottomSheetReviewTransactionProps extends PropsWithChildren {
   txHash?: string;
   loading: boolean;
   estimatedGas: ethers.BigNumber;
+  isApprovalRequired: boolean;
+  approving?: boolean;
 }
 
 export const BottomSheetReviewTransaction = forwardRef<
@@ -29,7 +31,17 @@ export const BottomSheetReviewTransaction = forwardRef<
   BottomSheetReviewTransactionProps
 >(
   (
-    { amount, success, timestamp, txHash, loading, estimatedGas, children },
+    {
+      amount,
+      success,
+      timestamp,
+      txHash,
+      loading,
+      estimatedGas,
+      isApprovalRequired,
+      approving = false,
+      children
+    },
     ref
   ) => {
     const { t } = useTranslation();
@@ -96,7 +108,11 @@ export const BottomSheetReviewTransaction = forwardRef<
                     fontFamily="Inter_500Medium"
                     color={COLORS.neutral600}
                   >
-                    {t('staking.pool.stake.amount')}
+                    {t(
+                      isApprovalRequired || approving
+                        ? 'wallet.connect.amount.approve'
+                        : 'staking.pool.stake.amount'
+                    )}
                   </Text>
                   <Row alignItems="center">
                     <TokenLogo scale={0.75} token={CryptoCurrencyCode.HBR} />
@@ -112,22 +128,25 @@ export const BottomSheetReviewTransaction = forwardRef<
                   </Row>
                 </Row>
 
-                <Row alignItems="center" justifyContent="space-between">
-                  <Text
-                    fontSize={14}
-                    fontFamily="Inter_500Medium"
-                    color={COLORS.neutral600}
-                  >
-                    {t('common.transaction.from')}
-                  </Text>
-                  <Text
-                    fontSize={14}
-                    fontFamily="Inter_500Medium"
-                    color={COLORS.neutral900}
-                  >
-                    {StringUtils.formatAddress(wallet?.address ?? '', 10, 3)}
-                  </Text>
-                </Row>
+                {!isApprovalRequired && !approving && (
+                  <Row alignItems="center" justifyContent="space-between">
+                    <Text
+                      fontSize={14}
+                      fontFamily="Inter_500Medium"
+                      color={COLORS.neutral600}
+                    >
+                      {t('common.transaction.from')}
+                    </Text>
+                    <Text
+                      fontSize={14}
+                      fontFamily="Inter_500Medium"
+                      color={COLORS.neutral900}
+                    >
+                      {StringUtils.formatAddress(wallet?.address ?? '', 10, 3)}
+                    </Text>
+                  </Row>
+                )}
+
                 <Row alignItems="center" justifyContent="space-between">
                   <Text
                     fontSize={14}
