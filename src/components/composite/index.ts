@@ -11,4 +11,3 @@ export * from './SegmentedPicker';
 export * from './BottomAwareSafeAreaView';
 export * from './CenteredSpinner';
 export * from './TextOrSpinner';
-export * from './PermissionItem';

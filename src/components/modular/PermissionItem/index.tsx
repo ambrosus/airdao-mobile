@@ -4,10 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { SvgUri } from 'react-native-svg';
 import { Button, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
-import { Toast, ToastType } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { removeConnectedAddressTo, WalletsPermissions } from '@lib';
+import { WalletsPermissions } from '@features/browser/types';
+import { removeConnectedAddressTo } from '@lib';
 import { scale, StringUtils } from '@utils';
+import { Toast, ToastType } from '../Toast';
 import { styles } from './styles';
 
 interface PermissionItemModel {

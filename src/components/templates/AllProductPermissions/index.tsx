@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import { FlatList, Image, View } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { FlatList, Image, ListRenderItemInfo, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Spacer, Spinner, Text } from '@components/base';
-import { BottomSheetRef, PermissionItem } from '@components/composite';
+import { BottomSheetRef } from '@components/composite';
+import { PermissionItem } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { BottomSheetRemovePermissions } from '@features/browser/components/templates';
 import { WalletsPermissions } from '@features/browser/types';
@@ -20,7 +21,7 @@ export const AllProductPermissions = () => {
 
   const permissionsModalRef = useRef<BottomSheetRef>(null);
 
-  const updatePermissions = async () => {
+  const updatePermissions = useCallback(async () => {
     try {
       setLoading(true);
       const allWalletsPermissions = await getAllWalletsPermissions();
@@ -28,14 +29,25 @@ export const AllProductPermissions = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     const getAll = async () => {
       await updatePermissions();
     };
     getAll().then();
-  }, []);
+  }, [updatePermissions]);
+
+  const renderListItem = useCallback(
+    (permissionItem: ListRenderItemInfo<WalletsPermissions>) => (
+      <PermissionItem
+        permissionsModalRef={permissionsModalRef}
+        updatePermissions={updatePermissions}
+        permissionItem={permissionItem}
+      />
+    ),
+    [permissionsModalRef, updatePermissions]
+  );
 
   if (loading) {
     return <Spinner size="large" />;
@@ -65,13 +77,7 @@ export const AllProductPermissions = () => {
       <FlatList
         contentContainerStyle={styles.listContainer}
         data={connectedDetails}
-        renderItem={(permissionItem) => (
-          <PermissionItem
-            permissionsModalRef={permissionsModalRef}
-            updatePermissions={updatePermissions}
-            permissionItem={permissionItem}
-          />
-        )}
+        renderItem={renderListItem}
       />
       <BottomSheetRemovePermissions ref={permissionsModalRef} />
     </>
