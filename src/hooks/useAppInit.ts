@@ -16,7 +16,11 @@ import {
   PublicAddressListDB
 } from '@database';
 import { usePasscodeInit } from '@features/passcode/lib/hooks/use-passcode-init';
-import { NotificationService, PermissionService } from '@lib';
+import {
+  migrateToNewBrowserStorage,
+  NotificationService,
+  PermissionService
+} from '@lib';
 import { Cache, CacheKey } from '@lib/cache';
 import { useListsAndAddressesFetcher } from './useListsAndAddressesFetcher';
 
@@ -121,6 +125,7 @@ export const useAppInit = () => {
     async function prepare() {
       try {
         migrateAddressesFromCache();
+        migrateToNewBrowserStorage();
         prepareNotifications();
         await Font.loadAsync({
           Inter_400Regular: require('../../assets/fonts/Inter-Regular.ttf'),
