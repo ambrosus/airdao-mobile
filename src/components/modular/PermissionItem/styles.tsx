@@ -12,6 +12,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: scale(10)
   },
+  container: { flexDirection: 'row' },
+  defaultIcon: { justifyContent: 'center', alignItems: 'center' },
+  image: { width: 32, height: 32 },
   button: {
     paddingVertical: scale(10)
   }
