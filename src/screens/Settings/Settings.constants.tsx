@@ -59,7 +59,11 @@ export const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [
     icon: <AboutIcon color={COLORS.brand500} />
   }
 ];
-export const SOCIAL_GROUPS: SettingsMenuItem[] = [
+
+export const SOCIAL_GROUPS: (Omit<SettingsMenuItem, 'route'> & {
+  route: 'Twitter' | 'Telegram' | 'Medium';
+  key: 'xTwitter' | 'telegram' | 'medium';
+})[] = [
   {
     key: 'xTwitter',
     title: 'settings.twitter',
@@ -69,7 +73,7 @@ export const SOCIAL_GROUPS: SettingsMenuItem[] = [
   {
     key: 'telegram',
     title: 'settings.telegram',
-    route: 'telegram',
+    route: 'Telegram',
     icon: <TelegramSettingsIcon color={COLORS.neutral400} />
   },
   {
