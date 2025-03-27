@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { SvgUri } from 'react-native-svg';
 import { Button, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
+import { DefaultPermissionsIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
 import { WalletsPermissions } from '@features/browser/types';
 import { removeConnectedAddressTo } from '@lib';
@@ -35,9 +36,15 @@ export const PermissionItem = ({
       ) : (
         <Image
           source={{ uri: permission?.icon }}
-          style={{ width: 32, height: 32 }}
+          style={styles.image}
           resizeMode="contain"
         />
+      );
+    } else {
+      return (
+        <View style={styles.defaultIcon}>
+          <DefaultPermissionsIcon />
+        </View>
       );
     }
   };
@@ -62,7 +69,7 @@ export const PermissionItem = ({
 
   return (
     <View style={styles.main}>
-      <View style={{ flexDirection: 'row' }}>
+      <View style={styles.container}>
         <ProductImage />
         <Spacer horizontal value={scale(15)} />
         <View>
