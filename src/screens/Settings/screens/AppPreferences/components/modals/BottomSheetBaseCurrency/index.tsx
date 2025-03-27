@@ -2,7 +2,7 @@ import { ForwardedRef, forwardRef, RefObject, useState } from 'react';
 import { FlatList, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Currency } from '@appTypes';
+import { Currency, Language } from '@appTypes';
 import { Spacer, Text } from '@components/base';
 import { BottomSheet, BottomSheetRef, Header } from '@components/composite';
 import { COLORS } from '@constants/colors';
@@ -98,7 +98,9 @@ export const BottomSheetSelectBaseCurrency = forwardRef<BottomSheetRef, Props>(
             return (
               <SettingsModalItem
                 modalActiveItem={modalActiveCurrency}
-                handleItemPress={onCurrencyPress}
+                handleItemPress={
+                  onCurrencyPress as (value: Language | Currency) => void
+                }
                 item={item.currency}
                 key={index}
               />

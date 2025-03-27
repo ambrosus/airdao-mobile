@@ -85,7 +85,7 @@ const getTransactionsOfOwnAccount = async (
   address: string,
   page: number,
   limit: number,
-  tokenUtils: any
+  tokenUtils: unknown
 ): Promise<
   PaginatedResponseBody<{
     tokens: Token[];

@@ -2,7 +2,7 @@ import { Linking, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { SettingsTabNavigationProp } from '@appTypes';
+import { SettingsTabNavigationProp, SettingsTabParamsList } from '@appTypes';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
 import Config from '@constants/config';
@@ -13,10 +13,10 @@ import { styles } from './styles';
 
 export const SettingsScreen = () => {
   const { t } = useTranslation();
-
   const navigation = useNavigation<SettingsTabNavigationProp>();
-  const navigateToRoute = (route: any) => {
-    navigation.navigate(route);
+
+  const navigateToRoute = (route: keyof SettingsTabParamsList) => {
+    navigation.navigate(route as never);
   };
 
   const openLink = (link: string) => {

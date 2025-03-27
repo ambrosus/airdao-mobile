@@ -51,7 +51,7 @@ export const NotificationSettingsView = () => {
 
   const onSettingsValueChange = (
     key: keyof NotificationSettings,
-    value: any
+    value: number | boolean
   ) => {
     setLocalNotificationSettings({
       ...localNotificationSettings,
@@ -116,7 +116,10 @@ export const NotificationSettingsView = () => {
                   }}
                   key={item.id}
                   onPress={() =>
-                    onSettingsValueChange('pricePercentThreshold', item.value)
+                    onSettingsValueChange(
+                      'pricePercentThreshold',
+                      item.value as number
+                    )
                   }
                 >
                   <Text

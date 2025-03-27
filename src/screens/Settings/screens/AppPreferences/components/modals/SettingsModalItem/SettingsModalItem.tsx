@@ -9,7 +9,7 @@ import { scale } from '@utils';
 
 type Props = {
   item: Language | Currency;
-  handleItemPress: (value: any) => void;
+  handleItemPress: (value: Language | Currency) => void;
   modalActiveItem: Language | Currency;
 };
 

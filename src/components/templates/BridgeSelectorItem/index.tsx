@@ -13,7 +13,7 @@ interface BridgeSelectorItemModel {
   item: ParsedBridge | RenderTokenItem;
   rightContent?: ReactNode;
   isActive: boolean;
-  onPressItem: (item: any) => void;
+  onPressItem: (item: ParsedBridge | RenderTokenItem) => void;
 }
 
 export const BridgeSelectorItem = ({
