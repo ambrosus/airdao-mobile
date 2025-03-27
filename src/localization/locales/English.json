@@ -252,6 +252,7 @@
   "settings.about": "About",
   "settings.help": "Help center",
   "settings.manage.wallet": "Manage wallets",
+  "settings.manage.permissions": "Manage permissions",
   "settings.watchlists": "Watchlists",
   "settings.explore": "Explore",
   "settings.notifications": "Notifications",
@@ -550,6 +551,12 @@
   "browser.wallet.selector.header": "Connected accounts:",
   "browser.wallet.selector.account": "Account",
   "browser.approve.permissions.header": "{{uri}} wants to:",
+  "browser.remove.permission.toast.header": "Permissions updated",
+  "browser.remove.permission.modal.header": "Are you sure?",
+  "browser.remove.permission.modal.subheader": "You’ll need to reconnect to use it again.",
+  "browser.remove.no.permissions.header": "No Connected Websites",
+  "browser.remove.no.permissions.subheader": "You haven’t connected to any websites yet. When you do, they will appear here",
+
   "browser.approve":{
     "permission": "See your account and suggest transactions",
     "personal.sign": "The message is used to sign message on wallet",

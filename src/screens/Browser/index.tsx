@@ -85,14 +85,8 @@ export const BrowserScreen = () => {
     if (webViewRef.current && connectedAddress) {
       connectWallet(connectedAddress, webViewRef);
     }
-  }, [
-    accounts,
-    allAccounts,
-    connectedAddress,
-    setConnectedAccount,
-    setConnectedAddress,
-    uri
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accounts, allAccounts, setConnectedAccount, setConnectedAddress, uri]);
 
   const onMessageEventHandler = useCallback(
     async (event: WebViewMessageEvent) => {
@@ -164,7 +158,6 @@ export const BrowserScreen = () => {
           uri={uri}
         />
       </View>
-
       <PanGestureHandler
         onGestureEvent={onGestureEvent}
         shouldCancelWhenOutside={false}

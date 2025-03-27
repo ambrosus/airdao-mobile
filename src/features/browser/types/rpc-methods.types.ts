@@ -6,6 +6,10 @@ import { Permissions, BasePermissions, PermissionType } from './permissions';
 import { rpcRejectHandler } from '../utils';
 
 export enum RPCMethods {
+  // functional methods
+  GetTitle = 'get_title',
+  GetIcon = 'get_icon',
+  // rpc_methods
   NetVersion = 'net_version',
   EthRequestAccounts = 'eth_requestAccounts',
   WalletRequestPermissions = 'wallet_requestPermissions',
@@ -21,8 +25,7 @@ export enum RPCMethods {
   EthSignTypedDataV4 = 'eth_signTypedData_v4',
   EthSignTypedData = 'eth_signTypedData',
   EthCall = 'eth_call',
-  EthEstimateGas = 'eth_estimateGas',
-  GetTitle = 'get_title'
+  EthEstimateGas = 'eth_estimateGas'
 }
 
 export type TransactionParams = {

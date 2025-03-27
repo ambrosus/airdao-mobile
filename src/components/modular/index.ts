@@ -17,3 +17,4 @@ export * from './AutoScrollBox';
 export * from './WalletSelectorItem';
 export { BalanceRow } from './BalanceRow';
 export { SingleAssetNFT } from './SingleAssetNFT';
+export { PermissionItem } from './PermissionItem';

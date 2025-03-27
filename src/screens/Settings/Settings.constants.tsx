@@ -6,6 +6,7 @@ import {
 import {
   AboutIcon,
   CompassIcon,
+  GlobalFill,
   NotificationIcon,
   Preferences,
   SecurityIcon,
@@ -21,6 +22,12 @@ export const SETTINGS_MENU_ITEMS: SettingsMenuItem[] = [
     title: 'settings.manage.wallet',
     route: 'ManageWallets',
     icon: <WalletIcon color={COLORS.brand500} />
+  },
+  {
+    key: 'managePermissions',
+    title: 'settings.manage.permissions',
+    route: 'ManagePermissions',
+    icon: <GlobalFill color={COLORS.brand500} />
   },
   {
     key: 'watchlists',

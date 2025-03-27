@@ -34,7 +34,8 @@ export async function handleWebViewMessage({
   browserApproveRef,
   browserWalletSelectorRef
 }: HandleWebViewMessageModel) {
-  const { connectedAddress, setProductTitle } = useBrowserStore.getState();
+  const { connectedAddress, setProductTitle, setProductIcon } =
+    useBrowserStore.getState();
   const requestsInProgress = new Set();
 
   const { handleChainIdRequest, handleGetBalance, sendResponse } = rpcMethods;
@@ -148,6 +149,10 @@ export async function handleWebViewMessage({
             setProductTitle(params[0]);
           }
           break;
+        case RPCMethods.GetIcon:
+          if (params[0]) {
+            setProductIcon(params[0]);
+          }
 
         // eth_accounts
         case RPCMethods.EthAccounts:

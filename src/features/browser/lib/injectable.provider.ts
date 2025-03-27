@@ -225,6 +225,24 @@ export const INJECTED_JS = `
         params: [title]
       }));
     });
+      window.addEventListener('load', function() {
+    setTimeout(() => {
+      let icon = document.querySelector("link[rel~='icon']") ||
+         document.querySelector("link[rel='shortcut icon']") ||
+         document.querySelector("link[rel='apple-touch-icon']");
+
+     let faviconUrl = icon ? icon.href : window.location.origin + '/favicon.ico';
+
+     window.ReactNativeWebView.postMessage(JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'get_icon',
+        params: [faviconUrl]
+     }));
+
+    console.log('Favicon URL:', faviconUrl);
+  }, 1000); // Чекаємо 1 сек, щоб сторінка встигла завантажитись
+});
+
     return true;
   })();
 `;
