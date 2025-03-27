@@ -3,6 +3,12 @@ import { ALL_TOKENS_DATA } from '@constants/allToken';
 import { BRIDGE_DATA } from '@constants/bridgeData';
 import { SWAP_SUPPORTED_TOKENS } from '@features/swap/entities';
 
+type TConfig = typeof envs.prod & {
+  env: 'prod' | 'stage' | 'testnet';
+  CHAIN_ID: 16718 | 22040;
+  CHAIN_ID_HEX: '0x414e' | '0x5618';
+};
+
 const envs = {
   prod: {
     WALLET_API_URL: 'https://wallet-api-api.ambrosus.io',
@@ -36,7 +42,6 @@ const envs = {
     ST_AMB_ADDRESS: '0x2834C436d04ED155e736F994c1F3a0d05C4A8dE4',
     LIQUID_STAKING_ADDRESS: '0xBda7cf631Db4535A500ED16Dd98099C04e66F1d5',
     STAKING_TIERS_ADDRESS: '0xD0442B6d4cCf2fEe0B48bc1be607390F4f8EB987',
-
     ALL_TOKENS: ALL_TOKENS_DATA.PROD,
     MARKETPLACE_URL: 'https://bond-backend-api.ambrosus.io',
     ...BRIDGE_DATA.prod,
@@ -148,23 +153,23 @@ const envs = {
   }
 };
 
-let Config: typeof envs.prod = envs.prod;
+let Config = envs.prod as TConfig;
 
 switch (Updates.channel) {
   case 'main': {
-    Config = envs.prod;
+    Config = envs.prod as TConfig;
     break;
   }
   case 'stage': {
-    Config = envs.prod;
+    Config = envs.prod as TConfig;
     break;
   }
   case 'testnet': {
-    Config = envs.testnet;
+    Config = envs.testnet as TConfig;
     break;
   }
   default: {
-    Config = envs.prod;
+    Config = envs.prod as TConfig;
     break;
   }
 }
