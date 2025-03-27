@@ -29,7 +29,10 @@ interface TabBarModel extends BottomTabBarProps {
 }
 
 interface TabBarMethodModel {
-  tabs: any;
+  tabs: Record<
+    string,
+    { activeIcon: React.ReactNode; inactiveIcon: React.ReactNode }
+  >;
   visibility: (tab: string) => boolean;
 }
 
@@ -85,7 +88,7 @@ const TabBar = ({ state, navigation, isHarbor = false }: TabBarModel) => {
         animatedStyle
       ]}
     >
-      {state.routes.map((route: any, index: number) => {
+      {state.routes.map((route, index) => {
         const isFocused = state.index === index;
 
         const icon =

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { DatabaseProvider } from '@nozbe/watermelondb/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -13,11 +13,11 @@ import { combineComponents } from '@utils';
 
 const queryClient = new QueryClient();
 
-const WrappedQueryClientProvider: FC = ({ children }: any) => (
+const WrappedQueryClientProvider: FC = ({ children }: PropsWithChildren) => (
   <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 );
 
-const ApolloQueryProvider = ({ children }: any) => {
+const ApolloQueryProvider = ({ children }: PropsWithChildren) => {
   const client = new ApolloClient({
     uri: Config.CURRENCY_GRAPH_URL,
     cache: new InMemoryCache()
@@ -26,31 +26,31 @@ const ApolloQueryProvider = ({ children }: any) => {
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
 
-const WrappedSafeAreaProvider: FC = ({ children }: any) => (
+const WrappedSafeAreaProvider: FC = ({ children }: PropsWithChildren) => (
   <SafeAreaProvider style={{ flex: 1 }}>{children}</SafeAreaProvider>
 );
 
-const WrappedLocalizationProvider: FC = ({ children }: any) => (
+const WrappedLocalizationProvider: FC = ({ children }: PropsWithChildren) => (
   <LocalizationProvider>{children}</LocalizationProvider>
 );
 
-const LocalDBProvider: FC = ({ children }: any) => (
+const LocalDBProvider: FC = ({ children }: PropsWithChildren) => (
   <DatabaseProvider database={Database.getDatabase()}>
     {children}
   </DatabaseProvider>
 );
 
-const BridgeProvider: FC = ({ children }: any) => (
+const BridgeProvider: FC = ({ children }: PropsWithChildren) => (
   // @ts-ignore
   <BridgeContextProvider>{children}</BridgeContextProvider>
 );
 
-const SwapProvider: FC = ({ children }: any) => (
+const SwapProvider: FC = ({ children }: PropsWithChildren) => (
   // @ts-ignore
   <SwapContextProvider>{children}</SwapContextProvider>
 );
 
-const WalletConnectProvider: FC = ({ children }: any) => (
+const WalletConnectProvider: FC = ({ children }: PropsWithChildren) => (
   // @ts-ignore
   <WalletConnectContextProvider>{children}</WalletConnectContextProvider>
 );

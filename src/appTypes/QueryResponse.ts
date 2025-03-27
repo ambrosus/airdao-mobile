@@ -1,6 +1,6 @@
 export interface QueryResponse<T> {
   loading: boolean;
-  error: any;
+  error: unknown;
   data: T;
   refetch?: () => void;
   refetching?: boolean;

@@ -12,7 +12,7 @@ import { ScanSquare } from './components/ScanSquare';
 import { styles } from './styles';
 
 interface BarCodeScanner {
-  onScanned: (data: any) => unknown;
+  onScanned: (data: string) => unknown;
   onClose: () => unknown;
 }
 

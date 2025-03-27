@@ -10,7 +10,7 @@ export class StakingPool {
   tokenPrice: number;
   isActive: boolean;
 
-  constructor(details: StakingPoolDTO, tokenUtils: any) {
+  constructor(details: StakingPoolDTO, tokenUtils: void) {
     // @ts-ignore
     this.token = new Token({ address: details.tokenAddress }, tokenUtils);
     this.userStake = 0; // TODO

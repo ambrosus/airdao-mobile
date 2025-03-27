@@ -1,5 +1,6 @@
 import { CryptoCurrencyCode } from '@appTypes';
 import { TransactionType } from '@appTypes/enums';
+import { TokenUtils } from '@utils';
 import { TransactionDTO } from './dtos/TransactionDTO';
 
 export interface TransactionTokenInfo {
@@ -41,7 +42,7 @@ export class Transaction {
 
   isSent?: boolean;
 
-  constructor(details: TransactionDTO, tokenUtils: any) {
+  constructor(details: TransactionDTO, tokenUtils: typeof TokenUtils) {
     this._id = details._id;
     this.timestamp = new Date(details.timestamp * 1000);
     this.amount = details.value.ether;
