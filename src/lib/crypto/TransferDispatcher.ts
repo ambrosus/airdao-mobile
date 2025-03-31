@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 import { TransactionConfig } from 'web3-core';
 import Config from '@constants/config';
-import { delay } from '@utils';
+import { delay } from '@utils/delay';
 import erc20 from './erc20';
 
 const MAX_RETRIES = 7;
