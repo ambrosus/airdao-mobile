@@ -133,6 +133,7 @@ export async function handleWebViewMessage({
           break;
         }
         // eth_sendTransaction
+        case RPCMethods.WalletSendTransaction:
         case RPCMethods.EthSendTransaction:
           await ethSendTransaction({
             params: params as [TransactionParams],

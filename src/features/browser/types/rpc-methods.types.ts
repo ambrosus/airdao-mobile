@@ -14,6 +14,7 @@ export enum RPCMethods {
   EthAccounts = 'eth_accounts',
   WalletRevokePermissions = 'wallet_revokePermissions',
   WalletGetPermissions = 'wallet_getPermissions',
+  WalletSendTransaction = 'wallet_sendTransaction',
   EthChainId = 'eth_chainId',
   EthSendTransaction = 'eth_sendTransaction',
   EthSignTransaction = 'eth_signTransaction',
