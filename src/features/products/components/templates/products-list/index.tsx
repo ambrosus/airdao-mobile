@@ -71,6 +71,7 @@ export const ProductsList = () => {
         keyExtractor={(item) => item.id.toString()}
         sections={devSupportedProducts}
         renderSectionHeader={renderSectionHeader}
+        stickySectionHeadersEnabled={false}
         renderItem={renderProductItem}
         style={styles.container}
         contentContainerStyle={styles.contentContainerStyle}
