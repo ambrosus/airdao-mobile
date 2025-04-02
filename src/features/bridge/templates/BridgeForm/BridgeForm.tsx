@@ -31,6 +31,17 @@ import { PreviewDataWithFeeModel, Tokens } from '@models/Bridge';
 import { isAndroid, NumberUtils, verticalScale } from '@utils';
 import { styles } from './styles';
 
+
+/*
+GAS_FEE_BUFFER -->
+ JavaScript has floating-point precision issues
+ sometimes getFeeData return (amount + allFees) > accountBalance
+ so we apply a small fix to avoid rounding errors
+ Adds a small buffer to account for potential gas fee changes
+ before the exact amount is known
+ */
+const GAS_FEE_BUFFER = 0.000001;
+
 export const BridgeForm = () => {
   const { wallet: selectedWallet } = useWalletStore();
 
@@ -377,6 +388,7 @@ export const BridgeForm = () => {
           label={t('bridge.set.amount')}
           // @ts-ignore
           token={selectedTokenFrom}
+          tokenDecimal={selectedTokenFrom.decimals}
           bottomSheetNode={<TokenSelectData onPressItem={onTokenSelect} />}
           onChangeText={onChangeText}
           onPressMaxAmount={() => {

@@ -11,7 +11,7 @@ import { SuccessTitle } from '@features/harbor/components/base/preview-modules/s
 import {
   HarborPreViewData,
   SuccessTemplateDataProps
-} from '@features/harbor/components/harbor-preview/model';
+} from '@features/harbor/components/templates/harbor-preview/model';
 import { delay, scale } from '@utils';
 import { CopyHash } from './copy-hash';
 import { styles } from './styes';

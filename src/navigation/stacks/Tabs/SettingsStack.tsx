@@ -24,6 +24,7 @@ import {
   SingleWalletScreen
 } from '@screens/Settings';
 import { Explore } from '@screens/Settings/screens/Explore';
+import { ManagePermissions } from '@screens/Settings/screens/ManagePermissions';
 import { Watchlist } from '@screens/Settings/screens/Watchlist';
 import {
   ConfirmPasscode,
@@ -43,6 +44,7 @@ export const SettingsStack = () => {
       <Stack.Screen name="AppPreferences" component={AppPreferencesScreen} />
       <Stack.Screen name="HelpCenter" component={HelpCenterScreen} />
       <Stack.Screen name="ManageWallets" component={ManageWalletsScreen} />
+      <Stack.Screen name="ManagePermissions" component={ManagePermissions} />
       <Stack.Screen name="Watchlist" component={Watchlist} />
       <Stack.Screen
         name="Explore"

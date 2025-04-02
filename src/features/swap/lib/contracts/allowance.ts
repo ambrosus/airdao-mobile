@@ -35,8 +35,9 @@ export async function checkIsApprovalRequired({
 export async function increaseAllowance({
   address,
   privateKey,
-  amount
-}: AllowanceArgs) {
+  amount,
+  estimateGas = false
+}: AllowanceArgs & { estimateGas?: boolean }) {
   try {
     const signer = createSigner(privateKey);
 
@@ -45,8 +46,14 @@ export async function increaseAllowance({
       ALLOWANCE
     );
 
-    const erc20 = erc20Contract.attach(address).connect(signer);
-    return erc20.approve(Config.ROUTER_V2_ADDRESS, amount);
+    const { approve, estimateGas: _estimateGas } = erc20Contract
+      .attach(address)
+      .connect(signer);
+
+    if (estimateGas)
+      return await _estimateGas.approve(Config.ROUTER_V2_ADDRESS, amount);
+
+    return approve(Config.ROUTER_V2_ADDRESS, amount);
   } catch (error) {
     throw error;
   }

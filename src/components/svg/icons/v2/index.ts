@@ -21,5 +21,7 @@ export { Edit } from './Edit';
 export { Key } from './Key';
 export { FingerPrintIcon } from './FingerPrintIcon';
 export { FaceIDIcon } from './FaceIDIcon';
+export { RefreshIcon } from './RefreshIcon';
 
 export * from './product';
+export * from './browser';

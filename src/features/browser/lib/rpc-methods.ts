@@ -3,9 +3,9 @@
 import { RefObject } from 'react';
 import { WebView } from '@metamask/react-native-webview';
 import { JsonRpcResponse } from '@walletconnect/jsonrpc-types';
-import { ethers } from 'ethers';
+import { Bytes, ethers } from 'ethers';
 import Config from '@constants/config';
-import { AMB_CHAIN_ID_DEC } from '../constants';
+import { TransactionParams } from '@features/browser/types';
 import { rpcErrorHandler } from '../utils';
 
 const extractWallet = async (privateKey: string) => {
@@ -26,16 +26,27 @@ const getCurrentAddress = async (privateKey: string) => {
 };
 
 const handleChainIdRequest = async () => {
-  return `0x${Number(AMB_CHAIN_ID_DEC).toString(16)}`;
+  return `0x${Number(Config.CHAIN_ID).toString(16)}`;
 };
 
-const handleSendTransaction = async (txParams: any, privateKey: string) => {
+const handleSendTransaction = async (
+  txParams: TransactionParams,
+  privateKey: string
+) => {
   const wallet = await extractWallet(privateKey);
-  const tx = await wallet.sendTransaction(txParams);
+  const { gas, ...rest } = txParams;
+  const modifiedTxParams = {
+    ...rest,
+    gasLimit: gas
+  };
+  const tx = await wallet.sendTransaction(modifiedTxParams);
   return tx.hash;
 };
 
-const handleSignTransaction = async (txParams: any, privateKey: string) => {
+const handleSignTransaction = async (
+  txParams: ethers.providers.TransactionRequest,
+  privateKey: string
+) => {
   const wallet = await extractWallet(privateKey);
   return await wallet.signTransaction(txParams);
 };
@@ -57,17 +68,36 @@ const sendResponse = (
   }
 };
 
-const signMessage = async (message: any, privateKey: string) => {
+const signMessage = async (message: string | Bytes, privateKey: string) => {
   const wallet = await extractWallet(privateKey);
   return await wallet.signMessage(
     ethers.utils.isHexString(message) ? ethers.utils.arrayify(message) : message
   );
 };
 
-const _signTypedData = async (data: any, privateKey: string) => {
-  const wallet = await extractWallet(privateKey);
+const _signTypedData = async (
+  data: {
+    domain: ethers.TypedDataDomain;
+    types: any;
+    primaryType: string;
+    message: Record<string, unknown>;
+  },
+  privateKey: string
+) => {
+  if (!data.domain || !data.types || !data.message) {
+    throw new Error('Invalid EIP-712 typed data format');
+  }
 
-  return await wallet._signTypedData(data.domain, data.types, data.message);
+  if (!data.types[data.primaryType]) {
+    throw new Error(`Primary type "${data.primaryType}" is missing in types`);
+  }
+  const cleanedTypes = { ...data.types };
+
+  if (cleanedTypes.EIP712Domain) {
+    delete cleanedTypes.EIP712Domain;
+  }
+  const wallet = await extractWallet(privateKey);
+  return await wallet._signTypedData(data.domain, cleanedTypes, data.message);
 };
 
 export const rpcMethods = {

@@ -87,18 +87,14 @@ export async function swapExactETHForTokens(
     if (estimateGas) {
       return await wrapEstimatedGas(
         routerContract,
-        tradeIn
-          ? 'swapExactAMBForTokensSupportingFeeOnTransferTokens'
-          : 'swapAMBForExactTokens',
+        tradeIn ? 'swapExactAMBForTokens' : 'swapAMBForExactTokens',
         args
       );
     }
 
     const callSwapMethod =
       routerContract[
-        tradeIn
-          ? 'swapExactAMBForTokensSupportingFeeOnTransferTokens'
-          : 'swapAMBForExactTokens'
+        tradeIn ? 'swapExactAMBForTokens' : 'swapAMBForExactTokens'
       ];
 
     const tx = await callSwapMethod(...args);
@@ -125,104 +121,47 @@ export async function swapMultiHopExactTokensForTokens(
     const isFromETH = path[0] === addresses.AMB;
     const isToETH = path[path.length - 1] === addresses.AMB;
 
-    if (estimateGas) {
-      let args;
+    // Determine the swap method based on path and trade direction
+    const getSwapMethod = () => {
       if (isFromETH) {
-        args = await swapPayableArgsCallback(
-          amountIn,
-          amountOut,
-          wrapNativeAddress(path),
-          signer.address,
-          timestampDeadline,
-          slippageTolerance,
-          tradeIn
-        );
-      } else {
-        args = await swapArgsCallback(
-          amountIn,
-          amountOut,
-          wrapNativeAddress(path),
-          signer.address,
-          timestampDeadline,
-          slippageTolerance,
-          tradeIn
-        );
+        return tradeIn
+          ? 'swapExactAMBForTokensSupportingFeeOnTransferTokens'
+          : 'swapAMBForExactTokens';
       }
+      if (isToETH) {
+        return tradeIn
+          ? 'swapExactTokensForAMBSupportingFeeOnTransferTokens'
+          : 'swapTokensForExactAMB';
+      }
+      return tradeIn
+        ? 'swapExactTokensForTokensSupportingFeeOnTransferTokens'
+        : 'swapTokensForExactTokens';
+    };
 
-      return await wrapEstimatedGas(
-        routerContract,
-        isFromETH
-          ? tradeIn
-            ? 'swapExactAMBForTokensSupportingFeeOnTransferTokens'
-            : 'swapAMBForExactTokens'
-          : tradeIn
-          ? 'swapExactTokensForTokensSupportingFeeOnTransferTokens'
-          : 'swapTokensForExactTokens',
-        args
+    // Get arguments based on whether it's a payable transaction
+    const getArgs = async () => {
+      const argsCallback = isFromETH
+        ? swapPayableArgsCallback
+        : swapArgsCallback;
+      return argsCallback(
+        amountIn,
+        amountOut,
+        wrapNativeAddress(path),
+        signer.address,
+        timestampDeadline,
+        slippageTolerance,
+        tradeIn
       );
+    };
+
+    const swapMethod = getSwapMethod();
+    const args = await getArgs();
+
+    if (estimateGas) {
+      return await wrapEstimatedGas(routerContract, swapMethod, args);
     }
 
-    let tx;
-
-    if (isFromETH) {
-      const args = await swapPayableArgsCallback(
-        amountIn,
-        amountOut,
-        wrapNativeAddress(path),
-        signer.address,
-        timestampDeadline,
-        slippageTolerance,
-        tradeIn
-      );
-
-      const callSwapMethod =
-        routerContract[
-          tradeIn
-            ? 'swapExactAMBForTokensSupportingFeeOnTransferTokens'
-            : 'swapAMBForExactTokens'
-        ];
-
-      tx = await callSwapMethod(...args);
-    } else if (isToETH) {
-      const args = await swapArgsCallback(
-        amountIn,
-        amountOut,
-        wrapNativeAddress(path),
-        signer.address,
-        timestampDeadline,
-        slippageTolerance,
-        tradeIn
-      );
-
-      const callSwapMethod =
-        routerContract[
-          tradeIn
-            ? 'swapExactTokensForAMBSupportingFeeOnTransferTokens'
-            : 'swapTokensForExactAMB'
-        ];
-
-      tx = await callSwapMethod(...args);
-    } else {
-      const callSwapMethod =
-        routerContract[
-          tradeIn
-            ? 'swapExactTokensForTokensSupportingFeeOnTransferTokens'
-            : 'swapTokensForExactTokens'
-        ];
-
-      const args = await swapArgsCallback(
-        amountIn,
-        amountOut,
-        wrapNativeAddress(path),
-        signer.address,
-        timestampDeadline,
-        slippageTolerance,
-        tradeIn
-      );
-
-      tx = await callSwapMethod(...args);
-    }
-
+    const tx = await routerContract[swapMethod](...args);
     return await tx.wait();
   } catch (error) {
     throw error;
@@ -315,9 +254,7 @@ export async function swapExactTokensForETH(
 
       return await wrapEstimatedGas(
         routerContract,
-        tradeIn
-          ? 'swapExactTokensForAMBSupportingFeeOnTransferTokens'
-          : 'swapTokensForExactAMB',
+        tradeIn ? 'swapExactTokensForAMB' : 'swapTokensForExactAMB',
         args
       );
     }
@@ -347,22 +284,42 @@ export async function swapExactTokensForETH(
   }
 }
 
-export async function wrapETH(amountToSell: string, signer: Wallet) {
+export async function wrapETH(
+  amountToSell: string,
+  signer: Wallet,
+  { estimateGas }: { estimateGas?: boolean }
+) {
   const bnAmountToSell = ethers.utils.parseEther(amountToSell);
   const contract = new ethers.Contract(addresses.SAMB, ERC20);
 
   const signedContract = contract.connect(signer);
-  const tx = await signedContract.deposit({ value: bnAmountToSell });
 
-  return await tx.wait();
+  if (estimateGas) {
+    return await wrapEstimatedGas(signedContract, 'deposit', [
+      { value: bnAmountToSell }
+    ]);
+  }
+
+  const { wait } = await signedContract.deposit({ value: bnAmountToSell });
+
+  return await wait();
 }
 
-export async function unwrapETH(amountToSell: string, signer: Wallet) {
+export async function unwrapETH(
+  amountToSell: string,
+  signer: Wallet,
+  { estimateGas }: { estimateGas?: boolean }
+) {
   const bnAmountToSell = ethers.utils.parseEther(amountToSell);
   const contract = new ethers.Contract(addresses.SAMB, ERC20);
 
   const signedContract = contract.connect(signer);
-  const tx = await signedContract.withdraw(bnAmountToSell);
 
-  return await tx.wait();
+  if (estimateGas) {
+    return await wrapEstimatedGas(signedContract, 'withdraw', [bnAmountToSell]);
+  }
+
+  const { wait } = await signedContract.withdraw(bnAmountToSell);
+
+  return await wait();
 }

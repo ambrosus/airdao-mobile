@@ -1,10 +1,21 @@
+import WebView from '@metamask/react-native-webview';
 import { randomUUID } from 'expo-crypto';
-import { AMB_CHAIN_ID_DEC, AMB_CHAIN_ID_HEX } from '../constants';
+import Config from '@constants/config';
+import { isIos } from '@utils';
 import { EIP6963_PROVIDER_INFO } from './eip6963';
 
 const uuid = randomUUID;
 
-export const INJECTED_PROVIDER_JS = `
+export const updateWindowObject = (
+  webViewRef: React.RefObject<WebView>,
+  object: string
+) => {
+  setTimeout(() => {
+    webViewRef.current?.injectJavaScript(object);
+  }, 100);
+};
+
+export const INJECTED_JS = `
   (function() {
     if (window.ethereum) return true;
 
@@ -16,6 +27,7 @@ export const INJECTED_PROVIDER_JS = `
       chainId: null,
       connected: false
     };
+    let isHandlingRequest = false;  // Add lock for request handling
 
     // EIP-6963
     const eip6963ProviderInfo = {
@@ -29,8 +41,8 @@ export const INJECTED_PROVIDER_JS = `
     const provider = {
       isMetaMask: true,
       selectedAddress: null,
-      chainId: '${AMB_CHAIN_ID_HEX}',
-      networkVersion: ${AMB_CHAIN_ID_DEC},
+      chainId: '${Config.CHAIN_ID_HEX}',
+      networkVersion: ${Config.CHAIN_ID},
       _events: new Map(),
 
       isConnected: () => true,
@@ -43,7 +55,16 @@ export const INJECTED_PROVIDER_JS = `
           const { method, params } = args;
           const id = requestCounter++;
 
-          // Special handling for eth_requestAccounts on page refresh
+          // Prevent duplicate eth_accounts requests
+          if (method === 'eth_accounts') {
+            if (isHandlingRequest) {
+              return resolve(this.selectedAddress ? [this.selectedAddress] : []);
+            }
+            isHandlingRequest = true;
+            setTimeout(() => { isHandlingRequest = false; }, 1000); // Reset lock after 1s
+          }
+
+          // Special handling for eth_requestAccounts
           if (method === 'eth_requestAccounts' && this.selectedAddress) {
             return resolve([this.selectedAddress]);
           }
@@ -65,8 +86,10 @@ export const INJECTED_PROVIDER_JS = `
         }
         this._events.get(eventName).add(callback);
 
-        // Only emit initial state if it's different from last emitted
-        if (this.selectedAddress && this.selectedAddress !== lastEmittedState.address) {
+        // Only emit initial state if there's an actual change
+        if (this.selectedAddress &&
+            this.selectedAddress !== lastEmittedState.address &&
+            !isHandlingRequest) {
           switch(eventName) {
             case 'connect':
               if (!lastEmittedState.connected) {
@@ -146,23 +169,27 @@ export const INJECTED_PROVIDER_JS = `
       }
     };
 
-    window.addEventListener('message', function(event) {
+    function eventHandler(event) {
       try {
         const response = JSON.parse(event.data);
         const { id, result, error } = response;
+
+        console.log('RN Message received',{id, result, error})
 
         const pendingRequest = pendingRequests.get(id);
         if (pendingRequest) {
           pendingRequests.delete(id);
 
           if (error) {
-            pendingRequest.reject(new Error(error.message));
+            pendingRequest.reject(error);
           } else {
             if (response.method === 'eth_requestAccounts' || response.method === 'eth_accounts') {
-              provider.selectedAddress = result[0];
-              const listeners = provider._events.get('accountsChanged');
-              if (listeners) {
-                listeners.forEach(listener => listener(result));
+              if (result && result[0] !== provider.selectedAddress) {
+                provider.selectedAddress = result[0];
+                const listeners = provider._events.get('accountsChanged');
+                if (listeners) {
+                  listeners.forEach(listener => listener(result));
+                }
               }
             }
             pendingRequest.resolve(result);
@@ -171,7 +198,12 @@ export const INJECTED_PROVIDER_JS = `
       } catch (error) {
         console.error('Failed to process message:', error);
       }
-    });
+    }
+
+    // for Android: document.addEventListener('message', eventHandler);
+    // for IOS: window.addEventListener('message', eventHandler);
+
+    {{listener}}('message', eventHandler)
 
     window.ethereum = provider;
 
@@ -182,11 +214,43 @@ export const INJECTED_PROVIDER_JS = `
         provider.announceProvider();
       });
       window.dispatchEvent(new Event('ethereum#initialized'));
+
+      // Get the title of the page and send it to React Native
     }
+    window.addEventListener('load', function() {
+      const title = document.title;
+      window.ReactNativeWebView.postMessage(JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'get_title',
+        params: [title]
+      }));
+    });
+      window.addEventListener('load', function() {
+    setTimeout(() => {
+      let icon = document.querySelector("link[rel~='icon']") ||
+         document.querySelector("link[rel='shortcut icon']") ||
+         document.querySelector("link[rel='apple-touch-icon']");
+
+     let faviconUrl = icon ? icon.href : window.location.origin + '/favicon.ico';
+
+     window.ReactNativeWebView.postMessage(JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'get_icon',
+        params: [faviconUrl]
+     }));
+
+    console.log('Favicon URL:', faviconUrl);
+  }, 1000); // Чекаємо 1 сек, щоб сторінка встигла завантажитись
+});
 
     return true;
   })();
 `;
+
+export const INJECTED_PROVIDER_JS = INJECTED_JS.replace(
+  '{{listener}}',
+  isIos ? 'window.addEventListener' : 'document.addEventListener'
+);
 
 export const REVOKE_PERMISSIONS_JS = `
   (function() {

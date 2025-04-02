@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { Keyboard } from 'react-native';
+import { bnZERO } from '@constants/variables';
 import { useSwapContextSelector } from '@features/swap/context';
 import {
   BottomSheetStatus,
@@ -14,7 +15,8 @@ export function useSwapBottomSheetHandler() {
     bottomSheetTokenBRef,
     bottomSheetPreviewSwapRef,
     bottomSheetSwapStatus,
-    setBottomSheetSwapStatus
+    setBottomSheetSwapStatus,
+    setEstimatedGasValues
   } = useSwapContextSelector();
 
   const { fetchAllBalances } = useSwapAllBalances();
@@ -57,8 +59,9 @@ export function useSwapBottomSheetHandler() {
   }, [bottomSheetPreviewSwapRef]);
 
   const onReviewSwapDismiss = useCallback(() => {
+    setEstimatedGasValues({ swap: bnZERO, approval: bnZERO });
     bottomSheetPreviewSwapRef.current?.dismiss();
-  }, [bottomSheetPreviewSwapRef]);
+  }, [bottomSheetPreviewSwapRef, setEstimatedGasValues]);
 
   return {
     onDismissBottomSheetByKey,

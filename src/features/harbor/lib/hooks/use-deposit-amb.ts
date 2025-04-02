@@ -47,5 +47,27 @@ export function useDepositAMB() {
     }
   }, [_extractPrivateKey, ambAmount, wallet]);
 
-  return { _depositAmb, loading, success, transaction, timestamp };
+  const estimateTransactionGas = useCallback(
+    async (amount?: string) => {
+      const privateKey = await _extractPrivateKey();
+      return await hbrYieldService._depositAmb(
+        amount ?? ambAmount,
+        wallet,
+        privateKey,
+        {
+          estimateGas: true
+        }
+      );
+    },
+    [_extractPrivateKey, ambAmount, wallet]
+  );
+
+  return {
+    _depositAmb,
+    estimateTransactionGas,
+    loading,
+    success,
+    transaction,
+    timestamp
+  };
 }

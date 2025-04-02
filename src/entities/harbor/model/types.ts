@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from 'ethers';
 import { Token } from '@models';
 
-interface UnStakeDelayModel {
+interface UnstakeDelayModel {
   rate: string;
   delay: string;
 }
@@ -10,7 +10,7 @@ export interface HarborDataModel {
   apr: string;
   token: Token;
   tier: number;
-  unStakeDelay: UnStakeDelayModel;
+  unStakeDelay: UnstakeDelayModel;
   totalStaked: BigNumber;
   stakeLimit: BigNumber;
   userStaked: BigNumber;

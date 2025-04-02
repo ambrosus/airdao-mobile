@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -16,23 +16,25 @@ import { Row, Spacer, Text } from '@components/base';
 import { BottomSheetRef, Header, TextOrSpinner } from '@components/composite';
 import { PrimaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
-import { KEYBOARD_OPENING_TIME } from '@constants/variables';
+import { KEYBOARD_OPENING_TIME, bnZERO } from '@constants/variables';
 import { useStakeHBRStore } from '@entities/harbor';
 import { HeaderAPYLabel } from '@entities/harbor/components/base';
 import {
   AmbInputWithPoolDetails,
   StakedBalanceInfo
 } from '@entities/harbor/components/composite';
+
 import { useInputErrorStakeAMB } from '@entities/harbor/lib/hooks/use-input-error';
 import { useWalletStore } from '@entities/wallet';
 import { useStakeHBRActionsStore } from '@features/harbor';
 import { BottomSheetReviewAMBTransactionWithAction } from '@features/harbor/components/templates';
+import { useDepositAMB } from '@features/harbor/lib/hooks';
 import { useAMBEntity } from '@features/send-funds/lib/hooks';
 import {
   keyboardAvoidingViewOffsetWithNotchSupportedValue,
   useKeyboardContainerStyleWithSafeArea
 } from '@hooks';
-import { NumberUtils, scale } from '@utils';
+import { estimatedNetworkProviderFee, NumberUtils, scale } from '@utils';
 import { styles } from './styles';
 
 type Props = NativeStackScreenProps<HarborTabParamsList, 'StakeAMBScreen'>;
@@ -45,6 +47,10 @@ export const StakeAMBScreen = ({ route }: Props) => {
   const footerStyle = useKeyboardContainerStyleWithSafeArea(styles.footer);
   const ambInstance = useAMBEntity(wallet?.address ?? '');
   const error = useInputErrorStakeAMB(ambInstance);
+
+  const [loading, setLoading] = useState(false);
+
+  const [estimatedGas, setEstimatedGas] = useState<ethers.BigNumber>(bnZERO);
 
   const bottomSheetReviewTxRef = useRef<BottomSheetRef>(null);
 
@@ -75,10 +81,11 @@ export const StakeAMBScreen = ({ route }: Props) => {
 
   const disabled = useMemo(
     () =>
+      loading ||
       !!error ||
       !ambAmount ||
       availableDepositLimit.lt(ethers.utils.parseEther(ambAmount)),
-    [ambAmount, availableDepositLimit, error]
+    [ambAmount, availableDepositLimit, error, loading]
   );
 
   const renderHeaderCenterNode = useMemo(() => {
@@ -99,14 +106,27 @@ export const StakeAMBScreen = ({ route }: Props) => {
     );
   }, [route.params, t]);
 
-  const onButtonPress = useCallback(() => {
+  const { estimateTransactionGas } = useDepositAMB();
+
+  const onButtonPress = useCallback(async () => {
     Keyboard.dismiss();
+    setLoading(true);
+
+    try {
+      const txEstimateGas = await estimateTransactionGas();
+      const txGasFee = await estimatedNetworkProviderFee(txEstimateGas);
+      setEstimatedGas(txGasFee);
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
 
     setTimeout(
       () => bottomSheetReviewTxRef.current?.show(),
       KEYBOARD_OPENING_TIME
     );
-  }, []);
+  }, [estimateTransactionGas]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -141,8 +161,8 @@ export const StakeAMBScreen = ({ route }: Props) => {
         <View style={footerStyle}>
           <PrimaryButton disabled={disabled} onPress={onButtonPress}>
             <TextOrSpinner
-              loading={false}
-              loadingLabel={undefined}
+              loading={loading}
+              spinnerColor={COLORS.brand400}
               label={label}
               styles={{
                 active: {
@@ -159,6 +179,7 @@ export const StakeAMBScreen = ({ route }: Props) => {
       <BottomSheetReviewAMBTransactionWithAction
         ref={bottomSheetReviewTxRef}
         apy={route.params.apy ?? 0}
+        estimatedGas={estimatedGas}
       />
     </SafeAreaView>
   );

@@ -1,15 +1,18 @@
 import Web3 from 'web3';
 import { TransactionConfig } from 'web3-core';
 import Config from '@constants/config';
+import { delay } from '@utils/delay';
 import erc20 from './erc20';
 const MAX_RETRIES = 3;
+
+const MAX_RETRIES = 7;
 
 class TransferDispatcher {
   private web3: Web3;
 
   constructor() {
     this.web3 = new Web3(new Web3.providers.HttpProvider(Config.NETWORK_URL));
-    this.web3.eth.transactionPollingTimeout = 17;
+    this.web3.eth.transactionPollingTimeout = 15;
   }
 
   private async prepareTransactionConfig(
@@ -124,11 +127,14 @@ class TransferDispatcher {
         while (attempt < MAX_RETRIES) {
           receipt = await this.web3.eth.getTransactionReceipt(txHash);
           if (receipt) break;
+          await delay(2000);
           attempt++;
         }
 
         if (!receipt)
-          throw new Error('Transaction receipt not found after 3 attempts.');
+          throw new Error(
+            `Transaction receipt not found after ${MAX_RETRIES} attempts.`
+          );
       } catch (error) {
         throw error;
       }

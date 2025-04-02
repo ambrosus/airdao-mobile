@@ -2,10 +2,9 @@ import { RawRecord } from '@nozbe/watermelondb';
 import { BigNumber, ethers } from 'ethers';
 import { parseEther } from 'ethers/lib/utils';
 import moment from 'moment/moment';
-import { HARBOR_ABI } from '@api/harbor/abi/harbor';
-import { UNSTAKE_LOG_ABI } from '@api/harbor/abi/harbor-unstake-log-abi';
+import { UNSTAKE_LOG_ABI, HARBOR_ABI } from '@api/harbor/abi';
 import Config from '@constants/config';
-import { ILogs } from '@entities/harbor/model/types';
+import { ILogs } from '@entities/harbor/model';
 import { Cache, CacheKey } from '@lib/cache';
 import {
   CustomAppEvents,
@@ -28,7 +27,7 @@ const createSigner = (privateKey: string) => {
 };
 
 export const createHarborLiquidStakedContract = (
-  providerOrSigner = provider
+  providerOrSigner: ethers.providers.JsonRpcProvider | ethers.Wallet = provider
 ) => {
   return new ethers.Contract(
     Config.LIQUID_STAKING_ADDRESS,
@@ -82,7 +81,7 @@ const getStakeLimit = async () => {
   }
 };
 
-const getUnStakeLockTime = async () => {
+const getUnstakeLockTime = async () => {
   try {
     const contract = createHarborLiquidStakedContract();
     const data = await contract.unstakeLockTime();
@@ -147,24 +146,21 @@ const getWithdrawalRequests = async (address: string) => {
 
     const formatData = (date: Date) => moment(date).format('DD/MM/YYYY  HH:mm');
     for (let i = 0; i < rawWithdrawalsList.length; i++) {
-      const currEvent: any = rawWithdrawalsList[i];
+      const { args }: ethers.Event = rawWithdrawalsList[i];
 
-      const requestDateTime = new Date(
-        Number(currEvent.args.creationTime) * 1000
-      );
+      const requestDateTime = new Date(Number(args?.creationTime) * 1000);
       const formattedRequestDateTime = formatData(requestDateTime);
 
-      const unlockDateTime = new Date(Number(currEvent.args.unlockTime) * 1000);
+      const unlockDateTime = new Date(Number(args?.unlockTime) * 1000);
+
       const formattedUnlockDateTime = formatData(unlockDateTime);
-
       const status = unlockDateTime < new Date() ? 'Success' : 'Pending';
-
-      const amount = BigNumber.from(currEvent.args.amount);
+      const amount = BigNumber.from(args?.amount);
 
       // add event to the beginning of the list to sort it from newest to oldest
       withdrawalsList.unshift({
         amount,
-        tokenAddress: currEvent.address,
+        tokenAddress: args?.address,
         requestData: formattedRequestDateTime,
         unlockData: formattedUnlockDateTime,
         status
@@ -181,19 +177,26 @@ const getWithdrawalRequests = async (address: string) => {
 
 const processStake = async (
   wallet: RawRecord | undefined,
-  value: BigNumber
+  value: BigNumber,
+  { estimateGas = false }: { estimateGas?: boolean } = {}
 ) => {
   try {
     if (wallet) {
-      sendFirebaseEvent(CustomAppEvents.harbor_amb_stake_start);
       const privateKey = (await Cache.getItem(
         // @ts-ignore
         `${CacheKey.WalletPrivateKey}-${wallet.hash}`
       )) as string;
       const signer = createSigner(privateKey);
-      // @ts-ignore
+
       const contract = createHarborLiquidStakedContract(signer);
+
+      if (estimateGas) {
+        return await contract.estimateGas.stake({ value });
+      }
+
+      sendFirebaseEvent(CustomAppEvents.harbor_amb_stake_start);
       const tx = await contract.stake({ value });
+
       if (tx) {
         const res = await tx.wait();
         if (res) {
@@ -215,19 +218,28 @@ const processStake = async (
 const processWithdraw = async (
   wallet: RawRecord | undefined,
   amount: string,
-  _desiredCoeff: number
+  _desiredCoeff: number,
+  { estimateGas = false }: { estimateGas?: boolean } = {}
 ) => {
   try {
-    sendFirebaseEvent(CustomAppEvents.harbor_amb_withdraw_start);
     const privateKey = (await Cache.getItem(
       // @ts-ignore
       `${CacheKey.WalletPrivateKey}-${wallet.hash}`
     )) as string;
     const signer = createSigner(privateKey);
-    // @ts-ignore
     const contract = createHarborLiquidStakedContract(signer);
     const desiredCoeff = _desiredCoeff * 100;
+
+    if (estimateGas) {
+      return await contract.estimateGas.unstake(
+        parseEther(amount),
+        desiredCoeff
+      );
+    }
+
+    sendFirebaseEvent(CustomAppEvents.harbor_amb_withdraw_start);
     const tx = await contract.unstake(parseEther(amount), desiredCoeff);
+
     if (tx) {
       const res = await tx.wait();
       if (res) {
@@ -247,19 +259,26 @@ const processWithdraw = async (
 };
 const processClaimReward = async (
   wallet: RawRecord | undefined,
-  _desiredCoeff: number
+  _desiredCoeff: number,
+  { estimateGas = false }: { estimateGas?: boolean } = {}
 ) => {
   try {
-    sendFirebaseEvent(CustomAppEvents.harbor_amb_claim_reward_start);
     const privateKey = (await Cache.getItem(
       // @ts-ignore
       `${CacheKey.WalletPrivateKey}-${wallet.hash}`
     )) as string;
     const signer = createSigner(privateKey);
-    // @ts-ignore
+
     const contract = createHarborLiquidStakedContract(signer);
     const desiredCoeff = _desiredCoeff * 100;
+
+    if (estimateGas) {
+      return await contract.estimateGas.claimRewards(desiredCoeff);
+    }
+
+    sendFirebaseEvent(CustomAppEvents.harbor_amb_claim_reward_start);
     const tx = await contract.claimRewards(desiredCoeff);
+
     if (tx) {
       const res = await tx.wait();
       if (res) {
@@ -283,7 +302,7 @@ export const harborService = {
   getStakeAPR,
   getUserStaked,
   getStakeLimit,
-  getUnStakeLockTime,
+  getUnstakeLockTime,
   getTier,
   getClaimAmount,
   getWithdrawalRequests,
