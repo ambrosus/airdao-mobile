@@ -50,7 +50,8 @@ export const PermissionItem = ({
   };
 
   const onApprove = async () => {
-    await removeConnectedAddressTo(key, permission.addresses[0]);
+    permissionsModalRef.current?.dismiss();
+    removeConnectedAddressTo(key, permission.addresses[0]);
     updatePermissions();
     Toast.show({
       type: ToastType.Success,
