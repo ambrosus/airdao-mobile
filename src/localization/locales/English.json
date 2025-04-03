@@ -555,7 +555,7 @@
   "browser.remove.permission.modal.header": "Are you sure?",
   "browser.remove.permission.modal.subheader": "You’ll need to reconnect to use it again.",
   "browser.remove.no.permissions.header": "No Connected Websites",
-  "browser.remove.no.permissions.subheader": "You haven’t connected to any websites yet. ${/n}When you do, they will appear here",
+  "browser.remove.no.permissions.subheader": "You haven’t connected to any websites yet. \nWhen you do, they will appear here",
 
   "browser.approve":{
     "permission": "See your account and suggest transactions",

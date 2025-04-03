@@ -558,7 +558,7 @@
   "browser.remove.permission.modal.header": "Emin misiniz?",
   "browser.remove.permission.modal.subheader": "Tekrar kullanmak için yeniden bağlanmanız gerekecek",
   "browser.remove.no.permissions.header": "Bağlı Web Sitesi Yok",
-  "browser.remove.no.permissions.subheader": "Henüz hiçbir web sitesine bağlanmadınız. ${/n}Bağlandığınızda, burada görünecekler",
+  "browser.remove.no.permissions.subheader": "Henüz hiçbir web sitesine bağlanmadınız. \nBağlandığınızda, burada görünecekler",
 
   "browser.approve": {
     "permission": "Hesabınızı görün ve işlem önerin",
