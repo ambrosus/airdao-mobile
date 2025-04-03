@@ -66,7 +66,7 @@ export const AllProductPermissions = () => {
         </Text>
         <Spacer value={scale(5)} />
         <Text align="center">
-          {t('browser.remove.no.permissions.subheader')}
+          {t('browser.remove.no.permissions.subheader').replace('${/n}', '\n')}
         </Text>
       </View>
     );

@@ -59,7 +59,7 @@ export const BottomSheetRemovePermissions = forwardRef<BottomSheetRef>(
           <Row style={styles.buttonsWrapper} justifyContent="space-between">
             <SecondaryButton style={styles.button} onPress={onReject}>
               <Text style={styles.buttonText} color={COLORS.neutral800}>
-                {t('common.reject')}
+                {t('wallet.connect.button.cancel')}
               </Text>
             </SecondaryButton>
             <PrimaryButton
@@ -68,7 +68,7 @@ export const BottomSheetRemovePermissions = forwardRef<BottomSheetRef>(
               onPress={onApprove}
             >
               <Text style={styles.buttonText} color={COLORS.neutral0}>
-                {t('common.approve')}
+                {t('wallet.connect.button.disconnect')}
               </Text>
             </PrimaryButton>
           </Row>
