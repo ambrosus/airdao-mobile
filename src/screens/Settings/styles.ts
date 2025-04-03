@@ -4,8 +4,8 @@ import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
   main: { paddingTop: verticalScale(15) },
+  container: { justifyContent: 'space-between' },
   contentWrapper: {
-    justifyContent: 'space-between',
     paddingBottom: '22%',
     height: '90%'
   },
