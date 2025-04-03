@@ -1,4 +1,4 @@
-import { Linking, TouchableOpacity, View } from 'react-native';
+import { Linking, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -82,12 +82,16 @@ export const SettingsScreen = () => {
           {t('tab.settings')}
         </Text>
       </View>
-      <View style={styles.contentWrapper}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        style={styles.contentWrapper}
+      >
         <View>
           {SETTINGS_MENU_ITEMS.map((menuItem) => (
             <SettingsMenuItemView item={menuItem} key={menuItem.route} />
           ))}
         </View>
+        <Spacer value={scale(20)} />
         <View style={styles.bottomContent}>
           <View style={styles.socialButtons}>
             {SOCIAL_GROUPS.map((item) => (
@@ -96,7 +100,8 @@ export const SettingsScreen = () => {
           </View>
           <Spacer value={scale(5)} />
         </View>
-      </View>
+        <Spacer value={scale(100)} />
+      </ScrollView>
     </SafeAreaView>
   );
 };
