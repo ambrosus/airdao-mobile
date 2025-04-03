@@ -18,7 +18,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CommonStackParamsList } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
 import { useBrowserStore } from '@entities/browser/model';
-
 import { BrowserHeader } from '@features/browser/components/modular/browser-header';
 import {
   BottomSheetApproveBrowserAction,
@@ -26,12 +25,12 @@ import {
   BottomSheetBrowserWalletSelector
 } from '@features/browser/components/templates';
 import {
+  getConnectedAddressTo,
   handleWebViewMessage,
   INJECTED_PROVIDER_JS
 } from '@features/browser/lib';
 import { connectWallet } from '@features/browser/utils';
 import { useAllAccounts } from '@hooks/database';
-import { getConnectedAddressTo } from '@lib';
 import { Cache, CacheKey } from '@lib/cache';
 import { isIos, StringUtils } from '@utils';
 import { styles } from './styles';

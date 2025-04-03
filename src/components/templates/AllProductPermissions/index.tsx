@@ -6,8 +6,8 @@ import { BottomSheetRef } from '@components/composite';
 import { PermissionItem } from '@components/modular';
 import { COLORS } from '@constants/colors';
 import { BottomSheetRemovePermissions } from '@features/browser/components/templates';
+import { getAllWalletsPermissions } from '@features/browser/lib';
 import { WalletsPermissions } from '@features/browser/types';
-import { getAllWalletsPermissions } from '@lib';
 import { scale } from '@utils';
 import { styles } from './styles';
 
