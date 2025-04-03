@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-// tslint:disable:no-console
 import { ModalActionTypes } from '@components/composite';
 import Config from '@constants/config';
 import { useBrowserStore } from '@entities/browser/model';
@@ -9,13 +7,13 @@ import {
   rpcErrorHandler,
   rpcRejectHandler
 } from '@features/browser/utils';
-import { setConnectedAddressTo } from '@lib';
 import { delay } from '@utils';
 import {
   updateWindowObject,
   UPDATE_ETHEREUM_STATE_JS
 } from '../injectable.provider';
 import { permissionsHandler } from '../permissions-handler';
+import { setConnectedAddressTo } from '../permissions.manager';
 
 export const handleWalletConnection = async ({
   webViewRef,
@@ -51,7 +49,6 @@ export const handleWalletConnection = async ({
     });
 
     await userConfirmation;
-    console.log('icon', getProductIcon());
     await setConnectedAddressTo({
       uri,
       icon: getProductIcon(),
