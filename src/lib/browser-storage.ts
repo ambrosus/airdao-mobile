@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MMKV } from 'react-native-mmkv';
 import {
   AsyncStorageKey,
   DeprecatedBrowserStorage,
@@ -6,10 +7,10 @@ import {
   WalletsPermissions
 } from '@features/browser/types/browser.storage.types';
 
-const Storage = AsyncStorage;
+const Storage = new MMKV();
 
-export const getConnectedAddressTo = async (uri: string) => {
-  const res = await AsyncStorage.getItem(`${AsyncStorageKey.browser}${uri}`);
+export const getConnectedAddressTo = (uri: string) => {
+  const res = Storage.getString(`${AsyncStorageKey.browser}${uri}`);
   if (res) {
     const data = JSON.parse(res);
     if (data?.addresses?.length === 1) {
@@ -21,23 +22,20 @@ export const getConnectedAddressTo = async (uri: string) => {
   return res;
 };
 
-export const setConnectedAddressTo = async ({
+export const setConnectedAddressTo = ({
   uri,
   addresses,
   icon
 }: SetConnectedAddressToModel) => {
-  const uriData = await Storage.getItem(`${AsyncStorageKey.browser}${uri}`);
+  const uriData = Storage.getString(`${AsyncStorageKey.browser}${uri}`);
   if (!addresses.length) {
-    await Storage.removeItem(`${AsyncStorageKey.browser}${uri}`);
+    Storage.delete(`${AsyncStorageKey.browser}${uri}`);
   }
   if (uriData) {
     const data = JSON.parse(uriData);
     data.addresses = [...addresses];
 
-    await Storage.setItem(
-      `${AsyncStorageKey.browser}${uri}`,
-      JSON.stringify(data)
-    );
+    Storage.set(`${AsyncStorageKey.browser}${uri}`, JSON.stringify(data));
   } else {
     const data = icon
       ? {
@@ -47,62 +45,51 @@ export const setConnectedAddressTo = async ({
       : {
           addresses
         };
-    await Storage.setItem(
-      `${AsyncStorageKey.browser}${uri}`,
-      JSON.stringify(data)
-    );
+    Storage.set(`${AsyncStorageKey.browser}${uri}`, JSON.stringify(data));
   }
 };
-export const removeConnectedAddressTo = async (
-  uri: string,
-  address: string
-) => {
-  const uriData = await Storage.getItem(`${AsyncStorageKey.browser}${uri}`);
+export const removeConnectedAddressTo = (uri: string, address: string) => {
+  const uriData = Storage.getString(`${AsyncStorageKey.browser}${uri}`);
   if (uriData) {
     const data = JSON.parse(uriData);
     data.addresses = data.addresses.filter((item: string) => item !== address);
     if (data.addresses.length) {
-      await Storage.setItem(
-        `${AsyncStorageKey.browser}${uri}`,
-        JSON.stringify(data)
-      );
+      Storage.set(`${AsyncStorageKey.browser}${uri}`, JSON.stringify(data));
     } else {
-      await Storage.removeItem(`${AsyncStorageKey.browser}${uri}`);
+      Storage.delete(`${AsyncStorageKey.browser}${uri}`);
     }
   }
 };
 
-export const removePermissionByAddress = async (deletedAddress: string) => {
-  const keys = (await AsyncStorage.getAllKeys()).filter((item) =>
+export const removePermissionByAddress = (deletedAddress: string) => {
+  const keys = Storage.getAllKeys().filter((item) =>
     item.includes(AsyncStorageKey.browser)
   );
-  await Promise.all(
-    keys.map(async (key) => {
-      const permission = await AsyncStorage.getItem(key);
-      const permissionItem = permission ? JSON.parse(permission) : {};
-      if (permissionItem.addresses.includes(deletedAddress)) {
-        permissionItem.addresses = [...permissionItem.addresses].filter(
-          (address) => address !== deletedAddress
-        );
-        if (!permissionItem.addresses.length) {
-          await AsyncStorage.removeItem(key);
-        } else {
-          await AsyncStorage.setItem(key, JSON.stringify(permissionItem));
-        }
+  keys.map((key) => {
+    const permission = Storage.getString(key);
+    const permissionItem = permission ? JSON.parse(permission) : {};
+    if (permissionItem.addresses.includes(deletedAddress)) {
+      permissionItem.addresses = [...permissionItem.addresses].filter(
+        (address) => address !== deletedAddress
+      );
+      if (!permissionItem.addresses.length) {
+        Storage.delete(key);
+      } else {
+        Storage.set(key, JSON.stringify(permissionItem));
       }
-    })
-  );
+    }
+  });
 };
 
 export const getAllWalletsPermissions: () => Promise<
   Awaited<WalletsPermissions>[]
 > = async () => {
-  const keys = await AsyncStorage.getAllKeys();
+  const keys = Storage.getAllKeys();
   return await Promise.all(
     keys
       .filter((item) => item.includes(AsyncStorageKey.browser))
       .map(async (key) => {
-        const _data = await AsyncStorage.getItem(key);
+        const _data = Storage.getString(key);
         return {
           [key.replace(AsyncStorageKey.browser, '')]: _data
             ? JSON.parse(_data)
@@ -122,7 +109,7 @@ export const migrateToNewBrowserStorage = async () => {
         ''
       );
       if (data && _key) {
-        await setConnectedAddressTo({ uri: _key, addresses: [data] });
+        setConnectedAddressTo({ uri: _key, addresses: [data] });
         await AsyncStorage.removeItem(key);
       }
     }
