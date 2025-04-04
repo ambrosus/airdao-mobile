@@ -41,7 +41,9 @@ export const BottomSheetBrowserModal = forwardRef<
       setOutsideModalData={setOutsideModalData}
     >
       <View style={styles.container}>
-        <InfoIcon scale={0.8} />
+        <View style={styles.iconContainer}>
+          <InfoIcon scale={0.8} />
+        </View>
         <Text
           fontSize={scale(20)}
           fontFamily="Inter_700Bold"
@@ -54,21 +56,13 @@ export const BottomSheetBrowserModal = forwardRef<
           <Text
             fontSize={15}
             fontFamily="Inter_500Medium"
-            color={COLORS.foregroundSecondaryContent}
+            color={COLORS.neutral800}
             align="center"
           >
             {outsideModalData?.subTitle}
           </Text>
         )}
         <Row width="100%" justifyContent={'space-around'}>
-          <PrimaryButton
-            style={styles.approve}
-            onPress={() => handlePress(onApprove)}
-          >
-            <Text color={COLORS.neutral0}>
-              {outsideModalData?.buttonsLabels?.[0] || t('button.confirm')}
-            </Text>
-          </PrimaryButton>
           <SecondaryButton
             style={styles.reject}
             onPress={() => handlePress(onReject)}
@@ -77,6 +71,14 @@ export const BottomSheetBrowserModal = forwardRef<
               {outsideModalData.buttonsLabels?.[1] || t('button.cancel')}
             </Text>
           </SecondaryButton>
+          <PrimaryButton
+            style={styles.approve}
+            onPress={() => handlePress(onApprove)}
+          >
+            <Text color={COLORS.neutral0}>
+              {outsideModalData?.buttonsLabels?.[0] || t('button.confirm')}
+            </Text>
+          </PrimaryButton>
         </Row>
       </View>
     </BottomSheet>

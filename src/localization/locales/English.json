@@ -56,7 +56,7 @@
   "amb.market.total.supply.popup": "The amount of coins that have been already created, minus any coins that have been burned, providing a measure of the current supply of a cryptocurrency.",
   "button.add": "Add",
   "button.add.wallet": "Add wallet",
-  "button.processed": "Processed",
+  "button.processed": "Proceed",
   "button.cancel": "Cancel",
   "button.continue": "Continue",
   "button.create": "Create",
