@@ -14,7 +14,7 @@ export function useSettingsWalletActions() {
   ) => {
     try {
       await WalletUtils.deleteWalletWithAccounts(walletHash);
-      await removePermissionByAddress(address || '');
+      removePermissionByAddress(address || '');
       if (address) {
         await API.watcherService.removeWatcherForAddresses([address]);
       }

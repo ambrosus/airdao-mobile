@@ -24,13 +24,13 @@ export const setConnectedAddressTo = ({
   addresses,
   icon
 }: SetConnectedAddressToModel) => {
-  const uriData = mmkv.getString(`${AsyncStorageKey.browser}${uri}`);
+  const uriData = JSON.parse(
+    mmkv.getString(`${AsyncStorageKey.browser}${uri}`) || 'null'
+  );
   if (!addresses.length) mmkv.delete(`${AsyncStorageKey.browser}${uri}`);
-
-  if (uriData) {
-    const data = JSON.parse(uriData);
-    data.addresses = [...addresses];
-    mmkv.set(`${AsyncStorageKey.browser}${uri}`, JSON.stringify(data));
+  if (uriData?.addresses.length) {
+    uriData.addresses = [...addresses];
+    mmkv.set(`${AsyncStorageKey.browser}${uri}`, JSON.stringify(uriData));
   } else {
     const data = { addresses, ...(icon && { icon }) };
     mmkv.set(`${AsyncStorageKey.browser}${uri}`, JSON.stringify(data));
@@ -48,6 +48,10 @@ export const removeConnectedAddressTo = (uri: string, address: string) => {
       mmkv.set(`${AsyncStorageKey.browser}${uri}`, JSON.stringify(data));
     else mmkv.delete(`${AsyncStorageKey.browser}${uri}`);
   }
+};
+
+export const removeAllConnectedAddressTo = (uri: string) => {
+  mmkv.delete(`${AsyncStorageKey.browser}${uri}`);
 };
 
 export const removePermissionByAddress = (deletedAddress: string) => {
@@ -70,23 +74,19 @@ export const removePermissionByAddress = (deletedAddress: string) => {
   });
 };
 
-export const getAllWalletsPermissions: () => Promise<
-  Awaited<WalletsPermissions>[]
-> = async () => {
+export const getAllWalletsPermissions: () => WalletsPermissions[] = () => {
   const keys = mmkv.getAllKeys();
 
-  return await Promise.all(
-    keys
-      .filter((item) => item.includes(AsyncStorageKey.browser))
-      .map(async (key) => {
-        const _data = mmkv.getString(key);
-        return {
-          [key.replace(AsyncStorageKey.browser, '')]: _data
-            ? JSON.parse(_data)
-            : ''
-        };
-      })
-  );
+  return keys
+    .filter((item) => item.includes(AsyncStorageKey.browser))
+    .map((key) => {
+      const _data = mmkv.getString(key);
+      return {
+        [key.replace(AsyncStorageKey.browser, '')]: _data
+          ? JSON.parse(_data)
+          : ''
+      };
+    });
 };
 
 export const migrateToNewBrowserStorage = async () => {

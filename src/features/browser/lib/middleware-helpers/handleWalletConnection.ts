@@ -13,7 +13,10 @@ import {
   UPDATE_ETHEREUM_STATE_JS
 } from '../injectable.provider';
 import { permissionsHandler } from '../permissions-handler';
-import { setConnectedAddressTo } from '../permissions.manager';
+import {
+  removeAllConnectedAddressTo,
+  setConnectedAddressTo
+} from '../permissions.manager';
 
 export const handleWalletConnection = async ({
   webViewRef,
@@ -49,7 +52,7 @@ export const handleWalletConnection = async ({
     });
 
     await userConfirmation;
-    await setConnectedAddressTo({
+    setConnectedAddressTo({
       uri,
       icon: getProductIcon(),
       addresses: [address]
@@ -65,7 +68,7 @@ export const handleWalletConnection = async ({
   } catch (error: unknown) {
     response.error = rpcRejectHandler(4001, error);
     setConnectedAddress('');
-    await setConnectedAddressTo({ uri, icon: getProductIcon(), addresses: [] });
+    removeAllConnectedAddressTo(uri);
 
     rpcErrorHandler('handleWalletConnection', error);
   }
