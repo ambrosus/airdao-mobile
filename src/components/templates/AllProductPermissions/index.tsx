@@ -24,7 +24,7 @@ export const AllProductPermissions = () => {
   const updatePermissions = useCallback(async () => {
     try {
       setLoading(true);
-      const allWalletsPermissions = await getAllWalletsPermissions();
+      const allWalletsPermissions = getAllWalletsPermissions();
       setConnectedDetails(allWalletsPermissions);
     } finally {
       setLoading(false);

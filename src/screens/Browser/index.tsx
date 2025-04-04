@@ -72,7 +72,7 @@ export const BrowserScreen = () => {
 
   useEffect(() => {
     const getSelectedWallet = async () => {
-      const _selectedAddress = await getConnectedAddressTo(uri);
+      const _selectedAddress = getConnectedAddressTo(uri);
       const account = accounts.find(
         (item) => item.address === _selectedAddress
       );

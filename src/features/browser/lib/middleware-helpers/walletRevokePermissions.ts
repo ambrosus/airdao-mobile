@@ -23,7 +23,7 @@ export const walletRevokePermissions = async ({
         UPDATE_ETHEREUM_STATE_JS('', Config.CHAIN_ID_HEX)
       )
     );
-    await removeConnectedAddressTo(uri, connectedAddress);
+    removeConnectedAddressTo(uri, connectedAddress);
     setConnectedAddress('');
   } catch (error: unknown) {
     rpcErrorHandler('walletRevokePermissions', error);
