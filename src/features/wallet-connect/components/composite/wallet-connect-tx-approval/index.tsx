@@ -52,6 +52,7 @@ export const WalletConnectTxApproval = () => {
   const params = requestEvent?.params;
   const request = params?.request;
 
+  const isPersonalSign = transaction?.functionName === 'personal_sign';
   const isUnstake = transaction?.functionName === 'unstake';
   const isApprovalTx = transaction?.functionName === 'approve';
   const isAmbTransaction = request?.params[0]?.value;
@@ -60,10 +61,14 @@ export const WalletConnectTxApproval = () => {
     transaction?.functionName?.toLowerCase() ?? ''
   );
 
-  const { data: account } = useAccountByAddress(
-    request?.params[0].from.toLowerCase(),
-    true
-  );
+  const address = useMemo(() => {
+    if (transaction?.decodedArgs && transaction.decodedArgs.from)
+      return transaction?.decodedArgs.from?.toLowerCase();
+
+    return request?.params[0].from.toLowerCase();
+  }, [request?.params, transaction]);
+
+  const { data: account } = useAccountByAddress(address, true);
 
   const onApprove = useCallback(async () => {
     if (requestEvent && topic) {
@@ -130,6 +135,7 @@ export const WalletConnectTxApproval = () => {
   ]);
 
   const tokenSymbol = useMemo(() => {
+    if (isPersonalSign) return '';
     if (isAmbTransaction) return CryptoCurrencyCode.AMB;
 
     if (isUnstake) return CryptoCurrencyCode.stAMB;
@@ -138,9 +144,11 @@ export const WalletConnectTxApproval = () => {
       request?.params[0]?.to.toUpperCase() ?? '',
       true
     );
-  }, [isAmbTransaction, isUnstake, request?.params]);
+  }, [isAmbTransaction, isPersonalSign, isUnstake, request?.params]);
 
   const amountSymbol = useMemo(() => {
+    if (isPersonalSign) return '';
+
     if (isAmbTransaction) return CryptoCurrencyCode.AMB;
 
     if (isWithdraw) return CryptoCurrencyCode.SAMB;
@@ -152,9 +160,96 @@ export const WalletConnectTxApproval = () => {
     );
   }, [
     isAmbTransaction,
+    isPersonalSign,
     isUnstake,
     isWithdraw,
     transaction?.decodedArgs?.addresses
+  ]);
+
+  const title = useMemo(() => {
+    if (isPersonalSign) return 'Signature request';
+    if (isApprovalTx) return 'wallet.connect.approve.token';
+
+    return 'wallet.connect.tx.request';
+  }, [isApprovalTx, isPersonalSign]);
+
+  const formatGasFee = useCallback(() => {
+    const gas = request?.params[0].gas ?? ZERO;
+    const gasInEth = ethers.utils.formatEther(gas);
+    return `${NumberUtils.limitDecimalCount(gasInEth, 0)} ${
+      CryptoCurrencyCode.AMB
+    }`;
+  }, [request?.params]);
+
+  const formatAmount = useCallback(
+    (amount: ethers.BigNumber, symbol: string) => {
+      const amountInEth = ethers.utils.formatEther(amount ?? ZERO);
+      return `${NumberUtils.numberToTransformedLocale(amountInEth)} ${symbol}`;
+    },
+    []
+  );
+
+  const getFieldLabel = useCallback(() => {
+    switch (true) {
+      case isPersonalSign:
+        return 'SPENDER';
+      case isApprovalTx:
+        return 'APPROVE';
+      default:
+        return 'INTERACTING';
+    }
+  }, [isPersonalSign, isApprovalTx]);
+
+  const getDisplayValue = useCallback(() => {
+    if (isPersonalSign) {
+      return StringUtils.formatAddress(
+        transaction?.decodedArgs?.from ?? '',
+        5,
+        6
+      );
+    }
+
+    if (isApprovalTx) {
+      return formatAmount(
+        transaction?.decodedArgs?.amount ?? ZERO,
+        tokenSymbol
+      );
+    }
+
+    const address = isWrapOrUnwrap
+      ? request?.params[0]?.to
+      : transaction?.decodedArgs?.addresses?.[1];
+    return StringUtils.formatAddress(address ?? '', 5, 6);
+  }, [
+    isPersonalSign,
+    isApprovalTx,
+    isWrapOrUnwrap,
+    transaction?.decodedArgs,
+    request?.params,
+    tokenSymbol,
+    formatAmount
+  ]);
+
+  const getSecondaryValue = useCallback(() => {
+    if (isApprovalTx) {
+      return StringUtils.formatAddress(
+        transaction?.decodedArgs?.addresses?.[0] ?? '',
+        5,
+        6
+      );
+    }
+
+    const amount = isAmbTransaction
+      ? request.params[0].value
+      : transaction?.decodedArgs?.amount;
+    return formatAmount(amount ?? ZERO, amountSymbol);
+  }, [
+    isApprovalTx,
+    isAmbTransaction,
+    transaction?.decodedArgs,
+    request?.params,
+    amountSymbol,
+    formatAmount
   ]);
 
   return (
@@ -166,11 +261,7 @@ export const WalletConnectTxApproval = () => {
           color={COLORS.neutral800}
           align="center"
         >
-          {t(
-            isApprovalTx
-              ? 'wallet.connect.approve.token'
-              : 'wallet.connect.tx.request'
-          )}
+          {t(title)}
         </Text>
 
         {isApprovalTx && (
@@ -193,51 +284,18 @@ export const WalletConnectTxApproval = () => {
           style={{ maxWidth: '60%' }}
         />
 
-        <DetailsRowItem
-          field={isApprovalTx ? 'APPROVE' : 'INTERACTING'}
-          value={
-            isApprovalTx
-              ? `${NumberUtils.numberToTransformedLocale(
-                  ethers.utils.formatEther(
-                    transaction?.decodedArgs?.amount ?? ZERO
-                  )
-                )} ${tokenSymbol}`
-              : StringUtils.formatAddress(
-                  (isWrapOrUnwrap
-                    ? request?.params[0]?.to
-                    : transaction?.decodedArgs?.addresses?.[1]) ?? '',
-                  5,
-                  6
-                )
-          }
-        />
+        <DetailsRowItem field={getFieldLabel()} value={getDisplayValue()} />
 
-        <DetailsRowItem
-          field={isApprovalTx ? 'SPENDER' : 'AMOUNT'}
-          value={
-            isApprovalTx
-              ? StringUtils.formatAddress(
-                  transaction?.decodedArgs?.addresses?.[0] ?? '',
-                  5,
-                  6
-                )
-              : `${NumberUtils.numberToTransformedLocale(
-                  ethers.utils.formatEther(
-                    (isAmbTransaction
-                      ? request.params[0].value
-                      : transaction?.decodedArgs?.amount) ?? ZERO
-                  )
-                )} ${amountSymbol}`
-          }
-        />
+        {!isPersonalSign && (
+          <DetailsRowItem
+            field={isApprovalTx ? 'SPENDER' : 'AMOUNT'}
+            value={getSecondaryValue()}
+          />
+        )}
 
-        <DetailsRowItem
-          field="FEE"
-          value={`${NumberUtils.limitDecimalCount(
-            ethers.utils.formatEther(request?.params[0].gas ?? ZERO),
-            0
-          )} ${CryptoCurrencyCode.AMB}`}
-        />
+        {!isPersonalSign && (
+          <DetailsRowItem field="FEE" value={formatGasFee()} />
+        )}
       </View>
 
       <PrimaryButton

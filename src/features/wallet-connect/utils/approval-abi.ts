@@ -202,5 +202,15 @@ export const APPROVAL = [
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function'
+  },
+  {
+    name: 'personal_sign',
+    type: 'function',
+    inputs: [
+      { name: 'message', type: 'string' },
+      { name: 'account', type: 'address' }
+    ],
+    outputs: [{ name: 'signature', type: 'string' }],
+    stateMutability: 'nonpayable'
   }
 ];
