@@ -164,7 +164,7 @@ export const BrowserScreen = () => {
         enabled={isIos}
       >
         <KeyboardAvoidingView
-          style={{ flex: 1 }}
+          style={styles.webViewWrapper}
           behavior="padding"
           enabled={isAndroid}
         >
