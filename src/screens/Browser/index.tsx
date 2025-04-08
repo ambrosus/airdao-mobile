@@ -1,8 +1,5 @@
-/* eslint-disable no-console */
-// tslint:disable:no-console
-
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { KeyboardAvoidingView, View } from 'react-native';
 import {
   WebView,
   WebViewMessageEvent,
@@ -32,10 +29,13 @@ import {
 import { connectWallet } from '@features/browser/utils';
 import { useAllAccounts } from '@hooks/database';
 import { Cache, CacheKey } from '@lib/cache';
-import { isIos, StringUtils } from '@utils';
+import { isAndroid, isIos, StringUtils } from '@utils';
 import { styles } from './styles';
 
 export const BrowserScreen = () => {
+  const { top } = useSafeAreaInsets();
+  const navigation = useNavigation();
+
   const { params } =
     useRoute<RouteProp<CommonStackParamsList, 'BrowserScreen'>>();
   const { uri } = params;
@@ -45,11 +45,11 @@ export const BrowserScreen = () => {
   const { data: accounts } = useAllAccounts();
 
   const formattedUrl = StringUtils.formatUri({ uri });
-  const navigation = useNavigation();
 
   const browserModalRef = useRef<BottomSheetRef>(null);
   const browserApproveRef = useRef<BottomSheetRef>(null);
   const webViewRef = useRef<WebView>(null);
+  const browserWalletSelectorRef = useRef<BottomSheetRef>(null);
 
   const reload = useCallback(() => webViewRef.current?.reload(), [webViewRef]);
   const goForward = useCallback(
@@ -135,8 +135,6 @@ export const BrowserScreen = () => {
     }
   };
 
-  const browserWalletSelectorRef = useRef<BottomSheetRef>(null);
-
   const openWalletSelector = () => {
     browserWalletSelectorRef?.current?.show();
   };
@@ -144,7 +142,6 @@ export const BrowserScreen = () => {
     setCanGoBack(navState.canGoBack);
   };
 
-  const { top } = useSafeAreaInsets();
   return (
     <>
       <View style={{ marginTop: top }}>
@@ -163,20 +160,28 @@ export const BrowserScreen = () => {
         activeOffsetX={[-10, 10]}
         enabled={isIos}
       >
-        <View style={styles.webViewWrapper}>
-          <WebView
-            ref={webViewRef}
-            source={SOURCE}
-            nativeConfig={{
-              props: { webContentsDebuggingEnabled: true }
-            }}
-            javaScriptEnabled={true}
-            injectedJavaScriptBeforeContentLoaded={INJECTED_PROVIDER_JS}
-            onMessage={onMessageEventHandler}
-            webviewDebuggingEnabled={__DEV__}
-            onNavigationStateChange={handleNavigationStateChange} // Додаємо тут
-          />
-        </View>
+        <KeyboardAvoidingView
+          style={styles.webViewWrapper}
+          behavior="padding"
+          enabled={isAndroid}
+        >
+          <View style={styles.webViewWrapper}>
+            <WebView
+              ref={webViewRef}
+              source={SOURCE}
+              nativeConfig={{
+                props: { webContentsDebuggingEnabled: true }
+              }}
+              scrollEnabled
+              javaScriptEnabled
+              androidLayerType="hardware"
+              injectedJavaScriptBeforeContentLoaded={INJECTED_PROVIDER_JS}
+              onMessage={onMessageEventHandler}
+              webviewDebuggingEnabled={__DEV__}
+              onNavigationStateChange={handleNavigationStateChange}
+            />
+          </View>
+        </KeyboardAvoidingView>
       </PanGestureHandler>
       <BottomSheetBrowserWalletSelector
         uri={formattedUrl}
