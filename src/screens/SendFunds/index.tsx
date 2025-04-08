@@ -278,7 +278,6 @@ export const SendFunds = ({ navigation, route }: Props) => {
 
         await Clipboard.setStringAsync(JSON.stringify(errorToCopy, null, 2));
 
-
         const errorMessage =
           (error as { message: string })?.message ?? JSON.stringify(error);
 

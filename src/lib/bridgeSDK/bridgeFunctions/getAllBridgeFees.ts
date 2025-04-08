@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from 'ethers';
-import { formatEther } from 'ethers/lib/utils';
+import { formatEther, parseEther } from 'ethers/lib/utils';
 import Config from '@constants/config';
-import { GAS_FEE_BUFFER } from '@constants/variables';
+import { ROUNDING_BUFFER } from '@constants/variables';
 import { getFeeData } from '@features/bridge/utils/getBridgeFee';
 import { currentProvider } from '@lib';
 import { calculateGazFee } from '@lib/bridgeSDK/bridgeFunctions/calculateGazFee';
@@ -39,11 +39,13 @@ export const getAllBridgeFees = async ({
 
     await delay(1000);
 
+    const gasFeePlusBuffer = gasFee.add(parseEther(ROUNDING_BUFFER));
+
+    // amountTokens = amountToBridge - gasFee - ROUNDING_BUFFER
     const amountTokens =
       selectedTokenFrom.isNativeCoin && isMax
-        ? String(+amountToBridge - +formatEther(gasFee) - GAS_FEE_BUFFER)
+        ? formatEther(parseEther(amountToBridge).sub(gasFeePlusBuffer))
         : amountToBridge;
-
     const feeData = await getFeeData({
       bridgeConfig,
       amountTokens,
@@ -55,7 +57,7 @@ export const getAllBridgeFees = async ({
   } else {
     const amountTokens =
       selectedTokenFrom.isNativeCoin && isMax
-        ? String(+amountToBridge - GAS_FEE_BUFFER)
+        ? String(+amountToBridge - +ROUNDING_BUFFER)
         : amountToBridge;
 
     const feeData = await getFeeData({

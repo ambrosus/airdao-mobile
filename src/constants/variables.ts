@@ -137,11 +137,11 @@ export const TOKEN_ADDRESSES = {
 };
 
 /*
-GAS_FEE_BUFFER -->
+ROUNDING_BUFFER -->
 JavaScript has floating-point precision issues
 sometimes getFeeData return (amount + allFees) > accountBalance
 so we apply a small fix to avoid rounding errors
 Adds a small buffer to account for potential gas fee changes
 before the exact amount is known
 */
-export const GAS_FEE_BUFFER = 0.00000000001;
+export const ROUNDING_BUFFER = '1';
