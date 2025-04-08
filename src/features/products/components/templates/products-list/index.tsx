@@ -72,6 +72,7 @@ export const ProductsList = () => {
         sections={devSupportedProducts}
         stickySectionHeadersEnabled={false}
         renderSectionHeader={renderSectionHeader}
+        stickySectionHeadersEnabled={false}
         renderItem={renderProductItem}
         style={styles.container}
         contentContainerStyle={styles.contentContainerStyle}

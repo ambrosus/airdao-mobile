@@ -60,7 +60,7 @@ export const PRODUCTS = (
     {
       id: 3,
       section: ProductSections.Earn,
-      name: 'KOSMOS',
+      name: 'Kosmos',
       description: t('products.kosmos.description'),
       icon: <ProductKosmos />,
       background: ['rgba(67, 68, 145, 1)', 'rgba(51, 48, 96, 1)'],
@@ -70,7 +70,7 @@ export const PRODUCTS = (
     },
     {
       id: 4,
-      name: 'HARBOR',
+      name: 'Harbor',
       section: ProductSections.Earn,
       description: t('products.harbor.description'),
       icon: <ProductHarbor />,
