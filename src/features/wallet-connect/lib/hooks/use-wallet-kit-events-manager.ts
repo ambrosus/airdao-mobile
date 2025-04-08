@@ -77,7 +77,11 @@ export function useWalletKitEventsManager(isWalletKitInitiated: boolean) {
       );
 
       if (chains.length > 0 || _correctChainIds.length === 0) {
-        await getTransactionParamsByBytes(event.params.request.params[0].data);
+        const data = event.params.request.params[0].data
+          ? event.params.request.params[0].data
+          : event.params.request.params;
+
+        await getTransactionParamsByBytes(data);
         setWalletConnectStep(CONNECT_VIEW_STEPS.EIP155_TRANSACTION);
         onChangeRequest({ event, session });
 

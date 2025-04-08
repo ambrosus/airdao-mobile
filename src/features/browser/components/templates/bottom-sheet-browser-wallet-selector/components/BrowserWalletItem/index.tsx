@@ -54,7 +54,7 @@ export const BrowserWalletItem = ({
       <View>
         <Row>
           <Text fontSize={scale(16)} color={COLORS.neutral900}>
-            {wallet.name || `Account ${itemIndex}`}
+            {wallet.name || `Account ${itemIndex + 1}`}
           </Text>
           {isSelectedWallet && (
             <>

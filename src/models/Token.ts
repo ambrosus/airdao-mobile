@@ -1,6 +1,7 @@
 import { formatUnits } from 'ethers/lib/utils';
 import { CryptoCurrencyCode } from '@appTypes';
 import { AMB_DECIMALS } from '@constants/variables';
+import { TokenUtils } from '@utils';
 import { getTokenNameFromDatabase } from '@utils/get-token-name-from-db';
 import { TokenDTO } from './dtos';
 
@@ -17,7 +18,10 @@ export class Token {
   decimals: number;
   symbol!: CryptoCurrencyCode | string;
 
-  private deriveNameAndSymbolFromDto(dto: TokenDTO, tokenUtils: any) {
+  private deriveNameAndSymbolFromDto(
+    dto: TokenDTO,
+    tokenUtils: typeof TokenUtils
+  ) {
     if (dto.name && dto.symbol) {
       this.name = dto.name;
       this.balance = {
@@ -47,7 +51,7 @@ export class Token {
     }
   }
 
-  constructor(details: TokenDTO, tokenUtils: any) {
+  constructor(details: TokenDTO, tokenUtils: typeof TokenUtils) {
     this.isNativeCoin = details.isNativeCoin || '';
     this.address = details.address;
     this.balance = details.balance;

@@ -146,24 +146,21 @@ const getWithdrawalRequests = async (address: string) => {
 
     const formatData = (date: Date) => moment(date).format('DD/MM/YYYY  HH:mm');
     for (let i = 0; i < rawWithdrawalsList.length; i++) {
-      const currEvent: any = rawWithdrawalsList[i];
+      const { args }: ethers.Event = rawWithdrawalsList[i];
 
-      const requestDateTime = new Date(
-        Number(currEvent.args.creationTime) * 1000
-      );
+      const requestDateTime = new Date(Number(args?.creationTime) * 1000);
       const formattedRequestDateTime = formatData(requestDateTime);
 
-      const unlockDateTime = new Date(Number(currEvent.args.unlockTime) * 1000);
+      const unlockDateTime = new Date(Number(args?.unlockTime) * 1000);
+
       const formattedUnlockDateTime = formatData(unlockDateTime);
-
       const status = unlockDateTime < new Date() ? 'Success' : 'Pending';
-
-      const amount = BigNumber.from(currEvent.args.amount);
+      const amount = BigNumber.from(args?.amount);
 
       // add event to the beginning of the list to sort it from newest to oldest
       withdrawalsList.unshift({
         amount,
-        tokenAddress: currEvent.address,
+        tokenAddress: args?.address,
         requestData: formattedRequestDateTime,
         unlockData: formattedUnlockDateTime,
         status

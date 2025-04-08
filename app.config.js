@@ -28,10 +28,10 @@ module.exports = {
           'Allow $(PRODUCT_NAME) to access your microphone',
         NSFaceIDUsageDescription: 'Allow $(PRODUCT_NAME) to access FaceID'
       },
-      buildNumber: '1.4'
+      buildNumber: '1.4.2'
     },
     android: {
-      versionCode: 124,
+      versionCode: 179,
       softwareKeyboardLayoutMode: 'pan',
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',

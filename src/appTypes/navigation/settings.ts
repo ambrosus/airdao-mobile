@@ -32,6 +32,7 @@ export type SettingsTabParamsList = {
   SuccessSetupSecurity: undefined;
   WelcomeScreen: undefined;
   Collection: { group: AccountList };
+  ManagePermissions: undefined;
 };
 
 export type SettingsTabNavigationProp = CompositeNavigationProp<

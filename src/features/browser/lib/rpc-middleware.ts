@@ -34,7 +34,8 @@ export async function handleWebViewMessage({
   browserApproveRef,
   browserWalletSelectorRef
 }: HandleWebViewMessageModel) {
-  const { connectedAddress, setProductTitle } = useBrowserStore.getState();
+  const { connectedAddress, setProductTitle, setProductIcon } =
+    useBrowserStore.getState();
   const requestsInProgress = new Set();
 
   const { handleChainIdRequest, handleGetBalance, sendResponse } = rpcMethods;
@@ -91,7 +92,7 @@ export async function handleWebViewMessage({
             webViewRef,
             browserApproveRef,
             permissions: INITIAL_ACCOUNTS_PERMISSIONS
-          }).then((result: WalletConnectionResult) => result.accounts);
+          }).then((result: WalletConnectionResult) => result?.accounts);
           break;
         }
 
@@ -133,6 +134,7 @@ export async function handleWebViewMessage({
           break;
         }
         // eth_sendTransaction
+        case RPCMethods.WalletSendTransaction:
         case RPCMethods.EthSendTransaction:
           await ethSendTransaction({
             params: params as [TransactionParams],
@@ -148,6 +150,10 @@ export async function handleWebViewMessage({
             setProductTitle(params[0]);
           }
           break;
+        case RPCMethods.GetIcon:
+          if (params[0]) {
+            setProductIcon(params[0]);
+          }
 
         // eth_accounts
         case RPCMethods.EthAccounts:

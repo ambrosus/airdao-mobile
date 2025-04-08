@@ -3,7 +3,7 @@
 import { RefObject } from 'react';
 import { WebView } from '@metamask/react-native-webview';
 import { JsonRpcResponse } from '@walletconnect/jsonrpc-types';
-import { ethers } from 'ethers';
+import { Bytes, ethers } from 'ethers';
 import Config from '@constants/config';
 import { TransactionParams } from '@features/browser/types';
 import { rpcErrorHandler } from '../utils';
@@ -43,7 +43,10 @@ const handleSendTransaction = async (
   return tx.hash;
 };
 
-const handleSignTransaction = async (txParams: any, privateKey: string) => {
+const handleSignTransaction = async (
+  txParams: ethers.providers.TransactionRequest,
+  privateKey: string
+) => {
   const wallet = await extractWallet(privateKey);
   return await wallet.signTransaction(txParams);
 };
@@ -65,14 +68,22 @@ const sendResponse = (
   }
 };
 
-const signMessage = async (message: any, privateKey: string) => {
+const signMessage = async (message: string | Bytes, privateKey: string) => {
   const wallet = await extractWallet(privateKey);
   return await wallet.signMessage(
     ethers.utils.isHexString(message) ? ethers.utils.arrayify(message) : message
   );
 };
 
-const _signTypedData = async (data: any, privateKey: string) => {
+const _signTypedData = async (
+  data: {
+    domain: ethers.TypedDataDomain;
+    types: any;
+    primaryType: string;
+    message: Record<string, unknown>;
+  },
+  privateKey: string
+) => {
   if (!data.domain || !data.types || !data.message) {
     throw new Error('Invalid EIP-712 typed data format');
   }

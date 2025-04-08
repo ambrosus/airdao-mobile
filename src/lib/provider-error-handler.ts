@@ -22,7 +22,10 @@ export async function errorByTxHash(
 
 export function wrapProviderToError(provider: ethers.providers.Provider) {
   const oldCall = provider.call;
-  provider.call = async (transaction: any, blockTag?: any): Promise<string> => {
+  provider.call = async (
+    transaction: ethers.providers.TransactionRequest,
+    blockTag?: ethers.providers.BlockTag
+  ): Promise<string> => {
     try {
       return await oldCall.apply(provider, [transaction, blockTag]);
     } catch (e) {
@@ -32,7 +35,9 @@ export function wrapProviderToError(provider: ethers.providers.Provider) {
   };
 
   const oldEstimateGas = provider.estimateGas;
-  provider.estimateGas = async (transaction: any): Promise<BigNumber> => {
+  provider.estimateGas = async (
+    transaction: ethers.providers.TransactionRequest
+  ): Promise<BigNumber> => {
     try {
       return await oldEstimateGas.apply(provider, [transaction]);
     } catch (e) {
@@ -46,7 +51,9 @@ export function wrapProviderToError(provider: ethers.providers.Provider) {
 
 export class AmbErrorProviderWeb3 extends ethers.providers.Web3Provider {
   // Populates "from" if unspecified, and estimates the gas for the transaction
-  async estimateGas(transaction: any): Promise<BigNumber> {
+  async estimateGas(
+    transaction: ethers.providers.TransactionRequest
+  ): Promise<BigNumber> {
     try {
       return await super.estimateGas(transaction);
     } catch (e) {
@@ -56,7 +63,10 @@ export class AmbErrorProviderWeb3 extends ethers.providers.Web3Provider {
   }
 
   // Populates "from" if unspecified, and calls with the transaction
-  async call(transaction: any, blockTag?: any): Promise<string> {
+  async call(
+    transaction: ethers.providers.TransactionRequest,
+    blockTag?: ethers.providers.BlockTag
+  ): Promise<string> {
     try {
       return await super.call(transaction, blockTag);
     } catch (e) {
@@ -67,7 +77,9 @@ export class AmbErrorProviderWeb3 extends ethers.providers.Web3Provider {
 
 export class AmbErrorProvider extends ethers.providers.StaticJsonRpcProvider {
   // Populates "from" if unspecified, and estimates the gas for the transaction
-  async estimateGas(transaction: any): Promise<BigNumber> {
+  async estimateGas(
+    transaction: ethers.providers.TransactionRequest
+  ): Promise<BigNumber> {
     try {
       return await super.estimateGas(transaction);
     } catch (e) {
@@ -77,7 +89,10 @@ export class AmbErrorProvider extends ethers.providers.StaticJsonRpcProvider {
   }
 
   // Populates "from" if unspecified, and calls with the transaction
-  async call(transaction: any, blockTag?: any): Promise<string> {
+  async call(
+    transaction: ethers.providers.TransactionRequest,
+    blockTag?: ethers.providers.BlockTag
+  ): Promise<string> {
     try {
       return await super.call(transaction, blockTag);
     } catch (e) {
@@ -86,7 +101,7 @@ export class AmbErrorProvider extends ethers.providers.StaticJsonRpcProvider {
   }
 }
 
-function parseError(error: any): any {
+function parseError(error: any): void {
   let ambError;
   try {
     ambError = _parseError(error);
@@ -98,7 +113,7 @@ function parseError(error: any): any {
   throw ambError;
 }
 
-function _parseError(error: any): any {
+function _parseError(error: any): Error {
   if (error.code === 'CALL_EXCEPTION') error = error.error;
   if (error.code === 'SERVER_ERROR') error = error.error;
   if (error.code === -32603) error = error.data;
