@@ -1,7 +1,4 @@
-/* eslint-disable no-console */
-// tslint:disable:no-console
-
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
 import {
   WebView,
