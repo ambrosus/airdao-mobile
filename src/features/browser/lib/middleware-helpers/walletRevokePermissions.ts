@@ -1,8 +1,8 @@
 import Config from '@constants/config';
 import { useBrowserStore } from '@entities/browser/model';
+import { removeConnectedAddressTo } from '@features/browser/lib';
 import { WalletRevokePermissionsProps } from '@features/browser/types';
 import { rpcErrorHandler } from '@features/browser/utils';
-import { removeConnectedAddressTo } from '@lib';
 import {
   updateWindowObject,
   UPDATE_ETHEREUM_STATE_JS
