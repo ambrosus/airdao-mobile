@@ -33,6 +33,9 @@ import { isAndroid, isIos, StringUtils } from '@utils';
 import { styles } from './styles';
 
 export const BrowserScreen = () => {
+  const { top } = useSafeAreaInsets();
+  const navigation = useNavigation();
+
   const { params } =
     useRoute<RouteProp<CommonStackParamsList, 'BrowserScreen'>>();
   const { uri } = params;
@@ -42,11 +45,11 @@ export const BrowserScreen = () => {
   const { data: accounts } = useAllAccounts();
 
   const formattedUrl = StringUtils.formatUri({ uri });
-  const navigation = useNavigation();
 
   const browserModalRef = useRef<BottomSheetRef>(null);
   const browserApproveRef = useRef<BottomSheetRef>(null);
   const webViewRef = useRef<WebView>(null);
+  const browserWalletSelectorRef = useRef<BottomSheetRef>(null);
 
   const reload = useCallback(() => webViewRef.current?.reload(), [webViewRef]);
   const goForward = useCallback(
@@ -132,8 +135,6 @@ export const BrowserScreen = () => {
     }
   };
 
-  const browserWalletSelectorRef = useRef<BottomSheetRef>(null);
-
   const openWalletSelector = () => {
     browserWalletSelectorRef?.current?.show();
   };
@@ -141,7 +142,6 @@ export const BrowserScreen = () => {
     setCanGoBack(navState.canGoBack);
   };
 
-  const { top } = useSafeAreaInsets();
   return (
     <>
       <View style={{ marginTop: top }}>
