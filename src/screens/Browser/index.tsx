@@ -178,7 +178,7 @@ export const BrowserScreen = () => {
               injectedJavaScriptBeforeContentLoaded={INJECTED_PROVIDER_JS}
               onMessage={onMessageEventHandler}
               webviewDebuggingEnabled={__DEV__}
-              onNavigationStateChange={handleNavigationStateChange} // Додаємо тут
+              onNavigationStateChange={handleNavigationStateChange}
             />
           </View>
         </KeyboardAvoidingView>
