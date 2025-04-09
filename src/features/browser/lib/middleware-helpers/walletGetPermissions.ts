@@ -6,7 +6,7 @@ import {
 import { rpcErrorHandler } from '@features/browser/utils';
 import { permissionsHandler } from '../permissions-handler';
 
-interface WalletGetPermissionsArgs {
+export interface WalletGetPermissionsArgs {
   response: {
     result: {
       parentCapability: Permissions;
