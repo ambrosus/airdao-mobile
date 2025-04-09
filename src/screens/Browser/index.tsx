@@ -65,6 +65,7 @@ export const BrowserScreen = () => {
     setConnectedAddress,
     setConnectedAccount
   } = useBrowserStore();
+
   const { data: allAccounts } = useAllAccounts();
 
   const [hasSwiped, setHasSwiped] = useState(false);
@@ -76,16 +77,23 @@ export const BrowserScreen = () => {
       const account = accounts.find(
         (item) => item.address === _selectedAddress
       );
+
       setConnectedAddress(_selectedAddress || '');
       setConnectedAccount(account || null);
     };
-    getSelectedWallet().then();
+    getSelectedWallet();
 
     if (webViewRef.current && connectedAddress) {
       connectWallet(connectedAddress, webViewRef);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accounts, allAccounts, setConnectedAccount, setConnectedAddress, uri]);
+  }, [
+    accounts,
+    allAccounts,
+    connectedAddress,
+    setConnectedAccount,
+    setConnectedAddress,
+    uri
+  ]);
 
   const onMessageEventHandler = useCallback(
     async (event: WebViewMessageEvent) => {
@@ -110,8 +118,8 @@ export const BrowserScreen = () => {
         throw error;
       }
     },
-    // @ts-ignore
-    [connectedAccount?._raw.hash, uri]
+
+    [connectedAccount, uri]
   );
 
   const onGestureEvent = (
