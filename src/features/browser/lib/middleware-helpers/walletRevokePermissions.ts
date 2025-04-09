@@ -1,6 +1,5 @@
 import Config from '@constants/config';
 import { useBrowserStore } from '@entities/browser/model';
-import { removeConnectedAddressTo } from '@features/browser/lib';
 import { WalletRevokePermissionsProps } from '@features/browser/types';
 import { rpcErrorHandler } from '@features/browser/utils';
 import {
@@ -8,6 +7,7 @@ import {
   UPDATE_ETHEREUM_STATE_JS
 } from '../injectable.provider';
 import { permissionsHandler } from '../permissions-handler';
+import { removeConnectedAddressTo } from '../permissions.manager';
 
 export const walletRevokePermissions = async ({
   permissions,
