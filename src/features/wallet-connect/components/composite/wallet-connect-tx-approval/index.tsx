@@ -19,6 +19,7 @@ import {
   rejectEIP155Request,
   walletKit
 } from '@features/wallet-connect/utils';
+import { useGetTokenDetails } from '@hooks';
 import { useAccountByAddress } from '@hooks/database';
 import { Cache, CacheKey } from '@lib/cache';
 import { NumberUtils, StringUtils, getTokenSymbolFromDatabase } from '@utils';
@@ -69,6 +70,11 @@ export const WalletConnectTxApproval = () => {
   }, [request?.params, transaction]);
 
   const { data: account } = useAccountByAddress(address, true);
+  const { data: token } = useGetTokenDetails(
+    isApprovalTx
+      ? request?.params[0]?.to
+      : transaction?.decodedArgs?.addresses?.[0]
+  );
 
   const onApprove = useCallback(async () => {
     if (requestEvent && topic) {
@@ -212,7 +218,7 @@ export const WalletConnectTxApproval = () => {
     if (isApprovalTx) {
       return formatAmount(
         transaction?.decodedArgs?.amount ?? ZERO,
-        tokenSymbol
+        tokenSymbol === 'unknown' && !!token.symbol ? token.symbol : tokenSymbol
       );
     }
 
@@ -224,10 +230,13 @@ export const WalletConnectTxApproval = () => {
     isPersonalSign,
     isApprovalTx,
     isWrapOrUnwrap,
-    transaction?.decodedArgs,
     request?.params,
-    tokenSymbol,
-    formatAmount
+    transaction?.decodedArgs?.addresses,
+    transaction?.decodedArgs?.from,
+    transaction?.decodedArgs?.amount,
+    token,
+    formatAmount,
+    tokenSymbol
   ]);
 
   const getSecondaryValue = useCallback(() => {
@@ -242,14 +251,19 @@ export const WalletConnectTxApproval = () => {
     const amount = isAmbTransaction
       ? request.params[0].value
       : transaction?.decodedArgs?.amount;
-    return formatAmount(amount ?? ZERO, amountSymbol);
+    return formatAmount(
+      amount ?? ZERO,
+      amountSymbol === 'unknown' && !!token.symbol ? token.symbol : amountSymbol
+    );
   }, [
     isApprovalTx,
     isAmbTransaction,
-    transaction?.decodedArgs,
     request?.params,
+    transaction?.decodedArgs?.amount,
+    transaction?.decodedArgs?.addresses,
+    formatAmount,
     amountSymbol,
-    formatAmount
+    token.symbol
   ]);
 
   return (

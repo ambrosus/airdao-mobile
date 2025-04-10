@@ -7,3 +7,5 @@ export * from './ethSignTransaction';
 export * from './ethSendTransaction';
 export * from './ethAccounts';
 export * from './ethCall';
+export * from './ethTransactionCore';
+export * from './ethBlockCore';

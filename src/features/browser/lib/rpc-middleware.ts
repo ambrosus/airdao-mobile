@@ -11,6 +11,9 @@ import {
   ethSendTransaction,
   ethSignTransaction,
   ethSignTypesData,
+  ethGetBlockNumber,
+  ethGetTransactionByHash,
+  ethGetTransactionReceipt,
   handleWalletConnection,
   personalSign,
   walletGetPermissions,
@@ -122,6 +125,18 @@ export async function handleWebViewMessage({
           });
           break;
 
+        case RPCMethods.EthGetTransactionByHash:
+          response.result = await ethGetTransactionByHash(params[0]);
+          break;
+
+        case RPCMethods.EthGetBlockNumber:
+          response.result = await ethGetBlockNumber();
+          break;
+
+        case RPCMethods.EthGetTransactionReceipt:
+          response.result = await ethGetTransactionReceipt(params[0]);
+          break;
+
         // eth_call
         case RPCMethods.EthCall: {
           await ethCall({ data: params[0], response });
@@ -189,7 +204,7 @@ export async function handleWebViewMessage({
 
         // wallet_getPermissions
         case RPCMethods.WalletGetPermissions:
-          await walletGetPermissions({ response });
+          await walletGetPermissions({ response: response as any });
           break;
 
         // eth_signTransaction
