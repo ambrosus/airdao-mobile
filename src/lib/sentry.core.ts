@@ -1,4 +1,5 @@
 import { ComponentType } from 'react';
+import { Alert } from 'react-native';
 import * as Sentry from '@sentry/react-native';
 import Constants from 'expo-constants';
 import Config from '@constants/config';
@@ -11,7 +12,7 @@ const hasInitClient = !__DEV__ && Config.env !== PRODUCTION;
 export const initSentryClient = () => {
   if (!hasInitClient) return;
 
-  console.warn('Sentry client initialized');
+  Alert.alert('Sentry client initialized');
 
   const replayIntegration = Sentry.mobileReplayIntegration({
     maskAllText: true,
