@@ -40,6 +40,14 @@ export function useDecodeCallbackData() {
         };
       }
 
+      case 'buy':
+      case 'sell': {
+        return {
+          addresses: [rawArgs.token, rawArgs[0]],
+          amount: rawArgs.amount.toString()
+        };
+      }
+
       case 'addLiquidityAMB':
       case 'removeLiquidityAMB':
         return {
