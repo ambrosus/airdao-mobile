@@ -70,7 +70,7 @@ export const WalletConnectTxApproval = () => {
   }, [request?.params, transaction]);
 
   const { data: account } = useAccountByAddress(address, true);
-  const { data: token } = useGetTokenDetails(
+  const { data: token, loading } = useGetTokenDetails(
     isApprovalTx
       ? request?.params[0]?.to
       : transaction?.decodedArgs?.addresses?.[0]
@@ -265,6 +265,8 @@ export const WalletConnectTxApproval = () => {
     amountSymbol,
     token.symbol
   ]);
+
+  if (loading) return null;
 
   return (
     <View style={styles.container}>
