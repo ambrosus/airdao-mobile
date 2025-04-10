@@ -70,7 +70,7 @@ export const WalletConnectTxApproval = () => {
   }, [request?.params, transaction]);
 
   const { data: account } = useAccountByAddress(address, true);
-  const { data: token, loading } = useGetTokenDetails(
+  const { data: token } = useGetTokenDetails(
     isApprovalTx
       ? request?.params[0]?.to
       : transaction?.decodedArgs?.addresses?.[0]
@@ -218,7 +218,11 @@ export const WalletConnectTxApproval = () => {
     if (isApprovalTx) {
       return formatAmount(
         transaction?.decodedArgs?.amount ?? ZERO,
-        tokenSymbol === 'unknown' && !!token.symbol ? token.symbol : tokenSymbol
+        token.symbol !== undefined
+          ? token.symbol
+          : tokenSymbol === 'unknown' && !token.symbol
+          ? CryptoCurrencyCode.AMB
+          : tokenSymbol
       );
     }
 
@@ -253,7 +257,11 @@ export const WalletConnectTxApproval = () => {
       : transaction?.decodedArgs?.amount;
     return formatAmount(
       amount ?? ZERO,
-      amountSymbol === 'unknown' && !!token.symbol ? token.symbol : amountSymbol
+      token.symbol !== undefined
+        ? token.symbol
+        : amountSymbol === 'unknown' && !token.symbol
+        ? CryptoCurrencyCode.AMB
+        : amountSymbol
     );
   }, [
     isApprovalTx,
@@ -265,8 +273,6 @@ export const WalletConnectTxApproval = () => {
     amountSymbol,
     token.symbol
   ]);
-
-  if (loading) return null;
 
   return (
     <View style={styles.container}>
