@@ -37,8 +37,8 @@ export function useAvailableWithdrawLogs(lockPeriod: ethers.BigNumber) {
     const withdrawalsList: IAvailableWithdrawLogs[] = [];
 
     for (let i = 0; i < rawWithdrawalsList.length; i++) {
-      const currEvent: any = rawWithdrawalsList[i];
-      const unlockDateTime = new Date(Number(currEvent.args.timestamp) * 1000);
+      const { args }: ethers.Event = rawWithdrawalsList[i];
+      const unlockDateTime = new Date(Number(args?.timestamp) * 1000);
       const unlockTimestamp = unlockDateTime.getTime();
       const unlockStakeLockPeriod = stakeLockPeriod * 1000;
       const currentTimestamp = new Date().getTime();

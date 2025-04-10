@@ -29,3 +29,4 @@ export * from './WalletDepositFunds';
 export * from './InputWithTokenSelect';
 export * from './InputWithoutTokenSelect';
 export * from './DropDownPanel';
+export * from './AllProductPermissions';

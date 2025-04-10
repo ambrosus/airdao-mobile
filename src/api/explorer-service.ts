@@ -11,6 +11,8 @@ import {
   TransactionDTO
 } from '@models';
 import { SearchSort } from '@screens/Settings/screens/Explore/Search.types';
+import { TokenInfo, TokenUtils } from '@utils';
+
 // deprecated
 // const exploreApiUrl = Config.EXPLORER_API_URL;
 const explorerApiV2Url = Config.EXPLORER_API_V2_URL;
@@ -85,7 +87,7 @@ const getTransactionsOfOwnAccount = async (
   address: string,
   page: number,
   limit: number,
-  tokenUtils: any
+  tokenUtils: typeof TokenUtils
 ): Promise<
   PaginatedResponseBody<{
     tokens: Token[];
@@ -128,6 +130,13 @@ const getTokenTransactionsV2 = async (
     throw error;
   }
 };
+
+const getTokenDetails = async (address: string): Promise<TokenInfo> => {
+  const url = `${explorerApiV2Url}/tokens/${address}`;
+  const response = await axios.get(url);
+  return response.data.data;
+};
+
 export const explorerService = {
   getExplorerInfo,
   getExplorerAccounts,
@@ -135,5 +144,6 @@ export const explorerService = {
   getTransactionsOfAccount,
   getTransactionDetails,
   getTransactionsOfOwnAccount,
-  getTokenTransactionsV2
+  getTokenTransactionsV2,
+  getTokenDetails
 };

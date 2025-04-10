@@ -5,6 +5,7 @@ const bip32 = require('bip32');
 interface CacheRoots {
   [key: string]: any;
 }
+
 const ETH_CACHE: CacheRoots = {};
 const CACHE: CacheRoots = {};
 const CACHE_ROOTS: CacheRoots = {};

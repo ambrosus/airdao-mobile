@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { ethers } from 'ethers';
 import { StandardizedDecodedArgs } from '@features/wallet-connect/types';
+import { PERSONAL_SIGN_MESSAGE } from '@features/wallet-connect/utils';
 import { APPROVAL } from '@features/wallet-connect/utils/approval-abi';
 import { useWalletConnectContextSelector } from './use-wallet-connect-context';
 
@@ -39,6 +40,14 @@ export function useDecodeCallbackData() {
         };
       }
 
+      case 'buy':
+      case 'sell': {
+        return {
+          addresses: [rawArgs.token, rawArgs[0]].filter(Boolean),
+          amount: rawArgs.out?.toString() || '0'
+        };
+      }
+
       case 'addLiquidityAMB':
       case 'removeLiquidityAMB':
         return {
@@ -70,12 +79,26 @@ export function useDecodeCallbackData() {
     async (txData: string | undefined): Promise<DecodedTransaction | null> => {
       if (!txData) return null;
 
+      // Handle regular transaction data
       const functionSignature = txData.slice(0, 10);
 
       const decodedTransaction: DecodedTransaction = {
         functionName: 'Unknown',
         decodedArgs: null
       };
+
+      // Check if this is a personal_sign request
+      if (txData[0].startsWith(PERSONAL_SIGN_MESSAGE)) {
+        decodedTransaction.functionName = 'personal_sign';
+        decodedTransaction.decodedArgs = {
+          // @ts-ignore
+          message: txData[0],
+          from: txData[1]
+        };
+
+        onChangeTransactionData(decodedTransaction);
+        return decodedTransaction;
+      }
 
       try {
         const iface = new ethers.utils.Interface(APPROVAL);

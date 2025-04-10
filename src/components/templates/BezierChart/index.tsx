@@ -8,7 +8,7 @@ import { styles } from './styles';
 
 interface Interval {
   text: string;
-  value: any;
+  value: number;
 }
 
 interface BezierChartProps {
@@ -22,15 +22,14 @@ interface BezierChartProps {
   onIntervalSelected?: (interval: Interval) => unknown;
 }
 
-export function BezierChart(props: BezierChartProps): JSX.Element {
-  const {
-    strokeColor = COLORS.black,
-    intervals = [],
-    selectedInterval,
-    data,
-    onPointSelected,
-    onIntervalSelected
-  } = props;
+export function BezierChart({
+  strokeColor = COLORS.black,
+  intervals = [],
+  selectedInterval,
+  data,
+  onPointSelected,
+  onIntervalSelected
+}: BezierChartProps): JSX.Element {
   const gestureStarted = useRef(false);
 
   const renderInterval = (interval: Interval, idx: number) => {
@@ -93,12 +92,9 @@ export function BezierChart(props: BezierChartProps): JSX.Element {
         verticalPadding={21}
       />
       {intervals.length > 0 && (
-        <>
-          {/* <Spacer value={verticalScale(21)} /> */}
-          <Row alignItems="center" justifyContent="center">
-            {intervals.map(renderInterval)}
-          </Row>
-        </>
+        <Row alignItems="center" justifyContent="center">
+          {intervals.map(renderInterval)}
+        </Row>
       )}
     </View>
   );

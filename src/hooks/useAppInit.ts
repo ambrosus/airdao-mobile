@@ -15,6 +15,7 @@ import {
   PublicAddressDB,
   PublicAddressListDB
 } from '@database';
+import { migrateToNewBrowserStorage } from '@features/browser/lib';
 import { usePasscodeInit } from '@features/passcode/lib/hooks/use-passcode-init';
 import { NotificationService, PermissionService } from '@lib';
 import { Cache, CacheKey } from '@lib/cache';
@@ -121,6 +122,7 @@ export const useAppInit = () => {
     async function prepare() {
       try {
         migrateAddressesFromCache();
+        migrateToNewBrowserStorage();
         prepareNotifications();
         await Font.loadAsync({
           Inter_400Regular: require('../../assets/fonts/Inter-Regular.ttf'),

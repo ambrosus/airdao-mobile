@@ -11,6 +11,9 @@ import {
   ethSendTransaction,
   ethSignTransaction,
   ethSignTypesData,
+  ethGetBlockNumber,
+  ethGetTransactionByHash,
+  ethGetTransactionReceipt,
   handleWalletConnection,
   personalSign,
   walletGetPermissions,
@@ -34,7 +37,8 @@ export async function handleWebViewMessage({
   browserApproveRef,
   browserWalletSelectorRef
 }: HandleWebViewMessageModel) {
-  const { connectedAddress, setProductTitle } = useBrowserStore.getState();
+  const { connectedAddress, setProductTitle, setProductIcon } =
+    useBrowserStore.getState();
   const requestsInProgress = new Set();
 
   const { handleChainIdRequest, handleGetBalance, sendResponse } = rpcMethods;
@@ -91,7 +95,7 @@ export async function handleWebViewMessage({
             webViewRef,
             browserApproveRef,
             permissions: INITIAL_ACCOUNTS_PERMISSIONS
-          }).then((result: WalletConnectionResult) => result.accounts);
+          }).then((result: WalletConnectionResult) => result?.accounts);
           break;
         }
 
@@ -121,6 +125,18 @@ export async function handleWebViewMessage({
           });
           break;
 
+        case RPCMethods.EthGetTransactionByHash:
+          response.result = await ethGetTransactionByHash(params[0]);
+          break;
+
+        case RPCMethods.EthGetBlockNumber:
+          response.result = await ethGetBlockNumber();
+          break;
+
+        case RPCMethods.EthGetTransactionReceipt:
+          response.result = await ethGetTransactionReceipt(params[0]);
+          break;
+
         // eth_call
         case RPCMethods.EthCall: {
           await ethCall({ data: params[0], response });
@@ -133,6 +149,7 @@ export async function handleWebViewMessage({
           break;
         }
         // eth_sendTransaction
+        case RPCMethods.WalletSendTransaction:
         case RPCMethods.EthSendTransaction:
           await ethSendTransaction({
             params: params as [TransactionParams],
@@ -148,6 +165,10 @@ export async function handleWebViewMessage({
             setProductTitle(params[0]);
           }
           break;
+        case RPCMethods.GetIcon:
+          if (params[0]) {
+            setProductIcon(params[0]);
+          }
 
         // eth_accounts
         case RPCMethods.EthAccounts:
@@ -183,7 +204,7 @@ export async function handleWebViewMessage({
 
         // wallet_getPermissions
         case RPCMethods.WalletGetPermissions:
-          await walletGetPermissions({ response });
+          await walletGetPermissions({ response: response as any });
           break;
 
         // eth_signTransaction

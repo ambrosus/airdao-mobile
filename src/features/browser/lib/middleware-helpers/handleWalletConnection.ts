@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-// tslint:disable:no-console
 import { ModalActionTypes } from '@components/composite';
 import Config from '@constants/config';
 import { useBrowserStore } from '@entities/browser/model';
@@ -9,13 +7,16 @@ import {
   rpcErrorHandler,
   rpcRejectHandler
 } from '@features/browser/utils';
-import { setConnectedAddressTo } from '@lib';
 import { delay } from '@utils';
 import {
   updateWindowObject,
   UPDATE_ETHEREUM_STATE_JS
 } from '../injectable.provider';
 import { permissionsHandler } from '../permissions-handler';
+import {
+  removeAllConnectedAddressTo,
+  setConnectedAddressTo
+} from '../permissions.manager';
 
 export const handleWalletConnection = async ({
   webViewRef,
@@ -24,7 +25,7 @@ export const handleWalletConnection = async ({
   browserWalletSelectorRef,
   uri
 }: ConnectionRequest) => {
-  const { setConnectedAddress } = useBrowserStore.getState();
+  const { setConnectedAddress, getProductIcon } = useBrowserStore.getState();
   try {
     const address = await new Promise<string>(async (resolve, reject) => {
       await delay(400);
@@ -51,7 +52,11 @@ export const handleWalletConnection = async ({
     });
 
     await userConfirmation;
-    await setConnectedAddressTo(uri, address);
+    setConnectedAddressTo({
+      uri,
+      icon: getProductIcon(),
+      addresses: [address]
+    });
     setConnectedAddress(address);
 
     updateWindowObject(
@@ -61,9 +66,10 @@ export const handleWalletConnection = async ({
 
     return permissionsHandler.bind(address);
   } catch (error: unknown) {
-    console.log(2, 'TYT');
     response.error = rpcRejectHandler(4001, error);
     setConnectedAddress('');
+    removeAllConnectedAddressTo(uri);
+
     rpcErrorHandler('handleWalletConnection', error);
   }
 };

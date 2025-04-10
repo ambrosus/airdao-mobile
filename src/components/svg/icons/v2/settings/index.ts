@@ -8,3 +8,4 @@ export { DownloadIcon } from './DownloadIcon';
 export { CopyIconV2 } from './CopyIconV2';
 export { KeyIcon } from './KeyIcon';
 export { CompassIcon } from './CompassIcon';
+export { GlobalFill } from './GlobalFill';

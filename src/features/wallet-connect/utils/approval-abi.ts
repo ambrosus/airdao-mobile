@@ -202,5 +202,66 @@ export const APPROVAL = [
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function'
+  },
+  {
+    name: 'personal_sign',
+    type: 'function',
+    inputs: [
+      { name: 'message', type: 'string' },
+      { name: 'account', type: 'address' }
+    ],
+    outputs: [{ name: 'signature', type: 'string' }],
+    stateMutability: 'nonpayable'
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'token',
+        type: 'address'
+      },
+      {
+        internalType: 'uint256',
+        name: 'out',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'slippagePercent',
+        type: 'uint256'
+      }
+    ],
+    name: 'buy',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function'
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'token',
+        type: 'address'
+      },
+      {
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'out',
+        type: 'uint256'
+      },
+      {
+        internalType: 'uint256',
+        name: 'slippagePercent',
+        type: 'uint256'
+      }
+    ],
+    name: 'sell',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
   }
 ];

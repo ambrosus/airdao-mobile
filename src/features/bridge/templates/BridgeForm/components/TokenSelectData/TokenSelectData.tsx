@@ -8,7 +8,7 @@ import { COLORS } from '@constants/colors';
 import { DECIMAL_LIMIT } from '@constants/variables';
 import { useBridgeContextData } from '@features/bridge/context';
 import { Token } from '@lib/bridgeSDK/models/types';
-import { RenderTokenItem } from '@models/Bridge';
+import { ParsedBridge, RenderTokenItem } from '@models/Bridge';
 import { scale, NumberUtils } from '@utils';
 import { styles } from './styles';
 
@@ -19,17 +19,18 @@ interface BottomSheetChoseNetworksProps {
 export const TokenSelectData = forwardRef<
   BottomSheetRef,
   BottomSheetChoseNetworksProps
->((props) => {
-  const { onPressItem } = props;
-
+>(({ onPressItem }) => {
   const { variables } = useBridgeContextData();
   const { selectedBridgeData, selectedTokenPairs } = variables;
+
   const TokenBalance = ({ token }: { token: Token }) => {
     const balance = NumberUtils.limitDecimalCount(
       formatUnits(token.balance || 0, token.decimals),
       DECIMAL_LIMIT.CRYPTO
     );
+
     const tokenBalanceInfo = `${balance} ${token.symbol}`;
+
     return (
       <Text fontSize={scale(14)} color={COLORS.black}>
         {NumberUtils.numberToTransformedLocale(tokenBalanceInfo)}
@@ -37,8 +38,8 @@ export const TokenSelectData = forwardRef<
     );
   };
 
-  const renderTokenItem = (token: any) => {
-    const { item }: { item: RenderTokenItem } = token;
+  const renderTokenItem = (token: { item: ParsedBridge | RenderTokenItem }) => {
+    const { item } = token;
     // @ts-ignore
     const renderToken = item[0];
     // @ts-ignore
