@@ -6,7 +6,7 @@ import Config from '@constants/config';
 type SentryProviderComponent = ComponentType<Record<string, unknown>>;
 
 const PRODUCTION = 'prod';
-const hasInitClient = __DEV__ && Config.env !== PRODUCTION;
+const hasInitClient = !__DEV__ && Config.env !== PRODUCTION;
 
 export const initSentryClient = () => {
   if (!hasInitClient) return;
