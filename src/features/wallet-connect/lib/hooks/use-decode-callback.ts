@@ -43,8 +43,8 @@ export function useDecodeCallbackData() {
       case 'buy':
       case 'sell': {
         return {
-          addresses: [rawArgs.token, rawArgs[0]],
-          amount: rawArgs.amount.toString()
+          addresses: [rawArgs.token, rawArgs[0]].filter(Boolean),
+          amount: rawArgs.out?.toString() || '0'
         };
       }
 
