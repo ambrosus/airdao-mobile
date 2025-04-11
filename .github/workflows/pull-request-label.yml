@@ -42,5 +42,5 @@ jobs:
                 nouns: ['chore']
                 labels: ['chore']
               - type: 'refactoring'
-                nouns: ['refactor', 'refactoring]
+                nouns: ['refactor', 'refactoring']
                 labels: ['refactoring']
