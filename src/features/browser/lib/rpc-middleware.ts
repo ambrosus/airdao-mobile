@@ -129,6 +129,7 @@ export async function handleWebViewMessage({
           response.result = await ethGetTransactionByHash(params[0]);
           break;
 
+        case RPCMethods.EthBlockNumber:
         case RPCMethods.EthGetBlockNumber:
           response.result = await ethGetBlockNumber();
           break;
