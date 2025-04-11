@@ -1,4 +1,5 @@
 name: Label Pull Requests
+
 on:
   pull_request:
     types: [opened, synchronize, reopened]
@@ -8,8 +9,9 @@ permissions:
   pull-requests: write
 
 jobs:
-  label_pr:
+  assign-labels:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == false
     steps:
       - name: Assign Labels from Conventional Commits
         uses: mauroalderete/action-assign-labels@v1
@@ -36,3 +38,9 @@ jobs:
               - type: 'config'
                 nouns: ['config', 'conf', 'cofiguration', 'configure']
                 labels: ['config']
+              - type: 'chore'
+                nouns: ['chore']
+                labels: ['chore']
+              - type: 'refactoring'
+                nouns: ['refactor', 'refactoring]
+                labels: ['refactoring']
