@@ -6,7 +6,6 @@ on:
       - main
       - dev
       - stage
-      - redesign
 
 jobs:
   tests:
