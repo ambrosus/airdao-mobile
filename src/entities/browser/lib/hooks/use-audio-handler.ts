@@ -11,7 +11,7 @@ export function useAudioHandler(ref: RefObject<WebView>) {
 
     const isMuted = appState === 'background';
 
-    const jsCode = `
+    const injectedAudioHandlerScript = `
           (function() {
             if (typeof Howler !== 'undefined') {
               Howler.mute(${isMuted});
@@ -29,6 +29,6 @@ export function useAudioHandler(ref: RefObject<WebView>) {
           true;
         `;
 
-    ref.current?.injectJavaScript(jsCode);
+    ref.current?.injectJavaScript(injectedAudioHandlerScript);
   }, [appState, ref]);
 }
