@@ -12,22 +12,19 @@ export function useAudioHandler(ref: RefObject<WebView>) {
     const isMuted = appState === 'background';
 
     const injectedAudioHandlerScript = `
-          (function() {
-            if (typeof Howler !== 'undefined') {
-              Howler.mute(${isMuted});
-            }
-            if (typeof Tone !== 'undefined' && Tone.Destination) {
-              Tone.Destination.mute = ${isMuted};
-            }
-            if (typeof window.muteAudio === 'function' && ${isMuted}) {
-              window.muteAudio();
-            }
-            if (typeof window.unmuteAudio === 'function' && ${!isMuted}) {
-              window.unmuteAudio();
-            }
-          })();
-          true;
-        `;
+      (function() {
+        const audioHandlers = {
+          Howler: () => Howler?.mute(${isMuted}),
+          Tone: () => Tone?.Destination && (Tone.Destination.mute = ${isMuted}),
+          Custom: () => {
+            ${isMuted} ? window.muteAudio?.() : window.unmuteAudio?.();
+          }
+        };
+
+        Object.values(audioHandlers).forEach(handler => handler());
+      })();
+      true;
+    `;
 
     ref.current?.injectJavaScript(injectedAudioHandlerScript);
   }, [appState, ref]);
