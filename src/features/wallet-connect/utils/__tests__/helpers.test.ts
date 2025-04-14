@@ -17,7 +17,7 @@ const airdaoRequiredNamespaces = {
 
 const ethereumRequiredNamespaces = {
   eip155: {
-    chains: ['eip155:1']
+    chains: ['eip155:0']
   }
 } as any;
 
