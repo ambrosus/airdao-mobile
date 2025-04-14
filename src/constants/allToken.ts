@@ -367,6 +367,30 @@ export const ALL_TOKENS_DATA: AllTokenDataModel = {
       name: 'SWINE',
       symbol: 'SWINE',
       decimals: 18
+    },
+    {
+      address: '0xFE7d3723d14a22AD51417669647B2db36249032E',
+      name: 'AMBull',
+      symbol: 'BULL',
+      decimals: 18
+    },
+    {
+      address: '0x3013cb367D85b484A2e89d4b0d6556588f1c339f',
+      name: 'MAKE AIRDAO GREAT AGAIN',
+      symbol: 'MAGA',
+      decimals: 18
+    },
+    {
+      address: '0x3EcF647262896A91291504c5206A77d2a4fFfCfF',
+      name: 'Merica',
+      symbol: 'Merica',
+      decimals: 18
+    },
+    {
+      address: '0x33ebbf03738EF0a916DDB84bDc25C4816084eF1F',
+      name: 'NOTHING CLUB APE',
+      symbol: 'NTC',
+      decimals: 18
     }
   ],
   TESTNET: [

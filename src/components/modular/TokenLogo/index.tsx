@@ -16,6 +16,10 @@ import {
   LangFundIcon,
   PlutusIcon,
   TetherIcon,
+  TokenBULLIcon,
+  TokenMAGAIcon,
+  TokenMericaIcon,
+  TokenNTCIcon,
   TokenSwineIcon,
   TokenXENAIcon,
   UnknownTokenIcon,
@@ -125,6 +129,29 @@ export const TokenLogo = (props: TokenLogoProps) => {
       return <TokenXENAIcon scale={scale} />;
     case CryptoCurrencyCode.Swine.toLowerCase():
       return <TokenSwineIcon scale={scale} />;
+      {
+        /*  MAGA */
+      }
+    case CryptoCurrencyCode.MAGA.toLowerCase():
+    case 'MAKE AIRDAO GREAT AGAIN'.toLowerCase():
+      return <TokenMAGAIcon scale={scale} />;
+      {
+        /*  NTC */
+      }
+    case CryptoCurrencyCode.NTC.toLowerCase():
+    case 'NOTHING CLUB APE'.toLowerCase():
+      return <TokenNTCIcon scale={scale} />;
+      {
+        /*  AMBull */
+      }
+    case CryptoCurrencyCode.BULL.toLowerCase():
+    case 'AMBULL'.toLowerCase():
+      return <TokenBULLIcon scale={scale} />;
+      {
+        /*  Merica */
+      }
+    case CryptoCurrencyCode.Merica.toLowerCase():
+      return <TokenMericaIcon scale={scale} />;
     default:
       return <UnknownTokenIcon scale={scale} />;
   }
