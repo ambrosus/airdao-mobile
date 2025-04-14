@@ -62,5 +62,9 @@ export enum CryptoCurrencyCode {
   stAMB = 'stAMB',
   // StAMB for testnet app
   StAMB = 'StAMB',
-  Swine = 'SWINE'
+  Swine = 'SWINE',
+  BULL = 'BULL',
+  MAGA = 'MAGA',
+  Merica = 'Merica',
+  NTC = 'NTC'
 }

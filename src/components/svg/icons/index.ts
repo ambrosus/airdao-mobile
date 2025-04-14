@@ -116,3 +116,7 @@ export * from './TokenKOS';
 export * from './TokenSTAMB';
 export * from './TokenXENA';
 export * from './TokenSwine';
+export * from './TokenMAGA';
+export * from './TokenBULL';
+export * from './TokenMerica';
+export * from './TokenNTC';
