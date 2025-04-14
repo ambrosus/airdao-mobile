@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
 import {
   WebView,
@@ -27,14 +27,16 @@ import {
   INJECTED_PROVIDER_JS
 } from '@features/browser/lib';
 import { connectWallet } from '@features/browser/utils';
+import { useAppState } from '@hooks';
 import { useAllAccounts } from '@hooks/database';
 import { Cache, CacheKey } from '@lib/cache';
 import { isAndroid, isIos, StringUtils } from '@utils';
 import { styles } from './styles';
 
 export const BrowserScreen = () => {
-  const { top } = useSafeAreaInsets();
   const navigation = useNavigation();
+  const { top } = useSafeAreaInsets();
+  const { appState } = useAppState();
 
   const { params } =
     useRoute<RouteProp<CommonStackParamsList, 'BrowserScreen'>>();
@@ -150,6 +152,11 @@ export const BrowserScreen = () => {
     setCanGoBack(navState.canGoBack);
   };
 
+  const isAndroidBackgroundState = useMemo(
+    () => appState !== 'active' && isAndroid,
+    [appState]
+  );
+
   return (
     <>
       <View style={{ marginTop: top }}>
@@ -173,22 +180,24 @@ export const BrowserScreen = () => {
           behavior="padding"
           enabled={isAndroid}
         >
-          <View style={styles.webViewWrapper}>
-            <WebView
-              ref={webViewRef}
-              source={SOURCE}
-              nativeConfig={{
-                props: { webContentsDebuggingEnabled: true }
-              }}
-              scrollEnabled
-              javaScriptEnabled
-              androidLayerType="hardware"
-              injectedJavaScriptBeforeContentLoaded={INJECTED_PROVIDER_JS}
-              onMessage={onMessageEventHandler}
-              webviewDebuggingEnabled={__DEV__}
-              onNavigationStateChange={handleNavigationStateChange}
-            />
-          </View>
+          {isAndroidBackgroundState ? null : (
+            <View style={styles.webViewWrapper}>
+              <WebView
+                ref={webViewRef}
+                source={SOURCE}
+                nativeConfig={{
+                  props: { webContentsDebuggingEnabled: true }
+                }}
+                scrollEnabled
+                javaScriptEnabled
+                androidLayerType="hardware"
+                injectedJavaScriptBeforeContentLoaded={INJECTED_PROVIDER_JS}
+                onMessage={onMessageEventHandler}
+                webviewDebuggingEnabled={__DEV__}
+                onNavigationStateChange={handleNavigationStateChange}
+              />
+            </View>
+          )}
         </KeyboardAvoidingView>
       </PanGestureHandler>
       <BottomSheetBrowserWalletSelector
