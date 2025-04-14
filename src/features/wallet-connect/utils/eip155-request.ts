@@ -7,19 +7,26 @@ import {
   formatJsonRpcError,
   formatJsonRpcResult
 } from './helpers';
+import { EIP155_CHAINS, extractChainData } from './presets';
 
 type RequestEventArgs = Omit<
   WalletKitTypes.EventArguments['session_request'],
   'verifyContext'
 >;
 
-const provider = new ethers.providers.JsonRpcProvider(Config.NETWORK_URL);
-
 export async function approveEIP155Request(
   id: number,
   requestEvent: RequestEventArgs,
   privateKey: string
 ): Promise<any> {
+  const { id: chainId } = extractChainData(
+    requestEvent.params.chainId.split(':')[1]
+  );
+
+  const provider = new ethers.providers.JsonRpcProvider(
+    EIP155_CHAINS[chainId].rpcUrl || Config.NETWORK_URL
+  );
+
   const { params } = requestEvent;
   const { request } = params;
   try {
