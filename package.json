@@ -151,6 +151,7 @@
     "stream-browserify": "^3.0.0",
     "thorify": "^1.6.2",
     "tiny-secp256k1": "^2.2.3",
+    "tweetnacl": "^1.0.3",
     "url": "^0.10.3",
     "use-context-selector": "^1.4.4",
     "web3": "1.2.7",
