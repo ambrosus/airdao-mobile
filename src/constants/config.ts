@@ -161,7 +161,7 @@ switch (Updates.channel) {
     break;
   }
   case 'stage': {
-    Config = envs.prod as TConfig;
+    Config = envs.stage as TConfig;
     break;
   }
   case 'testnet': {
