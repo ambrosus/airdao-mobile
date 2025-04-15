@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import { ethers } from 'ethers';
-import Config from '@constants/config';
+import { useRodeoTokensListQuery } from '@entities/amb-rodeo-tokens/lib';
 import { useSwapContextSelector } from '@features/swap/context';
-import { SwapToken } from '@features/swap/types';
+import { transformTokensObject } from '@features/swap/utils';
 import { initialBalances } from '@features/swap/utils/balances';
 import { useSwapMultiplyBalance } from './use-swap-multiply-balance';
 
@@ -11,17 +11,18 @@ export function useSwapAllBalances() {
   const { balances, setBalances, setBalancesLoading } =
     useSwapContextSelector();
 
-  const tokens: SwapToken[] = Config.SWAP_TOKENS;
+  const { tokens } = useRodeoTokensListQuery();
 
   const fetchAllBalances = useCallback(async () => {
     const isInitialBalance =
       JSON.stringify(balances) === JSON.stringify(initialBalances);
+
     try {
       setBalancesLoading(isInitialBalance);
       const balancePromises: Promise<Record<
         string,
         ethers.BigNumber
-      > | null>[] = tokens.map(async (token) => {
+      > | null>[] = transformTokensObject(tokens).map(async (token) => {
         const balance = await getTokenBalance(token);
         return balance ? { [token.address]: balance } : null;
       });

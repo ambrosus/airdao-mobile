@@ -58,26 +58,6 @@ export const SWAP_SUPPORTED_TOKENS = {
         address: '0x5ECAddC28FcFc0bEDF94858c6D771420672ad2CF',
         name: 'X3NA',
         symbol: 'X3NA'
-      },
-      {
-        address: '0xFE7d3723d14a22AD51417669647B2db36249032E',
-        name: 'AMBull',
-        symbol: 'BULL'
-      },
-      {
-        address: '0x3013cb367D85b484A2e89d4b0d6556588f1c339f',
-        name: 'MAKE AIRDAO GREAT AGAIN',
-        symbol: 'MAGA'
-      },
-      {
-        address: '0x3EcF647262896A91291504c5206A77d2a4fFfCfF',
-        name: 'Merica',
-        symbol: 'Merica'
-      },
-      {
-        address: '0x33ebbf03738EF0a916DDB84bDc25C4816084eF1F',
-        name: 'NOTHING CLUB APE',
-        symbol: 'NTC'
       }
     ],
     testnet: [
