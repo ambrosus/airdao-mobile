@@ -2,7 +2,7 @@ module.exports = {
   expo: {
     name: 'AirDAO',
     slug: 'AirDao',
-    version: '1.4',
+    version: '1.5',
     orientation: 'portrait',
     icon: './assets/logo.png',
     owner: 'airdao_mobile',
@@ -31,7 +31,7 @@ module.exports = {
       buildNumber: '1.4.2'
     },
     android: {
-      versionCode: 179,
+      versionCode: 181,
       softwareKeyboardLayoutMode: 'pan',
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
@@ -112,7 +112,8 @@ module.exports = {
     extra: {
       eas: {
         projectId: 'fe81238e-85e8-4ace-8b87-65ff01c085b7',
-        REOWN_PROJECT_ID: process.env.REOWN_PROJECT_ID
+        REOWN_PROJECT_ID: process.env.REOWN_PROJECT_ID,
+        SENTRY_DSN: process.env.SENTRY_DSN
       }
     },
     runtimeVersion: {

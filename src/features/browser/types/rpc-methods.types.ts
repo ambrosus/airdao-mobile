@@ -9,6 +9,7 @@ export enum RPCMethods {
   // functional methods
   GetTitle = 'get_title',
   GetIcon = 'get_icon',
+
   // rpc_methods
   NetVersion = 'net_version',
   EthRequestAccounts = 'eth_requestAccounts',
@@ -30,7 +31,26 @@ export enum RPCMethods {
   EthGetTransactionByHash = 'eth_getTransactionByHash',
   EthGetBlockNumber = 'eth_getBlockNumber',
   EthBlockNumber = 'eth_blockNumber',
-  EthGetTransactionReceipt = 'eth_getTransactionReceipt'
+  EthGetTransactionReceipt = 'eth_getTransactionReceipt',
+
+  // added methods
+  WalletWatchAsset = 'wallet_watchAsset',
+  EthGetEncryptionPublicKey = 'eth_getEncryptionPublicKey',
+  EthDecrypt = 'eth_decrypt',
+  EthFeeHistory = 'eth_feeHistory',
+  EthGasPrice = 'eth_gasPrice',
+  EthGetBlockByHash = 'eth_getBlockByHash',
+  EthGetBlockByNumber = 'eth_getBlockByNumber',
+  EthGetBlockTransactionCountByHash = 'eth_getBlockTransactionCountByHash',
+  EthGetBlockTransactionCountByNumber = 'eth_getBlockTransactionCountByNumber',
+  EthGetCode = 'eth_getCode',
+  EthGetLogs = 'eth_getLogs',
+  EthGetStorageAt = 'eth_getStorageAt',
+  EthGetTransactionByBlockHashAndIndex = 'eth_getTransactionByBlockHashAndIndex',
+  EthGetTransactionByBlockNumberAndIndex = 'eth_getTransactionByBlockNumberAndIndex',
+  EthGetTransactionCount = 'eth_getTransactionCount',
+  EthSendRawTransaction = 'eth_sendRawTransaction',
+  EthSyncing = 'eth_syncing'
 }
 
 export type TransactionParams = {
@@ -160,4 +180,23 @@ export interface WalletRevokePermissionsProps {
   response: any;
   webViewRef: RefObject<WebView>;
   uri: string;
+}
+
+export interface EthEncryptionPublicKeyProps {
+  privateKey: string; // hex string without '0x' prefix
+  response: JsonRpcResponse;
+  browserApproveRef: RefObject<BottomSheetRef>;
+  address: string;
+}
+
+export interface EthDecryptInputProps {
+  response: JsonRpcResponse;
+  browserApproveRef: RefObject<BottomSheetRef>;
+  privateKey: string;
+  params: any[];
+}
+
+export interface EthGetMethodsProps {
+  params: any[];
+  response: JsonRpcResponse;
 }

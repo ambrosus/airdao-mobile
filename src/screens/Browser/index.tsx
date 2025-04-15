@@ -14,6 +14,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CommonStackParamsList } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
+import { useAudioHandler } from '@entities/browser/lib/hooks';
 import { useBrowserStore } from '@entities/browser/model';
 import { BrowserHeader } from '@features/browser/components/modular/browser-header';
 import {
@@ -33,8 +34,8 @@ import { isAndroid, isIos, StringUtils } from '@utils';
 import { styles } from './styles';
 
 export const BrowserScreen = () => {
-  const { top } = useSafeAreaInsets();
   const navigation = useNavigation();
+  const { top } = useSafeAreaInsets();
 
   const { params } =
     useRoute<RouteProp<CommonStackParamsList, 'BrowserScreen'>>();
@@ -50,6 +51,8 @@ export const BrowserScreen = () => {
   const browserApproveRef = useRef<BottomSheetRef>(null);
   const webViewRef = useRef<WebView>(null);
   const browserWalletSelectorRef = useRef<BottomSheetRef>(null);
+
+  useAudioHandler(webViewRef);
 
   const reload = useCallback(() => webViewRef.current?.reload(), [webViewRef]);
   const goForward = useCallback(
@@ -187,6 +190,8 @@ export const BrowserScreen = () => {
               onMessage={onMessageEventHandler}
               webviewDebuggingEnabled={__DEV__}
               onNavigationStateChange={handleNavigationStateChange}
+              allowsInlineMediaPlayback={false}
+              mediaPlaybackRequiresUserAction={false}
             />
           </View>
         </KeyboardAvoidingView>
