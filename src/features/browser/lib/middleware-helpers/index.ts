@@ -9,3 +9,8 @@ export * from './ethAccounts';
 export * from './ethCall';
 export * from './ethTransactionCore';
 export * from './ethBlockCore';
+export * from './ethDecrypt';
+export * from './ethEncryptionPublicKey';
+export * from './ethEstimateGas';
+export * from './ethGasPrice';
+export * from './ethGenericProviderHandler';

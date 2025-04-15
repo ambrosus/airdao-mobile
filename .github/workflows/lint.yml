@@ -2,11 +2,7 @@ name: Lint Codebase
 
 on:
   pull_request:
-    branches:
-      - main
-      - dev
-      - stage
-      - redesign
+    types: [opened, synchronize, reopened]
 
 jobs:
   lint:

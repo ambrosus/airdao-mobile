@@ -4,16 +4,20 @@ import { WebViewMessageEvent } from '@metamask/react-native-webview';
 import Config from '@constants/config';
 import { useBrowserStore } from '@entities/browser/model';
 import { INITIAL_ACCOUNTS_PERMISSIONS } from '@features/browser/constants';
-import { ethEstimateGas } from '@features/browser/lib/middleware-helpers/ethEstimateGas';
 import { rpcErrorHandler } from '@features/browser/utils/rpc-error-handler';
 import {
   ethCall,
-  ethSendTransaction,
-  ethSignTransaction,
-  ethSignTypesData,
+  ethDecrypt,
+  ethEncryptionPublicKey,
+  ethEstimateGas,
+  ethGasPrice,
+  ethGenericProviderHandler,
   ethGetBlockNumber,
   ethGetTransactionByHash,
   ethGetTransactionReceipt,
+  ethSendTransaction,
+  ethSignTransaction,
+  ethSignTypesData,
   handleWalletConnection,
   personalSign,
   walletGetPermissions,
@@ -129,10 +133,6 @@ export async function handleWebViewMessage({
           response.result = await ethGetTransactionByHash(params[0]);
           break;
 
-        case RPCMethods.EthGetBlockNumber:
-          response.result = await ethGetBlockNumber();
-          break;
-
         case RPCMethods.EthGetTransactionReceipt:
           response.result = await ethGetTransactionReceipt(params[0]);
           break;
@@ -150,6 +150,7 @@ export async function handleWebViewMessage({
         }
         // eth_sendTransaction
         case RPCMethods.WalletSendTransaction:
+        case RPCMethods.EthSendRawTransaction:
         case RPCMethods.EthSendTransaction:
           await ethSendTransaction({
             params: params as [TransactionParams],
@@ -169,6 +170,7 @@ export async function handleWebViewMessage({
           if (params[0]) {
             setProductIcon(params[0]);
           }
+          break;
 
         // eth_accounts
         case RPCMethods.EthAccounts:
@@ -222,6 +224,49 @@ export async function handleWebViewMessage({
           response.result = await handleGetBalance(params[0], params[1]);
           break;
 
+        // eth_getEncryptionPublicKey
+        case RPCMethods.EthGetEncryptionPublicKey:
+          await ethEncryptionPublicKey({
+            browserApproveRef,
+            address: connectedAddress,
+            privateKey,
+            response
+          });
+          break;
+
+        // eth_decrypt
+        case RPCMethods.EthDecrypt:
+          await ethDecrypt({
+            params,
+            response,
+            browserApproveRef,
+            privateKey
+          });
+          console.log('request', request);
+          break;
+        case RPCMethods.EthGasPrice:
+          await ethGasPrice(response);
+          break;
+
+        // ->
+        case RPCMethods.EthBlockNumber:
+        case RPCMethods.EthGetBlockNumber:
+          response.result = await ethGetBlockNumber();
+          break;
+        case RPCMethods.EthFeeHistory:
+        case RPCMethods.EthGetBlockByHash:
+        case RPCMethods.EthGetBlockByNumber:
+        case RPCMethods.EthGetBlockTransactionCountByHash:
+        case RPCMethods.EthGetBlockTransactionCountByNumber:
+        case RPCMethods.EthGetCode:
+        case RPCMethods.EthGetLogs:
+        case RPCMethods.EthGetStorageAt:
+        case RPCMethods.EthGetTransactionByBlockHashAndIndex:
+        case RPCMethods.EthGetTransactionByBlockNumberAndIndex:
+        case RPCMethods.EthGetTransactionCount:
+        case RPCMethods.EthSyncing:
+          await ethGenericProviderHandler({ method, params, response });
+          break;
         default:
           response.error = {
             code: 4200,

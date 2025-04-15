@@ -18,10 +18,7 @@ export async function createWalletKit() {
   });
 
   try {
-    const clientId =
-      await walletKit.engine.signClient.core.crypto.getClientId();
-
-    console.warn('WalletConnect ClientID:', clientId);
+    await walletKit.engine.signClient.core.crypto.getClientId();
   } catch (error) {
     console.error('Failed to get clientId', error);
   }
