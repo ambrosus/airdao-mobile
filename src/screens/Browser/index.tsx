@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
 import {
   WebView,
@@ -14,6 +14,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CommonStackParamsList } from '@appTypes';
 import { BottomSheetRef } from '@components/composite';
+import { useAudioHandler } from '@entities/browser/lib/hooks';
 import { useBrowserStore } from '@entities/browser/model';
 import { BrowserHeader } from '@features/browser/components/modular/browser-header';
 import {
@@ -27,7 +28,6 @@ import {
   INJECTED_PROVIDER_JS
 } from '@features/browser/lib';
 import { connectWallet } from '@features/browser/utils';
-import { useAppState } from '@hooks';
 import { useAllAccounts } from '@hooks/database';
 import { Cache, CacheKey } from '@lib/cache';
 import { isAndroid, isIos, StringUtils } from '@utils';
@@ -36,7 +36,6 @@ import { styles } from './styles';
 export const BrowserScreen = () => {
   const navigation = useNavigation();
   const { top } = useSafeAreaInsets();
-  const { appState } = useAppState();
 
   const { params } =
     useRoute<RouteProp<CommonStackParamsList, 'BrowserScreen'>>();
@@ -52,6 +51,8 @@ export const BrowserScreen = () => {
   const browserApproveRef = useRef<BottomSheetRef>(null);
   const webViewRef = useRef<WebView>(null);
   const browserWalletSelectorRef = useRef<BottomSheetRef>(null);
+
+  useAudioHandler(webViewRef);
 
   const reload = useCallback(() => webViewRef.current?.reload(), [webViewRef]);
   const goForward = useCallback(
@@ -152,11 +153,6 @@ export const BrowserScreen = () => {
     setCanGoBack(navState.canGoBack);
   };
 
-  const isAndroidBackgroundState = useMemo(
-    () => appState !== 'active' && isAndroid,
-    [appState]
-  );
-
   return (
     <>
       <View style={{ marginTop: top }}>
@@ -180,24 +176,24 @@ export const BrowserScreen = () => {
           behavior="padding"
           enabled={isAndroid}
         >
-          {isAndroidBackgroundState ? null : (
-            <View style={styles.webViewWrapper}>
-              <WebView
-                ref={webViewRef}
-                source={SOURCE}
-                nativeConfig={{
-                  props: { webContentsDebuggingEnabled: true }
-                }}
-                scrollEnabled
-                javaScriptEnabled
-                androidLayerType="hardware"
-                injectedJavaScriptBeforeContentLoaded={INJECTED_PROVIDER_JS}
-                onMessage={onMessageEventHandler}
-                webviewDebuggingEnabled={__DEV__}
-                onNavigationStateChange={handleNavigationStateChange}
-              />
-            </View>
-          )}
+          <View style={styles.webViewWrapper}>
+            <WebView
+              ref={webViewRef}
+              source={SOURCE}
+              nativeConfig={{
+                props: { webContentsDebuggingEnabled: true }
+              }}
+              scrollEnabled
+              javaScriptEnabled
+              androidLayerType="hardware"
+              injectedJavaScriptBeforeContentLoaded={INJECTED_PROVIDER_JS}
+              onMessage={onMessageEventHandler}
+              webviewDebuggingEnabled={__DEV__}
+              onNavigationStateChange={handleNavigationStateChange}
+              allowsInlineMediaPlayback={false}
+              mediaPlaybackRequiresUserAction={false}
+            />
+          </View>
         </KeyboardAvoidingView>
       </PanGestureHandler>
       <BottomSheetBrowserWalletSelector
