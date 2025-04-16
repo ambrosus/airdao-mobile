@@ -17,6 +17,7 @@ export const ProductScreen = () => {
     ),
     [t]
   );
+
   return (
     <SafeAreaView style={styles.container}>
       <Header
