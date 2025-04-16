@@ -1,8 +1,8 @@
 import { ethers } from 'ethers';
-import Config from '@constants/config';
-import { SwapToken } from '../types';
+import { useRodeoTokensStore } from '@entities/amb-rodeo-tokens/model';
+import { transformTokensObject } from './transform-tokens-object';
 
-const tokens = Config.SWAP_TOKENS as SwapToken[];
+const tokens = transformTokensObject(useRodeoTokensStore.getState().tokens);
 
 export const initialBalances = tokens.reduce<
   Record<string, ethers.BigNumber>[]
