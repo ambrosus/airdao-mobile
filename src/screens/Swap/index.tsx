@@ -8,6 +8,7 @@ import { Button } from '@components/base';
 import { Header } from '@components/composite';
 import { SettingsFilledIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
+import { useRodeoTokensListQuery } from '@entities/amb-rodeo-tokens/lib';
 import {
   BottomSheetPreviewSwap,
   BottomSheetTokensList,
@@ -24,7 +25,9 @@ type Props = NativeStackScreenProps<HomeParamsList, 'SwapScreen'>;
 
 export const SwapScreen = ({ navigation }: Props) => {
   const { t } = useTranslation();
+  useRodeoTokensListQuery();
   useSwapAllBalances();
+
   const { getAllPoolsCount } = useAllLiquidityPools();
   const {
     bottomSheetTokenARef,

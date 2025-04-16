@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { CryptoCurrencyCode } from '@appTypes';
+import { TokenImageIpfsWithShimmer } from '@components/base';
 import {
   AirBondIcon,
   AirdaoBlueIcon,
@@ -26,7 +27,8 @@ import {
   UsdcIcon
 } from '@components/svg/icons';
 import { NFTIcon } from '@components/svg/icons/NFTIcon';
-import { getTokenNameFromDatabase } from '@utils';
+import { useRodeoTokensListQuery } from '@entities/amb-rodeo-tokens/lib';
+import { fromHexlifyToObject, getTokenNameFromDatabase } from '@utils';
 
 export interface TokenLogoProps {
   token?: string;
@@ -39,13 +41,13 @@ export interface TokenLogoProps {
   };
 }
 
-export const TokenLogo = (props: TokenLogoProps) => {
-  const {
-    scale,
-    token,
-    address,
-    overrideIconVariants = { amb: 'blue', eth: 'gray' }
-  } = props;
+export const TokenLogo = ({
+  scale = 1,
+  token,
+  address,
+  overrideIconVariants = { amb: 'blue', eth: 'gray' }
+}: TokenLogoProps) => {
+  const { tokens } = useRodeoTokensListQuery();
 
   const tokenName = useMemo(() => {
     if (address) {
@@ -152,7 +154,24 @@ export const TokenLogo = (props: TokenLogoProps) => {
       }
     case CryptoCurrencyCode.Merica.toLowerCase():
       return <TokenMericaIcon scale={scale} />;
-    default:
+    default: {
+      const token = tokens?.find((item) => {
+        return item.symbol.toLowerCase() === tokenName?.toLowerCase();
+      });
+
+      if (token && token?.data) {
+        const ambrodeoTokenImage = token.data
+          ? fromHexlifyToObject<{ tokenIcon?: string }>(token.data)
+          : null;
+
+        return (
+          <TokenImageIpfsWithShimmer
+            src={ambrodeoTokenImage?.tokenIcon ?? ''}
+          />
+        );
+      }
+
       return <UnknownTokenIcon scale={scale} />;
+    }
   }
 };
