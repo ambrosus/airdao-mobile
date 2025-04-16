@@ -12,3 +12,4 @@ export * from './Spinner';
 export * from './Switch';
 export { TextInput } from './Input/Input.text';
 export { NumberInput } from './Input/Input.number';
+export { TokenImageIpfsWithShimmer } from './TokenImageIpfsWithShimmer';
