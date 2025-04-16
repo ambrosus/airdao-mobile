@@ -22,10 +22,12 @@ export const parseWebProduct = (
   return products
     .filter((product) => product.uri && product.name)
     .filter((product) => product?.platforms?.includes(Platform.OS))
-    .filter(
-      (product) =>
-        APP_VERSION >= MIN_AMBRODEO_VERSION || product?.uid !== 'amb_rodeo'
-    )
+    .filter((product) => {
+      if (product?.uid === 'amb_rodeo') {
+        return APP_VERSION >= MIN_AMBRODEO_VERSION;
+      }
+      return true;
+    })
     .map((product: BrowserItemModel) => {
       const icon = product.icon ? (
         <SvgXml xml={product.icon} width={56} height={56} />
