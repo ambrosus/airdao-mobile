@@ -1,4 +1,5 @@
 import { Platform } from 'react-native';
+import * as Application from 'expo-application';
 import { SvgXml } from 'react-native-svg';
 import { ProductSwap } from '@components/svg/icons/v2';
 import { BrowserItemModel } from '@entities/browser/model';
@@ -11,6 +12,9 @@ const DEFAULT_GRADIENT = [
 
 const DEFAULT_TEXT_COLOR = 'rgba(52, 27, 104, 1)';
 
+const APP_VERSION = +(Application?.nativeApplicationVersion ?? 0);
+const MIN_AMBRODEO_VERSION = 1.5;
+
 export const parseWebProduct = (
   products: BrowserItemModel[],
   currentLanguage: string
@@ -18,6 +22,10 @@ export const parseWebProduct = (
   return products
     .filter((product) => product.uri && product.name)
     .filter((product) => product?.platforms?.includes(Platform.OS))
+    .filter(
+      (product) =>
+        APP_VERSION >= MIN_AMBRODEO_VERSION || product?.uid !== 'amb_rodeo'
+    )
     .map((product: BrowserItemModel) => {
       const icon = product.icon ? (
         <SvgXml xml={product.icon} width={56} height={56} />
