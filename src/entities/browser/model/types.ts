@@ -17,6 +17,7 @@ export interface BrowserStoreModel {
 
 export interface BrowserItemModel {
   id: number;
+  uid: string;
   section: ProductSections;
   icon: string;
   platforms: string[];

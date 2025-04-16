@@ -2,7 +2,7 @@ module.exports = {
   expo: {
     name: 'AirDAO',
     slug: 'AirDao',
-    version: '1.4',
+    version: '1.5',
     orientation: 'portrait',
     icon: './assets/logo.png',
     owner: 'airdao_mobile',
@@ -31,7 +31,7 @@ module.exports = {
       buildNumber: '1.4.2'
     },
     android: {
-      versionCode: 179,
+      versionCode: 181,
       softwareKeyboardLayoutMode: 'pan',
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
