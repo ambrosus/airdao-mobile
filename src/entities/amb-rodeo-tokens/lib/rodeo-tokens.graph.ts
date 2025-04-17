@@ -20,3 +20,14 @@ export const AMBRODEO_TOKENS = gql`
     }
   }
 `;
+
+export const AMBRODEO_TOKEN = gql`
+  query AmbrodeoToken($id: ID!) {
+    token(id: $id) {
+      id
+      data
+      name
+      symbol
+    }
+  }
+`;

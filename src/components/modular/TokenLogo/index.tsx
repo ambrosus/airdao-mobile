@@ -27,7 +27,7 @@ import {
   UsdcIcon
 } from '@components/svg/icons';
 import { NFTIcon } from '@components/svg/icons/NFTIcon';
-import { useRodeoTokensListQuery } from '@entities/amb-rodeo-tokens/lib';
+import { useRodeoSingleTokenQuery } from '@entities/amb-rodeo-tokens/lib';
 import { fromHexlifyToObject, getTokenNameFromDatabase } from '@utils';
 
 export interface TokenLogoProps {
@@ -47,8 +47,6 @@ export const TokenLogo = ({
   address,
   overrideIconVariants = { amb: 'blue', eth: 'gray' }
 }: TokenLogoProps) => {
-  const { tokens } = useRodeoTokensListQuery();
-
   const tokenName = useMemo(() => {
     if (address) {
       return getTokenNameFromDatabase(address);
@@ -56,6 +54,9 @@ export const TokenLogo = ({
       return token;
     }
   }, [address, token]);
+
+  const { data } = useRodeoSingleTokenQuery(tokenName);
+
   switch (tokenName?.toLowerCase()) {
     case CryptoCurrencyCode.AMB.toLowerCase():
     case CryptoCurrencyCode.SAMB.toLowerCase():
@@ -155,19 +156,13 @@ export const TokenLogo = ({
     case CryptoCurrencyCode.Merica.toLowerCase():
       return <TokenMericaIcon scale={scale} />;
     default: {
-      const token = tokens?.find((item) => {
-        return item.symbol.toLowerCase() === tokenName?.toLowerCase();
-      });
-
-      if (token && token?.data) {
-        const ambrodeoTokenImage = token.data
-          ? fromHexlifyToObject<{ tokenIcon?: string }>(token.data)
+      if (data && data?.data) {
+        const decodedTokenData = data.data
+          ? fromHexlifyToObject<{ image?: string }>(data.data)
           : null;
 
         return (
-          <TokenImageIpfsWithShimmer
-            src={ambrodeoTokenImage?.tokenIcon ?? ''}
-          />
+          <TokenImageIpfsWithShimmer src={decodedTokenData?.image ?? ''} />
         );
       }
 

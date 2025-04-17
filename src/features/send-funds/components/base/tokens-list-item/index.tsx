@@ -10,7 +10,8 @@ import {
   StringValidators,
   wrapTokenIcon,
   NumberUtils,
-  StringUtils
+  StringUtils,
+  getTokenNameFromDatabase
 } from '@utils';
 import { styles } from './styles';
 
@@ -59,6 +60,14 @@ export const TokensListItem = ({
     return StringUtils.formatAddress(address, 5, 6);
   }, [token]);
 
+  const tokenLogoHref = useMemo(
+    () =>
+      getTokenNameFromDatabase(token.address) !== 'unknown'
+        ? SAMBSupportedTokenLogo
+        : token.address,
+    [SAMBSupportedTokenLogo, token.address]
+  );
+
   return (
     <TouchableOpacity
       style={containerStyle}
@@ -67,7 +76,7 @@ export const TokensListItem = ({
     >
       <Row alignItems="center" justifyContent="space-between">
         <Row alignItems="center">
-          <TokenLogo scale={1} token={SAMBSupportedTokenLogo ?? ''} />
+          <TokenLogo scale={1} token={tokenLogoHref ?? ''} />
           <Spacer horizontal value={6} />
           <View>
             <Text
