@@ -156,9 +156,12 @@ export const TokenLogo = ({
     case CryptoCurrencyCode.Merica.toLowerCase():
       return <TokenMericaIcon scale={scale} />;
     default: {
-      if (data && data?.data) {
-        const decodedTokenData = data.data
-          ? fromHexlifyToObject<{ image?: string }>(data.data)
+      if (data && data.token) {
+        const {
+          token: { data: tokenEncodedData }
+        } = data;
+        const decodedTokenData = data.token
+          ? fromHexlifyToObject<{ image?: string }>(tokenEncodedData)
           : null;
 
         return (
