@@ -4,6 +4,7 @@ import { CryptoCurrencyCode } from '@appTypes';
 import { Row, Spacer, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
+import { useWalletStore } from '@entities/wallet';
 import { useUSDPrice } from '@hooks';
 import { Token } from '@models';
 import {
@@ -26,6 +27,7 @@ export const TokensListItem = ({
   selectedToken,
   onSelectToken
 }: TokensListItemProps) => {
+  const { wallet } = useWalletStore();
   const usdPrice = useUSDPrice(
     token.balance.ether,
     token.symbol as CryptoCurrencyCode
@@ -60,12 +62,17 @@ export const TokensListItem = ({
     return StringUtils.formatAddress(address, 5, 6);
   }, [token]);
 
+  const isNativeToken = useMemo(
+    () => token.address === wallet?.address,
+    [token.address, wallet?.address]
+  );
+
   const tokenLogoHref = useMemo(
     () =>
-      getTokenNameFromDatabase(token.address) !== 'unknown'
+      isNativeToken || getTokenNameFromDatabase(token.address) !== 'unknown'
         ? SAMBSupportedTokenLogo
         : token.address,
-    [SAMBSupportedTokenLogo, token.address]
+    [SAMBSupportedTokenLogo, isNativeToken, token.address]
   );
 
   return (
