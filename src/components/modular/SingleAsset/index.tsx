@@ -36,12 +36,20 @@ export const SingleAsset = ({
     return StringUtils.formatAddress(address, 5, 6);
   }, [address, symbol]);
 
+  const tokenSymbol = useMemo(
+    () =>
+      tokenNameFromDatabase === 'unknown'
+        ? token.address
+        : tokenNameFromDatabase,
+    [token.address, tokenNameFromDatabase]
+  );
+
   return (
     <View style={styles.container}>
       <Row alignItems="center" justifyContent="space-between">
         <Row alignItems="center">
           <TokenLogo
-            token={tokenNameFromDatabase}
+            token={tokenSymbol}
             overrideIconVariants={overrideIconVariants}
           />
           <Spacer horizontal value={scale(8)} />
