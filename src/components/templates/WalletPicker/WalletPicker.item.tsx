@@ -20,7 +20,7 @@ export const WalletPickerItem = (props: WalletItemProps) => {
   const { data: ambBalance } = useBalanceOfAddress(wallet.address);
   const usdBalance = useUSDPrice(
     parseFloat(ambBalance?.ether || '0'),
-    CryptoCurrencyCode.AMB
+    CryptoCurrencyCode.ASC
   );
 
   return (

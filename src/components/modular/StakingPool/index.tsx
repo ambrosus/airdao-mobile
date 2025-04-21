@@ -42,7 +42,7 @@ export const StakingPoolItem = (props: StakingPoolItemProps) => {
                   poolStakingDetails?.user.raw ?? ethers.BigNumber.from(0)
                 )
               ),
-              symbol: 'AMB'
+              symbol: 'ASC'
             })}
           </Text>
         </View>

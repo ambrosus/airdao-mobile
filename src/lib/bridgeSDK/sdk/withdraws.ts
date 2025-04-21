@@ -21,7 +21,7 @@ export async function getFeeData(
     tokenAddress: tokenFrom.isNativeCoin
       ? ethers.constants.AddressZero
       : tokenFrom.address,
-    isAmb: tokenFrom.network == 'amb',
+    isAmb: tokenFrom.network == 'asc',
     amount: ethers.utils.hexValue(amountForFee),
     isAmountWithFees: isMax
   };
@@ -51,7 +51,7 @@ function getAmountInForeignDecimals(
   // same rule for getting fees
 
   const decimals =
-    tokenFrom.network === 'amb' ? tokenTo.decimals : tokenFrom.decimals;
+    tokenFrom.network === 'asc' ? tokenTo.decimals : tokenFrom.decimals;
   return ethers.utils.parseUnits(amountTokens, decimals);
 }
 

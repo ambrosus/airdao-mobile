@@ -9,7 +9,7 @@ import { WithdrawalButton } from '../../modular';
 
 interface BottomSheetWithdrawTransactionWithActionProps {
   amount: string;
-  token: CryptoCurrencyCode.AMB | CryptoCurrencyCode.HBR;
+  token: CryptoCurrencyCode.ASC | CryptoCurrencyCode.HBR;
   logs: IAvailableWithdrawLogs | null;
   estimatedGas: ethers.BigNumber;
   ambBalance: ethers.BigNumber;

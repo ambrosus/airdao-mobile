@@ -26,7 +26,7 @@ export const RequestItem = ({ requestItem }: { requestItem: ILogs }) => {
             <TokenLogo token={CryptoCurrencyCode.stAMB} />
             <Spacer horizontal value={scale(8)} />
             <Text fontSize={scale(12)} color={COLORS.neutral900}>
-              {CryptoCurrencyCode.AMB}
+              {CryptoCurrencyCode.ASC}
             </Text>
           </Row>
           <View>

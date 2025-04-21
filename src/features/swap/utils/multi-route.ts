@@ -10,7 +10,7 @@ export const isMultiHopSwapAvailable = (path: string[]): boolean => {
 
 export const withMultiHopPath = (path: string[]): string[] => {
   return path.map((address) =>
-    address === addresses.AMB ? addresses.SAMB : address
+    address === addresses.ASC ? addresses.SAMB : address
   );
 };
 
@@ -44,7 +44,7 @@ export const generateAllPossibleRoutes = (
         !ignoreTokenAddresses.includes(token.address) &&
         token.address !== startToken &&
         token.address !== endToken &&
-        !(includesSAMB && token.address === addresses.AMB) // Exclude AMB if SAMB is in path
+        !(includesSAMB && token.address === addresses.ASC) // Exclude AMB if SAMB is in path
     )
     .map((token) => token.address);
 

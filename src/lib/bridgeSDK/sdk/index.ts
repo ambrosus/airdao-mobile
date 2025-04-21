@@ -31,7 +31,7 @@ export class MySdk extends BridgeSDK {
     const isNativeAMB =
       token.address === SAMB_IN_AMB &&
       token.isNativeCoin &&
-      token.network === 'amb';
+      token.network === 'asc';
 
     const isSAMBinETH =
       token.address === SAMB_IN_ETH && token.network === 'eth';
@@ -39,14 +39,14 @@ export class MySdk extends BridgeSDK {
     const isSAMBinAMB =
       token.address === SAMB_IN_AMB &&
       !token.isNativeCoin &&
-      token.network === 'amb';
+      token.network === 'asc';
 
     if (isNativeETH || isNativeBNB) {
       token.name = isNativeETH ? 'ETH' : 'BNB';
     }
     if (isNativeAMB) {
       token.name = 'Amber';
-      token.symbol = CryptoCurrencyCode.AMB;
+      token.symbol = CryptoCurrencyCode.ASC;
     }
     if (isSAMBinETH || isSAMBinAMB) {
       token.name = 'Synthetic Amber';

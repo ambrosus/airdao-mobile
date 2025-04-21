@@ -19,7 +19,8 @@ export async function getBridgePairs({
   const provider = currentProvider(from);
   const pairs = await getAllBridgeTokenBalance(
     // @ts-ignore
-    sdk.getPairs(from, destination),
+    // TODO replace 'from === 'asc' ? 'amb'' -> 'from' when backend use 'ASC'
+    sdk.getPairs(from === 'asc' ? 'amb' : from, destination),
     from,
     ownerAddress
   );

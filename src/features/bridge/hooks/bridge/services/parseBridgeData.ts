@@ -26,9 +26,9 @@ export const parseNetworkParams = (
   networksParamsSetter(tokenForRender || DEFAULT_TOKEN_PAIRS);
 
   const defaultToken = (() => {
-    if (fromId !== 'amb') {
+    if (fromId !== 'asc') {
       const isAMBToken = tokenForRender.find(
-        (token) => token.renderTokenItem.symbol === CryptoCurrencyCode.AMB
+        (token) => token.renderTokenItem.symbol === CryptoCurrencyCode.ASC
       );
       const isSAMBToken = tokenForRender.find(
         (token) => token.renderTokenItem.symbol === CryptoCurrencyCode.SAMB

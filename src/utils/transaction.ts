@@ -16,7 +16,7 @@ const sendTx = async (
     )) as string;
     if (!privateKey) throw Error('PRIVATE_KEY_NOT_FOUND');
     const additionalData =
-      token.symbol !== CryptoCurrencyCode.AMB ? token.address : undefined;
+      token.symbol !== CryptoCurrencyCode.ASC ? token.address : undefined;
     await TransferDispatcher.sendTx(
       privateKey,
       from,
@@ -37,7 +37,7 @@ const getEstimatedFee = async (
 ): Promise<number> => {
   try {
     const additionalData =
-      token.symbol !== CryptoCurrencyCode.AMB ? token.address : undefined;
+      token.symbol !== CryptoCurrencyCode.ASC ? token.address : undefined;
     return await TransferDispatcher.getEstimatedFee(
       from,
       to,

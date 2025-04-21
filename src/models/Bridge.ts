@@ -112,4 +112,4 @@ export interface BridgeFeeModel {
   feeData: FeeData;
 }
 
-export type NetworksNames = 'amb' | 'eth' | 'bsc' | string;
+export type NetworksNames = 'asc' | 'eth' | 'bsc' | string;

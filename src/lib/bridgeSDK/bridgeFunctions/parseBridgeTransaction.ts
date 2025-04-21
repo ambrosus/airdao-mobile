@@ -6,7 +6,7 @@ export const parseBridgeTransaction = (
 ) => {
   const getDecimals = () => {
     const tokenDecimals =
-      transaction.networkFrom === 'amb'
+      transaction.networkFrom === 'asc'
         ? transaction.tokenTo.decimals || transaction.tokenTo.denomination
         : transaction.tokenFrom.decimals || transaction.tokenFrom.denomination;
     return tokenDecimals || 18;

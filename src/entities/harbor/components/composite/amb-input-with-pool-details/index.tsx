@@ -34,10 +34,10 @@ export const AmbInputWithPoolDetails = ({
     () => ({
       totalLimit: `${NumberUtils.abbreviateNumber(
         +ethers.utils.formatEther(limitsConfig.maxTotalStakeValue)
-      )} ${CryptoCurrencyCode.AMB}`,
+      )} ${CryptoCurrencyCode.ASC}`,
       availableLimit: `${NumberUtils.abbreviateNumber(
         +ethers.utils.formatEther(totalPoolLimit)
-      )} ${CryptoCurrencyCode.AMB}`
+      )} ${CryptoCurrencyCode.ASC}`
     }),
     [limitsConfig.maxTotalStakeValue, totalPoolLimit]
   );
@@ -92,7 +92,7 @@ export const AmbInputWithPoolDetails = ({
               fontFamily="Inter_500Medium"
               color="rgba(88, 94, 119, 1)"
             >
-              {CryptoCurrencyCode.AMB}
+              {CryptoCurrencyCode.ASC}
             </Text>
           </Text>
         </Row>

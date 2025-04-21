@@ -63,7 +63,7 @@ const _SwapCurrencyRate = ({
             fontFamily="Inter_600SemiBold"
             color={COLORS.brand500}
           >
-            1 {tokens.symbolInput ?? 'AMB'} = {transformedCurrencyRate}{' '}
+            1 {tokens.symbolInput ?? 'ASC'} = {transformedCurrencyRate}{' '}
             {tokens.symbolOutput}
           </Text>
         </TouchableOpacity>

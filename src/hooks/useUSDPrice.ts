@@ -9,7 +9,7 @@ import { useCurrencySelector } from '@entities/currencies/lib/hooks/use-currency
  */
 export const useUSDPrice = (
   etherAmount: number,
-  symbol: CryptoCurrencyCode | string = CryptoCurrencyCode.AMB
+  symbol: CryptoCurrencyCode | string = CryptoCurrencyCode.ASC
 ): number => {
   return useCurrencySelector(etherAmount, symbol);
 };

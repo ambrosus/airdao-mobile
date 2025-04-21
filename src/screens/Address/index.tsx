@@ -186,7 +186,7 @@ export const AddressDetails = (): JSX.Element => {
             ? NumberUtils.formatNumber(finalAccount.ambBalance, 2)
             : NumberUtils.abbreviateNumber(finalAccount.ambBalance)
         }
-        currency={'AMB'}
+        currency={'ASC'}
         currencyPosition={'right'}
         last24HourChange={ambPrice?.percentChange24H || 0}
         timestamp={ambPrice?.timestamp || new Date()}

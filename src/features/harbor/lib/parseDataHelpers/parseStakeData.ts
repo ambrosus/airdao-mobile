@@ -27,7 +27,7 @@ export const parseStakeData = (previewData: StakePreviewDataModel) => {
       },
       {
         name: 'common.network.fee',
-        value: `${previewData.estimatedGas} ${CryptoCurrencyCode.AMB}`
+        value: `${previewData.estimatedGas} ${CryptoCurrencyCode.ASC}`
       }
     ],
     success: [

@@ -8,7 +8,7 @@ export type HarborTabParamsList = {
   StakeHarborScreen: undefined;
   WithdrawHarborScreen: undefined;
   WithdrawHarborPoolScreen: {
-    token: CryptoCurrencyCode.AMB | CryptoCurrencyCode.HBR;
+    token: CryptoCurrencyCode.ASC | CryptoCurrencyCode.HBR;
     logs: IAvailableWithdrawLogs | null;
   };
   WithdrawRequests: undefined;

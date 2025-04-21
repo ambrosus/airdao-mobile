@@ -55,13 +55,15 @@ export const TokenLogo = (props: TokenLogoProps) => {
     }
   }, [address, token]);
   switch (tokenName?.toLowerCase()) {
-    case CryptoCurrencyCode.AMB.toLowerCase():
+    case CryptoCurrencyCode.ASC.toLowerCase():
     case CryptoCurrencyCode.SAMB.toLowerCase():
     case CryptoCurrencyCode.CollateralizedHarbor.toLowerCase():
     case CryptoCurrencyCode.SyntheticAmber.toLowerCase():
     case CryptoCurrencyCode.Test1.toLowerCase():
     case CryptoCurrencyCode.stAMB.toLowerCase():
     case CryptoCurrencyCode.StAMB.toLowerCase():
+    // TODO remove when backend use 'ASC'
+    case 'amb':
     case 'staked amb':
     case 'airdao': {
       if (overrideIconVariants.amb === 'white') {

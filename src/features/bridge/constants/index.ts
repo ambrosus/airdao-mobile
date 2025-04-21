@@ -5,7 +5,7 @@ import { Token } from '@lib/bridgeSDK/models/types';
 export const DEFAULT_AMB_NETWORK = {
   side: '0x0000000000',
   amb: '1x1111111111',
-  id: 'amb',
+  id: 'asc',
   name: 'AirDAO'
 };
 export const DEFAULT_ETH_NETWORK = {
@@ -22,8 +22,8 @@ export const DEFAULT_TOKEN_FROM: Token = {
   decimals: 18,
   isNativeCoin: true,
   name: 'AirDAO (NATIVE)',
-  network: 'amb',
-  symbol: CryptoCurrencyCode.AMB
+  network: 'asc',
+  symbol: CryptoCurrencyCode.ASC
 };
 
 export const DEFAULT_TOKEN_TO = {

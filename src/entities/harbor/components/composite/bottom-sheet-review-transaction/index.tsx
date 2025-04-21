@@ -80,7 +80,7 @@ export const BottomSheetReviewTransaction = forwardRef<
         1
       );
 
-      return `${parsedGas} ${CryptoCurrencyCode.AMB}`;
+      return `${parsedGas} ${CryptoCurrencyCode.ASC}`;
     }, [estimatedGas]);
 
     return (

@@ -36,7 +36,7 @@ export function useInputErrorStakeAMB(ambInstance: Token) {
         inputError ??
         `Min ${NumberUtils.formatNumber(
           +ethers.utils.formatEther(minStakeValue)
-        )} ${CryptoCurrencyCode.AMB}`;
+        )} ${CryptoCurrencyCode.ASC}`;
     }
 
     if (ethers.utils.parseEther(ambAmount).gt(ambBalance)) {

@@ -21,7 +21,7 @@ import { StakingInfo } from './components';
 import { WithdrawToken } from './components/Withdraw';
 import { styles } from './style';
 
-const CURRENCY = CryptoCurrencyCode.AMB;
+const CURRENCY = CryptoCurrencyCode.ASC;
 
 export const StakingPoolScreen = () => {
   const { t } = useTranslation();

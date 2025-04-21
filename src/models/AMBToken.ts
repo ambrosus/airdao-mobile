@@ -40,10 +40,10 @@ export class AMBToken {
 
   static fromCMCResponse(data: PriceSnapshot): AMBToken {
     return {
-      _id: 'amb',
+      _id: 'asc',
       id: 1,
       name: 'AirDAO',
-      symbol: 'AMB',
+      symbol: 'ASC',
       circulatingSupply: -1,
       maxSupply: -1,
       totalSupply: -1,

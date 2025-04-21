@@ -54,6 +54,7 @@ export const SendFunds = ({ navigation, route }: Props) => {
   );
 
   const tokenFromNavigationParams = route.params?.token;
+
   const bottomSheetTokensListRef = useRef<BottomSheetRef>(null);
   const transactionIdRef = useRef('');
 

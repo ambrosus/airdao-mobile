@@ -29,7 +29,7 @@ export const StakeAMBInput = ({ error, tokenInstance }: StakeAMBInputProps) => {
 
   const exchange = useMemo(() => {
     return {
-      token: CryptoCurrencyCode.AMB,
+      token: CryptoCurrencyCode.ASC,
       value: maxUserStakeValue.sub(stake).isZero()
         ? '0.00'
         : NumberUtils.numberToTransformedLocale(

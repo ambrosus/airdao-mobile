@@ -142,7 +142,7 @@ export const StakeAMBScreen = ({ route }: Props) => {
           <View style={styles.innerContainer}>
             <StakedBalanceInfo
               title={t('harbor.staked.balance')}
-              coin={CryptoCurrencyCode.AMB}
+              coin={CryptoCurrencyCode.ASC}
               stakedValue={NumberUtils.numberToTransformedLocale(
                 NumberUtils.limitDecimalCount(
                   +ethers.utils.formatEther(stake),

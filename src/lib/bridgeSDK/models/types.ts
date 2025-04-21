@@ -11,7 +11,7 @@ export type BridgeDataState = {
 };
 
 export type BridgeNetwork = 'eth' | 'bsc';
-export type Network = BridgeNetwork | 'amb';
+export type Network = BridgeNetwork | 'asc';
 export type RelayUrls = { [net in BridgeNetwork]: string };
 export type BridgeAddresses = { [from: string]: { [to: string]: string } };
 

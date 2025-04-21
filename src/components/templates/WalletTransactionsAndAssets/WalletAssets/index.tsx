@@ -59,7 +59,7 @@ export const WalletAssets = forwardRef<FlatList, WalletAssetsProps>(
                 AMB_DECIMALS
               )
             },
-            symbol: CryptoCurrencyCode.AMB,
+            symbol: CryptoCurrencyCode.ASC,
             decimals: AMB_DECIMALS,
             tokenNameFromDatabase: 'AirDAO'
           },

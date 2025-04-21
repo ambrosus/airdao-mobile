@@ -36,7 +36,7 @@ export const BridgeSelectorItem = ({
       <View style={styles.container}>
         <TokenLogo
           overrideIconVariants={{ eth: 'blue' }}
-          token={symbol || CryptoCurrencyCode.AMB}
+          token={symbol || CryptoCurrencyCode.ASC}
           scale={1.2}
         />
         <Spacer horizontal value={scale(10)} />

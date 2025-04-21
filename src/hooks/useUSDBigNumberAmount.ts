@@ -7,7 +7,7 @@ import { useCurrenciesStore } from '@entities/currencies/model';
 
 export const useUSDBigNumberAmount = (
   weiAmount: number | string,
-  symbol: CryptoCurrencyCode | string = CryptoCurrencyCode.AMB
+  symbol: CryptoCurrencyCode | string = CryptoCurrencyCode.ASC
 ) => {
   const { currencies } = useCurrenciesStore();
 

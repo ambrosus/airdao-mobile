@@ -53,7 +53,7 @@ export const TiersSelector = ({
   };
 
   const onAmbPress = (ambItem: TierRewardItem) => {
-    setRewardAmount(calculateClaimAmount(claimAmount, ambItem, 'amb'));
+    setRewardAmount(calculateClaimAmount(claimAmount, ambItem, 'asc'));
     setActiveAmbTier(ambItem);
     setOppositePart(REWARD_TIERS_LIST.bond, setActiveBondTier, ambItem);
   };
@@ -64,7 +64,7 @@ export const TiersSelector = ({
     setOppositePart(REWARD_TIERS_LIST.amb, setActiveAmbTier, bondItem);
   };
   useEffect(() => {
-    setRewardAmount(calculateClaimAmount(claimAmount, activeAmbTier, 'amb'));
+    setRewardAmount(calculateClaimAmount(claimAmount, activeAmbTier, 'asc'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [claimAmount]);
 
@@ -114,7 +114,7 @@ export const TiersSelector = ({
       <View style={styles.wrapper}>
         <TokenReward
           userTier={userTier}
-          rewardTokenName={'amb'}
+          rewardTokenName={'asc'}
           selectedTokenReward={activeAmbTier}
           amount={ambAmount}
           onItemPress={onAmbPress}

@@ -53,7 +53,7 @@ export const StakeInfoContainer = ({
         <>
           <Row alignItems="center" justifyContent="space-between">
             <Row alignItems="center">
-              <TokenLogo token={'amb'} />
+              <TokenLogo token={'asc'} />
               <Spacer horizontal value={scale(8)} />
               <Text style={styles.topText} color={COLORS.neutral900}>
                 {CryptoCurrencyCode.stAMB}

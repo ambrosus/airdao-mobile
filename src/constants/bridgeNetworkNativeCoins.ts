@@ -18,14 +18,14 @@ export const BRIDGE_NATIVE_COINS = {
       network: 'bsc',
       symbol: 'BNB'
     },
-    amb: {
+    asc: {
       address: '0x8D3e03889bFCb859B2dBEB65C60a52Ad9523512c',
       bridgeNetwork: 'eth',
       decimals: 18,
       isNativeCoin: true,
       name: 'AirDAO',
-      network: 'amb',
-      symbol: 'AMB'
+      network: 'ASC',
+      symbol: 'ASC'
     }
   },
   prod: {
@@ -47,14 +47,14 @@ export const BRIDGE_NATIVE_COINS = {
       network: 'bsc',
       symbol: 'BNB'
     },
-    amb: {
+    asc: {
       address: '0x2b2d892C3fe2b4113dd7aC0D2c1882AF202FB28F',
       bridgeNetwork: 'eth',
       decimals: 18,
       isNativeCoin: true,
       name: 'AirDAO',
-      network: 'amb',
-      symbol: 'AMB'
+      network: 'asc',
+      symbol: 'ASC'
     }
   }
 };

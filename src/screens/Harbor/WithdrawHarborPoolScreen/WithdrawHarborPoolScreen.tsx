@@ -53,7 +53,7 @@ export const WithdrawHarborPoolScreen = ({ route, navigation }: Props) => {
   const withdrawalBottomSheetRef = useRef<BottomSheetRef>(null);
 
   const [amountToWithdraw, setAmountToWithdraw] = useState(
-    token === CryptoCurrencyCode.AMB && logs?.status === LogStatus.ERROR
+    token === CryptoCurrencyCode.ASC && logs?.status === LogStatus.ERROR
       ? NumberUtils.limitDecimalCount(ethers.utils.formatEther(stake), 2)
       : ''
   );
@@ -80,7 +80,7 @@ export const WithdrawHarborPoolScreen = ({ route, navigation }: Props) => {
 
     onChangeAmountToWithdraw(
       ethers.utils.formatEther(
-        token === CryptoCurrencyCode.AMB ? stake : deposit
+        token === CryptoCurrencyCode.ASC ? stake : deposit
       )
     );
   }, [deposit, onChangeAmountToWithdraw, stake, token, withdrawalCallback]);

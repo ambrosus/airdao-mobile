@@ -75,7 +75,7 @@ export const BrowserWalletItem = ({
         <Row>
           <Text style={styles.text}>
             {NumberUtils.numberToTransformedLocale(balance.crypto)}{' '}
-            {CryptoCurrencyCode.AMB}
+            {CryptoCurrencyCode.ASC}
           </Text>
         </Row>
       </View>

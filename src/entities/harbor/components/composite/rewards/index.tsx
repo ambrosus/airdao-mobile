@@ -39,7 +39,7 @@ export const Rewards = () => {
           color={COLORS.neutral800}
         >
           {NumberUtils.formatDecimal(ethers.utils.formatEther(rewards), 2)}{' '}
-          {CryptoCurrencyCode.AMB}
+          {CryptoCurrencyCode.ASC}
         </Text>
       </Row>
     </Row>

@@ -111,7 +111,7 @@ function detectBridgeNetwork(
 ): BridgeNetwork {
   if (sourceNetwork === destinationNetwork)
     throw new Error('sourceNetwork and destinationNetwork must be different');
-  if (sourceNetwork !== 'amb') return sourceNetwork;
-  if (destinationNetwork !== 'amb') return destinationNetwork;
+  if (sourceNetwork !== 'asc') return sourceNetwork;
+  if (destinationNetwork !== 'asc') return destinationNetwork;
   throw new Error("can't be");
 }

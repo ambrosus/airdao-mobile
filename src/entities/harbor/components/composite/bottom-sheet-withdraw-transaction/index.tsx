@@ -22,7 +22,7 @@ interface BottomSheetWithdrawTransactionProps extends PropsWithChildren {
   timestamp?: number;
   txHash?: string;
   loading: boolean;
-  token: CryptoCurrencyCode.AMB | CryptoCurrencyCode.HBR;
+  token: CryptoCurrencyCode.ASC | CryptoCurrencyCode.HBR;
   estimatedGas: ethers.BigNumber;
 }
 
@@ -79,7 +79,7 @@ export const BottomSheetWithdrawTransaction = forwardRef<
         1
       );
 
-      return `${parsedGas} ${CryptoCurrencyCode.AMB}`;
+      return `${parsedGas} ${CryptoCurrencyCode.ASC}`;
     }, [estimatedGas]);
 
     return (

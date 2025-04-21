@@ -18,7 +18,7 @@ export const HarborStakeTabs = () => {
       onChangeActiveIndex={setActiveTabIndex}
       tabs={[
         {
-          icon: <TokenLogo token={'amb'} scale={0.7} />,
+          icon: <TokenLogo token={'asc'} scale={0.7} />,
           title: `${t('staking.header')} AMB`,
           view: (
             <WrappedListsContainer>

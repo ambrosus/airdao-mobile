@@ -11,7 +11,7 @@ export const calculateClaimAmount = (
   tierValue: TierRewardItem,
   token: RewardTokenNamesModel
 ) => {
-  const isAmbTierPress = token === 'amb';
+  const isAmbTierPress = token === 'asc';
 
   if (isAmbTierPress) {
     const nmClaimAmount = +formatEther(claimAmount);

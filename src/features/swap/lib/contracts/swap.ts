@@ -118,8 +118,8 @@ export async function swapMultiHopExactTokensForTokens(
     const routerContract = createRouterContract(signer, TRADE);
     const timestampDeadline = getTimestampDeadline(deadline);
 
-    const isFromETH = path[0] === addresses.AMB;
-    const isToETH = path[path.length - 1] === addresses.AMB;
+    const isFromETH = path[0] === addresses.ASC;
+    const isToETH = path[path.length - 1] === addresses.ASC;
 
     // Determine the swap method based on path and trade direction
     const getSwapMethod = () => {

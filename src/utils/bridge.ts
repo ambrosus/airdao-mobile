@@ -14,7 +14,7 @@ export enum SHORTEN_NETWORK {
 }
 
 export const tokenThumb = (transaction: string) => {
-  return transaction.includes('SAMB') ? 'AMB' : transaction;
+  return transaction.includes('SAMB') ? 'ASC' : transaction;
 };
 
 export const transactionFrom = (transaction: string) => {

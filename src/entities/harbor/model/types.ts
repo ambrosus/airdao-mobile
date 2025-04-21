@@ -16,7 +16,7 @@ export interface HarborDataModel {
   userStaked: BigNumber;
 }
 
-export type RewardTokenNamesModel = 'amb' | 'bond';
+export type RewardTokenNamesModel = 'asc' | 'bond';
 
 export interface TierRewardItem {
   id: string;

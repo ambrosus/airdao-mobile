@@ -74,7 +74,7 @@ export const BottomSheetReviewAMBTransaction = forwardRef<
         1
       );
 
-      return `${parsedGas} ${CryptoCurrencyCode.AMB}`;
+      return `${parsedGas} ${CryptoCurrencyCode.ASC}`;
     }, [estimatedGas]);
 
     return (
@@ -94,7 +94,7 @@ export const BottomSheetReviewAMBTransaction = forwardRef<
               dismiss={dismiss}
               timestamp={timestamp}
               stakeLockPeriod={stakeLockPeriod}
-              token={CryptoCurrencyCode.AMB}
+              token={CryptoCurrencyCode.ASC}
             />
           ) : (
             <>
@@ -109,7 +109,7 @@ export const BottomSheetReviewAMBTransaction = forwardRef<
                     {t('staking.pool.stake.amount')}
                   </Text>
                   <Row alignItems="center">
-                    <TokenLogo scale={0.75} token={CryptoCurrencyCode.AMB} />
+                    <TokenLogo scale={0.75} token={CryptoCurrencyCode.ASC} />
                     <Spacer horizontal value={4} />
                     <Text
                       fontSize={14}
@@ -120,7 +120,7 @@ export const BottomSheetReviewAMBTransaction = forwardRef<
                         NumberUtils.numberToTransformedLocale(amount),
                         3
                       )}{' '}
-                      {CryptoCurrencyCode.AMB}
+                      {CryptoCurrencyCode.ASC}
                     </Text>
                   </Row>
                 </Row>

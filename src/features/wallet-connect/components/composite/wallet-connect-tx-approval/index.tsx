@@ -142,7 +142,7 @@ export const WalletConnectTxApproval = () => {
 
   const tokenSymbol = useMemo(() => {
     if (isPersonalSign) return '';
-    if (isAmbTransaction) return CryptoCurrencyCode.AMB;
+    if (isAmbTransaction) return CryptoCurrencyCode.ASC;
 
     if (isUnstake) return CryptoCurrencyCode.stAMB;
 
@@ -155,7 +155,7 @@ export const WalletConnectTxApproval = () => {
   const amountSymbol = useMemo(() => {
     if (isPersonalSign) return '';
 
-    if (isAmbTransaction) return CryptoCurrencyCode.AMB;
+    if (isAmbTransaction) return CryptoCurrencyCode.ASC;
 
     if (isWithdraw) return CryptoCurrencyCode.SAMB;
 
@@ -183,7 +183,7 @@ export const WalletConnectTxApproval = () => {
     const gas = request?.params[0].gas ?? ZERO;
     const gasInEth = ethers.utils.formatEther(gas);
     return `${NumberUtils.limitDecimalCount(gasInEth, 0)} ${
-      CryptoCurrencyCode.AMB
+      CryptoCurrencyCode.ASC
     }`;
   }, [request?.params]);
 
@@ -221,7 +221,7 @@ export const WalletConnectTxApproval = () => {
         token.symbol !== undefined
           ? token.symbol
           : tokenSymbol === 'unknown' && !token.symbol
-          ? CryptoCurrencyCode.AMB
+          ? CryptoCurrencyCode.ASC
           : tokenSymbol
       );
     }
@@ -260,7 +260,7 @@ export const WalletConnectTxApproval = () => {
       token.symbol !== undefined
         ? token.symbol
         : amountSymbol === 'unknown' && !token.symbol
-        ? CryptoCurrencyCode.AMB
+        ? CryptoCurrencyCode.ASC
         : amountSymbol
     );
   }, [

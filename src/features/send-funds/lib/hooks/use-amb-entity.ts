@@ -21,7 +21,7 @@ export function useAMBEntity(senderAddress: string) {
             ether: Number(tokenBalance.ether) || 0,
             formattedBalance: formatUnits(tokenBalance.wei, AMB_DECIMALS)
           },
-          symbol: CryptoCurrencyCode.AMB,
+          symbol: CryptoCurrencyCode.ASC,
           decimals: AMB_DECIMALS,
           tokenNameFromDatabase: 'AirDAO'
         },

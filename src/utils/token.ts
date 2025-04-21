@@ -14,7 +14,7 @@ interface TokenExtendProps {
 }
 
 export function wrapTokenIcon<T extends TokenExtendProps>(token: T) {
-  if (token.symbol === CryptoCurrencyCode.AMB) {
+  if (token.symbol === CryptoCurrencyCode.ASC) {
     return 'AirDAO';
   }
 

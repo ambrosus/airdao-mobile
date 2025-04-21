@@ -18,7 +18,7 @@ export const ALL_TOKENS_DATA: AllTokenDataModel = {
       address: ethers.constants.AddressZero,
       decimals: 0,
       name: 'AirDAO',
-      symbol: 'AMB'
+      symbol: 'ASC'
     },
     {
       address: '0x015AB9B3771F1748007ea62885737eF4Fa346291',
@@ -41,7 +41,7 @@ export const ALL_TOKENS_DATA: AllTokenDataModel = {
     {
       address: '0x0aC605bDc5440B698a7FE34504C8352c36Ed9345',
       decimals: 18,
-      name: 'AMB',
+      name: 'ASC',
       symbol: 'AMBROSUS'
     },
     {
@@ -168,7 +168,7 @@ export const ALL_TOKENS_DATA: AllTokenDataModel = {
       address: '0xa7A9B4117e22e01E002bA95A65A2da85A7528629',
       decimals: 18,
       name: 'Ambrosus ',
-      symbol: 'AMB'
+      symbol: 'ASC'
     },
     {
       address: '0xA96C522fA8Df99BB73A6E317A1afb0E3FA13b735',
@@ -186,7 +186,7 @@ export const ALL_TOKENS_DATA: AllTokenDataModel = {
       address: '0xAFD1Df0B8dba1cCB0846FA6BdeAd0b4fb67F7d29',
       decimals: 18,
       name: 'Ambrosus ',
-      symbol: 'AMB'
+      symbol: 'ASC'
     },
     {
       address: '0xB031c2e15e8D6010F1824ad7d885524D620761C8',
@@ -398,7 +398,7 @@ export const ALL_TOKENS_DATA: AllTokenDataModel = {
       address: ethers.constants.AddressZero,
       decimals: 0,
       name: 'AirDAO',
-      symbol: 'AMB'
+      symbol: 'ASC'
     },
     {
       address: '0x2Cf845b49e1c4E5D657fbBF36E97B7B5B7B7b74b',

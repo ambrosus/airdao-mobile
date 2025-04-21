@@ -129,12 +129,12 @@ export const BridgeContext = () => {
         // @ts-ignore
         setSelectedBridgeData(pair);
         const pairsToTokenByDefault = pair.pairs.find((item) => {
-          if (pair.name === 'amb->eth') {
+          if (pair.name === 'asc->eth') {
             return item.find((token) => token.isNativeCoin);
           } else {
             return item.find(
               (token) =>
-                token.symbol === CryptoCurrencyCode.AMB ||
+                token.symbol === CryptoCurrencyCode.ASC ||
                 token.symbol === CryptoCurrencyCode.SAMB
             );
           }
@@ -186,7 +186,7 @@ export const BridgeContext = () => {
 
       setter(item);
       const isTheSameNetwork = item.id === oppositeNetwork.id;
-      const isSelectedAMBNetwork = item.id === 'amb';
+      const isSelectedAMBNetwork = item.id === 'asc';
 
       if (isTheSameNetwork && !isSelectedAMBNetwork) {
         oppositeSetter(DEFAULT_AMB_NETWORK);
@@ -195,7 +195,7 @@ export const BridgeContext = () => {
         oppositeSetter(DEFAULT_ETH_NETWORK);
       }
       // if user not chose amb network
-      if (oppositeNetwork.id !== 'amb' && !isSelectedAMBNetwork) {
+      if (oppositeNetwork.id !== 'asc' && !isSelectedAMBNetwork) {
         oppositeSetter(DEFAULT_AMB_NETWORK);
       }
     },
@@ -237,7 +237,7 @@ export const BridgeContext = () => {
 
   const decimals = useMemo(
     () =>
-      fromData.value.id === 'amb'
+      fromData.value.id === 'asc'
         ? selectedTokenDestination.decimals
         : selectedTokenFrom.decimals,
     [

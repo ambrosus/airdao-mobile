@@ -1,8 +1,7 @@
-
-import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
-import { AMBMarket } from '@screens/AMBMarket';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AMBMarket } from '@screens/AMBMarket';
 import clearAllMocks = jest.clearAllMocks;
 
 const queryClient = new QueryClient();
@@ -11,7 +10,7 @@ let mockedData = {
   data: {
     _id: '987654210987654',
     id: 12345678902345678,
-    name: 'AMB',
+    name: 'ASC',
     symbol: 'csaaafafa',
     circulatingSupply: 9865,
     maxSupply: null,

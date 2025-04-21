@@ -11,7 +11,7 @@ import { IAvailableWithdrawLogs, LogStatus } from '@entities/harbor/types';
 
 interface WithdrawalButtonProps {
   loading?: boolean;
-  token: CryptoCurrencyCode.AMB | CryptoCurrencyCode.HBR;
+  token: CryptoCurrencyCode.ASC | CryptoCurrencyCode.HBR;
   logs: IAvailableWithdrawLogs | null;
   amountToWithdraw: string;
   onButtonPress?: () => void;
@@ -60,7 +60,7 @@ export const WithdrawalButton = ({
           isErrorLog
         );
       }
-      case CryptoCurrencyCode.AMB: {
+      case CryptoCurrencyCode.ASC: {
         const isInsufficientBalance = bnAmountToWithdraw.gt(stake);
         const isZeroAmount = bnAmountToWithdraw.isZero();
         const isZeroStake = stake.isZero();
@@ -102,7 +102,7 @@ export const WithdrawalButton = ({
         return t('bridge.insufficient.funds');
       }
 
-    if (token === CryptoCurrencyCode.AMB && bnAmountToWithdraw.gt(stake)) {
+    if (token === CryptoCurrencyCode.ASC && bnAmountToWithdraw.gt(stake)) {
       return t('bridge.insufficient.funds');
     }
 

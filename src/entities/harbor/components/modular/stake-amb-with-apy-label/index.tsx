@@ -63,10 +63,10 @@ export const StakeAMBWithApyLabel = ({ logs }: StakeAMBWithApyLabelProps) => {
     () => ({
       totalLimit: `${NumberUtils.abbreviateNumber(
         +ethers.utils.formatEther(limitsConfig.maxTotalStakeValue)
-      )} ${CryptoCurrencyCode.AMB}`,
+      )} ${CryptoCurrencyCode.ASC}`,
       availableLimit: `${NumberUtils.abbreviateNumber(
         +ethers.utils.formatEther(totalPoolLimit)
-      )} ${CryptoCurrencyCode.AMB}`
+      )} ${CryptoCurrencyCode.ASC}`
     }),
     [limitsConfig.maxTotalStakeValue, totalPoolLimit]
   );
@@ -77,7 +77,7 @@ export const StakeAMBWithApyLabel = ({ logs }: StakeAMBWithApyLabelProps) => {
 
   const onWithdrawButtonPress = () => {
     navigation.navigate('WithdrawHarborPoolScreen', {
-      token: CryptoCurrencyCode.AMB,
+      token: CryptoCurrencyCode.ASC,
       logs
     });
   };
@@ -103,7 +103,7 @@ export const StakeAMBWithApyLabel = ({ logs }: StakeAMBWithApyLabelProps) => {
           amount={NumberUtils.numberToTransformedLocale(
             ethers.utils.formatEther(stake)
           )}
-          token={CryptoCurrencyCode.AMB}
+          token={CryptoCurrencyCode.ASC}
         >
           <View style={styles.stakedNativeInnerDetails}>
             <Row alignItems="center" justifyContent="space-between">

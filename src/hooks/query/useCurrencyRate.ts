@@ -6,7 +6,7 @@ import { useAMBPrice } from './useAMBPrice';
 import { useAmbrosusStakingPools } from './useAmbrosusStakingPools';
 
 export const useCurrencyRate = (
-  symbol: CryptoCurrencyCode | string = CryptoCurrencyCode.AMB
+  symbol: CryptoCurrencyCode | string = CryptoCurrencyCode.ASC
 ): number => {
   const { data: stakingPools } = useAmbrosusStakingPools();
   const { data: ambPrice } = useAMBPrice();
@@ -17,7 +17,7 @@ export const useCurrencyRate = (
     switch (symbol) {
       case CryptoCurrencyCode.Bond:
       case CryptoCurrencyCode.SAMB:
-      case CryptoCurrencyCode.AMB: {
+      case CryptoCurrencyCode.ASC: {
         _currencyRate = 1;
         break;
       }

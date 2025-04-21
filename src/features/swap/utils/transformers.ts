@@ -98,7 +98,7 @@ const transformSlippageValue = (value: string) => {
 };
 
 const extendedLogoVariants = (symbol: string) =>
-  symbol === 'SAMB' ? 'AMB' : symbol;
+  symbol === 'SAMB' ? 'ASC' : symbol;
 
 export const SwapStringUtils = {
   transformAmountValue,

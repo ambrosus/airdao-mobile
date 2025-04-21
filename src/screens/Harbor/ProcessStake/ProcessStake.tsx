@@ -79,7 +79,7 @@ export const ProcessStake = () => {
               AMB_DECIMALS
             )
           },
-          symbol: CryptoCurrencyCode.AMB,
+          symbol: CryptoCurrencyCode.ASC,
           decimals: AMB_DECIMALS,
           tokenNameFromDatabase: 'AirDAO'
         },
@@ -119,7 +119,7 @@ export const ProcessStake = () => {
       if (parseEther(amountToStake).lt(stakeLimit)) {
         setInputError(
           `Min ${NumberUtils.formatNumber(+formatEther(stakeLimit))} ${
-            CryptoCurrencyCode.AMB
+            CryptoCurrencyCode.ASC
           }`
         );
         return;
@@ -127,7 +127,7 @@ export const ProcessStake = () => {
 
       const data = {
         amount: amountToStake,
-        token: CryptoCurrencyCode.AMB,
+        token: CryptoCurrencyCode.ASC,
         receiveAmount: amountToStake,
         receiveToken: CryptoCurrencyCode.stAMB,
         fromAddress: wallet?.address || '',

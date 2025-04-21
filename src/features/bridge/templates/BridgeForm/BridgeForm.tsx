@@ -100,7 +100,7 @@ export const BridgeForm = () => {
 
   const decimals = useMemo(
     () =>
-      fromData.value.id === 'amb'
+      fromData.value.id === 'asc'
         ? selectedTokenDestination.decimals
         : selectedTokenFrom.decimals,
     [

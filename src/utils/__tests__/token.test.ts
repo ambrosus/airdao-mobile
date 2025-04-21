@@ -23,7 +23,7 @@ describe('tokens util test', () => {
   });
 
   it('wrap token icon amb', () => {
-    const key = wrapTokenIcon({ ...MockWithNameWithDB, symbol: 'AMB' });
+    const key = wrapTokenIcon({ ...MockWithNameWithDB, symbol: 'ASC' });
 
     expect(key).toBe('AirDAO');
   });
@@ -31,7 +31,7 @@ describe('tokens util test', () => {
   it('wrap token icon amb', () => {
     const key = wrapTokenIcon({
       ...MockWithNameWithDB,
-      symbol: 'AMB',
+      symbol: 'ASC',
       tokenNameFromDatabase: 'unknown'
     });
 

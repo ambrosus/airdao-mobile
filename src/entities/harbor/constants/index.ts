@@ -38,7 +38,7 @@ export const DEFAULT_DATA = {
 
 export const DEFAULT_STAKE_PREVIEW = {
   amount: '',
-  token: CryptoCurrencyCode.AMB,
+  token: CryptoCurrencyCode.ASC,
   receiveAmount: '',
   receiveToken: CryptoCurrencyCode.stAMB,
   fromAddress: '',

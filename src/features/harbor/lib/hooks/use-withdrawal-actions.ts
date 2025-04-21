@@ -10,7 +10,7 @@ import { getTimestampFromBlockHash } from '@entities/harbor/utils';
 import { useWalletPrivateKey } from '@entities/wallet';
 
 export function useWithdrawalActions(
-  token: CryptoCurrencyCode.AMB | CryptoCurrencyCode.HBR,
+  token: CryptoCurrencyCode.ASC | CryptoCurrencyCode.HBR,
   amountToWithdraw: string
 ) {
   const { _extractPrivateKey } = useWalletPrivateKey();
@@ -103,7 +103,7 @@ export function useWithdrawalActions(
     async ({ estimateGas = false }: { estimateGas?: boolean } = {}) => {
       Keyboard.dismiss();
       switch (token) {
-        case CryptoCurrencyCode.AMB: {
+        case CryptoCurrencyCode.ASC: {
           return handleWithdrawAMB({ estimateGas });
         }
         case CryptoCurrencyCode.HBR: {

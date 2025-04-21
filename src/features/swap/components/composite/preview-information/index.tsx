@@ -129,7 +129,7 @@ export const PreviewInformation = () => {
         </Text>
 
         <RightSideRowItem>
-          {`${estimatedNetworkFee} ${CryptoCurrencyCode.AMB}`}
+          {`${estimatedNetworkFee} ${CryptoCurrencyCode.ASC}`}
         </RightSideRowItem>
       </Row>
 

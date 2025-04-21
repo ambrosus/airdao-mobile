@@ -35,10 +35,10 @@ export const WithdrawTokenPreview = ({
         1
       );
 
-      return `${parsedGas} ${CryptoCurrencyCode.AMB}`;
+      return `${parsedGas} ${CryptoCurrencyCode.ASC}`;
     }
 
-    return `0 ${CryptoCurrencyCode.AMB}`;
+    return `0 ${CryptoCurrencyCode.ASC}`;
   }, [estimatedGas]);
 
   const label = useMemo(() => {

@@ -8,7 +8,7 @@ import { WithdrawIcon } from '@components/svg/icons/v2/harbor';
 import { useHarborStore, useStakeUIStore } from '@entities/harbor/model';
 
 enum TAB_INDEX {
-  AMB = 0,
+  ASC = 0,
   HBR = 1
 }
 
@@ -20,7 +20,7 @@ export const HeaderWithWithdrawal = () => {
   const { loading } = useHarborStore();
 
   const renderRightContentNode = useMemo(() => {
-    if (activeTabIndex === TAB_INDEX.AMB && !loading) {
+    if (activeTabIndex === TAB_INDEX.ASC && !loading) {
       const onPress = () =>
         !loading && navigation.navigate('WithdrawHarborScreen');
 

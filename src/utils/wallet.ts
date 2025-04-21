@@ -57,7 +57,7 @@ const _getWalletNumber = async () => {
 const processWallet = async (mnemonic: string, accounts: AccountDBModel[]) => {
   let walletInDb: WalletDBModel | null = null;
   let accountInDb: AccountDBModel | null = null;
-  const currencyCode = CryptoCurrencyCode.AMB;
+  const currencyCode = CryptoCurrencyCode.ASC;
 
   try {
     const number = await _getWalletNumber();
@@ -122,7 +122,7 @@ export const importWalletViaPrivateKey = async (
 ) => {
   let walletInDb: WalletDBModel | null = null;
   let accountInDb: AccountDBModel | null = null;
-  const currencyCode = CryptoCurrencyCode.AMB;
+  const currencyCode = CryptoCurrencyCode.ASC;
 
   try {
     const number = await _getWalletNumber();

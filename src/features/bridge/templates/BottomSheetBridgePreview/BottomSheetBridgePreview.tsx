@@ -40,7 +40,7 @@ export const BottomSheetBridgePreview = forwardRef<
   );
 
   const errorBalance = useMemo(() => {
-    const networkNativeTokenSymbol = networkNativeToken?.symbol ?? 'amb';
+    const networkNativeTokenSymbol = networkNativeToken?.symbol ?? 'asc';
     if (selectedTokenFrom.symbol === networkNativeTokenSymbol) {
       const withdrawSum = dataToPreview
         .filter((item) => item.symbol === selectedTokenFrom?.symbol)

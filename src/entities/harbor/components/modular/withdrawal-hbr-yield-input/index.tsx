@@ -37,7 +37,7 @@ const BACKGROUND_CONTAINER_COLORS = {
 interface WithdrawalHbrYieldInputProps extends PropsWithChildren {
   value: string;
   onChangeValue: (payload: string) => void;
-  token: CryptoCurrencyCode.AMB | CryptoCurrencyCode.HBR;
+  token: CryptoCurrencyCode.ASC | CryptoCurrencyCode.HBR;
   type: LogStatus;
   logs: IAvailableWithdrawLogs | null;
   onPressMaxButton: () => void;
@@ -77,12 +77,12 @@ export const WithdrawalHbrYieldInput = ({
   hbrWithdrawalDisabled;
 
   const tokenInstance = useMemo(
-    () => (token === CryptoCurrencyCode.AMB ? ambInstance : hbrInstance),
+    () => (token === CryptoCurrencyCode.ASC ? ambInstance : hbrInstance),
     [ambInstance, hbrInstance, token]
   );
 
   const balance = useMemo(
-    () => (token === CryptoCurrencyCode.AMB ? stake : deposit),
+    () => (token === CryptoCurrencyCode.ASC ? stake : deposit),
     [deposit, stake, token]
   );
 

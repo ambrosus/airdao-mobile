@@ -5,7 +5,7 @@ export const SWAP_SUPPORTED_TOKENS = {
   native: {
     address: ethers.constants.AddressZero,
     name: 'AirDAO',
-    symbol: 'AMB'
+    symbol: 'ASC'
   },
   usdc: {
     address: TOKEN_ADDRESSES.prod.USDC,
@@ -17,7 +17,7 @@ export const SWAP_SUPPORTED_TOKENS = {
       {
         address: ethers.constants.AddressZero,
         name: 'AirDAO',
-        symbol: 'AMB'
+        symbol: 'ASC'
       },
       {
         address: '0xFF9F502976E7bD2b4901aD7Dd1131Bb81E5567de',
@@ -84,7 +84,7 @@ export const SWAP_SUPPORTED_TOKENS = {
       {
         address: ethers.constants.AddressZero,
         name: 'AirDAO',
-        symbol: 'AMB'
+        symbol: 'ASC'
       },
       {
         address: '0xdd82283Fc93Aa4373B6B27a7B25EB3A770fc3aba',

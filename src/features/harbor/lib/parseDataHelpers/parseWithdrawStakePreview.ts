@@ -15,7 +15,7 @@ export const parseWithdrawStakePreview = (
       {
         name: 'harbor.withdraw.preview.amb.reward',
         value: previewData.rewardAmb,
-        symbol: CryptoCurrencyCode.AMB
+        symbol: CryptoCurrencyCode.ASC
       },
       {
         name: 'harbor.withdraw.preview.bond.reward',
@@ -24,7 +24,7 @@ export const parseWithdrawStakePreview = (
       },
       {
         name: 'common.network.fee',
-        value: `${previewData.estimatedGas ?? 0} ${CryptoCurrencyCode.AMB}`
+        value: `${previewData.estimatedGas ?? 0} ${CryptoCurrencyCode.ASC}`
       }
     ],
     success: [
@@ -36,7 +36,7 @@ export const parseWithdrawStakePreview = (
       },
       {
         name: 'harbor.withdraw.preview.amb.reward',
-        value: `${previewData.rewardAmb} ${CryptoCurrencyCode.AMB}`
+        value: `${previewData.rewardAmb} ${CryptoCurrencyCode.ASC}`
       },
       {
         name: 'harbor.withdraw.preview.bond.reward',

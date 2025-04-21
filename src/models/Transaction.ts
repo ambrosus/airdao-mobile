@@ -52,7 +52,7 @@ export class Transaction {
     this.from = details.from;
     this.to = details.to;
     this.status = details.status;
-    this.value = { ...details.value, symbol: details.value.symbol || 'AMB' };
+    this.value = { ...details.value, symbol: details.value.symbol || 'ASC' };
     this.gasCost = details.gasCost;
     if (details.token) {
       // @ts-ignore
