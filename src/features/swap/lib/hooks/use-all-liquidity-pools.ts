@@ -49,8 +49,8 @@ export function useAllLiquidityPools() {
 
               return {
                 pairAddress,
-                token0,
-                token1
+                token0: token0.toLowerCase(),
+                token1: token1.toLowerCase()
               };
             } catch (error) {
               if (__DEV__) {
@@ -115,10 +115,16 @@ export function useAllLiquidityPools() {
           TOKEN_B?.address ?? ''
         ]);
 
-        const targetSet = new Set([addressFrom, addressTo]);
+        const targetSet = new Set([
+          addressFrom.toLowerCase(),
+          addressTo.toLowerCase()
+        ]);
 
         return allPairsRef.current.find((pair) => {
-          const pairSet = new Set([pair.token0, pair.token1]);
+          const pairSet = new Set([
+            pair.token0.toLowerCase(),
+            pair.token1.toLowerCase()
+          ]);
           return (
             targetSet.size === pairSet.size &&
             [...targetSet].every((value) => pairSet.has(value))

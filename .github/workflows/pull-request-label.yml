@@ -1,0 +1,46 @@
+name: Label Pull Requests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  assign-labels:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == false
+    steps:
+      - name: Assign Labels from Conventional Commits
+        uses: mauroalderete/action-assign-labels@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          apply-changes: true
+          conventional-commits: |
+            conventional-commits:
+              - type: 'fix'
+                nouns: ['FIX', 'Fix', 'fix', 'FIXED', 'Fixed', 'fixed']
+                labels: ['fix']
+              - type: 'feature'
+                nouns: ['FEATURE', 'Feature', 'feature', 'FEAT', 'Feat', 'feat']
+                labels: ['feature']
+              - type: 'breaking_change'
+                nouns: ['BREAKING CHANGE', 'BREAKING', 'MAJOR']
+                labels: ['BREAKING CHANGE']
+              - type: 'documentation'
+                nouns: ['doc', 'docu', 'document', 'documentation']
+                labels: ['documentation']
+              - type: 'build'
+                nouns: ['build', 'rebuild']
+                labels: ['build']
+              - type: 'config'
+                nouns: ['config', 'conf', 'cofiguration', 'configure']
+                labels: ['config']
+              - type: 'chore'
+                nouns: ['chore']
+                labels: ['chore']
+              - type: 'refactoring'
+                nouns: ['refactor', 'refactoring']
+                labels: ['refactoring']

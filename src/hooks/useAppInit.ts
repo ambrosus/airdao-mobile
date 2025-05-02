@@ -15,12 +15,9 @@ import {
   PublicAddressDB,
   PublicAddressListDB
 } from '@database';
+import { migrateToNewBrowserStorage } from '@features/browser/lib';
 import { usePasscodeInit } from '@features/passcode/lib/hooks/use-passcode-init';
-import {
-  migrateToNewBrowserStorage,
-  NotificationService,
-  PermissionService
-} from '@lib';
+import { NotificationService, PermissionService } from '@lib';
 import { Cache, CacheKey } from '@lib/cache';
 import { useListsAndAddressesFetcher } from './useListsAndAddressesFetcher';
 

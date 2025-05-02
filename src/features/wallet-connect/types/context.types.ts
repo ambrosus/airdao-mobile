@@ -16,6 +16,8 @@ export interface StandardizedDecodedArgs {
   addresses?: string[];
   deadline?: string;
   gas?: ethers.BigNumber;
+  from?: string;
+  message?: string;
 }
 
 export interface DecodedTransaction {

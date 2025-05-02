@@ -3,6 +3,8 @@ import { ethers } from 'ethers';
 import { extractChainData } from './presets';
 import { walletKit } from '../lib/wc.core';
 
+export const PERSONAL_SIGN_MESSAGE = '0x414d4252';
+
 export function supportedChains(
   requiredNamespaces: ProposalTypes.RequiredNamespaces,
   optionalNamespaces: ProposalTypes.OptionalNamespaces

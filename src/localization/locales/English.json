@@ -56,7 +56,7 @@
   "amb.market.total.supply.popup": "The amount of coins that have been already created, minus any coins that have been burned, providing a measure of the current supply of a cryptocurrency.",
   "button.add": "Add",
   "button.add.wallet": "Add wallet",
-  "button.processed": "Processed",
+  "button.processed": "Proceed",
   "button.cancel": "Cancel",
   "button.continue": "Continue",
   "button.create": "Create",
@@ -558,7 +558,7 @@
   "browser.remove.permission.modal.header": "Are you sure?",
   "browser.remove.permission.modal.subheader": "You’ll need to reconnect to use it again.",
   "browser.remove.no.permissions.header": "No Connected Websites",
-  "browser.remove.no.permissions.subheader": "You haven’t connected to any websites yet. When you do, they will appear here",
+  "browser.remove.no.permissions.subheader": "You haven’t connected to any websites yet. \nWhen you do, they will appear here",
 
   "browser.approve":{
     "permission": "See your account and suggest transactions",

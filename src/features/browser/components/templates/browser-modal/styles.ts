@@ -18,6 +18,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     rowGap: verticalScale(16)
   },
+  iconContainer: { transform: [{ rotate: '180deg' }] },
   footerWrapper: {
     rowGap: 16
   },

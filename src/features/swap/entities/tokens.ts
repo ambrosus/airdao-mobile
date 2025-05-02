@@ -55,11 +55,6 @@ export const SWAP_SUPPORTED_TOKENS = {
         symbol: 'KOS'
       },
       {
-        address: '0xC410F3EB0c0f0E1EFA188D38C366536d59a265ba',
-        name: 'SWINE',
-        symbol: 'SWINE'
-      },
-      {
         address: '0x5ECAddC28FcFc0bEDF94858c6D771420672ad2CF',
         name: 'X3NA',
         symbol: 'X3NA'

@@ -2,7 +2,7 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 import { API } from '@api/api';
 import { DatabaseTable, SettingsTabNavigationProp } from '@appTypes';
 import { Database, WalletDBModel } from '@database';
-import { removePermissionByAddress } from '@lib';
+import { removePermissionByAddress } from '@features/browser/lib';
 import { WalletUtils } from '@utils';
 
 export function useSettingsWalletActions() {
@@ -14,7 +14,7 @@ export function useSettingsWalletActions() {
   ) => {
     try {
       await WalletUtils.deleteWalletWithAccounts(walletHash);
-      await removePermissionByAddress(address || '');
+      removePermissionByAddress(address || '');
       if (address) {
         await API.watcherService.removeWatcherForAddresses([address]);
       }
@@ -41,9 +41,9 @@ export function useSettingsWalletActions() {
       name: walletName
     });
     (wallet._raw as unknown as WalletDBModel).name = walletName;
-    //@ts-ignore
     navigation.setParams({
-      wallet: wallet
+      //@ts-ignore
+      wallet
     });
   };
 

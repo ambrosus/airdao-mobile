@@ -52,6 +52,8 @@ const envs = {
     CHAIN_ID_HEX: '0x414e',
     CURRENCY_GRAPH_URL:
       'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b',
+    AMBRODEO_TOKENS_GRAPH_URL:
+      'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/ambrodeo',
     HBR_LIQUIDITY_POOL: '0xA89621016D945408a556ECcb4A10c0122aB852F2',
     HBR_TOKEN_ADDRESS: '0xd09270E917024E75086e27854740871F1C8E0E10',
     BROWSER_CONFIG:
@@ -99,6 +101,8 @@ const envs = {
     CHAIN_ID_HEX: '0x414e',
     CURRENCY_GRAPH_URL:
       'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b',
+    AMBRODEO_TOKENS_GRAPH_URL:
+      'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/ambrodeo',
     HBR_LIQUIDITY_POOL: '0xA89621016D945408a556ECcb4A10c0122aB852F2',
     HBR_TOKEN_ADDRESS: '0xd09270E917024E75086e27854740871F1C8E0E10',
     BROWSER_CONFIG:
@@ -146,6 +150,8 @@ const envs = {
     CHAIN_ID_HEX: '0x5618',
     CURRENCY_GRAPH_URL:
       'https://graph-node-api.ambrosus.io/subgraphs/name/airdao/astra-price-test-b',
+    AMBRODEO_TOKENS_GRAPH_URL:
+      'https://graph-node-api.ambrosus-test.io/subgraphs/name/airdao/ambrodeo',
     HBR_LIQUIDITY_POOL: '0x255b5ff5026f198c83575d9a1A4561fe820ab92e',
     HBR_TOKEN_ADDRESS: '0x7B58Cbb7c4Ff2E53F8c4405606D0A7AF707ab00b',
     BROWSER_CONFIG:
@@ -161,7 +167,7 @@ switch (Updates.channel) {
     break;
   }
   case 'stage': {
-    Config = envs.prod as TConfig;
+    Config = envs.stage as TConfig;
     break;
   }
   case 'testnet': {

@@ -6,7 +6,8 @@ import { Row, Spacer, Text } from '@components/base';
 import {
   BottomSheet,
   BottomSheetOutsideDataProps,
-  BottomSheetRef
+  BottomSheetRef,
+  ModalActionTypes
 } from '@components/composite';
 import { PrimaryButton, SecondaryButton } from '@components/modular';
 import { COLORS } from '@constants/colors';
@@ -27,6 +28,7 @@ export const BottomSheetApproveBrowserAction = forwardRef<
   const [outsideModalData, setOutsideModalData] = useState(
     {} as BottomSheetOutsideDataProps
   );
+
   const { t } = useTranslation();
   const { bottom } = useSafeAreaInsets();
 
@@ -48,36 +50,24 @@ export const BottomSheetApproveBrowserAction = forwardRef<
     localRef?.current?.dismiss();
   };
 
-  const getHeaderText = () => {
-    switch (modalType) {
-      case 'permissions':
-        return t('browser.approve.permissions.header').replace(
-          '{{uri}}',
-          StringUtils.formatUri({ uri, formatLength: 10 })
-        );
-      case 'personalSign':
-        return t('browser.approve.permissions.header').replace(
-          '{{uri}}',
-          StringUtils.formatUri({ uri, formatLength: 10 })
-        );
-      case 'sendTransaction':
-        return t('browser.approve.permissions.header').replace(
-          '{{uri}}',
-          StringUtils.formatUri({ uri, formatLength: 10 })
-        );
-      default:
-        return '';
-    }
-  };
+  const getHeaderText = () =>
+    t('browser.approve.permissions.header').replace(
+      '{{uri}}',
+      StringUtils.formatUri({ uri, formatLength: 10 })
+    );
 
   const getDescriptionText = () => {
     switch (modalType) {
-      case 'permissions':
+      case ModalActionTypes.PERMISSIONS:
         return t('browser.approve.permission');
-      case 'personalSign':
+      case ModalActionTypes.PERSONAL_SIGN:
         return t('browser.approve.personal.sign');
-      case 'sendTransaction':
+      case ModalActionTypes.SEND_TRANSACTION:
         return t('browser.approve.send.transaction');
+      case ModalActionTypes.ENCRYPTION_PUBLIC_KEY:
+        return 'ENCRYPTION_PUBLIC_KEY';
+      case ModalActionTypes.DECRYPT:
+        return 'DECRYPT';
       default:
         return '';
     }

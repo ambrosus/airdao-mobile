@@ -56,7 +56,7 @@
   "amb.market.total.supply.popup": "Zaten oluşturulmuş olan jeton miktarı, yakılan tokenlar çıkarıldıktan sonra, bir kripto paranın mevcut arzını ölçen bir ölçüdür.",
   "button.add": "Ekle",
   "button.add.wallet": "Cüzdan ekle",
-  "button.processed": "İşlendi",
+  "button.processed": "!!!Proceed",
   "button.cancel": "İptal et",
   "button.continue": "Devam et",
   "button.create": "Oluştur",
@@ -251,7 +251,7 @@
   "settings.about": "Hakkında",
   "settings.help": "Yardım merkezi",
   "settings.manage.wallet": "Cüzdan yönetimi",
-  "settings.manage.permissions": "Manage permissions",
+  "settings.manage.permissions": "İzinleri yönet",
   "settings.watchlists": "İzleme listesi",
   "settings.explore": "Keşfet",
   "settings.notifications": "Bildirim ayarları",
@@ -563,7 +563,7 @@
   "browser.remove.permission.modal.header": "Emin misiniz?",
   "browser.remove.permission.modal.subheader": "Tekrar kullanmak için yeniden bağlanmanız gerekecek",
   "browser.remove.no.permissions.header": "Bağlı Web Sitesi Yok",
-  "browser.remove.no.permissions.subheader": "Henüz hiçbir web sitesine bağlanmadınız. Bağlandığınızda, burada görünecekler",
+  "browser.remove.no.permissions.subheader": "Henüz hiçbir web sitesine bağlanmadınız. \nBağlandığınızda, burada görünecekler",
 
   "browser.approve": {
     "permission": "Hesabınızı görün ve işlem önerin",

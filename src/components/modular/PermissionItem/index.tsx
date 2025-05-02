@@ -6,8 +6,8 @@ import { Button, Spacer, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { DefaultPermissionsIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
+import { removeConnectedAddressTo } from '@features/browser/lib';
 import { WalletsPermissions } from '@features/browser/types';
-import { removeConnectedAddressTo } from '@lib';
 import { scale, StringUtils } from '@utils';
 import { Toast, ToastType } from '../Toast';
 import { styles } from './styles';
@@ -50,7 +50,8 @@ export const PermissionItem = ({
   };
 
   const onApprove = async () => {
-    await removeConnectedAddressTo(key, permission.addresses[0]);
+    permissionsModalRef.current?.dismiss();
+    removeConnectedAddressTo(key, permission.addresses[0]);
     updatePermissions();
     Toast.show({
       type: ToastType.Success,

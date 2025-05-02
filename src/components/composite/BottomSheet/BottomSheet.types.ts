@@ -6,6 +6,8 @@ export enum ModalActionTypes {
   PERMISSIONS = 'permissions',
   PERSONAL_SIGN = 'personalSign',
   SEND_TRANSACTION = 'sendTransaction',
+  ENCRYPTION_PUBLIC_KEY = 'encryptionPublicKey',
+  DECRYPT = 'decrypt',
   DISCONNECT = 'disconnect'
 }
 

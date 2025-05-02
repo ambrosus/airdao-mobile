@@ -1,16 +1,13 @@
-import { RefObject, useCallback, useMemo } from 'react';
+import { RefObject, useCallback } from 'react';
 import { Pressable, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { lowerCase } from 'lodash';
-import capitalize from 'lodash/capitalize';
 import { useTranslation } from 'react-i18next';
 import { HomeNavigationProp } from '@appTypes';
 import { Row, Text } from '@components/base';
 import { BottomSheetRef } from '@components/composite';
 import { Product } from '@features/products/utils';
 import { sendFirebaseEvent } from '@lib/firebaseEventAnalytics';
-import { hasDigits } from '@utils';
 import { styles } from './styles';
 
 interface ProductListItemProps {
@@ -65,13 +62,6 @@ export const ProductListItem = ({
     navigation
   ]);
 
-  const name = useMemo(() => {
-    const _name = hasDigits(product.name)
-      ? product.name
-      : lowerCase(product.name);
-    return capitalize(_name);
-  }, [product.name]);
-
   return (
     <Pressable
       onPress={onRedirectToProductScreen}
@@ -90,7 +80,7 @@ export const ProductListItem = ({
               fontFamily="Inter_600SemiBold"
               color={product.color}
             >
-              {name}
+              {product.name}
             </Text>
             <Text
               fontSize={13}
