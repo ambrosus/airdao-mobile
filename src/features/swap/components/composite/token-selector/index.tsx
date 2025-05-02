@@ -9,7 +9,7 @@ import { useSwapContextSelector } from '@features/swap/context';
 import { useSwapBottomSheetHandler } from '@features/swap/lib/hooks';
 import { SelectedTokensKeys } from '@features/swap/types';
 import { SwapStringUtils } from '@features/swap/utils';
-import { scale } from '@utils';
+import { getTokenNameFromDatabase, scale } from '@utils';
 import { styles } from './styles';
 
 interface TokenSelectorProps {
@@ -25,9 +25,16 @@ export const TokenSelector = ({ type }: TokenSelectorProps) => {
     return !!selectedTokens[type];
   }, [selectedTokens, type]);
 
-  const SAMBSupportedTokenLogo = SwapStringUtils.extendedLogoVariants(
-    selectedTokens[type]?.symbol ?? ''
+  const tokenLogoHref = useMemo(
+    () =>
+      getTokenNameFromDatabase(selectedTokens[type].address) !== 'unknown'
+        ? selectedTokens[type].symbol
+        : selectedTokens[type].address,
+    [selectedTokens, type]
   );
+
+  const SAMBSupportedTokenLogo =
+    SwapStringUtils.extendedLogoVariants(tokenLogoHref);
 
   const onToggleSelectTokenModal = useCallback(() => {
     onShowBottomSheetByKey(type);

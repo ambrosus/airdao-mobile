@@ -17,7 +17,7 @@ import {
 } from '@features/swap/lib/hooks';
 import { FIELD, SelectedTokensKeys, SwapToken } from '@features/swap/types';
 import { SwapStringUtils } from '@features/swap/utils';
-import { NumberUtils } from '@utils';
+import { NumberUtils, getTokenNameFromDatabase } from '@utils';
 import { styles } from './styles';
 
 interface BottomSheetTokenItemProps {
@@ -72,9 +72,16 @@ export const BottomSheetTokenItem = ({
     token
   ]);
 
-  const SAMBSupportedTokenLogo = SwapStringUtils.extendedLogoVariants(
-    token.symbol
+  const tokenLogoHref = useMemo(
+    () =>
+      getTokenNameFromDatabase(token.address) !== 'unknown'
+        ? token.symbol
+        : token.address,
+    [token.address, token.symbol]
   );
+
+  const SAMBSupportedTokenLogo =
+    SwapStringUtils.extendedLogoVariants(tokenLogoHref);
 
   const balance = useMemo(() => {
     if (bnBalance) {

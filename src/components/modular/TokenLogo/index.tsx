@@ -55,7 +55,7 @@ export const TokenLogo = ({
     }
   }, [address, token]);
 
-  const { data } = useRodeoSingleTokenQuery(tokenName);
+  const { data, loading } = useRodeoSingleTokenQuery(tokenName);
 
   switch (tokenName?.toLowerCase()) {
     case CryptoCurrencyCode.AMB.toLowerCase():
@@ -156,6 +156,10 @@ export const TokenLogo = ({
     case CryptoCurrencyCode.Merica.toLowerCase():
       return <TokenMericaIcon scale={scale} />;
     default: {
+      if (loading) {
+        return <TokenImageIpfsWithShimmer src="" loading />;
+      }
+
       if (data && data.token) {
         const {
           token: { data: tokenEncodedData }

@@ -6,11 +6,13 @@ import { styles } from './styles';
 interface TokenImageWithShimmerProps {
   src: string;
   scale?: number;
+  loading?: boolean;
 }
 
 const TokenImageIpfsWithShimmerMemo = ({
   src,
-  scale = 1
+  scale = 1,
+  loading: propsLoading = false
 }: TokenImageWithShimmerProps) => {
   const [loading, setLoading] = useState(false);
 
@@ -26,10 +28,15 @@ const TokenImageIpfsWithShimmerMemo = ({
     [src]
   );
 
+  const isImageLoading = useMemo(
+    () => loading || propsLoading,
+    [loading, propsLoading]
+  );
+
   return (
     <View style={[styles.container, { width: size, height: size }]}>
       <View style={styles.innerRelativeContainer}>
-        {loading && (
+        {isImageLoading && (
           <ShimmerLoader
             width={size}
             height={size}
