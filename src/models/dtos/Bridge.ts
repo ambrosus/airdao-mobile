@@ -1,3 +1,5 @@
+import { TransactionDTO } from '@models';
+
 export interface BridgeTransactionTokenDestination {
   name: string;
   decimals?: number;
@@ -20,5 +22,5 @@ export interface BridgeTransactionHistoryDTO {
   withdrawTx: string;
   timestampStart: number;
   transferFinishTxHash: string;
-  wait: () => Promise<unknown>;
+  wait: () => Promise<TransactionDTO>;
 }
