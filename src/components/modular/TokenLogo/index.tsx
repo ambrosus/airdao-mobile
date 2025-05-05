@@ -169,7 +169,10 @@ export const TokenLogo = ({
           : null;
 
         return (
-          <TokenImageIpfsWithShimmer src={decodedTokenData?.image ?? ''} />
+          <TokenImageIpfsWithShimmer
+            src={decodedTokenData?.image ?? ''}
+            scale={scale}
+          />
         );
       }
 
