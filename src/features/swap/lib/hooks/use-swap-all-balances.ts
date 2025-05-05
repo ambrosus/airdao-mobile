@@ -1,45 +1,78 @@
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { ethers } from 'ethers';
 import { useRodeoTokensListQuery } from '@entities/amb-rodeo-tokens/lib';
+import { useWalletStore } from '@entities/wallet';
 import { useSwapContextSelector } from '@features/swap/context';
-import { transformTokensObject } from '@features/swap/utils';
-import { initialBalances } from '@features/swap/utils/balances';
-import { useSwapMultiplyBalance } from './use-swap-multiply-balance';
+import { transformTokensObject, initialBalances } from '@features/swap/utils';
+import { batchFetchTokenBalances } from '../contracts';
 
 export function useSwapAllBalances() {
-  const { getTokenBalance } = useSwapMultiplyBalance();
+  const { wallet } = useWalletStore();
   const { balances, setBalances, setBalancesLoading } =
     useSwapContextSelector();
 
   const { tokens } = useRodeoTokensListQuery();
+  const fetchInProgress = useRef(false);
 
   const fetchAllBalances = useCallback(async () => {
+    if (!wallet?.address || fetchInProgress.current) return;
+
+    fetchInProgress.current = true;
     const isInitialBalance =
       JSON.stringify(balances) === JSON.stringify(initialBalances);
 
     try {
       setBalancesLoading(isInitialBalance);
-      const balancePromises: Promise<Record<
-        string,
-        ethers.BigNumber
-      > | null>[] = transformTokensObject(tokens).map(async (token) => {
-        const balance = await getTokenBalance(token);
-        return balance ? { [token.address]: balance } : null;
-      });
 
-      const resolvedBalances = await Promise.all(balancePromises);
-      const nonNullBalances = resolvedBalances.filter(
-        (balance): balance is Record<string, ethers.BigNumber> =>
-          balance !== null
+      // Split tokens into priority tokens (common tokens) and other tokens
+      // This ensures users see their most important balances first
+      const commonTokenSymbols = ['AMB', 'SAMB', 'USDT', 'USDC', 'ETH', 'WETH'];
+      const allTokens = transformTokensObject(tokens);
+      const priorityTokens = allTokens.filter((token) =>
+        commonTokenSymbols.includes(token.symbol)
+      );
+      const otherTokens = allTokens.filter(
+        (token) => !commonTokenSymbols.includes(token.symbol)
       );
 
-      setBalances(nonNullBalances);
+      let nonNullBalances: Record<string, ethers.BigNumber>[] = [];
+
+      // Process priority tokens first to show important balances quickly
+      if (priorityTokens.length > 0) {
+        const priorityBalances = await batchFetchTokenBalances(
+          priorityTokens,
+          wallet.address
+        );
+
+        const priorityResults = Object.entries(priorityBalances).map(
+          ([address, balance]) => ({ [address]: balance })
+        );
+
+        nonNullBalances = [...nonNullBalances, ...priorityResults];
+        setBalances(nonNullBalances);
+      }
+
+      // Process remaining tokens in a single batch with multicall
+      if (otherTokens.length > 0) {
+        const otherBalances = await batchFetchTokenBalances(
+          otherTokens,
+          wallet.address
+        );
+
+        const otherResults = Object.entries(otherBalances).map(
+          ([address, balance]) => ({ [address]: balance })
+        );
+
+        nonNullBalances = [...nonNullBalances, ...otherResults];
+        setBalances(nonNullBalances);
+      }
     } catch (error) {
-      throw error;
+      console.error('Error in fetchAllBalances:', error);
     } finally {
       setBalancesLoading(false);
+      fetchInProgress.current = false;
     }
-  }, [balances, getTokenBalance, setBalances, setBalancesLoading, tokens]);
+  }, [balances, setBalances, setBalancesLoading, tokens, wallet?.address]);
 
   return { balances, fetchAllBalances };
 }
