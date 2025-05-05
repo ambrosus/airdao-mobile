@@ -25,7 +25,7 @@ export const Swap = ({ disabled }: SwapActionProps) => {
   const disclaimerModalRef = useRef<BottomSheetRef>(null);
 
   const navigateToSwap = () => {
-    if (!isIos) {
+    if (isIos) {
       const swapItem = browserConfig.products.find(
         (item) => (item.id = ProductSequence.Astra)
       );
