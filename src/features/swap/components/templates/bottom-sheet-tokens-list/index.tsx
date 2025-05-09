@@ -5,11 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Spacer } from '@components/base';
 import { BottomSheet, BottomSheetRef } from '@components/composite';
-import Config from '@constants/config';
 import { DEVICE_HEIGHT } from '@constants/variables';
+import { useRodeoTokensListQuery } from '@entities/amb-rodeo-tokens/lib';
 import { BottomSheetTokenItem } from '@features/swap/components/modular';
-import { useSwapAllBalances } from '@features/swap/lib/hooks/use-swap-all-balances';
+import { useSwapAllBalances } from '@features/swap/lib/hooks';
 import { FIELD, SelectedTokensKeys, SwapToken } from '@features/swap/types';
+import { transformTokensObject } from '@features/swap/utils';
 import { useForwardedRef } from '@hooks';
 import { scale } from '@utils';
 import { styles } from './styles';
@@ -25,6 +26,8 @@ export const BottomSheetTokensList = forwardRef<
   const { t } = useTranslation();
   const bottomSheetRef = useForwardedRef(ref);
   const { balances } = useSwapAllBalances();
+
+  const { tokens } = useRodeoTokensListQuery();
 
   const label = type === FIELD.TOKEN_A ? t('swap.pay') : t('swap.receive');
 
@@ -55,7 +58,7 @@ export const BottomSheetTokensList = forwardRef<
       <View style={{ maxHeight: DEVICE_HEIGHT / 2.25 }}>
         <FlatList
           maxToRenderPerBatch={4}
-          data={Config.SWAP_TOKENS}
+          data={transformTokensObject(tokens)}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.container}
           keyExtractor={(item) => item.symbol}

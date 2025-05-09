@@ -10,7 +10,6 @@ import { useBridgeContextData } from '@features/bridge/context';
 import { useBridgeTransactionStatus } from '@features/bridge/hooks/useBridgeTransactionStatus';
 import { BridgeTransactionPendingTemplate } from '@features/bridge/templates/BottomSheetBridgeTransactionPendingHistory/components';
 import { BridgeNetworksSelected } from '@features/bridge/templates/BridgeNetworksSelected/BridgeNetworksSelected';
-import { BridgeTransactionHistoryDTO } from '@models/dtos/Bridge';
 import { NumberUtils, scale } from '@utils';
 import { PreviewDataTemplate } from '../PreviewDataTemplate/PreviewDataTemplate';
 
@@ -30,7 +29,7 @@ export const GeneralPreviewTemplate = ({
   const { t } = useTranslation();
 
   const { methods, variables } = useBridgeContextData();
-  const { setProcessingTransaction } = methods;
+  const { setProcessingTransaction, getTransactionTransaction } = methods;
   const {
     processingTransaction,
     amountToBridge,
@@ -49,11 +48,8 @@ export const GeneralPreviewTemplate = ({
 
   useEffect(() => {
     if (!processingTransaction?.withdrawTx && processingTransaction) {
-      const getTransaction = async (
-        _transaction: BridgeTransactionHistoryDTO
-      ) => _transaction.wait();
       try {
-        getTransaction(processingTransaction).then((transaction) => {
+        getTransactionTransaction(processingTransaction).then((transaction) => {
           // @ts-ignore
           const userTo = transaction?.to;
           // @ts-ignore
@@ -67,7 +63,7 @@ export const GeneralPreviewTemplate = ({
           return transaction;
         });
       } catch (e) {
-        // ignore
+        throw e;
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

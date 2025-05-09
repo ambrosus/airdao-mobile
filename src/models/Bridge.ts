@@ -99,6 +99,12 @@ export interface PreviewDataWithFeeModel {
   dataToPreview: DataToPreviewModel[];
 }
 
+export interface TransactionOnLoopModel {
+  address: string;
+  timestamp: number;
+  feeData: FeeData;
+}
+
 export type BridgeSelectorTypes = 'from' | 'destination';
 export interface BridgeNetworkPickerProps {
   type: BridgeSelectorTypes;

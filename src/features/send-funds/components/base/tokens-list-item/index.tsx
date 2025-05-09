@@ -4,13 +4,15 @@ import { CryptoCurrencyCode } from '@appTypes';
 import { Row, Spacer, Text } from '@components/base';
 import { TokenLogo } from '@components/modular';
 import { COLORS } from '@constants/colors';
+import { useWalletStore } from '@entities/wallet';
 import { useUSDPrice } from '@hooks';
 import { Token } from '@models';
 import {
   StringValidators,
   wrapTokenIcon,
   NumberUtils,
-  StringUtils
+  StringUtils,
+  getTokenNameFromDatabase
 } from '@utils';
 import { styles } from './styles';
 
@@ -25,6 +27,7 @@ export const TokensListItem = ({
   selectedToken,
   onSelectToken
 }: TokensListItemProps) => {
+  const { wallet } = useWalletStore();
   const usdPrice = useUSDPrice(
     token.balance.ether,
     token.symbol as CryptoCurrencyCode
@@ -59,6 +62,19 @@ export const TokensListItem = ({
     return StringUtils.formatAddress(address, 5, 6);
   }, [token]);
 
+  const isNativeToken = useMemo(
+    () => token.address === wallet?.address,
+    [token.address, wallet?.address]
+  );
+
+  const tokenLogoHref = useMemo(
+    () =>
+      isNativeToken || getTokenNameFromDatabase(token.address) !== 'unknown'
+        ? SAMBSupportedTokenLogo
+        : token.address,
+    [SAMBSupportedTokenLogo, isNativeToken, token.address]
+  );
+
   return (
     <TouchableOpacity
       style={containerStyle}
@@ -67,7 +83,7 @@ export const TokensListItem = ({
     >
       <Row alignItems="center" justifyContent="space-between">
         <Row alignItems="center">
-          <TokenLogo scale={1} token={SAMBSupportedTokenLogo ?? ''} />
+          <TokenLogo scale={1} token={tokenLogoHref ?? ''} />
           <Spacer horizontal value={6} />
           <View>
             <Text
