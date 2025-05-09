@@ -5,7 +5,7 @@ import { CryptoCurrencyCode } from '@appTypes/blockchain';
 import { Row, Spacer, Text } from '@components/base';
 import { ArrowBottomFillIcon } from '@components/svg/icons/v2';
 import { COLORS } from '@constants/colors';
-import { TToken, wrapTokenIcon, scale } from '@utils';
+import { TToken, scale, getTokenNameFromDatabase } from '@utils';
 import { TokenLogo } from '../TokenLogo';
 import { styles } from './styles';
 
@@ -27,7 +27,16 @@ export const TokenSelector = ({
   const isToken = useMemo(() => {
     return !!token;
   }, [token]);
-  const SAMBSupportedTokenLogo = wrapTokenIcon(token);
+
+  const tokenLogoHref = useMemo(() => {
+    if (token.symbol === CryptoCurrencyCode.AMB) {
+      return 'AirDAO';
+    }
+
+    return getTokenNameFromDatabase(token.address) !== 'unknown'
+      ? token.symbol
+      : token.address;
+  }, [token.address, token.symbol]);
 
   const onToggleSelectTokenModal = useCallback(() => {
     if (selectable) onShowBottomSheetTokensListHandle();
@@ -45,7 +54,7 @@ export const TokenSelector = ({
             <>
               <TokenLogo
                 scale={token.symbol === CryptoCurrencyCode.HBR ? 0.9 : 0.8}
-                token={SAMBSupportedTokenLogo ?? ''}
+                token={tokenLogoHref}
               />
               <Spacer horizontal value={scale(4)} />
             </>

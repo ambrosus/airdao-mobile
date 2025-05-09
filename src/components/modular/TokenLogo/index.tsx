@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { CryptoCurrencyCode } from '@appTypes';
+import { TokenImageIpfsWithShimmer } from '@components/base';
 import {
   AirBondIcon,
   AirdaoBlueIcon,
@@ -26,7 +27,8 @@ import {
   UsdcIcon
 } from '@components/svg/icons';
 import { NFTIcon } from '@components/svg/icons/NFTIcon';
-import { getTokenNameFromDatabase } from '@utils';
+import { useRodeoSingleTokenQuery } from '@entities/amb-rodeo-tokens/lib';
+import { fromHexlifyToObject, getTokenNameFromDatabase } from '@utils';
 
 export interface TokenLogoProps {
   token?: string;
@@ -39,14 +41,12 @@ export interface TokenLogoProps {
   };
 }
 
-export const TokenLogo = (props: TokenLogoProps) => {
-  const {
-    scale,
-    token,
-    address,
-    overrideIconVariants = { amb: 'blue', eth: 'gray' }
-  } = props;
-
+export const TokenLogo = ({
+  scale = 1,
+  token,
+  address,
+  overrideIconVariants = { amb: 'blue', eth: 'gray' }
+}: TokenLogoProps) => {
   const tokenName = useMemo(() => {
     if (address) {
       return getTokenNameFromDatabase(address);
@@ -54,6 +54,9 @@ export const TokenLogo = (props: TokenLogoProps) => {
       return token;
     }
   }, [address, token]);
+
+  const { data, loading } = useRodeoSingleTokenQuery(tokenName);
+
   switch (tokenName?.toLowerCase()) {
     case CryptoCurrencyCode.AMB.toLowerCase():
     case CryptoCurrencyCode.SAMB.toLowerCase():
@@ -152,7 +155,28 @@ export const TokenLogo = (props: TokenLogoProps) => {
       }
     case CryptoCurrencyCode.Merica.toLowerCase():
       return <TokenMericaIcon scale={scale} />;
-    default:
+    default: {
+      if (loading) {
+        return <TokenImageIpfsWithShimmer src="" loading />;
+      }
+
+      if (data && data.token) {
+        const {
+          token: { data: tokenEncodedData }
+        } = data;
+        const decodedTokenData = data.token
+          ? fromHexlifyToObject<{ image?: string }>(tokenEncodedData)
+          : null;
+
+        return (
+          <TokenImageIpfsWithShimmer
+            src={decodedTokenData?.image ?? ''}
+            scale={scale}
+          />
+        );
+      }
+
       return <UnknownTokenIcon scale={scale} />;
+    }
   }
 };

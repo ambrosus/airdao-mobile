@@ -10,3 +10,5 @@ export { dexValidators } from './validators';
 export { SwapStringUtils } from './transformers';
 export * from './swap-args.callback';
 export * from './is-trade-better';
+export * from './transform-tokens-object';
+export * from './balances';

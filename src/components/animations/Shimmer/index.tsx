@@ -12,11 +12,13 @@ import Reanimated, {
 interface ShimmerLoaderProps {
   width: DimensionValue;
   height: DimensionValue;
+  borderRadius?: number;
 }
 
 export const ShimmerLoader = ({
   width = '100%',
-  height = 150
+  height = 150,
+  borderRadius = 4
 }: Partial<ShimmerLoaderProps>) => {
   const translateX = useSharedValue(-Dimensions.get('window').width);
 
@@ -35,7 +37,7 @@ export const ShimmerLoader = ({
   }, [translateX]);
 
   return (
-    <View style={{ ...styles.container, width, height }}>
+    <View style={{ ...styles.container, width, height, borderRadius }}>
       <Reanimated.View style={[styles.shimmer, animatedStyle]}>
         <LinearGradient
           colors={['#E0E0E0', '#F0F0F0', '#E0E0E0']}

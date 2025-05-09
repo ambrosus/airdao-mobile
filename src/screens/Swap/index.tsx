@@ -8,14 +8,17 @@ import { Button } from '@components/base';
 import { Header } from '@components/composite';
 import { SettingsFilledIcon } from '@components/svg/icons';
 import { COLORS } from '@constants/colors';
+import { useRodeoTokensListQuery } from '@entities/amb-rodeo-tokens/lib';
 import {
   BottomSheetPreviewSwap,
   BottomSheetTokensList,
   SwapForm
 } from '@features/swap/components/templates';
 import { useSwapContextSelector } from '@features/swap/context';
-import { useAllLiquidityPools } from '@features/swap/lib/hooks';
-import { useSwapAllBalances } from '@features/swap/lib/hooks/use-swap-all-balances';
+import {
+  useAllLiquidityPools,
+  useSwapAllBalances
+} from '@features/swap/lib/hooks';
 import { FIELD } from '@features/swap/types';
 import { useEffectOnce } from '@hooks';
 import { styles } from './styles';
@@ -24,7 +27,9 @@ type Props = NativeStackScreenProps<HomeParamsList, 'SwapScreen'>;
 
 export const SwapScreen = ({ navigation }: Props) => {
   const { t } = useTranslation();
+  useRodeoTokensListQuery();
   useSwapAllBalances();
+
   const { getAllPoolsCount } = useAllLiquidityPools();
   const {
     bottomSheetTokenARef,
