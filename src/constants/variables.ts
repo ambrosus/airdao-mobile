@@ -135,3 +135,13 @@ export const TOKEN_ADDRESSES = {
   '“Test1“': '0xB4eB7786858AEcE42E52656a891C01F4e5fFC12a',
   '“Test2“': '0x8099B4D8320C237A511310e3C7946cc492Ee663b'
 };
+
+/*
+ROUNDING_BUFFER -->
+JavaScript has floating-point precision issues
+sometimes getFeeData return (amount + allFees) > accountBalance
+so we apply a small fix to avoid rounding errors
+Adds a small buffer to account for potential gas fee changes
+before the exact amount is known
+*/
+export const ROUNDING_BUFFER = '1';

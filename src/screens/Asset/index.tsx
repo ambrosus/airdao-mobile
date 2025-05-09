@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ethers } from 'ethers';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { HomeParamsList } from '@appTypes';
+import { CryptoCurrencyCode, HomeParamsList } from '@appTypes';
 import { Button, Row, Spacer, Text } from '@components/base';
 import { Header } from '@components/composite';
 import { TokenLogo } from '@components/modular';
@@ -24,7 +24,8 @@ import {
   StringValidators,
   NumberUtils,
   scale,
-  verticalScale
+  verticalScale,
+  getTokenNameFromDatabase
 } from '@utils';
 import { styles } from './styles';
 
@@ -96,11 +97,21 @@ export const AssetScreen = ({ route, navigation }: Props) => {
     return StringUtils.formatAddress(address, 5, 6);
   }, [tokenInfo]);
 
-  const renderHeaderTitleComponent = useMemo(
-    () => (
+  const tokenLogoHref = useMemo(() => {
+    if (tokenInfo.symbol === CryptoCurrencyCode.AMB) {
+      return 'AirDAO';
+    }
+
+    return getTokenNameFromDatabase(tokenInfo.address) !== 'unknown'
+      ? tokenInfo.symbol
+      : tokenInfo.address;
+  }, [tokenInfo.address, tokenInfo.symbol]);
+
+  const renderHeaderTitleComponent = useMemo(() => {
+    return (
       <Row alignItems="center">
         <View>
-          <TokenLogo scale={0.7} token={tokenInfo.tokenNameFromDatabase} />
+          <TokenLogo scale={0.7} token={tokenLogoHref} />
         </View>
         <Spacer horizontal value={scale(4)} />
         <Text
@@ -111,9 +122,8 @@ export const AssetScreen = ({ route, navigation }: Props) => {
           {tokenNameOrAddress}
         </Text>
       </Row>
-    ),
-    [tokenNameOrAddress, tokenInfo.tokenNameFromDatabase]
-  );
+    );
+  }, [tokenLogoHref, tokenNameOrAddress]);
 
   const renderHeaderRightComponent = useMemo(
     () =>

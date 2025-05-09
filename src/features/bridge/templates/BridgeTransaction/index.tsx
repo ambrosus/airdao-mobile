@@ -96,10 +96,6 @@ export const BridgeTransaction = ({ transaction }: BridgeTransactionModel) => {
             </Text>
           </View>
           <View style={{ ...statusStyle }} />
-          {/*<Status*/}
-          {/*  steps={{ start: confirmations, end: minSafetyBlocks }}*/}
-          {/*  status={transactionStatus}*/}
-          {/*/>*/}
         </View>
       </Button>
 

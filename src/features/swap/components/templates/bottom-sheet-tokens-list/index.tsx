@@ -8,7 +8,7 @@ import { BottomSheet, BottomSheetRef } from '@components/composite';
 import { DEVICE_HEIGHT } from '@constants/variables';
 import { useRodeoTokensListQuery } from '@entities/amb-rodeo-tokens/lib';
 import { BottomSheetTokenItem } from '@features/swap/components/modular';
-import { useSwapAllBalances } from '@features/swap/lib/hooks/use-swap-all-balances';
+import { useSwapAllBalances } from '@features/swap/lib/hooks';
 import { FIELD, SelectedTokensKeys, SwapToken } from '@features/swap/types';
 import { transformTokensObject } from '@features/swap/utils';
 import { useForwardedRef } from '@hooks';

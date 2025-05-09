@@ -46,7 +46,10 @@ export const DEFAULT_TOKEN_PAIRS = {
 export const BRIDGE_ERROR_CODES = {
   UNPREDICTABLE_GAS_LIMIT: 'UNPREDICTABLE_GAS_LIMIT',
   INSUFFICIENT_FUNDS: 'INSUFFICIENT_FUNDS',
-  AMOUNT_TO_SMALL: 'error when getting fees: amount is too small'
+  INSUFFICIENT_FUNDS_2: 'INSUFFICIENT_FUNDS',
+  INSUFFICIENT_FUNDS_3: 'Insufficient funds',
+  AMOUNT_TO_SMALL: 'amount is too small',
+  TRANSACTION_ON_PROCESS: 'Transaction is still processing'
 };
 
 export const METHODS_FROM_ERRORS = {
