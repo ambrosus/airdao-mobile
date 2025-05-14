@@ -1,6 +1,4 @@
 import Config from '@constants/config';
-import { useRodeoTokensStore } from '@entities/amb-rodeo-tokens/model';
-import { transformTokensObject } from './transform-tokens-object';
 import { addresses } from './wrap-native-address';
 
 export const MAX_HOPS = 3;
@@ -33,22 +31,19 @@ export const generateAllPossibleRoutes = (
   path: string[],
   maxHops = MAX_HOPS
 ): string[][] => {
-  const { tokens: ambRodeoTokens } = useRodeoTokensStore.getState();
   const [startToken, endToken] = path;
   if (!startToken || !endToken) return [];
 
   // Check if path includes addresses.SAMB
   const includesSAMB = path.includes(addresses.SAMB);
 
-  const availableTokens = transformTokensObject(ambRodeoTokens)
-    .filter(
-      (token) =>
-        !ignoreTokenAddresses.includes(token.address) &&
-        token.address !== startToken &&
-        token.address !== endToken &&
-        !(includesSAMB && token.address === addresses.AMB) // Exclude AMB if SAMB is in path
-    )
-    .map((token) => token.address);
+  const availableTokens = Config.SWAP_TOKENS.filter(
+    (token) =>
+      !ignoreTokenAddresses.includes(token.address) &&
+      token.address !== startToken &&
+      token.address !== endToken &&
+      !(includesSAMB && token.address === addresses.AMB) // Exclude AMB if SAMB is in path
+  ).map((token) => token.address);
 
   const routes: string[][] = [];
 
