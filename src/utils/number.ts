@@ -162,9 +162,15 @@ const toSignificantDigits = (value: string, significantDigits = 6): string => {
   const num = parseFloat(value);
   if (isNaN(num)) return '';
 
-  const formatted = num.toPrecision(significantDigits);
+  if (Math.abs(num) < 0.000001 || Math.abs(num) > 1e21) {
+    return num.toLocaleString('fullwide', {
+      useGrouping: false,
+      maximumSignificantDigits: significantDigits
+    });
+  }
 
-  return parseFloat(formatted).toString();
+  const formatted = parseFloat(num.toPrecision(significantDigits));
+  return formatted.toLocaleString('fullwide', { useGrouping: false });
 };
 
 export const NumberUtils = {

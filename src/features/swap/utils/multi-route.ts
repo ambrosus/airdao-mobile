@@ -1,3 +1,4 @@
+import Config from '@constants/config';
 import { useRodeoTokensStore } from '@entities/amb-rodeo-tokens/model';
 import { transformTokensObject } from './transform-tokens-object';
 import { addresses } from './wrap-native-address';
@@ -79,8 +80,8 @@ export const generateAllPossibleRoutes = (
 export const extractArrayOfMiddleMultiHopAddresses = (
   path: string[]
 ): string[] => {
-  const { tokens } = useRodeoTokensStore.getState();
-  const availableTokens = transformTokensObject(tokens).filter(
+  // const { tokens } = useRodeoTokensStore.getState();
+  const availableTokens = Config.SWAP_TOKENS.filter(
     (token) => token.symbol !== 'SAMB'
   );
 

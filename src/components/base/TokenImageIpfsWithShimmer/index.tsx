@@ -10,7 +10,7 @@ import { View, Image, Dimensions } from 'react-native';
 import { ShimmerLoader } from '@components/animations';
 import { styles } from './styles';
 
-const IN_VIEW_THRESHOLD = 200;
+const IN_VIEW_THRESHOLD = 64;
 
 // IPFS Gateways
 const IPFS_GATEWAYS = [
@@ -99,10 +99,10 @@ const TokenImageIpfsWithShimmerComponent = ({
       loadingTimeoutRef.current = null;
     }
 
-    setLoading(false);
-
     if (gatewayIndex < IPFS_GATEWAYS.length - 1) {
-      setGatewayIndex((prev) => prev + 1);
+      setTimeout(() => {
+        setGatewayIndex((prev) => prev + 1);
+      }, 500);
     } else {
       setError(true);
       failedImages.add(src);
@@ -179,6 +179,16 @@ const TokenImageIpfsWithShimmerComponent = ({
           ]}
         />
       </View>
+    );
+  }
+
+  if (!src) {
+    return (
+      <ShimmerLoader
+        width={size}
+        height={size}
+        borderRadius={Number.MAX_SAFE_INTEGER}
+      />
     );
   }
 
