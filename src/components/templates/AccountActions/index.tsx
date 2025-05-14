@@ -25,7 +25,10 @@ export const AccountActions = ({
 }: AccountActionsProps) => {
   const _isRouteActive = useCallback(
     (key: string) => {
-      return !disabled && Config.walletActions[key];
+      return (
+        !disabled &&
+        Config.walletActions[key as keyof typeof Config.walletActions]
+      );
     },
     [disabled]
   );
