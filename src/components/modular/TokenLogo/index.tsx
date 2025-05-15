@@ -165,12 +165,12 @@ export const TokenLogo = ({
           token: { data: tokenEncodedData }
         } = data;
         const decodedTokenData = data.token
-          ? fromHexlifyToObject<{ image?: string }>(tokenEncodedData)
+          ? fromHexlifyToObject<{ tokenIcon?: string }>(tokenEncodedData)
           : null;
 
         return (
           <TokenImageIpfsWithShimmer
-            src={decodedTokenData?.image ?? ''}
+            src={decodedTokenData?.tokenIcon ?? ''}
             scale={scale}
           />
         );
