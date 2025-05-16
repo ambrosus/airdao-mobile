@@ -14,11 +14,13 @@ import { PrimaryButton, SecondaryButton, TokenLogo } from '@components/modular';
 import { AddressRowWithAction } from '@components/templates/ExplorerAccount/components';
 import { COLORS } from '@constants/colors';
 import { useSendFundsStore } from '@features/send-funds';
+import { Token } from '@models';
 import {
   cssShadowToNative,
   verticalScale,
   NumberUtils,
-  _delayNavigation
+  _delayNavigation,
+  getTokenNameFromDatabase
 } from '@utils';
 import { styles } from './styles';
 
@@ -26,7 +28,7 @@ interface ConfirmTransactionProps {
   from: string;
   to: string;
   etherAmount: number;
-  currency: string;
+  currency: Token;
   estimatedFee: number;
   onSendPress: () => unknown;
   onSuccessBottomSheetDismiss: () => void;
@@ -71,6 +73,12 @@ export const ConfirmTransaction = ({
     () => [styles.container, { paddingBottom: bottom }],
     [bottom]
   );
+
+  const tokenLogoHref = useMemo(() => {
+    return getTokenNameFromDatabase(currency.address) !== 'unknown'
+      ? currency.symbol
+      : currency.address;
+  }, [currency.address, currency.symbol]);
 
   const buttonColors = useMemo(() => {
     return disabled
@@ -165,13 +173,14 @@ export const ConfirmTransaction = ({
         <Row alignItems="center" justifyContent="space-between">
           <Title>{t('common.transactions.sending')}</Title>
           <Row alignItems="center" style={styles.amountContainerRow}>
-            <TokenLogo token={currency} scale={0.75} />
+            <TokenLogo token={tokenLogoHref} scale={0.75} />
             <Text
               fontSize={15}
               fontFamily="Inter_500Medium"
               color={COLORS.neutral800}
             >
-              {NumberUtils.numberToTransformedLocale(etherAmount)} {currency}
+              {NumberUtils.numberToTransformedLocale(etherAmount)}{' '}
+              {currency.symbol}
             </Text>
           </Row>
         </Row>
