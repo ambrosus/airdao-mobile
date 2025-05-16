@@ -75,10 +75,12 @@ export const ConfirmTransaction = ({
   );
 
   const tokenLogoHref = useMemo(() => {
+    if (currency.address === from) return currency.symbol;
+
     return getTokenNameFromDatabase(currency.address) !== 'unknown'
       ? currency.symbol
       : currency.address;
-  }, [currency.address, currency.symbol]);
+  }, [currency.address, currency.symbol, from]);
 
   const buttonColors = useMemo(() => {
     return disabled
