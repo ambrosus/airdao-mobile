@@ -35,10 +35,7 @@ export const parseWebProduct = (
   products: BrowserItemModel[],
   currentLanguage: string
 ): Product[] => {
-  Alert.alert(`1->${Application?.nativeApplicationVersion}`);
-  Alert.alert(`2->${compareVersions(APP_VERSION, MIN_AMBRODEO_VERSION) >= 0}`);
-  Alert.alert(`3->${APP_VERSION}, ${MIN_AMBRODEO_VERSION}`);
-
+  
   return products
     .filter((product) => product.uri && product.name)
     .filter((product) => product?.platforms?.includes(Platform.OS))
