@@ -5,7 +5,7 @@ import {
   BottomSheetProps,
   BottomSheetRef
 } from '@components/composite';
-import { AlertModalTemplate } from '@components/templates';
+import { AlertModalTemplate } from '@components/templates/AlertModalTemplate';
 import { useForwardedRef } from '@hooks';
 import { styles } from './styles';
 
