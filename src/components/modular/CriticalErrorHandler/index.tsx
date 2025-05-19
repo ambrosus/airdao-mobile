@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { BackHandler } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { BottomSheetRef } from '@components/composite';
 import { useGlobalErrorStore } from '@entities/global-error/global-error-store';
 import { BottomSheetCriticalError } from '@features/harbor/components/templates/bottom-sheet-critical-error';
+import { delay } from '@utils';
 
 // Глобальна функція для показу критичної помилки через zustand store
 export function showCriticalError({
@@ -32,24 +33,34 @@ export const CriticalErrorHandler: React.FC = () => {
     }
   }, [error]);
 
+  const handleClose = useCallback(async () => {
+    clearError();
+    await delay(200);
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    } else {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'HomeScreen' }]
+        })
+      );
+    }
+  }, [clearError, navigation]);
+
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
         if (error) {
-          navigation.goBack();
-          clearError();
+          handleClose();
           return true;
         }
         return false;
       }
     );
     return () => backHandler.remove();
-  }, [navigation, error, clearError]);
-
-  const handleClose = () => {
-    clearError();
-  };
+  }, [navigation, error, clearError, handleClose]);
 
   return (
     <BottomSheetCriticalError

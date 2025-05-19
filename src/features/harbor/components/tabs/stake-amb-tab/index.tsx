@@ -33,11 +33,11 @@ export const StakeAMBTab = () => {
     return (
       <RefreshControl
         onRefresh={handleRefresh}
-        refreshing={loading}
+        refreshing={false}
         removeClippedSubviews
       />
     );
-  }, [handleRefresh, loading]);
+  }, [handleRefresh]);
 
   const [extraHeight, setExtraHeight] = useState(50);
 

@@ -1,5 +1,4 @@
 import { ForwardedRef, forwardRef, useEffect } from 'react';
-import { CommonActions, useNavigation } from '@react-navigation/native';
 import { t } from 'i18next';
 import {
   BottomSheet,
@@ -24,7 +23,6 @@ export const BottomSheetCriticalError = forwardRef<
 >((props, ref) => {
   const { visible, title, message, onClose, ...restProps } = props;
   const localRef: ForwardedRef<BottomSheetRef> = useForwardedRef(ref);
-  const navigation = useNavigation();
 
   useEffect(() => {
     if (visible) {
@@ -38,19 +36,13 @@ export const BottomSheetCriticalError = forwardRef<
     if (onClose) {
       onClose();
     }
-    navigation.canGoBack()
-      ? navigation.goBack()
-      : navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: 'HomeScreen' }]
-          })
-        );
   };
 
   return (
     <BottomSheet
+      onClose={onClose}
       ref={localRef}
+      onCustomCrossPress={onClose}
       containerStyle={styles.bottomSheet}
       swiperIconVisible={false}
       swipingEnabled={false}
