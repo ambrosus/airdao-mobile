@@ -23,8 +23,8 @@
     }
   },
   "critical.error": {
-    "harbor.header": "!!!Something went wrong",
-    "harbor.subheader": "!!!Please try again later or contact support if the issue persists."
+    "harbor.header": "Bir şeyler ters gitti",
+    "harbor.subheader": "Lütfen tekrar deneyin. Sorun sürerse desteğe başvurun."
   },
   "address.add.group": "Gruba ekleyin",
   "address.add.to.group": "Adresi gruba ekleyin",
