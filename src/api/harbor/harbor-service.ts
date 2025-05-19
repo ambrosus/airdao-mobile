@@ -3,7 +3,7 @@ import { BigNumber, ethers } from 'ethers';
 import { parseEther } from 'ethers/lib/utils';
 import moment from 'moment/moment';
 import { UNSTAKE_LOG_ABI, HARBOR_ABI } from '@api/harbor/abi';
-import { showCriticalError } from '@components/CriticalErrorHandler';
+import { showCriticalError } from '@components/modular/CriticalErrorHandler';
 import Config from '@constants/config';
 import { ILogs } from '@entities/harbor/model';
 import { Cache, CacheKey } from '@lib/cache';

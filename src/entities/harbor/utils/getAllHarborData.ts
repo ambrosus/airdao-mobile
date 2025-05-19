@@ -1,5 +1,5 @@
 import { harborService } from '@api/harbor/harbor-service';
-import { showCriticalError } from '@components/CriticalErrorHandler';
+import { showCriticalError } from '@components/modular/CriticalErrorHandler';
 import { getHarborToken } from '@entities/harbor/utils/getHarborToken';
 
 const handleServiceError = (e: any) => {
