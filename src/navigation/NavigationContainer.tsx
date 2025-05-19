@@ -4,6 +4,7 @@ import {
   NavigationContainerRef
 } from '@react-navigation/native';
 import { RootStackParamsList } from '@appTypes';
+import { CriticalErrorHandler } from '@components/CriticalErrorHandler';
 import { StatusBar } from '@components/templates';
 import { navTheme } from '@constants/navTheme';
 import { NavigationProvider } from '@contexts/Navigation';
@@ -42,6 +43,7 @@ const Navigation = () => {
       <NavigationProvider currentRoute={currentRoute}>
         <StatusBar />
         <RootStack />
+        <CriticalErrorHandler />
       </NavigationProvider>
     </NavigationContainer>
   );

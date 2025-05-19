@@ -22,6 +22,10 @@
       "bridge": "Bridge"
     }
   },
+  "critical.error": {
+    "harbor.header": "Something went wrong",
+    "harbor.subheader": "Please try again later or contact support if the issue persists. "
+  },
   "address.add.group": "Add to group",
   "address.add.to.group": "Add address to group",
   "address.add.to.selected.group": "Add address to {{selectedGroup}}",

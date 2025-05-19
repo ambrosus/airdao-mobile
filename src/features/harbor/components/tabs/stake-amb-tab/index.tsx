@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 import { Spacer } from '@components/base';
 import { useHarborStore } from '@entities/harbor/model';
@@ -14,17 +14,30 @@ export const StakeAMBTab = () => {
   const scrollRef = useRef<ScrollView>(null);
   const { data: harborData, loading, updateAll } = useHarborStore();
   const { wallet } = useWalletStore();
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  const handleRefresh = useCallback(() => {
+    if (wallet?.address) {
+      updateAll(wallet.address);
+    }
+  }, [wallet?.address, updateAll]);
+
+  useEffect(() => {
+    if (wallet?.address && !isInitialized) {
+      handleRefresh();
+      setIsInitialized(true);
+    }
+  }, [wallet?.address, handleRefresh, isInitialized]);
 
   const renderRefetchController = useMemo(() => {
     return (
       <RefreshControl
-        onRefresh={() => updateAll(wallet?.address || '')}
-        refreshing={false}
+        onRefresh={handleRefresh}
+        refreshing={loading}
         removeClippedSubviews
       />
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [wallet?.address]);
+  }, [handleRefresh, loading]);
 
   const [extraHeight, setExtraHeight] = useState(50);
 

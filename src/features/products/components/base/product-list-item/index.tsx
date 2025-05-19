@@ -34,7 +34,7 @@ export const ProductListItem = ({
         disclaimerModalRef?.current?.show({
           title: t('browser.disclaimer.header'),
           subTitle: t('browser.disclaimer.description'),
-          buttonsLabels: [t('button.processed')],
+          buttonsLabels: [t('button.cancel'), t('button.processed')],
           onApprove: () => navigation.navigate('BrowserScreen', { uri })
         });
       }

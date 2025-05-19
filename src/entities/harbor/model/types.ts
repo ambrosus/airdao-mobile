@@ -41,15 +41,15 @@ export interface HarborStoreModel {
   withdrawalList: ILogs[];
   withdrawListLoader: boolean;
   activeAmbTier: TierRewardItem;
+  ambAmount: string;
+  claimAmount: BigNumber;
+  loading: boolean;
   setActiveAmbTier: (payload: TierRewardItem) => void;
   setDefaultActiveAmbTiers: () => void;
-  claimAmount: BigNumber;
   updateWithdrawList: (payload: string) => void;
   clearWithdrawList: () => void;
   getClaimAmount: (payload: string) => void;
   setRewardAmount: (payload: { ambAmount: string }) => void;
-  ambAmount: string;
-  loading: boolean;
   updateAll: (payload: string) => void;
 }
 

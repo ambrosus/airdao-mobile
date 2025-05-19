@@ -30,3 +30,4 @@ export * from './InputWithTokenSelect';
 export * from './InputWithoutTokenSelect';
 export * from './DropDownPanel';
 export * from './AllProductPermissions';
+export * from './AlertModalTemplate';
