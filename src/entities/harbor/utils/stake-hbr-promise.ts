@@ -1,4 +1,13 @@
 import { hbrYieldService } from '@api/harbor';
+import { showCriticalError } from '@components/CriticalErrorHandler';
+
+const handleServiceError = (e: any) => {
+  showCriticalError({
+    title: 'critical.error.harbor.header',
+    message: 'critical.error.harbor.subheader'
+  });
+  throw e;
+};
 
 export async function stakeHBRPromise(address: string) {
   try {
@@ -12,6 +21,6 @@ export async function stakeHBRPromise(address: string) {
       await hbrYieldService.allowance(address)
     ]);
   } catch (error) {
-    throw error;
+    return handleServiceError(error);
   }
 }

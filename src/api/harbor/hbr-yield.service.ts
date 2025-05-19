@@ -1,5 +1,6 @@
 import { Wallet, ethers } from 'ethers';
 import { provider } from '@api/nft-contract-service';
+import { showCriticalError } from '@components/CriticalErrorHandler';
 import Config from '@constants/config';
 import { IsNullableAccount } from '@entities/wallet/model/types';
 import { AmbErrorProvider } from '@lib';
@@ -31,6 +32,14 @@ const createHBRTokenContract = (providerOrSigner = provider) => {
 const createSigner = (privateKey: string) => {
   const provider = new AmbErrorProvider(Config.NETWORK_URL, Config.CHAIN_ID);
   return new ethers.Wallet(privateKey, provider);
+};
+
+const handleServiceError = (e: any) => {
+  showCriticalError({
+    title: 'critical.error.harbor.header',
+    message: 'critical.error.harbor.subheader'
+  });
+  throw e;
 };
 
 class HBRYieldService {
@@ -100,7 +109,7 @@ class HBRYieldService {
       sendFirebaseEvent(CustomAppEvents.harbor_hbr_stake_error, {
         harborHBRStakeError: errorMessage
       });
-      return error;
+      return handleServiceError(error);
     }
   }
 
@@ -138,7 +147,7 @@ class HBRYieldService {
       sendFirebaseEvent(CustomAppEvents.harbor_hbr_amb_stake_error, {
         harborHbrAmbStakeError: errorMessage
       });
-      return error;
+      return handleServiceError(error);
     }
   }
 
@@ -171,7 +180,7 @@ class HBRYieldService {
       sendFirebaseEvent(CustomAppEvents.harbor_hbr_withdraw_error, {
         harborHbrWithdrawError: errorMessage
       });
-      return error;
+      return handleServiceError(error);
     }
   }
 
@@ -204,7 +213,7 @@ class HBRYieldService {
       sendFirebaseEvent(CustomAppEvents.harbor_hbr_amb_withdraw_error, {
         harborHbrAmbWithdrawError: errorMessage
       });
-      return error;
+      return handleServiceError(error);
     }
   }
 }

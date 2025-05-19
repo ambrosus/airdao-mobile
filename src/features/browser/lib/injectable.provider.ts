@@ -240,7 +240,7 @@ export const INJECTED_JS = `
      }));
 
     console.log('Favicon URL:', faviconUrl);
-  }, 1000); // Чекаємо 1 сек, щоб сторінка встигла завантажитись
+  }, 1000); // Wait 1 second for the page to load completely
 });
 
     return true;

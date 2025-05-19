@@ -10,7 +10,7 @@ import { getAllHarborData } from '@entities/harbor/utils/getAllHarborData';
 import { parseData } from '@entities/harbor/utils/parceData';
 import { DEFAULT_DATA, REWARD_TIERS_LIST } from '../constants';
 
-export const useHarborStore = create<HarborStoreModel>((set) => ({
+export const useHarborStore = create<HarborStoreModel>((set, get) => ({
   data: DEFAULT_DATA,
   loading: false,
   withdrawListLoader: false,
@@ -41,14 +41,25 @@ export const useHarborStore = create<HarborStoreModel>((set) => ({
     set({ withdrawalList: [] });
   },
   updateAll: async (address: string) => {
+    if (!address || get().loading) {
+      return;
+    }
+
     try {
       set({ loading: true });
-      set({ claimAmount: await harborService.getClaimAmount(address) });
+
+      const claimAmount = await harborService.getClaimAmount(address);
       const data = await getAllHarborData(address);
+
       if (data) {
-        set({ data: parseData<HarborDataModel>(data) });
+        set({
+          data: parseData<HarborDataModel>(data),
+          claimAmount
+        });
         return data;
       }
+    } catch (error) {
+      // Error is now handled by harbor-service.ts
     } finally {
       set({ loading: false });
     }

@@ -22,6 +22,10 @@
       "stake": "Bahis"
     }
   },
+  "critical.error": {
+    "harbor.header": "!!!Something went wrong",
+    "harbor.subheader": "!!!Please try again later or contact support if the issue persists."
+  },
   "address.add.group": "Gruba ekleyin",
   "address.add.to.group": "Adresi gruba ekleyin",
   "address.add.to.selected.group": "Adresi {{selectedGroup}} grubuna ekleyin",
