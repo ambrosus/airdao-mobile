@@ -1,6 +1,6 @@
 import { Wallet, ethers } from 'ethers';
 import { provider } from '@api/nft-contract-service';
-import { showCriticalError } from '@components/CriticalErrorHandler';
+import { showCriticalError } from '@components/modular/CriticalErrorHandler';
 import Config from '@constants/config';
 import { IsNullableAccount } from '@entities/wallet/model/types';
 import { AmbErrorProvider } from '@lib';

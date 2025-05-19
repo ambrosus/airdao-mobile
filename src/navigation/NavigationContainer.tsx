@@ -4,7 +4,7 @@ import {
   NavigationContainerRef
 } from '@react-navigation/native';
 import { RootStackParamsList } from '@appTypes';
-import { CriticalErrorHandler } from '@components/CriticalErrorHandler';
+import { CriticalErrorHandler } from '@components/modular';
 import { StatusBar } from '@components/templates';
 import { navTheme } from '@constants/navTheme';
 import { NavigationProvider } from '@contexts/Navigation';

@@ -1,5 +1,5 @@
 import { API } from '@api/api';
-import { showCriticalError } from '@components/CriticalErrorHandler';
+import { showCriticalError } from '@components/modular/CriticalErrorHandler';
 import Config from '@constants/config';
 import { EMPTY_TOKEN } from '@entities/harbor/constants';
 import { TokenUtils } from '@utils';

@@ -1,5 +1,5 @@
 import { hbrYieldService } from '@api/harbor';
-import { showCriticalError } from '@components/CriticalErrorHandler';
+import { showCriticalError } from '@components/modular/CriticalErrorHandler';
 
 const handleServiceError = (e: any) => {
   showCriticalError({
