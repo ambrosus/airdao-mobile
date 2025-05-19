@@ -48,7 +48,6 @@ export const DEFAULT_STAKE_PREVIEW = {
 export const DEFAULT_WITHDRAW_PREVIEW = {
   withdrawAmount: '0',
   rewardAmb: '0',
-  rewardBond: '0',
   delay: '0',
   estimatedGas: '0'
 };
@@ -60,11 +59,5 @@ export const REWARD_TIERS_LIST: TierRewardList = {
     { id: 'amb2', value: 0.5, availableOn: 2 },
     { id: 'amb3', value: 0.75, availableOn: 3 },
     { id: 'amb4', value: 1, availableOn: 4 }
-  ],
-  bond: [
-    { id: 'bond1', value: 0.25, availableOn: 3 },
-    { id: 'bond2', value: 0.5, availableOn: 2 },
-    { id: 'bond3', value: 0.75, availableOn: 1 },
-    { id: 'bond4', value: 1, availableOn: 4 }
   ]
 };

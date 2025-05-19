@@ -6,10 +6,7 @@ import { Row, Spacer, Text } from '@components/base';
 import { CircleInfoIcon } from '@components/svg/icons/v2/harbor';
 import { COLORS } from '@constants/colors';
 import { DEVICE_HEIGHT } from '@constants/variables';
-import {
-  EMPTY_SELECTED_TIER,
-  REWARD_TIERS_LIST
-} from '@entities/harbor/constants';
+import { REWARD_TIERS_LIST } from '@entities/harbor/constants';
 import { useHarborStore, TierRewardItem } from '@entities/harbor/model';
 import { TokenReward } from '@features/harbor/components/base/token-reward';
 import { calculateClaimAmount } from '@features/harbor/lib';
@@ -17,19 +14,14 @@ import { isAndroid, isIos, scale } from '@utils';
 import { styles } from './styles';
 
 interface TiersContainerProps {
-  bondAmount: string;
   ambAmount: string;
 }
-export const TiersSelector = ({
-  bondAmount,
-  ambAmount
-}: TiersContainerProps) => {
+
+export const TiersSelector = ({ ambAmount }: TiersContainerProps) => {
   const { t } = useTranslation();
   const {
     activeAmbTier,
     setActiveAmbTier,
-    activeBondTier,
-    setActiveBondTier,
     claimAmount,
     setRewardAmount,
     loading,
@@ -38,35 +30,14 @@ export const TiersSelector = ({
 
   const [toolTipVisible, setToolTipVisible] = useState(false);
 
-  const setOppositePart = (
-    oppositeArray: TierRewardItem[],
-    oppositeSetter: (payload: TierRewardItem) => void,
-    selectedItem: TierRewardItem
-  ) => {
-    if (selectedItem?.value === 1) {
-      oppositeSetter(EMPTY_SELECTED_TIER);
-    }
-    const oppositePart = oppositeArray.find(
-      (oppositeItem) => oppositeItem?.value + selectedItem?.value === 1
-    ) as TierRewardItem;
-    oppositeSetter(oppositePart);
-  };
-
   const onAmbPress = (ambItem: TierRewardItem) => {
-    setRewardAmount(calculateClaimAmount(claimAmount, ambItem, 'amb'));
+    setRewardAmount(calculateClaimAmount(claimAmount, ambItem));
     setActiveAmbTier(ambItem);
-    setOppositePart(REWARD_TIERS_LIST.bond, setActiveBondTier, ambItem);
   };
 
-  const onBondPress = (bondItem: TierRewardItem) => {
-    setRewardAmount(calculateClaimAmount(claimAmount, bondItem, 'bond'));
-    setActiveBondTier(bondItem);
-    setOppositePart(REWARD_TIERS_LIST.amb, setActiveAmbTier, bondItem);
-  };
   useEffect(() => {
-    setRewardAmount(calculateClaimAmount(claimAmount, activeAmbTier, 'amb'));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [claimAmount]);
+    setRewardAmount(calculateClaimAmount(claimAmount, activeAmbTier));
+  }, [claimAmount, activeAmbTier, setRewardAmount]);
 
   useEffect(() => {
     setToolTipVisible(false);
@@ -119,15 +90,6 @@ export const TiersSelector = ({
           amount={ambAmount}
           onItemPress={onAmbPress}
           rewardTiers={REWARD_TIERS_LIST.amb}
-        />
-        <Spacer value={scale(12)} />
-        <TokenReward
-          userTier={userTier}
-          rewardTokenName={'bond'}
-          selectedTokenReward={activeBondTier}
-          amount={bondAmount}
-          onItemPress={onBondPress}
-          rewardTiers={REWARD_TIERS_LIST.bond}
         />
       </View>
     </View>

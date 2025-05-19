@@ -1,4 +1,4 @@
-import { Alert, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import * as Application from 'expo-application';
 import { SvgXml } from 'react-native-svg';
 import { ProductSwap } from '@components/svg/icons/v2';
@@ -35,7 +35,6 @@ export const parseWebProduct = (
   products: BrowserItemModel[],
   currentLanguage: string
 ): Product[] => {
-  
   return products
     .filter((product) => product.uri && product.name)
     .filter((product) => product?.platforms?.includes(Platform.OS))

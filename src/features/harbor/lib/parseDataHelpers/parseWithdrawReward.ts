@@ -12,11 +12,6 @@ export const parseWithdrawReward = (previewData: WithdrawPreviewDataModel) => {
         symbol: CryptoCurrencyCode.AMB
       },
       {
-        name: 'harbor.withdraw.preview.bond.reward',
-        value: NumberUtils.limitDecimalCount(previewData.rewardBond, 2),
-        symbol: CryptoCurrencyCode.BOND
-      },
-      {
         name: 'common.network.fee',
         value: `${previewData.estimatedGas ?? 0} ${CryptoCurrencyCode.AMB}`
       }
@@ -32,12 +27,6 @@ export const parseWithdrawReward = (previewData: WithdrawPreviewDataModel) => {
         name: 'harbor.withdraw.preview.amb.reward',
         value: `${NumberUtils.limitDecimalCount(previewData.rewardAmb, 2)} ${
           CryptoCurrencyCode.AMB
-        }`
-      },
-      {
-        name: 'harbor.withdraw.preview.bond.reward',
-        value: `${NumberUtils.limitDecimalCount(previewData.rewardBond, 2)} ${
-          CryptoCurrencyCode.BOND
         }`
       }
     ]

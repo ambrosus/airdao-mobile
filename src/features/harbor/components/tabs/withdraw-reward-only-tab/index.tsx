@@ -22,7 +22,6 @@ export const WithdrawRewardOnlyTab = () => {
   const [isNullAmount, setIsNullAmount] = useState(false);
   const {
     ambAmount,
-    bondAmount,
     activeAmbTier,
     data: { unStakeDelay }
   } = useHarborStore();
@@ -37,7 +36,6 @@ export const WithdrawRewardOnlyTab = () => {
         withdrawAmount: '0',
         delay: unStakeDelay.delay,
         rewardAmb: ambAmount,
-        rewardBond: bondAmount,
         estimatedGas: '0'
       };
 
@@ -63,15 +61,15 @@ export const WithdrawRewardOnlyTab = () => {
     } finally {
       setIsEstimatingGas(false);
     }
-  }, [activeAmbTier.value, ambAmount, bondAmount, unStakeDelay.delay, wallet]);
+  }, [activeAmbTier.value, ambAmount, unStakeDelay.delay, wallet]);
 
   useEffect(() => {
-    if (+ambAmount <= 0 && +bondAmount <= 0) {
+    if (+ambAmount <= 0) {
       setIsNullAmount(true);
     } else {
       setIsNullAmount(false);
     }
-  }, [ambAmount, bondAmount]);
+  }, [ambAmount]);
 
   const disabled = useMemo(() => {
     return isNullAmount || isEstimatingGas;
@@ -79,10 +77,7 @@ export const WithdrawRewardOnlyTab = () => {
 
   return (
     <View style={styles.main}>
-      <TiersSelector
-        bondAmount={bondAmount || '0'}
-        ambAmount={ambAmount || '0'}
-      />
+      <TiersSelector ambAmount={ambAmount || '0'} />
       <Spacer value={scale(8)} />
 
       <PrimaryButton

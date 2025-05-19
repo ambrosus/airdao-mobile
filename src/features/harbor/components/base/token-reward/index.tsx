@@ -26,9 +26,7 @@ export const TokenReward = ({
   userTier
 }: TokenRewardProps) => {
   const onRewardPress = (item: TierRewardItem) => {
-    if (item.availableOn > userTier) {
-      return;
-    }
+    return;
     onItemPress(item);
   };
   return (
