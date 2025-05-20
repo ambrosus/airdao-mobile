@@ -6,17 +6,6 @@ import { useGlobalErrorStore } from '@entities/global-error/global-error-store';
 import { BottomSheetCriticalError } from '@features/harbor/components/templates/bottom-sheet-critical-error';
 import { delay } from '@utils';
 
-// Глобальна функція для показу критичної помилки через zustand store
-export function showCriticalError({
-  title,
-  message
-}: {
-  title: string;
-  message: string;
-}) {
-  useGlobalErrorStore.getState().setError({ title, message });
-}
-
 export const CriticalErrorHandler: React.FC = () => {
   const localRef = useRef<BottomSheetRef>(null);
   const navigation = useNavigation();
