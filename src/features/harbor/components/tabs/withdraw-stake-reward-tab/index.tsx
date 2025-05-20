@@ -23,7 +23,6 @@ export const WithdrawStakeRewardTab = () => {
   const {
     data: { userStaked, token, totalStaked, unStakeDelay },
     ambAmount,
-    bondAmount,
     activeAmbTier
   } = useHarborStore();
 
@@ -50,7 +49,6 @@ export const WithdrawStakeRewardTab = () => {
       const data = {
         withdrawAmount: amountToWithdraw,
         rewardAmb: ambAmount,
-        rewardBond: bondAmount,
         delay: unStakeDelay.delay,
         estimatedGas: '0'
       };
@@ -82,7 +80,6 @@ export const WithdrawStakeRewardTab = () => {
     activeAmbTier.value,
     ambAmount,
     amountToWithdraw,
-    bondAmount,
     previewData,
     unStakeDelay.delay,
     wallet
@@ -114,10 +111,7 @@ export const WithdrawStakeRewardTab = () => {
         }}
       />
       <Spacer value={scale(8)} />
-      <TiersSelector
-        bondAmount={bondAmount || '0'}
-        ambAmount={ambAmount || '0'}
-      />
+      <TiersSelector ambAmount={ambAmount || '0'} />
       <Spacer value={scale(8)} />
       <WithdrawInfo />
       <Spacer value={scale(16)} />

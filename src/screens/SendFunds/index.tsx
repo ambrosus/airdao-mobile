@@ -427,7 +427,7 @@ export const SendFunds = ({ navigation, route }: Props) => {
               from={senderAddress}
               to={destinationAddress}
               etherAmount={parseFloat(amountInCrypto)}
-              currency={selectedToken.symbol}
+              currency={selectedToken}
               estimatedFee={estimatedFee}
               onSendPress={sendTx}
               onSuccessBottomSheetDismiss={onSuccessBottomSheetDismiss}

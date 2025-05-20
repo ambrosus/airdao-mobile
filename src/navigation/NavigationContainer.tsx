@@ -7,6 +7,7 @@ import { RootStackParamsList } from '@appTypes';
 import { StatusBar } from '@components/templates';
 import { navTheme } from '@constants/navTheme';
 import { NavigationProvider } from '@contexts/Navigation';
+import { CriticalErrorHandler } from '@features/harbor/components/composite/critical-error-handler';
 import { RootStack } from './stacks/RootStack';
 
 const Navigation = () => {
@@ -42,6 +43,7 @@ const Navigation = () => {
       <NavigationProvider currentRoute={currentRoute}>
         <StatusBar />
         <RootStack />
+        <CriticalErrorHandler />
       </NavigationProvider>
     </NavigationContainer>
   );

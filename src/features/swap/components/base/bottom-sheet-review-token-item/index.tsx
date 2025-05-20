@@ -7,7 +7,7 @@ import { COLORS } from '@constants/colors';
 import { useSwapContextSelector } from '@features/swap/context';
 import { FIELD } from '@features/swap/types';
 import { SwapStringUtils } from '@features/swap/utils';
-import { verticalScale } from '@utils';
+import { getTokenNameFromDatabase, verticalScale } from '@utils';
 import { styles } from './styles';
 
 interface BottomSheetReviewTokenItemProps {
@@ -21,9 +21,14 @@ export const BottomSheetReviewTokenItem = ({
   const label = type === FIELD.TOKEN_A ? t('swap.pay') : t('swap.receive');
   const { selectedTokens, selectedTokensAmount } = useSwapContextSelector();
 
-  const token = SwapStringUtils.extendedLogoVariants(
-    selectedTokens[type]?.symbol ?? ''
-  );
+  const tokenLogoHref = useMemo(() => {
+    const token = selectedTokens[type];
+    return getTokenNameFromDatabase(token.address) !== 'unknown'
+      ? token.symbol
+      : token.address;
+  }, [selectedTokens, type]);
+
+  const token = SwapStringUtils.extendedLogoVariants(tokenLogoHref);
 
   const combinedTypeContainerStyle: StyleProp<ViewStyle> = useMemo(() => {
     return {

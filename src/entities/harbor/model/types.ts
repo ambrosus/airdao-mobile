@@ -16,7 +16,7 @@ export interface HarborDataModel {
   userStaked: BigNumber;
 }
 
-export type RewardTokenNamesModel = 'amb' | 'bond';
+export type RewardTokenNamesModel = 'amb';
 
 export interface TierRewardItem {
   id: string;
@@ -26,8 +26,8 @@ export interface TierRewardItem {
 
 export interface TierRewardList {
   amb: TierRewardItem[];
-  bond: TierRewardItem[];
 }
+
 export interface ILogs {
   amount: BigNumber;
   tokenAddress: string;
@@ -41,18 +41,15 @@ export interface HarborStoreModel {
   withdrawalList: ILogs[];
   withdrawListLoader: boolean;
   activeAmbTier: TierRewardItem;
-  setActiveAmbTier: (payload: TierRewardItem) => void;
-  activeBondTier: TierRewardItem;
-  setDefaultActiveAmbTiers: () => void;
+  ambAmount: string;
   claimAmount: BigNumber;
+  loading: boolean;
+  setActiveAmbTier: (payload: TierRewardItem) => void;
+  setDefaultActiveAmbTiers: () => void;
   updateWithdrawList: (payload: string) => void;
   clearWithdrawList: () => void;
   getClaimAmount: (payload: string) => void;
-  setActiveBondTier: (payload: TierRewardItem) => void;
-  bondAmount: string;
-  setRewardAmount: (payload: { ambAmount: string; bondAmount: string }) => void;
-  ambAmount: string;
-  loading: boolean;
+  setRewardAmount: (payload: { ambAmount: string }) => void;
   updateAll: (payload: string) => void;
 }
 

@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.neutral200,
     borderRadius: scale(16),
-    paddingHorizontal: scale(8) // Додає внутрішні відступи
+    paddingHorizontal: scale(8) // Add internal padding
   },
   actionButton: {
     flex: 1,

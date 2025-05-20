@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { CryptoCurrencyCode } from '@appTypes';
+import { ShimmerLoader } from '@components/animations';
 import { TokenImageIpfsWithShimmer } from '@components/base';
 import {
   AirBondIcon,
@@ -157,7 +158,13 @@ export const TokenLogo = ({
       return <TokenMericaIcon scale={scale} />;
     default: {
       if (loading) {
-        return <TokenImageIpfsWithShimmer src="" loading />;
+        return (
+          <ShimmerLoader
+            width={32 * scale}
+            height={32 * scale}
+            borderRadius={Number.MAX_SAFE_INTEGER}
+          />
+        );
       }
 
       if (data && data.token) {
@@ -165,12 +172,12 @@ export const TokenLogo = ({
           token: { data: tokenEncodedData }
         } = data;
         const decodedTokenData = data.token
-          ? fromHexlifyToObject<{ image?: string }>(tokenEncodedData)
+          ? fromHexlifyToObject<{ tokenIcon?: string }>(tokenEncodedData)
           : null;
 
         return (
           <TokenImageIpfsWithShimmer
-            src={decodedTokenData?.image ?? ''}
+            src={decodedTokenData?.tokenIcon ?? ''}
             scale={scale}
           />
         );

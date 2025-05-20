@@ -22,6 +22,10 @@
       "stake": "Bahis"
     }
   },
+  "critical.error": {
+    "harbor.header": "Bir şeyler ters gitti",
+    "harbor.subheader": "Lütfen tekrar deneyin. Sorun sürerse desteğe başvurun."
+  },
   "address.add.group": "Gruba ekleyin",
   "address.add.to.group": "Adresi gruba ekleyin",
   "address.add.to.selected.group": "Adresi {{selectedGroup}} grubuna ekleyin",
@@ -488,7 +492,7 @@
   "harbor.successfully.withdraw.header": "Başarıyla çektiniz",
   "harbor.withdraw.stake.reward": "Stake + Ödüller",
   "harbor.withdraw.reward": "Yalnızca ödüller",
-  "harbor.tiers.container.header": "Ödül Dağıtımı",
+  "harbor.tiers.container.header": "Ödül",
   "harbor.exchange.rate": "Döviz kuru",
   "harbor.withdrawal.delay": "Çekme Gecikmesi",
   "harbor.withdrawal.button": "Çekme Talebinde Bulun",
