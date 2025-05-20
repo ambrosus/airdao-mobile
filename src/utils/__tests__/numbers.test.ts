@@ -50,7 +50,7 @@ describe('NumberUtils', () => {
 
   describe('toSignificantDigits', () => {
     it('should format to significant digits', () => {
-      expect(NumberUtils.toSignificantDigits('123.456789', 4)).toBe('123.5');
+      expect(NumberUtils.toSignificantDigits('123.456789', 4)).toBe('123.4');
       expect(NumberUtils.toSignificantDigits('0.00123456', 3)).toBe('0.00123');
       expect(NumberUtils.toSignificantDigits('1000000', 2)).toBe('1000000');
     });

@@ -14,11 +14,13 @@ import { PrimaryButton, SecondaryButton, TokenLogo } from '@components/modular';
 import { AddressRowWithAction } from '@components/templates/ExplorerAccount/components';
 import { COLORS } from '@constants/colors';
 import { useSendFundsStore } from '@features/send-funds';
+import { Token } from '@models';
 import {
   cssShadowToNative,
   verticalScale,
   NumberUtils,
-  _delayNavigation
+  _delayNavigation,
+  getTokenNameFromDatabase
 } from '@utils';
 import { styles } from './styles';
 
@@ -26,7 +28,7 @@ interface ConfirmTransactionProps {
   from: string;
   to: string;
   etherAmount: number;
-  currency: string;
+  currency: Token;
   estimatedFee: number;
   onSendPress: () => unknown;
   onSuccessBottomSheetDismiss: () => void;
@@ -72,6 +74,14 @@ export const ConfirmTransaction = ({
     [bottom]
   );
 
+  const tokenLogoHref = useMemo(() => {
+    if (currency.address === from) return currency.symbol;
+
+    return getTokenNameFromDatabase(currency.address) !== 'unknown'
+      ? currency.symbol
+      : currency.address;
+  }, [currency.address, currency.symbol, from]);
+
   const buttonColors = useMemo(() => {
     return disabled
       ? [COLORS.primary50, COLORS.primary50]
@@ -92,7 +102,7 @@ export const ConfirmTransaction = ({
   if (success) {
     const description = `You sent ${NumberUtils.numberToTransformedLocale(
       etherAmount
-    )} ${currency}`;
+    )} ${currency.symbol}`;
 
     return (
       <BottomSheetSuccessView
@@ -165,13 +175,14 @@ export const ConfirmTransaction = ({
         <Row alignItems="center" justifyContent="space-between">
           <Title>{t('common.transactions.sending')}</Title>
           <Row alignItems="center" style={styles.amountContainerRow}>
-            <TokenLogo token={currency} scale={0.75} />
+            <TokenLogo token={tokenLogoHref} scale={0.75} />
             <Text
               fontSize={15}
               fontFamily="Inter_500Medium"
               color={COLORS.neutral800}
             >
-              {NumberUtils.numberToTransformedLocale(etherAmount)} {currency}
+              {NumberUtils.numberToTransformedLocale(etherAmount)}{' '}
+              {currency.symbol}
             </Text>
           </Row>
         </Row>

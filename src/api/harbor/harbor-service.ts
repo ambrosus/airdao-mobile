@@ -45,7 +45,7 @@ const getTotalStaked = async () => {
     );
     return await contract.totalSupply();
   } catch (e) {
-    return e;
+    throw e;
   }
 };
 
@@ -56,7 +56,7 @@ const getStakeAPR = async () => {
     const interestPeriod = await contract.interestPeriod();
     return calculateAPR(Number(interest), Number(interestPeriod));
   } catch (e) {
-    return e;
+    throw e;
   }
 };
 
@@ -68,7 +68,7 @@ const getUserStaked = async (address: string) => {
     }
     return null;
   } catch (e) {
-    return e;
+    throw e;
   }
 };
 
@@ -77,7 +77,7 @@ const getStakeLimit = async () => {
     const contract = createHarborLiquidStakedContract();
     return await contract.minStakeValue();
   } catch (e) {
-    return e;
+    throw e;
   }
 };
 
@@ -91,7 +91,7 @@ const getUnstakeLockTime = async () => {
       delay: (Number(data) / 86400).toFixed(0) || '0'
     };
   } catch (e) {
-    return e;
+    throw e;
   }
 };
 
@@ -120,7 +120,7 @@ const getTier = async (address: string) => {
         return 1;
     }
   } catch (e) {
-    return 1;
+    throw e;
   }
 };
 
@@ -129,7 +129,7 @@ const getClaimAmount = async (address: string) => {
     const contract = createHarborLiquidStakedContract();
     return await contract.getClaimAmount(address);
   } catch (e) {
-    return e;
+    throw e;
   }
 };
 
@@ -146,7 +146,8 @@ const getWithdrawalRequests = async (address: string) => {
 
     const formatData = (date: Date) => moment(date).format('DD/MM/YYYY  HH:mm');
     for (let i = 0; i < rawWithdrawalsList.length; i++) {
-      const { args }: ethers.Event = rawWithdrawalsList[i];
+      const event: ethers.Event = rawWithdrawalsList[i];
+      const { args } = event;
 
       const requestDateTime = new Date(Number(args?.creationTime) * 1000);
       const formattedRequestDateTime = formatData(requestDateTime);
@@ -160,7 +161,7 @@ const getWithdrawalRequests = async (address: string) => {
       // add event to the beginning of the list to sort it from newest to oldest
       withdrawalsList.unshift({
         amount,
-        tokenAddress: args?.address,
+        tokenAddress: event.address,
         requestData: formattedRequestDateTime,
         unlockData: formattedUnlockDateTime,
         status
@@ -211,7 +212,7 @@ const processStake = async (
     sendFirebaseEvent(CustomAppEvents.harbor_amb_stake_error, {
       harborAMBStakeError: errorMessage
     });
-    return e;
+    throw e;
   }
 };
 
@@ -244,7 +245,6 @@ const processWithdraw = async (
       const res = await tx.wait();
       if (res) {
         sendFirebaseEvent(CustomAppEvents.harbor_amb_withdraw_finish);
-
         return res;
       }
     }
@@ -254,9 +254,10 @@ const processWithdraw = async (
     sendFirebaseEvent(CustomAppEvents.harbor_amb_withdraw_error, {
       harborAMBWithdrawError: errorMessage
     });
-    return e;
+    throw e;
   }
 };
+
 const processClaimReward = async (
   wallet: RawRecord | undefined,
   _desiredCoeff: number,
@@ -289,11 +290,10 @@ const processClaimReward = async (
   } catch (e) {
     const errorMessage =
       (e as { message: string }).message || JSON.stringify(e);
-
     sendFirebaseEvent(CustomAppEvents.harbor_amb_claim_reward_error, {
       harborAMBClaimRewardError: errorMessage
     });
-    return e;
+    throw e;
   }
 };
 

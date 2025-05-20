@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { LayoutChangeEvent } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Animated, {
@@ -7,9 +7,11 @@ import Animated, {
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
+  useAnimatedReaction,
   withSpring,
   withTiming,
-  cancelAnimation
+  cancelAnimation,
+  runOnJS
 } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Spacer } from '@components/base';
@@ -20,11 +22,10 @@ import {
   WalletTransactionsAndAssets
 } from '@components/templates';
 import { useCurrenciesQuery } from '@entities/currencies/lib';
-import { _tokensOrNftMapper, useWalletStore } from '@entities/wallet';
+import { useWalletStore } from '@entities/wallet';
 import { useSendFundsStore } from '@features/send-funds';
 import { HomeHeader } from '@features/wallet-assets/components/templates';
-import { balanceReducer } from '@features/wallet-assets/utils';
-import { useBalanceOfAddress, useTokensAndTransactions } from '@hooks';
+import { useBalanceOfAddress } from '@hooks';
 import { useAllAccounts } from '@hooks/database';
 import { ExplorerAccount } from '@models';
 import { WalletUtils, scale, SCREEN_HEIGHT, verticalScale } from '@utils';
@@ -45,6 +46,7 @@ export const HomeScreen = () => {
   const { tokens: _sendFundsTokens, onSetTokens } = useSendFundsStore();
 
   const [headerHeight, setHeaderHeight] = useState(0);
+  const [isHeaderHiddenState, setIsHeaderHiddenState] = useState(false);
   const [scrollIdx, setScrollIdx] = useState(0);
 
   const hideThreshold = headerHeight + 24;
@@ -169,25 +171,14 @@ export const HomeScreen = () => {
     [activeTabIndex, offsetScrollY]
   );
 
-  const {
-    data: { tokens }
-  } = useTokensAndTransactions(
-    selectedAccount?.address ?? '',
-    1,
-    20,
-    !!selectedAccount?.address
+  useAnimatedReaction(
+    () => isHeaderHidden.value,
+    (isHidden, previousIsHidden) => {
+      if (isHidden !== previousIsHidden) {
+        runOnJS(setIsHeaderHiddenState)(isHidden);
+      }
+    }
   );
-
-  const tokensOrNFTs = useMemo(() => {
-    return _tokensOrNftMapper(tokens);
-  }, [tokens]);
-
-  const isSelectAccountBalanceZero = useMemo(() => {
-    return balanceReducer(
-      tokensOrNFTs.tokens,
-      selectedAccountWithBalance?.ambBalanceWei ?? '0'
-    ).isZero();
-  }, [selectedAccountWithBalance?.ambBalanceWei, tokensOrNFTs.tokens]);
 
   return (
     <SafeAreaView edges={['top']} testID="Home_Screen" style={{ flex: 1 }}>
@@ -223,7 +214,7 @@ export const HomeScreen = () => {
             <Spacer value={verticalScale(accounts.length > 1 ? 24 : 32)} />
             <AccountActions
               account={selectedAccountWithBalance}
-              disabled={isSelectAccountBalanceZero && !isHeaderHidden.value}
+              disabled={isHeaderHiddenState}
             />
             <Spacer value={verticalScale(16)} />
           </>

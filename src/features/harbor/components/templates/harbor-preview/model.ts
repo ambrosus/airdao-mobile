@@ -24,7 +24,6 @@ export interface StakePreviewDataModel {
 export interface WithdrawPreviewDataModel {
   withdrawAmount: string;
   rewardAmb: string;
-  rewardBond: string;
   delay: string;
   estimatedGas: string;
 }

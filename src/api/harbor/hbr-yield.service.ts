@@ -100,7 +100,7 @@ class HBRYieldService {
       sendFirebaseEvent(CustomAppEvents.harbor_hbr_stake_error, {
         harborHBRStakeError: errorMessage
       });
-      return error;
+      throw error;
     }
   }
 
@@ -138,7 +138,7 @@ class HBRYieldService {
       sendFirebaseEvent(CustomAppEvents.harbor_hbr_amb_stake_error, {
         harborHbrAmbStakeError: errorMessage
       });
-      return error;
+      throw error;
     }
   }
 
@@ -171,7 +171,7 @@ class HBRYieldService {
       sendFirebaseEvent(CustomAppEvents.harbor_hbr_withdraw_error, {
         harborHbrWithdrawError: errorMessage
       });
-      return error;
+      throw error;
     }
   }
 
@@ -204,7 +204,7 @@ class HBRYieldService {
       sendFirebaseEvent(CustomAppEvents.harbor_hbr_amb_withdraw_error, {
         harborHbrAmbWithdrawError: errorMessage
       });
-      return error;
+      throw error;
     }
   }
 }

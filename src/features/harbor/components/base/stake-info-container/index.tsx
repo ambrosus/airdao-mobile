@@ -1,5 +1,6 @@
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { BigNumber } from 'ethers';
 import { formatEther } from 'ethers/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { CryptoCurrencyCode } from '@appTypes';
@@ -27,10 +28,33 @@ export const StakeInfoContainer = ({
   const { data: ambPrice } = useAMBPrice();
   const { apr: harborAPR, totalStaked, userStaked } = harborData;
 
+  // Перевірка на тип даних для запобігання помилкам при рендерингу
+  const isValidBigNumber = (value: any): boolean => {
+    return value && typeof value === 'object' && BigNumber.isBigNumber(value);
+  };
+
+  const isError = (value: any): boolean => {
+    return value instanceof Error;
+  };
+
+  // Безпечна обробка значень для запобігання помилкам при рендерингу
+  const safeHarborAPR =
+    isError(harborAPR) || typeof harborAPR === 'object'
+      ? '0'
+      : String(harborAPR || '0');
+
+  const safeTotalStaked = isValidBigNumber(totalStaked)
+    ? totalStaked
+    : BigNumber.from(0);
+
+  const safeUserStaked = isValidBigNumber(userStaked)
+    ? userStaked
+    : BigNumber.from(0);
+
   const totalStakedOnHarbor = {
-    crypto: NumberUtils.limitDecimalCount(formatEther(totalStaked), 2),
+    crypto: NumberUtils.limitDecimalCount(formatEther(safeTotalStaked), 2),
     usd: NumberUtils.limitDecimalCount(
-      (ambPrice?.priceUSD || 1) * +formatEther(totalStaked),
+      (ambPrice?.priceUSD || 1) * +formatEther(safeTotalStaked),
       2
     )
   };
@@ -64,7 +88,7 @@ export const StakeInfoContainer = ({
               <Spacer value={scale(8)} />
               <Text style={styles.topText} color={COLORS.neutral900}>
                 {NumberUtils.numberToTransformedLocale(
-                  NumberUtils.limitDecimalCount(formatEther(userStaked), 2)
+                  NumberUtils.limitDecimalCount(formatEther(safeUserStaked), 2)
                 )}
               </Text>
             </View>
@@ -84,7 +108,7 @@ export const StakeInfoContainer = ({
                 fontFamily="Inter_500Medium"
                 color={COLORS.success500}
               >
-                {harborAPR} %
+                {safeHarborAPR} %
               </Text>
             </Row>
             <Row justifyContent={'space-between'}>
