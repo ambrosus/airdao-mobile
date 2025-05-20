@@ -490,7 +490,7 @@
   "harbor.successfully.withdraw.header": "You have successfully withdraw",
   "harbor.withdraw.stake.reward": "Stake + Rewards",
   "harbor.withdraw.reward": "Rewards only",
-  "harbor.tiers.container.header": "Reward Distribution",
+  "harbor.tiers.container.header": "Reward",
   "harbor.exchange.rate": "Exchange rate",
   "harbor.withdrawal.delay": "Withdrawal Delay",
   "harbor.withdrawal.button": "Request Withdrawal",

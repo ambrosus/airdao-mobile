@@ -1,6 +1,19 @@
+import { BigNumber } from 'ethers';
 import { hbrYieldService } from '@api/harbor';
 
-export const stakeHbrPromise = async (address: string) => {
+type StakeHBRResult = [
+  BigNumber, // stake
+  BigNumber, // rewards
+  BigNumber, // deposit
+  any, // limitsConfig
+  [BigNumber], // poolInfo
+  BigNumber, // maxUserStakeValue
+  BigNumber // allowance
+];
+
+export const stakeHbrPromise = async (
+  address: string
+): Promise<StakeHBRResult | null> => {
   try {
     return Promise.all([
       await hbrYieldService.staked(address),
