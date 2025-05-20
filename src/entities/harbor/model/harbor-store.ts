@@ -26,7 +26,7 @@ export const useHarborStore = create<HarborStoreModel>((set, get) => ({
   },
   setActiveAmbTier: (activeAmbTier: TierRewardItem) => set({ activeAmbTier }),
   setDefaultActiveAmbTiers: () => {
-    set({ activeAmbTier: REWARD_TIERS_LIST.amb[0] });
+    set({ activeAmbTier: REWARD_TIERS_LIST.amb[3] });
   },
   updateWithdrawList: async (address: string) => {
     try {

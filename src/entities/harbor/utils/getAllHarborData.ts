@@ -1,14 +1,5 @@
 import { harborService } from '@api/harbor/harbor-service';
-import { showCriticalError } from '@components/modular/CriticalErrorHandler';
 import { getHarborToken } from '@entities/harbor/utils/getHarborToken';
-
-const handleServiceError = (e: any) => {
-  showCriticalError({
-    title: 'critical.error.harbor.header',
-    message: 'critical.error.harbor.subheader'
-  });
-  throw e;
-};
 
 export const getAllHarborData = async (address: string) => {
   try {
@@ -24,6 +15,6 @@ export const getAllHarborData = async (address: string) => {
 
     return data;
   } catch (error) {
-    return handleServiceError(error);
+    return null;
   }
 };

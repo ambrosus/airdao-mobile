@@ -1,15 +1,6 @@
 import { hbrYieldService } from '@api/harbor';
-import { showCriticalError } from '@components/modular/CriticalErrorHandler';
 
-const handleServiceError = (e: any) => {
-  showCriticalError({
-    title: 'critical.error.harbor.header',
-    message: 'critical.error.harbor.subheader'
-  });
-  throw e;
-};
-
-export async function stakeHBRPromise(address: string) {
+export const stakeHbrPromise = async (address: string) => {
   try {
     return Promise.all([
       await hbrYieldService.staked(address),
@@ -21,6 +12,6 @@ export async function stakeHBRPromise(address: string) {
       await hbrYieldService.allowance(address)
     ]);
   } catch (error) {
-    return handleServiceError(error);
+    return null;
   }
-}
+};

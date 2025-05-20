@@ -3,7 +3,6 @@ import { BigNumber, ethers } from 'ethers';
 import { parseEther } from 'ethers/lib/utils';
 import moment from 'moment/moment';
 import { UNSTAKE_LOG_ABI, HARBOR_ABI } from '@api/harbor/abi';
-import { showCriticalError } from '@components/modular/CriticalErrorHandler';
 import Config from '@constants/config';
 import { ILogs } from '@entities/harbor/model';
 import { Cache, CacheKey } from '@lib/cache';
@@ -11,14 +10,6 @@ import {
   CustomAppEvents,
   sendFirebaseEvent
 } from '@lib/firebaseEventAnalytics';
-
-const handleServiceError = (e: any) => {
-  showCriticalError({
-    title: 'critical.error.harbor.header',
-    message: 'critical.error.harbor.subheader'
-  });
-  throw e;
-};
 
 export function calculateAPR(
   interestNumber: number,
@@ -54,7 +45,7 @@ const getTotalStaked = async () => {
     );
     return await contract.totalSupply();
   } catch (e) {
-    return handleServiceError(e);
+    throw e;
   }
 };
 
@@ -65,7 +56,7 @@ const getStakeAPR = async () => {
     const interestPeriod = await contract.interestPeriod();
     return calculateAPR(Number(interest), Number(interestPeriod));
   } catch (e) {
-    return handleServiceError(e);
+    throw e;
   }
 };
 
@@ -77,7 +68,7 @@ const getUserStaked = async (address: string) => {
     }
     return null;
   } catch (e) {
-    handleServiceError(e);
+    throw e;
   }
 };
 
@@ -86,7 +77,7 @@ const getStakeLimit = async () => {
     const contract = createHarborLiquidStakedContract();
     return await contract.minStakeValue();
   } catch (e) {
-    return handleServiceError(e);
+    throw e;
   }
 };
 
@@ -100,7 +91,7 @@ const getUnstakeLockTime = async () => {
       delay: (Number(data) / 86400).toFixed(0) || '0'
     };
   } catch (e) {
-    return handleServiceError(e);
+    throw e;
   }
 };
 
@@ -129,7 +120,7 @@ const getTier = async (address: string) => {
         return 1;
     }
   } catch (e) {
-    return handleServiceError(e);
+    throw e;
   }
 };
 
@@ -138,7 +129,7 @@ const getClaimAmount = async (address: string) => {
     const contract = createHarborLiquidStakedContract();
     return await contract.getClaimAmount(address);
   } catch (e) {
-    return handleServiceError(e);
+    throw e;
   }
 };
 
@@ -180,7 +171,7 @@ const getWithdrawalRequests = async (address: string) => {
       (item) => item.tokenAddress === Config.LIQUID_STAKING_ADDRESS
     );
   } catch (e) {
-    return handleServiceError(e);
+    throw e;
   }
 };
 
@@ -220,7 +211,7 @@ const processStake = async (
     sendFirebaseEvent(CustomAppEvents.harbor_amb_stake_error, {
       harborAMBStakeError: errorMessage
     });
-    return handleServiceError(e);
+    throw e;
   }
 };
 
@@ -262,7 +253,7 @@ const processWithdraw = async (
     sendFirebaseEvent(CustomAppEvents.harbor_amb_withdraw_error, {
       harborAMBWithdrawError: errorMessage
     });
-    return handleServiceError(e);
+    throw e;
   }
 };
 
@@ -301,7 +292,7 @@ const processClaimReward = async (
     sendFirebaseEvent(CustomAppEvents.harbor_amb_claim_reward_error, {
       harborAMBClaimRewardError: errorMessage
     });
-    return handleServiceError(e);
+    throw e;
   }
 };
 

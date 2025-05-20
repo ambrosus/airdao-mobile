@@ -1,16 +1,7 @@
 import { API } from '@api/api';
-import { showCriticalError } from '@components/modular/CriticalErrorHandler';
 import Config from '@constants/config';
 import { EMPTY_TOKEN } from '@entities/harbor/constants';
 import { TokenUtils } from '@utils';
-
-const handleServiceError = (e: any) => {
-  showCriticalError({
-    title: 'critical.error.harbor.header',
-    message: 'critical.error.harbor.subheader'
-  });
-  throw e;
-};
 
 export const getHarborToken = async (address: string) => {
   try {
@@ -27,6 +18,6 @@ export const getHarborToken = async (address: string) => {
       ) || EMPTY_TOKEN
     );
   } catch (error) {
-    return handleServiceError(error);
+    return null;
   }
 };
