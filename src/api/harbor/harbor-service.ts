@@ -146,7 +146,8 @@ const getWithdrawalRequests = async (address: string) => {
 
     const formatData = (date: Date) => moment(date).format('DD/MM/YYYY  HH:mm');
     for (let i = 0; i < rawWithdrawalsList.length; i++) {
-      const { args }: ethers.Event = rawWithdrawalsList[i];
+      const event: ethers.Event = rawWithdrawalsList[i];
+      const { args } = event;
 
       const requestDateTime = new Date(Number(args?.creationTime) * 1000);
       const formattedRequestDateTime = formatData(requestDateTime);
@@ -160,7 +161,7 @@ const getWithdrawalRequests = async (address: string) => {
       // add event to the beginning of the list to sort it from newest to oldest
       withdrawalsList.unshift({
         amount,
-        tokenAddress: args?.address,
+        tokenAddress: event.address,
         requestData: formattedRequestDateTime,
         unlockData: formattedUnlockDateTime,
         status
