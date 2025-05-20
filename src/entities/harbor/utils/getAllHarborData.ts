@@ -3,7 +3,7 @@ import { getHarborToken } from '@entities/harbor/utils/getHarborToken';
 
 export const getAllHarborData = async (address: string) => {
   try {
-    const data = Promise.all([
+    const data = await Promise.all([
       ['apr', await harborService.getStakeAPR()],
       ['totalStaked', await harborService.getTotalStaked()],
       ['stakeLimit', await harborService.getStakeLimit()],
@@ -12,10 +12,9 @@ export const getAllHarborData = async (address: string) => {
       ['unStakeDelay', await harborService.getUnstakeLockTime()],
       ['token', await getHarborToken(address)]
     ]);
-    if (data) {
-      return data;
-    }
-  } catch (e) {
-    // ignore
+
+    return data;
+  } catch (error) {
+    return null;
   }
 };

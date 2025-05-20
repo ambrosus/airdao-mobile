@@ -4,7 +4,7 @@ import {
   INITIAL_ETHERS_ZERO,
   INITIAL_LIMITS,
   limitsConfigMapper,
-  stakeHBRPromise
+  stakeHbrPromise
 } from '@entities/harbor/utils';
 import type { StakeHBRStore } from './types';
 
@@ -25,25 +25,29 @@ export const useStakeHBRStore = create<StakeHBRStore>((set) => ({
   },
   hbrYieldFetcher: async (address, key = 'loading') => {
     set({ [key]: true });
-    const [
-      stake,
-      rewards,
-      deposit,
-      limitsConfig,
-      poolInfo,
-      maxUserStakeValue,
-      allowance
-    ] = await stakeHBRPromise(address);
+    const result = await stakeHbrPromise(address);
 
-    set({
-      stake,
-      rewards,
-      deposit,
-      limitsConfig: limitsConfigMapper(limitsConfig),
-      totalPoolLimit: poolInfo[0],
-      maxUserStakeValue,
-      allowance
-    });
+    if (result) {
+      const [
+        stake,
+        rewards,
+        deposit,
+        limitsConfig,
+        poolInfo,
+        maxUserStakeValue,
+        allowance
+      ] = result;
+
+      set({
+        stake,
+        rewards,
+        deposit,
+        limitsConfig: limitsConfigMapper(limitsConfig),
+        totalPoolLimit: poolInfo[0],
+        maxUserStakeValue,
+        allowance
+      });
+    }
 
     set({ [key]: false });
   }

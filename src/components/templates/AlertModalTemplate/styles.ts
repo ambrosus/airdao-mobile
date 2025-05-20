@@ -3,12 +3,6 @@ import { COLORS } from '@constants/colors';
 import { scale, verticalScale } from '@utils';
 
 export const styles = StyleSheet.create({
-  bottomSheet: {
-    backgroundColor: COLORS.neutral900Alpha['20'],
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 16
-  },
   container: {
     width: '100%',
     maxHeight: scale(350),

@@ -22,6 +22,10 @@
       "bridge": "Bridge"
     }
   },
+  "critical.error": {
+    "harbor.header": "Something went wrong",
+    "harbor.subheader": "Please try again later or contact support if the issue persists. "
+  },
   "address.add.group": "Add to group",
   "address.add.to.group": "Add address to group",
   "address.add.to.selected.group": "Add address to {{selectedGroup}}",
@@ -486,7 +490,7 @@
   "harbor.successfully.withdraw.header": "You have successfully withdraw",
   "harbor.withdraw.stake.reward": "Stake + Rewards",
   "harbor.withdraw.reward": "Rewards only",
-  "harbor.tiers.container.header": "Reward Distribution",
+  "harbor.tiers.container.header": "Reward",
   "harbor.exchange.rate": "Exchange rate",
   "harbor.withdrawal.delay": "Withdrawal Delay",
   "harbor.withdrawal.button": "Request Withdrawal",

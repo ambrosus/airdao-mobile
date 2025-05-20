@@ -102,7 +102,7 @@ export const ConfirmTransaction = ({
   if (success) {
     const description = `You sent ${NumberUtils.numberToTransformedLocale(
       etherAmount
-    )} ${currency}`;
+    )} ${currency.symbol}`;
 
     return (
       <BottomSheetSuccessView
