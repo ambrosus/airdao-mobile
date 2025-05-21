@@ -91,6 +91,9 @@ export const SendFunds = ({ navigation, route }: Props) => {
     if (tokens.length === 0 && tokensFromAPI.length > 0) {
       onSetTokens([_AMBEntity].concat(tokensFromAPI));
     }
+    if (tokens.length === 0 && tokensFromAPI.length === 0) {
+      onSetTokens([_AMBEntity]);
+    }
   }, [_AMBEntity, tokensFromAPI, onSetTokens, tokens.length]);
 
   const { amountInCrypto, setAmountInCrypto, onChangeAmountHandle } =
