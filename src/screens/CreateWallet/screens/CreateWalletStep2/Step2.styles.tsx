@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
   main: { flex: 1 },
   mnemonicRandom: {
     backgroundColor: COLORS.neutral100,
-    paddingHorizontal: scale(16),
     paddingVertical: verticalScale(8),
     borderWidth: 1,
     borderColor: COLORS.neutral200,
@@ -50,7 +49,7 @@ export const styles = StyleSheet.create({
     paddingVertical: verticalScale(12)
   },
   mnemonicSelected: {
-    paddingHorizontal: scale(16),
+    paddingHorizontal: scale(14),
     height: 20,
     flexDirection: 'row',
     alignItems: 'center'

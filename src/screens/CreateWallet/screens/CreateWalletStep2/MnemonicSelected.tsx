@@ -1,5 +1,6 @@
 import { Button, Spacer, Text } from '@components/base';
 import { COLORS } from '@constants/colors';
+import { scale } from '@utils';
 import { styles } from './Step2.styles';
 
 interface MnemonicSelectedProps {
@@ -24,7 +25,7 @@ export const MnemonicSelected = (props: MnemonicSelectedProps) => {
       <Spacer value={8} horizontal />
       <Text
         align="center"
-        fontSize={14}
+        fontSize={scale(14)}
         fontFamily="Inter_600SemiBold"
         color={COLORS.success400}
       >
