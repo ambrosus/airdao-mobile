@@ -175,7 +175,7 @@ switch (Updates.channel) {
     break;
   }
   default: {
-    Config = envs.prod as TConfig;
+    Config = envs.testnet as TConfig;
     break;
   }
 }
